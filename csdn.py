@@ -9,7 +9,9 @@ import random
 import os
 import sqlite3  
 import multiprocessing
+import threading
 from PyPDF2 import PdfFileReader, PdfFileWriter
+import sys
 
 class CSDN(object):
     def __init__(self, username):
@@ -222,12 +224,21 @@ class CSDN(object):
 
 
     def doMerge(self):
-
+        pageIndex = 0
         for i in range(0, self.articleNumber):
             pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber - i), "rb"))
-            self.merge.appendPagesFromReader(pdf)
-        self.merge.write(open("%s" % self.username, "wb"))
 
+            pageCount = pdf.getNumPages() 
+            title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+            #print(title, pageCount)
+            self.merge.appendPagesFromReader(pdf)
+            self.merge.addBookmark(title, pageIndex)
+            pageIndex += pageCount
+
+        #设置最大递归深度,不然报错
+        sys.setrecursionlimit(5000)
+        self.merge.write(open("%s.pdf" % self.username, "wb"))
+        sys.setrecursionlimit(1000)
 
     def startThreadPool(self):
 
@@ -242,25 +253,18 @@ class CSDN(object):
 
         for (id, srcHtml) in result:
             cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'))
-            process = multiprocessing.Process(target = self.doConvert, args = (id, cleanedHtml))
+            #process = multiprocessing.Process(target = self.doConvert, args = (id, cleanedHtml))
+            process = threading.Thread(target = self.doConvert, args = (id, cleanedHtml))
             processList.append(process)
-
-
-
-
 
         k = 0
         while k < len(processList):
-
             temProcessList = []
             for i in range(0, 30):
                 processList[k].start()
-
                 temProcessList.append(processList[k])
-                print('启动%d' % k)
-
+                #print('启动%d' % k)
                 k = k + 1
-
                 if k >= len(processList):
                     break
 
