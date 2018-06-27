@@ -12,6 +12,7 @@ import multiprocessing
 import threading
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import sys
+import io
 
 class CSDN(object):
     def __init__(self, username):
@@ -100,11 +101,6 @@ class CSDN(object):
         if  self.cursor.fetchone()[0]:
             #print("爬过了%s" % url)
             return True
-
-
-
-
-        # print(url)
 
         # headers = {
         #     'Host': 'blog.csdn.net',
@@ -220,10 +216,37 @@ class CSDN(object):
             os.mkdir('pdf')
 
         if not os.path.exists('pdf/%d.pdf' % id ):
-            pdfkit.from_string(html, 'pdf/%d.pdf' % id )
+            print("正在生成第%d篇pdf (%d of %d)" % (id, id, self.articleNumber))
+            ts = 0
+            while True:
+                #获取输出结果
+                ts = ts + 1
+
+                if ts > 5:
+                    print('5次失败后, 放弃获取图片')
+
+                #c重定向输出结果
+                stdout = sys.stdout
+                err =  io.StringIO()
+                sys.stdout = err
+                pdfkit.from_string(html, 'pdf/%d.pdf' % id )
+
+                #恢复重定向
+                sys.stdout = stdout
+
+                r = err.getvalue()
+
+                print(r)
+                if r.find('Warning: Failed to load') == -1:
+                    break;
+                else:
+                    #print("生成%d篇文章pdf时发生意外,重试中...." % id)
+                    pass
+                
 
 
     def doMerge(self):
+        print("PDF生成完成, 开始合并........")
         pageIndex = 0
         for i in range(0, self.articleNumber):
             pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber - i), "rb"))
@@ -249,7 +272,7 @@ class CSDN(object):
 
         result = self.cursor.fetchall()
         self.articleNumber = len(result)
-        print("一共 %d篇文章" % self.articleNumber)
+        print("一共 %d篇文章, 准备生成PDF文件...." % self.articleNumber)
 
         for (id, srcHtml) in result:
             cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'))
