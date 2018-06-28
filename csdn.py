@@ -44,7 +44,6 @@ class CSDN(object):
             ''' % self.username) 
 
         self.articleNumber = 0
-
         self.merge = PdfFileWriter()
 
     def __del__(self):
@@ -263,6 +262,94 @@ class CSDN(object):
         self.merge.write(open("%s.pdf" % self.username, "wb"))
         sys.setrecursionlimit(1000)
 
+    def calcDotNum(self, begin, end):
+        line = ''
+        size = 1024
+
+
+    def generateCatlog(self):
+        print('正在生成目录....')
+        articleIndex = 1
+        pageIndex = 0
+
+
+        pdfcontent = ''
+        pdfcontent = pdfcontent + '''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>博客目录</title></head><body><div style='font-size:30px;text-align:center;'> 目录 </div>'''
+
+        for i in range(0, self.articleNumber):
+            pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber - i), "rb"))
+            pageCount = pdf.getNumPages() 
+            title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+
+            # #目录..........................................
+
+
+            pdfcontent = pdfcontent + '''
+                            <div style="max-width:100%;line-height:1.8em;margin-top:5px;background-color:#ccc;">
+                            <span class="start">
+                        '''
+            pdfcontent = pdfcontent +  "%d.%s</span>" % (articleIndex, title)
+            pdfcontent = pdfcontent + '''<span class='middle' style="max-height:25px;overflow:hidden;display:inline-block"></span>'''
+            pdfcontent = pdfcontent +   ''' <span class="end" style="float:right;">'''
+            pdfcontent = pdfcontent +  '%d' % (pageIndex + 1)
+            pdfcontent = pdfcontent + '</span></div>'
+
+
+
+
+            # pdfcontent = pdfcontent + "<div><span style='font-size:20px;'>"
+            # start = "%d.%s" % (articleIndex, title)
+            # middle = '</span><span style="max_length=80%;overflow:hidden;">'
+            # end = '%d' % pageIndex
+           
+            # lstart = len(start)
+            # lend = len(end)
+            # for x in range(1024 - lstart * 20 - lend * 20): 
+            #     middle = middle + '..'
+
+            # middle = middle + '</span>'
+            # #print(start + middle + end)
+            # pdfcontent = pdfcontent + start + middle + end
+            # pdfcontent = pdfcontent + '</div>'
+
+
+            articleIndex = articleIndex + 1
+            pageIndex += pageCount
+
+
+        #写入javascript代码
+
+        #手动计算.....个数
+        # innerHTML = ''
+        # for x in range(2048):
+        #     innerHTML = innerHTML + '.'
+
+        # pdfcontent = pdfcontent + '''
+        #                             <script type="text/javascript">
+        #                                 var start = document.getElementsByClassName("start");
+        #                                 var end =  document.getElementsByClassName("end");
+        #                                 var middle = document.getElementsByClassName("middle");
+                                     
+        #                                 for(var i = 0; i < start.length; i++)
+        #                                 {
+        #                                     var maxw = start[i].offsetParent.offsetWidth - start[i].offsetWidth - end[i].offsetWidth - 5 + 'px'
+        #                                     middle[i].style.width=maxw
+        #                                     middle[i].innerHTML = "%s"
+        #                                 }
+        #                             </script>
+        #                         ''' % innerHTML
+    
+        pdfcontent = pdfcontent +  '</body></html>'
+
+        with open('mm.html', "w") as f:
+            f.write(pdfcontent)
+
+        self.articleNumber = self.articleNumber + 1
+        self.doConvert(self.articleNumber, pdfcontent)
+        print('目录生成完成....')
+
+
+
     def startThreadPool(self):
 
         processList = []
@@ -275,10 +362,11 @@ class CSDN(object):
         print("一共 %d篇文章, 准备生成PDF文件...." % self.articleNumber)
 
         for (id, srcHtml) in result:
-            cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'))
             #process = multiprocessing.Process(target = self.doConvert, args = (id, cleanedHtml))
-            process = threading.Thread(target = self.doConvert, args = (id, cleanedHtml))
-            processList.append(process)
+            if not os.path.exists('pdf/%d.pdf' % id ):
+                cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'))
+                process = threading.Thread(target = self.doConvert, args = (id, cleanedHtml))
+                processList.append(process)
 
         k = 0
         while k < len(processList):
@@ -303,10 +391,11 @@ if __name__ == '__main__':
     username = 'leixiaohua1020'
     csdn = CSDN(username)
 
+    print('开始获取文章列表.....')
     i = 1;
     while(True):
         pageNumber = csdn.getPageByIndex(i)
-        print('正在获取第%d页文章索引页.' % i)
+        
         if pageNumber:
             pass
         else:
@@ -314,9 +403,13 @@ if __name__ == '__main__':
 
         i = i + 1;
 
+    print('索引页获取完成, 共 %d 页!!!' % (i - 1))
+
 
     csdn.startThreadPool()
-
+    csdn.generateCatlog()
     csdn.doMerge()
+
+    
 
     
