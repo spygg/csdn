@@ -341,8 +341,8 @@ class CSDN(object):
     
         pdfcontent = pdfcontent +  '</body></html>'
 
-        with open('mm.html', "w") as f:
-            f.write(pdfcontent)
+        # with open('mm.html', "w") as f:
+        #     f.write(pdfcontent)
 
         self.articleNumber = self.articleNumber + 1
         self.doConvert(self.articleNumber, pdfcontent)
