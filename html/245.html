@@ -1,0 +1,173 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 图像检索：几类基于内容的图像分类技术 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_245">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   图像检索：几类基于内容的图像分类技术
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月20日 19:10:30
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：9751
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     一共有四种基于内容的图像分类方法，即颜色、纹理、形状和空间关系。
+    </p>
+    <p>
+     <strong>
+      1.基于颜色特征的分类技术
+     </strong>
+    </p>
+    <p>
+     目前，提取颜色特征己经成为几乎所有基于内容图像分类技术的重要手段。由于颜色是物体必备的视觉特性，同一类物体一般会有相似的色彩特征，所以人们就根据这一点用色彩来对图像内容进行区分。颜色直方图能够描述不同色彩在整个图像中所占的比例，即使图像内容发生了大小、旋转上的变化，它也不会有很大的差异，因此颜色直方图在很多图像分类和检索系统中被广泛使用，得到了研究人员的普遍关注。
+    </p>
+    <p>
+     最初采用颜色直方图进行分类的思想就是根据每种颜色在整幅图像中出现的概率，统计出一个含有色彩比例的直方图，然后将两个图像的直方图通过交运算来度量相似性。但是这种方法并没有考虑到图像色彩信息的空间性，所以很多该领域的学者又不断进行改进，下面将介绍几种典型方法。
+    </p>
+    <p>
+     颜色矩(ColorMoments)是由Strieker等人提出的。它的主要思想就是用矩来表示图像中各种颜色的分布，再使用不同颜色分量的统计参数作为参量。低阶矩集中了颜色分布的主要信息，因而图像颜色分布的情况可以釆用颜色一阶矩、二阶矩、三阶矩表示出，更高阶的矩中几乎不会含有颜色信息。其中，一阶矩能够表示出图像的整体概况，即均值信息；二阶矩能够表示出图像细节变化，即方差信息；三阶矩能够表示出该幅图像的斜度信息。
+    </p>
+    <p>
+     <strong>
+      2.基于纹理特征的分类技术
+     </strong>
+    </p>
+    <p>
+     纹理特征也是图像特征提取中一个非常重要的技术，它能够描绘出物体表面所具有的内在规律与结构。其基本的研究方法就是利用像素点的灰度值来找出图像中像素分布的规律。
+    </p>
+    <p>
+     最早的提取纹理特征的方法就是Haralick等的灰度共生矩阵。灰度共生矩阵是根据像素之间的距离和方向建立起来的，纹理特征向量便是通过提取这个矩阵中有意义的统计量得到的，它能够很好的反应灰度级的空间相关性，目前是一种非常重要的纹理分析方法。设像素灰度的级数为L，图中任意点(x,y)的灰度值为i，点(x+a，y+b)的灰度值为j，且i、j取值范围为[0，L-1], a、b的值固定，这样就会形成一个点对(i，j)，在图像上移动(x,y)则会得出不同的(i,j)值，统计出每个点对(i,j)值出现的次数再进行归一化就会得到一个方阵Pij，这个方阵Pij就是灰度共生矩阵，也可以说灰度共生矩阵就是两个相对位置不变像素点的联合直方图。
+    </p>
+    <p>
+     通过灰度共生矩阵就可以得到一系列的纹理特征统计量：Pij的数值可以反映纹理的粗细，如果聚集在主对角线附近时就表示粗纹理特征，如果分布比较集中时就表示细纹里特征；矩阵行或列之间的相似度可以用Pij的灰度相关性表示；Pij的熵和能量也可以反映图像灰度分布的均勾性，如果数值分布集中，熵较小，能量较大；如果分布均勾，熵较大，能量较小。
+    </p>
+    <p>
+     20世纪90年代开始，小波变换也随着其理论结构的建立进入了人们的研究视线。它的理论基础就是先将信号分割成不同的频率成分，再研宄其对应尺度下的各个分量。小波变换能够把信号分解为近似分量和细节分量，近似分量一般是信号的低频部分，那么很容易想到，图像中的颜色信息就是低频信息，而信号的高频分量一般对应着的细节分量，也就是图像中的过渡、边缘等纹理信息。基于小波变换的主要理论有：Smiht和Chang的提取小波子带统计量方法可达到百分之九十的准确率；Chang和Kuo研究出了一种能够进一步提高分类准确率的树型结构小波变换；Thygaarajna等人兼顾基于统计和变换的纹理分析算法将小波变换和共生矩阵结合起来提高其准确性。
+    </p>
+    <p>
+     目前，边缘直方图EHD (Edge Histogram Descriptor)也是人们提取图像纹理特征的一个重要方式，因为边缘的空间分布能够包含重要的纹理信息，它还可以有效的结合颜色信息，提高准确度，后面即将用到的CEDD特征的纹理信息提取就是基于这一原理。EHD也是MPEG-7标准纹理描述符的一种。EHD提供了5种纹理边缘类型：垂直边缘的纹理，水平边缘的纹理、45度边缘的纹理、135度边缘的纹理、无方向边缘的纹理。但EHD只考虑了图像的局部边缘分布，并没有考虑到全局特征，它的基本方法是将一幅图像分为4*4个子块，每个子块的局部特征都可以用其形成的边缘分布直方图来表示，这样的直方图就会包含5个代表边缘类型出现概率的bins，最后得出5*4*4=80个包含与位置和边缘类型相关的带有边缘纹理信息的bins。Chee等人还加进了半全局和全局的边缘分布进行改进，得出包含150个bins的直方图。
+    </p>
+    <p>
+     <strong>
+      3.基于形状特征的分类技术
+     </strong>
+    </p>
+    <p>
+     在图像特征提取中，研究者普遍认为形状是一个描绘轮廓的封闭曲线所包围的区域。根据学者们多年来的研究与实践，目前，主要有两大类描述形状特征的方法：基于边界特征方法和基于区域特征方法。基于边界的形状特征提取方法主要有傅里叶描述符、边界矩和边界方向直方图，基于区域的形状特征提取方法主要是不变矩。形状特征与颜色和纹理特征不同，必须先对图像中对象的边缘和区域进行分割和提取，在其实现方法上有一定的困难。
+    </p>
+    <p>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://www.cnki.net/KCMS/detail/detail.aspx?QueryID=0&amp;CurRec=1&amp;recid=&amp;filename=1013244249.nh&amp;dbname=CMFDTEMP&amp;dbcode=CMFD&amp;pr=&amp;urlid=&amp;yx=&amp;uid=WEEvREcwSlJHSldSdnQ0S3ppcjVaQjl4ZVI2aWd5VmFFelQ2UmJxRmJoQjJjL1EzdTBYMjVQQmMvZ3hxN3JNPQ==&amp;v=MDI2Njg3RGgxVDNxVHJXTTFGckNVUkxtZVp1UnZGeUhtVzd6TlZGMjZIYkc4R3RQSXBwRWJQSVI4ZVgxTHV4WVM">
+      http://www.cnki.net/KCMS/detail/detail.aspx?QueryID=0&amp;CurRec=1&amp;recid=&amp;filename=1013244249.nh&amp;dbname=CMFDTEMP&amp;dbcode=CMFD&amp;pr=&amp;urlid=&amp;yx=&amp;uid=WEEvREcwSlJHSldSdnQ0S3ppcjVaQjl4ZVI2aWd5VmFFelQ2UmJxRmJoQjJjL1EzdTBYMjVQQmMvZ3hxN3JNPQ==&amp;v=MDI2Njg3RGgxVDNxVHJXTTFGckNVUkxtZVp1UnZGeUhtVzd6TlZGMjZIYkc4R3RQSXBwRWJQSVI4ZVgxTHV4WVM
+     </a>
+     =
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=颜色&amp;t=blog" target="_blank">
+    颜色
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=形状&amp;t=blog" target="_blank">
+    形状
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=纹理&amp;t=blog" target="_blank">
+    纹理
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362935" target="_blank">
+    MPEG7/图像检索
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,587 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ITU-T G.1081 IPTV性能监测点 (Performance monitoring points for IPTV) - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_275">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   ITU-T G.1081 IPTV性能监测点 (Performance monitoring points for IPTV)
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月04日 16:39:59
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4112
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     ITU-T 建议书 G.1081
+    </p>
+    <p>
+     IPTV性能监测点 Performance monitoring points for IPTV
+    </p>
+    <p>
+     <strong>
+      Summary
+     </strong>
+    </p>
+    <p>
+     Successful deployment of IPTV servicesrequires performance parameters to be monitored at a number of different pointsin the complete end to end chain, including the customer premises, keyaggregation points and at interconnect points between disparate and
+ serviceprovider network domains. This Recommendation defines five monitoring pointswhere such performance measurements can be made.
+    </p>
+    <p>
+     <strong>
+      Keywords
+     </strong>
+    </p>
+    <p>
+     IPTV,performance, QoS, QoE, monitoring points
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h1>
+     1. 范围 (Scope)
+    </h1>
+    <p>
+     ThisRecommendation defines performance monitoring points which will allow theservice provider/network operator to monitor the performance of the completeIPTV service delivery to the end-user.
+    </p>
+    <p>
+     Successful deployment of IPTV servicesrequires performance monitoring at the customer premise (e.g. set-top-box), keyaggregation points (e.g DSL Access Multiplexer DSLAM) or cable modemtermination system (CMTS) and at interconnect points between disparate
+ networkdomains and service provider domain boundaries. Performance monitoring can helpin:
+    </p>
+    <p>
+     ·        Finding errors in an end-to-endsystem (system debugging)
+    </p>
+    <p>
+     ·        Checking the resourceutilization and the work load of system components
+    </p>
+    <p>
+     ·        Comparing values (metrics)regarding performance of different system deployments
+    </p>
+    <p>
+     ·        Providing a base for modellingthe system
+    </p>
+    <p>
+     ·        Identifying system bottlenecks
+    </p>
+    <p>
+     ·        Optimizing IPTV networkdeployment
+    </p>
+    <p>
+     ·        Ensuring that systemperformance does not degrade with time.
+    </p>
+    <p>
+     The goal of performance monitoring is toprovide end-users of IPTV services with a high user experience by identifying,localizing and quantifying service and network issues.
+    </p>
+    <h1>
+     2. 参考 (References)
+    </h1>
+    <p>
+     Thefollowing ITU-T Recommendations and other references contain provisions, which,through reference in this text, constitute provisions of this Recommendation.At the time of publication, the editions indicated were valid. AllRecommendations and other references
+ are subject to revision; users of this Recommendationare therefore encouraged to investigate the possibility of applying the mostrecent edition of the Recommendations and other references listed below. A listof the currently valid ITU-T Recommendations is
+ regularly published.
+    </p>
+    <p>
+     Thereference to a document within this Recommendation does not give it, as astand-alone document, the status of a Recommendation.
+    </p>
+    <p>
+    </p>
+    <p>
+     [ITU-T Y.1540]          ITU-TRecommendation Y.1540 (2007), “Internet protocol data communication service –IP packet transfer and availability performance parameters,” Nov. 2007.
+    </p>
+    <p>
+     [ITU-T Y.1543]          ITU-T Recommendation Y.1543 (2007), “Measurements in IPnetworks for inter-domain performance assessment,” Nov. 2007.
+    </p>
+    <p>
+     [ITU-T Y.1544]          ITU-T Recommendation Y.1544 (2008), “Multicast IPperformance parameters,” .
+    </p>
+    <h1>
+     3. 定义 (Definitions)
+    </h1>
+    <p>
+     Platform          Ahardware and/or software architecture that serves as a foundation or base forrealising a certain functionality.
+    </p>
+    <h1>
+     4. 缩写和首字母缩略词 (Abbreviations and acronyms)
+    </h1>
+    <p>
+     本建议使用下列缩略语：
+    </p>
+    <p>
+     CMTS             Cable Modem Termination System 电缆调制解调器终端系统
+    </p>
+    <p>
+     DSLAM         DSL Access Multiplexer DSL接入复用器
+    </p>
+    <p>
+     NMS               NetworkManagement System 网络管理系统
+    </p>
+    <p>
+     OSS                 OperationsSupport System
+    </p>
+    <p>
+     QoE                 Qualityof Experience 体验质量
+    </p>
+    <p>
+     QoS                 Qualityof Service 服务质量
+    </p>
+    <p>
+     VoD                Videoon Demand 视频点播
+    </p>
+    <h1>
+     5. 约定 (Conventions)
+    </h1>
+    <p>
+     In this document:
+    </p>
+    <p>
+     The keyword “
+     <strong>
+      is recommended”
+     </strong>
+     indicates a requirement which isrecommended but which is not absolutely required.  Thus this requirement need not be present toclaim conformance.
+    </p>
+    <p>
+     The keyword “
+     <strong>
+      may
+     </strong>
+     ” indicates a requirement which is optional.
+    </p>
+    <h1>
+     6. IPTV性能监测点 (IPTV performance monitoring points)
+    </h1>
+    <p>
+     The entire IPTV content delivery chain can be divided into multiple
+     <em>
+      domains.
+     </em>
+     Operators at domain bordershave the option to perform monitoring which, when taken together, forms anend-to-end monitoring topology.
+    </p>
+    <p>
+     This domain approach is independent of any specific monitoringmethod.
+    </p>
+    <p>
+     Monitored performance characteristics, across a single domain ormultiple domains, can be integrated with existing or new operations supportsystems (OSS)and/or network management system (NMS) systems.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <img alt="" height="257" src="https://img-blog.csdn.net/20131104152930406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="573"/>
+    </p>
+    <p align="center">
+     <strong>
+     </strong>
+    </p>
+    <p align="center">
+     <a>
+      Figure
+     </a>
+     1/G.1081 – IPTV模型 (IPTV Domains)
+    </p>
+    <p>
+     The exact topology and domains will varyfrom one operator to another; however, monitoring can be applied at each domainboundary. An example topology with generalized domain boundaries is shown inFigure 1. These domains are further divided into specific monitoring
+ domains inFigure 2. Within each domain, different aspects can be monitored at each domainboundary as outlined below.
+    </p>
+    <p align="center">
+     <img alt="" height="682" src="https://img-blog.csdn.net/20131104152935921?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="907"/>
+     <br/>
+    </p>
+    <p align="center">
+     <a>
+      Figure
+     </a>
+     2/G.1081 – IPTV性能监测点 (IPTV Performance Monitoring Points)
+    </p>
+    <p>
+     A complete performance monitoring system is recommended to include aperformance monitoring management platform to translate the measured data fromthe monitoring points into actionable knowledge. Functions of the managementplatform could include data storage,
+ analysis, correlation, faultidentification, root cause analysis, report generation and visualization. Therange of the management platform(s) may cover all domains as shown in Figure 2.
+    </p>
+    <p>
+     The interfaces between the performance monitoring managementplatform(s) and the monitoring points will be further defined in the future.
+    </p>
+    <h1>
+     7. 性能监测点定义 (Performance monitoringpoint definitions)
+    </h1>
+    <p>
+     This section provides a basic description of each monitoring point shown inthe previous section. The capabilities and parameters listed below are not anexhaustive list. Some parameters may be difficult to obtain in some scenarios.Conversely, there may be
+ some other parameters that are essential. These arestill under study.
+    </p>
+    <h4>
+     7.1  监测点1 Monitoring point 1 – PT1
+    </h4>
+    <p>
+     This point demarcates the domain borderbetween content provision and IPTV control. PT1 is located at the domain border between content providers (contentowners and aggregators) and IPTV Service provider.
+    </p>
+    <p>
+     PT1 enablesthe measurement of source audio-visual quality and metadata verification and theanalysis of information to be exchanged between content provider and IPTV serviceprovider.
+    </p>
+    <p>
+     PT1 may capture thefollowing information:
+    </p>
+    <p>
+     ·        Coding parameters of video, audioand text content;
+    </p>
+    <p>
+     ·        Quality parameters of video,audio and text content;
+    </p>
+    <p>
+     ·        Acknowledgement for the report ofsource content transfer receipt;
+    </p>
+    <p>
+     PT1may support thefollowing capabilities:
+    </p>
+    <p>
+     ·        Real-time request/responsetransactions by the protocols involved;
+    </p>
+    <p>
+     ·        Real-time notifications ofasynchronous events;
+    </p>
+    <p>
+     ·        Reliable and secure deliveryof  any messages involved;
+    </p>
+    <p>
+     ·        Clock synchronization withother monitoring points;
+    </p>
+    <p>
+     ·        Identification of variouscontent providers;
+    </p>
+    <p>
+     ·        Report  testing information for quality parameters ofvideo audio and text content from various content providers to the service quality monitoring platform.
+    </p>
+    <h4>
+     7.2 监测点2 Monitoring point 2 – PT2
+    </h4>
+    <p>
+     This point is located at the domain borderbetween the service provider and network provider. It should aim for originalstreaming quality monitoring. PT2 monitors the service provider streamquality at the head-end egress.
+    </p>
+    <p>
+     PT2 may capture thefollowing information:
+    </p>
+    <p>
+     ·        Quality parameters of streammedia from the core node of the service provider;
+    </p>
+    <p>
+     ·        Performance parameters of EPGservers at the core node of the service provider;
+    </p>
+    <p>
+     ·        Performance parameters of VODservers at the core node of the service provider;
+    </p>
+    <p>
+     ·        Performance parameters of  service related  servers at the core node of service provider;
+    </p>
+    <p>
+     PT2 may support thefollowing capabilities:
+    </p>
+    <p>
+     ·        Real-time request/responsetransactions by the protocols involved;
+    </p>
+    <p>
+     ·        Real-time notifications ofasynchronous events;
+    </p>
+    <p>
+     ·        Reliable and secure delivery ofany messages involved;
+    </p>
+    <p>
+     ·        Clock synchronization withothermonitoring points;
+    </p>
+    <p>
+     ·        Identification of variousservers;
+    </p>
+    <p>
+     ·         Report information for quality parameters ofvideo, audio and text content and performance parameters of servers  to the  service quality monitoring platform.
+    </p>
+    <h4>
+     7.3  监测点3 Monitoring point 3 – PT3
+    </h4>
+    <p>
+     This point is located at the boundarybetween the IP core and IP edge networks for monitoring of IP-relatedperformance parameters.This point can be placed on any type of  interfacebetween the IPTV core network and the edge network.
+    </p>
+    <p>
+     PT3 may capture the following information:
+    </p>
+    <p>
+     ·        Source network segment anddestination network segment to be measured;
+    </p>
+    <p>
+     ·        IP network performance as definedin (ITU-T Y.1540]. Recommended methods of measurement are found in [ITU-T Y.1543].
+    </p>
+    <p>
+     o   Mean one-way delay
+    </p>
+    <p>
+     o   One-way packet delay variation
+    </p>
+    <p>
+     o   Packet loss ratio
+    </p>
+    <p>
+     o   Packet loss profile
+    </p>
+    <p>
+     o   Path unavailability
+    </p>
+    <p>
+     ·        Multicast IP networkperformance parameters defined in [ITU-T Y.1544].
+    </p>
+    <p>
+     o   Successful join time
+    </p>
+    <p>
+     o   Successful leave time
+    </p>
+    <p>
+     o   Group mean one-way delay
+    </p>
+    <p>
+     o   Group IP service availability
+    </p>
+    <p>
+     o   Mean group loss ratio
+    </p>
+    <p>
+     PT3 may support the following capabilities:
+    </p>
+    <p>
+     ·        Real-time request/response transactions;
+    </p>
+    <p>
+     ·        Real-time notifications ofasynchronous events;
+    </p>
+    <p>
+     ·        Reliable and secure delivery ofany messages involved;
+    </p>
+    <p>
+     ·        Clock synchronization withother monitoring points;
+    </p>
+    <p>
+     ·        Submission of r information forquality parameters of IP network to service quality monitoring platform
+    </p>
+    <p>
+     ·        Access to raw IP information(e.g., packet headers, type of codec) of the audio-visual or text stream;
+    </p>
+    <p>
+     ·        Able to capture information onquality originating from end-user devices.
+    </p>
+    <h4>
+     7.4  监测点4 Monitoring Point 4 – PT4
+    </h4>
+    <p>
+     This point is closest to the user wheremonitoring the quality of streaming, audio-visual quality, and IPTV serviceattributes areimportant. Monitoring at this point can be implemented byintroducing the performance monitoring function in Home Gateways and
+ STBs, forexample.
+    </p>
+    <p>
+     PT4 may capture the following information:
+    </p>
+    <p>
+     ·        Source network segment anddestination network segment to be measured;
+    </p>
+    <p>
+     ·        Access the service qualityinformation and stream media quality information of the IPTV service platformfrom edge point of IPTV;
+    </p>
+    <p>
+     ·        Access to raw IP information(e.g., packet headers, type of codec) of the audiovisual or text stream;
+    </p>
+    <p>
+     ·        IP network performance parametersdefined in [ITU-T Y.1540]. Recommended methods of measurement are found in [ITU-TY.1543].
+    </p>
+    <p>
+     o   Mean one-way delay
+    </p>
+    <p>
+     o   One-way packet delay variation
+    </p>
+    <p>
+     o   Packet loss ratio
+    </p>
+    <p>
+     o   Path unavailability
+    </p>
+    <p>
+     ·        Multicast IP network performanceparameters defined in [ITU-T Y.1544].
+    </p>
+    <p>
+     o   Successful join time
+    </p>
+    <p>
+     o   Successful leave time
+    </p>
+    <p>
+     o   Group mean one-way delay
+    </p>
+    <p>
+     o   Group IP service availability
+    </p>
+    <p>
+     o   Mean group loss ratio
+    </p>
+    <p>
+     PT4 may be able to support the following capabilities:
+    </p>
+    <p>
+     ·        Real-time request/response transactions;
+    </p>
+    <p>
+     ·        Real-time notifications ofasynchronous events;
+    </p>
+    <p>
+     ·        Reliable and secure delivery ofthe messages involved;
+    </p>
+    <p>
+     ·        Clock synchronization withothermonitoring points;
+    </p>
+    <p>
+     ·        Simulate the integrated serviceflow of IPTV terminal;
+    </p>
+    <p>
+     ·        Report information for  parameters of IP network performance, servicequality that access IPTV service platform from edge point, and stream mediaquality to service quality monitoring platform.
+    </p>
+    <h4>
+     7.5  监测点5 Monitoring point 5 – PT5
+    </h4>
+    <p>
+     This point is at the final end-point anddirectly relates to end-user QoE. Monitoring audio-visual quality, textaccuracy and IPTV service attributes as perceived by the end-user areimportant.
+    </p>
+    <p>
+     PT5 may capture the following information:
+    </p>
+    <p>
+     ·        Source network segment anddestination network segment to be monitored;
+    </p>
+    <p>
+     ·        Access the quality informationof service and stream media of the IPTV service platform from the client;
+    </p>
+    <p>
+     PT5 may support the following capabilities:
+    </p>
+    <p>
+     ·        Real-time request/response transactions;
+    </p>
+    <p>
+     ·        Real-time notifications ofasynchronous events;
+    </p>
+    <p>
+     ·        Reliable and secure delivery of any messages involved;
+    </p>
+    <p>
+     ·        Clock synchronization withother monitoring points;
+    </p>
+    <p>
+     ·        Integrated service informationof IPTV terminal;
+    </p>
+    <p>
+     ·        Report information for  parameters of IP network performance, servicequality that access IPTV service platform from client, and stream media qualityto service quality monitoring platform.
+    </p>
+    <h1>
+     8.  安全性考虑 (Security considerations)
+    </h1>
+    <p>
+     Security aspects have not been addressed inthis Recommendation.
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=iptv&amp;t=blog" target="_blank">
+    iptv
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=质量评价&amp;t=blog" target="_blank">
+    质量评价
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoS&amp;t=blog" target="_blank">
+    QoS
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoE&amp;t=blog" target="_blank">
+    QoE
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638143" target="_blank">
+    IPTV
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

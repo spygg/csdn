@@ -1,0 +1,471 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MPlayer 使用手册中文版 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_247">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   MPlayer 使用手册中文版
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月20日 15:33:03
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6556
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p align="left" style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140616104102796"/>
+     <br/>
+    </p>
+    <p align="left">
+     播放文件
+    </p>
+    <p align="left">
+     使用 MPlayer 播放媒体文件最简单的方式是：
+    </p>
+    <p align="left">
+     mplayer &lt;somefile&gt;
+    </p>
+    <p align="left">
+     MPlayer 会自动检测文件的类型并加以播放，如果是音频文件，则会在命令行中显示该播放文件的状态信息；而假如是视
+    </p>
+    <p align="left">
+     频文件的话，则会打开一个新的播放窗口。
+    </p>
+    <p align="left">
+     倒退与快进
+    </p>
+    <p align="left">
+     在播放文件的时候，你可以通过以下三组快捷键来对播放进程进行倒退与快进操作：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p align="left">
+      •左方向键和右方向键：分别执行倒退 10 秒和快进 10 秒操作
+     </p>
+     <p align="left">
+      •下方向键和上方向键：分别执行倒退 1 分钟和快进 1 分钟操作
+     </p>
+     <p align="left">
+      •下翻页键和上翻页键：分别执行倒退 10 分钟和快进 10 分钟操作
+     </p>
+    </blockquote>
+    <p align="left">
+     播放 DVD
+    </p>
+    <p align="left">
+     虽然 MPlayer 不支持DVD 菜单，但是却能够播放 DVD。你可以这样播放 DVD：
+    </p>
+    <p align="left">
+     mplayer dvd://&lt;titlenumber&gt;
+    </p>
+    <p align="left">
+     你需要使用实际的数字来替换 &lt;titlenumber&gt;，如 1、2、3 等。
+    </p>
+    <p align="left">
+     使用字幕
+    </p>
+    <p align="left">
+     当播放电影文件时，你可以指定字幕文件：
+    </p>
+    <p align="left">
+     mplayer -sub &lt;somesubtitlefile&gt; &lt;somefile&gt;
+    </p>
+    <p align="left">
+     在播放 DVD 电影时，你也可以通过指定语言代码来使用字幕：
+    </p>
+    <p align="left">
+     mplayer dvd://&lt;titlenumber&gt; -slang nl,en
+    </p>
+    <p align="left">
+     这样，MPlayer 就会优先使用荷兰语字幕，如果该语言不可用，则再使用英语字幕。
+    </p>
+    <p align="left">
+     有用的快捷键
+    </p>
+    <p align="left">
+     以下是 MPlayer 中一些有用的快捷键：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p align="left">
+      •f－当播放视频时，在全屏和窗口模式之间切换。你也可以在命令行中使用 -fs 选项，以便让 MPlayer 开始在全屏
+     </p>
+     <p align="left">
+      模式中播放。
+     </p>
+     <p align="left">
+      •o－在播放视频时切换 OSD（OnScreen Display）模式。
+     </p>
+     <p align="left">
+      •p 或Space－暂停／继续播放。
+     </p>
+     <p align="left">
+      •q 或Esc－退出 MPlayer。在 GUI 模式时，Esc 不会退出，仅停止播放。
+     </p>
+     <p align="left">
+      •/ 和* 或 9 和 0－减小或增大音量。
+     </p>
+     <p align="left">
+      •m－静音切换。
+     </p>
+     <p align="left">
+      •T（通常是 Shift + t）－播放窗口置顶切换。
+     </p>
+     <p align="left">
+      •b 和j－在可用的字幕间循环。
+     </p>
+     <p align="left">
+      •x 和z－调整字幕的延迟时间。
+     </p>
+     <p align="left">
+      •I（Shift+ i）－显示播放电影的文件名称。
+     </p>
+     <p align="left">
+      •1 和2－调整对比度。
+     </p>
+     <p align="left">
+      •3 和4－调整亮度。
+     </p>
+     <p align="left">
+      •5 和6－调整色度。
+     </p>
+     <p align="left">
+      •7 和8－调整饱和度。
+     </p>
+    </blockquote>
+    <p align="left">
+     生成索引
+    </p>
+    <p align="left">
+     有时候，有些视频文件（主要是 AVI 文件）包含损坏的索引，或者根本就没有索引。这种情况通常是由下载文件不正确或
+    </p>
+    <p align="left">
+     未完成造成的。幸运的是，MPlayer 能够生成正常播放文件所需的索引。通过使用 -idx 选项，你可以告诉 MPlayer 来生成
+    </p>
+    <p align="left">
+     索引：
+    </p>
+    <p align="left">
+     mplayer -idx &lt;somefile&gt;
+    </p>
+    <p align="left">
+     有时候文件虽然包含索引，但却已损坏。那样的情况，你可能需要 MPlayer 强制生成索引：
+    </p>
+    <p align="left">
+     mplayer -forceidx &lt;somefile&gt;
+    </p>
+    <p align="left">
+     根据视频文件的大小，生成索引需花费一定的时间。但在此后，文件应该能够正常播放。
+    </p>
+    <p align="left">
+     纠正错误的音频／视频同步
+    </p>
+    <p align="left">
+     有些视频文件（主要是 flv 文件）由于编码的问题，会给 MPlayer 带来音频／视频同步的麻烦。这有两种可能情况：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p align="left">
+      •MPlayer 会尝试修复，但同步问题却更遭。
+     </p>
+     <p align="left">
+      •MPlayer 会尝试修复那些正确的，因此没有必要同步。
+     </p>
+    </blockquote>
+    <p align="left">
+     对于第一种情况，你应当让 MPlayer 努力修复同步问题：
+    </p>
+    <p align="left">
+     mplayer -autosync 30 -mc 2.0 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     而对于第二种情况，你不应当允许 MPlayer 去修复同步问题：
+    </p>
+    <p align="left">
+     mplayer -autosync 0 -mc 0 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     将上述命令中的 autosync 设置为正值就会让 MPlayer 逐渐调整音频／视频的同步。值越高，MPlayer 越快地修复它。mc
+    </p>
+    <p align="left">
+     选项指定 MPlayer 纠正每帧要多少秒。值越高，MPlayer 越认为接近修复音频／视频同步。设置为 0 则阻止 MPlayer 修复。
+    </p>
+    <p align="left">
+     在慢系统上使用 MPlayer
+    </p>
+    <p align="left">
+     MPlayer 允许在旧的或慢的系统上使用低 CPU 功率来播放视频文件。你可以使用 -framedrop 选项：
+    </p>
+    <p align="left">
+     mplayer -framedrop &lt;somefile&gt;
+    </p>
+    <p align="left">
+     当播放 MP3 或 OGGVorbis 文件时，你可能感受到一定的缓冲，这将影响你的音乐体验。那样的话，你可以尝试使用
+    </p>
+    <p align="left">
+     libmad（MP3）或 Tremor（OGG Vorbis）音频解码器。你可以这样来检测它们：
+    </p>
+    <p align="left">
+     对于 MP3：
+    </p>
+    <p align="left">
+     mplayer -ac help | grep mad
+    </p>
+    <p align="left">
+     如果上面的命令返回的结果像这样：
+    </p>
+    <p align="left">
+     mad libmad working libMAD MPEG layer 1-2-3 [libmad]
+    </p>
+    <p align="left">
+     那么你可以使用 libmad 播放 MP3：
+    </p>
+    <p align="left">
+     mplayer -ac mad &lt;somefile&gt;
+    </p>
+    <p align="left">
+     在 OGG 的情况中，你可以使用同样的技巧来检测 tremor 音频解码器是否可用：
+    </p>
+    <p align="left">
+     mplayer -ac help | grep tremor
+    </p>
+    <p align="left">
+     播放流媒体
+    </p>
+    <p align="left">
+     如果 MPlayer 无法自动找到播放列表或直接的流媒体文件，你可以尝试使用 -playlist 选项：
+    </p>
+    <p align="left">
+     mplayer -playlist &lt;file or url&gt;
+    </p>
+    <p align="left">
+     同时你也可以设置较大的缓存：
+    </p>
+    <p align="left">
+     mplayer -cache 8192 -playlist &lt;file or url&gt;
+    </p>
+    <p align="left">
+     指定缓存大小的单位是 KB，上面的命令将允许 MPlayer 使用 8 MB 缓存。你可以使用 -cache-min 选项来改变 MPlayer 占
+    </p>
+    <p align="left">
+     用缓存的百分比：
+    </p>
+    <p align="left">
+     mplayer -cache 8192 -cache-min 50 -playlist &lt;file orurl&gt;
+    </p>
+    <p align="left">
+     循环播放
+    </p>
+    <p align="left">
+     如果你想让媒体文件循环播放，可以使用 -loop 选项：
+    </p>
+    <p align="left">
+     mplayer -loop 3 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     上面的命令将播放 &lt;somefile&gt; 3 次，然后才退出。
+    </p>
+    <p align="left">
+     mplayer -loop 0 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     上面的命令将永远重复播放 &lt;somefile&gt;。
+    </p>
+    <p align="left">
+     改变播放速度
+    </p>
+    <p align="left">
+     你可以使用 -speed 选项来改变 MPlayer 播放媒体文件的速度。值为 1.0，意味着正常速度；0.5 意味着慢两倍；2.0 意味
+    </p>
+    <p align="left">
+     着快两倍。像这样指定选项：
+    </p>
+    <p align="left">
+     mplayer -speed 2.0 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     改变采样率
+    </p>
+    <p align="left">
+     使用 -srate 选项你可以改变 MPlayer 输出的采样率：
+    </p>
+    <p align="left">
+     mplayer -srate 48000 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     将音频输出为 wav 文件
+    </p>
+    <p align="left">
+     你可以将视频文件中的音频部分输出为 wav 文件：
+    </p>
+    <p align="left">
+     mplayer -ao pcm &lt;somefile&gt;
+    </p>
+    <p align="left">
+     这将输出名为 audiodump.wav 的音频文件。你也可以为输出的 wav 文件指定名称：
+    </p>
+    <p align="left">
+     mplayer -ao pcm:file=&lt;filename&gt;.wav&lt;somefile&gt;
+    </p>
+    <p align="left">
+     使用 ASCII 方式观看电影
+    </p>
+    <p align="left">
+     虽然无用，但却很好玩。有两个库文件支持该特性：aa 和 caca。使用 libaa，你只能在黑白 ASCII 中观看电影。而 libcaca
+    </p>
+    <p align="left">
+     支持色彩。然而，libaa 支持更广泛。你可以像这样使用 libaa 观看电影：
+    </p>
+    <p align="left">
+     mplayer -vo aa &lt;somefile&gt;
+    </p>
+    <p align="left">
+     如果你想使用 libcaca：
+    </p>
+    <p align="left">
+     mplayer -vo caca &lt;somefile&gt;
+    </p>
+    <p align="left">
+     将电影输出为系列图片
+    </p>
+    <p align="left">
+     MPlayer 也能将电影输出为一系列的图片：
+    </p>
+    <p align="left">
+     mplayer -vo jpeg &lt;somefile&gt;
+    </p>
+    <p align="left">
+     注意：上面的命令将产生数量巨大的 jpeg 文件。输出的 jpeg 文件名看起来像这样：
+    </p>
+    <p align="left">
+     00000001.jpg、00000002.jpg、00000003.jpg等等。
+    </p>
+    <p align="left">
+     你也可以输出其他的格式。只需将命令中的 jpeg 替换成 ppm、png、tga 等。
+    </p>
+    <p align="left">
+     指定纵横比
+    </p>
+    <p align="left">
+     当你在宽屏中播放电影时，可能想要使用 16:9 的纵横比：
+    </p>
+    <p align="left">
+     mplayer -aspect 16:9 &lt;somefile&gt;
+    </p>
+    <p align="left">
+     在非宽屏中，你可以使用 4:3 的纵横比。
+    </p>
+    <p align="left">
+     将选项放置到 MPlayer 的配置文件中
+    </p>
+    <p>
+     对于一般用户来说，该配置文件位于 ~/.mplayer/config；全局的配置文件在/etc/mplayer/config。不同的值使用行分隔。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     MPlayer官方网站：
+     <a href="http://www.mplayerhq.hu/">
+      http://www.mplayerhq.hu/
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mplayer&amp;t=blog" target="_blank">
+    mplayer
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=使用&amp;t=blog" target="_blank">
+    使用
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=控制&amp;t=blog" target="_blank">
+    控制
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286593" target="_blank">
+    Mplayer
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

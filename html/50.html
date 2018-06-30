@@ -1,0 +1,1030 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg的HEVC解码器源代码简单分析：解码器主干部分 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_50">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg的HEVC解码器源代码简单分析：解码器主干部分
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年06月10日 16:23:08
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：10723
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="white-space:pre;">
+     </span>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     HEVC源代码分析文章列表：
+    </p>
+    <p>
+     【解码 -libavcodec HEVC 解码器】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46412023">
+      FFmpeg的HEVC解码器源代码简单分析：概述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46412607">
+      FFmpeg的HEVC解码器源代码简单分析：解析器（Parser）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46412897">
+      FFmpeg的HEVC解码器源代码简单分析：解码器主干部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46414483">
+      FFmpeg的HEVC解码器源代码简单分析：CTU解码（CTU Decode）部分-PU
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46451119">
+      FFmpeg的HEVC解码器源代码简单分析：CTU解码（CTU Decode）部分-TU
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46483721">
+      FFmpeg的HEVC解码器源代码简单分析：环路滤波（LoopFilter）
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     本文分析FFmpeg的libavcodec中的HEVC解码器的主干部分。“主干部分”是相对于“CTU解码”、 “环路滤波”这些细节部分而言的。它包含了HEVC解码器直到hls_decode_entry()前面的函数调用关系（hls_decode_entry()后面就是HEVC解码器的细节部分，主要包含了“CTU解码”、 “环路滤波”2个部分）。
+    </p>
+    <br/>
+    <h2>
+     函数调用关系图
+    </h2>
+    FFmpeg HEVC解码器主干部分在整个HEVC解码器中的位置如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201506/08/1433745138_2962.png">
+      <img alt="" src="https://img-blog.csdn.net/20150608151627383"/>
+     </a>
+    </div>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1809621">
+      单击查看更清晰的大图
+     </a>
+    </div>
+    <br/>
+    HEVC解码器主干部分的源代码的调用关系如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201506/08/1433748060_9087.png">
+      <img alt="" src="https://img-blog.csdn.net/20150608151827077"/>
+     </a>
+    </div>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1809625">
+      单击查看更清晰的大图
+     </a>
+    </div>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    从图中可以看出，HEVC解码器初始化函数是hevc_decode_init()，解码函数是hevc_decode_frame()，关闭函数是hevc_decode_free()。其中hevc_decode_frame()调用了decode_nal_units()进行一帧NALU的解码，decode_nal_units()又调用了decode_nal_unit()进行一个NALU的解码。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    decode_nal_unit()一方面调用解析函数ff_hevc_decode_nal_vps()，ff_hevc_decode_nal_sps()，ff_hevc_decode_nal_pps()等对VPS、SPS、PPS进行解析；另一方面调用了hls_slice_header()和hls_slice_data()对Slice数据进行解码。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    hls_slice_data()中调用了hls_decode_entry()，在其中完成了Slice Data解码的流程。该流程包含了CU、PU、TU解码，环路滤波、SAO滤波等环节。
+    <br/>
+    <br/>
+    <h2>
+     ff_hevc_decoder
+    </h2>
+    ff_hevc_decoder是HEVC解码器对应的AVCodec结构体。该结构体的定义位于libavcodec\hevc.c，如下所示。
+    <br/>
+    <pre class="cpp">AVCodec ff_hevc_decoder = {
+    .name                  = "hevc",
+    .long_name             = NULL_IF_CONFIG_SMALL("HEVC (High Efficiency Video Coding)"),
+    .type                  = AVMEDIA_TYPE_VIDEO,
+    .id                    = AV_CODEC_ID_HEVC,
+    .priv_data_size        = sizeof(HEVCContext),
+    .priv_class            = &amp;hevc_decoder_class,
+    .init                  = hevc_decode_init,
+    .close                 = hevc_decode_free,
+    .decode                = hevc_decode_frame,
+    .flush                 = hevc_decode_flush,
+    .update_thread_context = hevc_update_thread_context,
+    .init_thread_copy      = hevc_init_thread_copy,
+    .capabilities          = CODEC_CAP_DR1 | CODEC_CAP_DELAY |
+                             CODEC_CAP_SLICE_THREADS | CODEC_CAP_FRAME_THREADS,
+    .profiles              = NULL_IF_CONFIG_SMALL(profiles),
+};</pre>
+    从源代码可以看出，HEVC解码器初始化函数是hevc_decode_init()，解码函数是hevc_decode_frame()，关闭函数是hevc_decode_free()。
+    <br/>
+    <br/>
+    <h2>
+     hevc_decode_init()
+    </h2>
+    hevc_decode_init()用于初始化HEVC解码器。该函数的定义如下。
+    <br/>
+    <pre class="cpp">//初始化HEVC解码器
+static av_cold int hevc_decode_init(AVCodecContext *avctx)
+{
+    HEVCContext *s = avctx-&gt;priv_data;
+    int ret;
+
+    //初始化CABAC
+    ff_init_cabac_states();
+
+    avctx-&gt;internal-&gt;allocate_progress = 1;
+
+    //为HEVCContext中的变量分配内存空间
+    ret = hevc_init_context(avctx);
+    if (ret &lt; 0)
+        return ret;
+
+    s-&gt;enable_parallel_tiles = 0;
+    s-&gt;picture_struct = 0;
+
+    if(avctx-&gt;active_thread_type &amp; FF_THREAD_SLICE)
+        s-&gt;threads_number = avctx-&gt;thread_count;
+    else
+        s-&gt;threads_number = 1;
+
+    //如果AVCodecContext中包含extradata，则解码之
+    if (avctx-&gt;extradata_size &gt; 0 &amp;&amp; avctx-&gt;extradata) {
+        ret = hevc_decode_extradata(s);
+        if (ret &lt; 0) {
+            hevc_decode_free(avctx);
+            return ret;
+        }
+    }
+
+    if((avctx-&gt;active_thread_type &amp; FF_THREAD_FRAME) &amp;&amp; avctx-&gt;thread_count &gt; 1)
+            s-&gt;threads_type = FF_THREAD_FRAME;
+        else
+            s-&gt;threads_type = FF_THREAD_SLICE;
+
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码中可以看出，hevc_decode_init()对HEVCContext中的变量做了一些初始化工作。其中调用了一个函数hevc_init_context()用于给HEVCContext中的变量分配内存空间。
+    <br/>
+    <br/>
+    <h3>
+     hevc_init_context()
+    </h3>
+    hevc_init_context()用于给HEVCContext中的变量分配内存空间。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">//为HEVCContext中的变量分配内存空间
+static av_cold int hevc_init_context(AVCodecContext *avctx)
+{
+    HEVCContext *s = avctx-&gt;priv_data;
+    int i;
+
+    s-&gt;avctx = avctx;
+
+    s-&gt;HEVClc = av_mallocz(sizeof(HEVCLocalContext));
+    if (!s-&gt;HEVClc)
+        goto fail;
+    s-&gt;HEVClcList[0] = s-&gt;HEVClc;
+    s-&gt;sList[0] = s;
+
+    s-&gt;cabac_state = av_malloc(HEVC_CONTEXTS);
+    if (!s-&gt;cabac_state)
+        goto fail;
+
+    s-&gt;tmp_frame = av_frame_alloc();
+    if (!s-&gt;tmp_frame)
+        goto fail;
+
+    s-&gt;output_frame = av_frame_alloc();
+    if (!s-&gt;output_frame)
+        goto fail;
+
+    for (i = 0; i &lt; FF_ARRAY_ELEMS(s-&gt;DPB); i++) {
+        s-&gt;DPB[i].frame = av_frame_alloc();
+        if (!s-&gt;DPB[i].frame)
+            goto fail;
+        s-&gt;DPB[i].tf.f = s-&gt;DPB[i].frame;
+    }
+
+    s-&gt;max_ra = INT_MAX;
+
+    s-&gt;md5_ctx = av_md5_alloc();
+    if (!s-&gt;md5_ctx)
+        goto fail;
+
+    ff_bswapdsp_init(&amp;s-&gt;bdsp);
+
+    s-&gt;context_initialized = 1;
+    s-&gt;eos = 0;
+
+    return 0;
+
+fail:
+    hevc_decode_free(avctx);
+    return AVERROR(ENOMEM);
+}</pre>
+    <br/>
+    <h2>
+     hevc_decode_free()
+    </h2>
+    hevc_decode_free()用于关闭HEVC解码器。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">//关闭HEVC解码器
+static av_cold int hevc_decode_free(AVCodecContext *avctx)
+{
+    HEVCContext       *s = avctx-&gt;priv_data;
+    int i;
+
+    pic_arrays_free(s);
+
+    av_freep(&amp;s-&gt;md5_ctx);
+
+    for(i=0; i &lt; s-&gt;nals_allocated; i++) {
+        av_freep(&amp;s-&gt;skipped_bytes_pos_nal[i]);
+    }
+    av_freep(&amp;s-&gt;skipped_bytes_pos_size_nal);
+    av_freep(&amp;s-&gt;skipped_bytes_nal);
+    av_freep(&amp;s-&gt;skipped_bytes_pos_nal);
+
+    av_freep(&amp;s-&gt;cabac_state);
+
+    av_frame_free(&amp;s-&gt;tmp_frame);
+    av_frame_free(&amp;s-&gt;output_frame);
+
+    for (i = 0; i &lt; FF_ARRAY_ELEMS(s-&gt;DPB); i++) {
+        ff_hevc_unref_frame(s, &amp;s-&gt;DPB[i], ~0);
+        av_frame_free(&amp;s-&gt;DPB[i].frame);
+    }
+
+    for (i = 0; i &lt; FF_ARRAY_ELEMS(s-&gt;vps_list); i++)
+        av_buffer_unref(&amp;s-&gt;vps_list[i]);
+    for (i = 0; i &lt; FF_ARRAY_ELEMS(s-&gt;sps_list); i++)
+        av_buffer_unref(&amp;s-&gt;sps_list[i]);
+    for (i = 0; i &lt; FF_ARRAY_ELEMS(s-&gt;pps_list); i++)
+        av_buffer_unref(&amp;s-&gt;pps_list[i]);
+    s-&gt;sps = NULL;
+    s-&gt;pps = NULL;
+    s-&gt;vps = NULL;
+
+    av_buffer_unref(&amp;s-&gt;current_sps);
+
+    av_freep(&amp;s-&gt;sh.entry_point_offset);
+    av_freep(&amp;s-&gt;sh.offset);
+    av_freep(&amp;s-&gt;sh.size);
+
+    for (i = 1; i &lt; s-&gt;threads_number; i++) {
+        HEVCLocalContext *lc = s-&gt;HEVClcList[i];
+        if (lc) {
+            av_freep(&amp;s-&gt;HEVClcList[i]);
+            av_freep(&amp;s-&gt;sList[i]);
+        }
+    }
+    if (s-&gt;HEVClc == s-&gt;HEVClcList[0])
+        s-&gt;HEVClc = NULL;
+    av_freep(&amp;s-&gt;HEVClcList[0]);
+
+    for (i = 0; i &lt; s-&gt;nals_allocated; i++)
+        av_freep(&amp;s-&gt;nals[i].rbsp_buffer);
+    av_freep(&amp;s-&gt;nals);
+    s-&gt;nals_allocated = 0;
+
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码可以看出，hevc_decode_free()释放了HEVCContext中的内存。
+    <br/>
+    <br/>
+    <h2>
+     hevc_decode_frame()
+    </h2>
+    hevc_decode_frame()是HEVC解码器中最关键的函数，用于解码一帧数据。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">/*
+ * 解码一帧数据
+ *
+ * 注释：雷霄骅
+ * leixiaohua1020@126.com
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ */
+static int hevc_decode_frame(AVCodecContext *avctx, void *data, int *got_output,
+                             AVPacket *avpkt)
+{
+    int ret;
+    HEVCContext *s = avctx-&gt;priv_data;
+    //没有输入码流的时候，输出解码器中剩余数据
+    //对应“Flush Decoder”功能
+    if (!avpkt-&gt;size) {
+    	//第3个参数flush取值为1
+        ret = ff_hevc_output_frame(s, data, 1);
+        if (ret &lt; 0)
+            return ret;
+
+        *got_output = ret;
+        return 0;
+    }
+
+    s-&gt;ref = NULL;
+    //解码一帧数据
+    ret    = decode_nal_units(s, avpkt-&gt;data, avpkt-&gt;size);
+    if (ret &lt; 0)
+        return ret;
+
+    /* verify the SEI checksum */
+    if (avctx-&gt;err_recognition &amp; AV_EF_CRCCHECK &amp;&amp; s-&gt;is_decoded &amp;&amp;
+        s-&gt;is_md5) {
+        ret = verify_md5(s, s-&gt;ref-&gt;frame);
+        if (ret &lt; 0 &amp;&amp; avctx-&gt;err_recognition &amp; AV_EF_EXPLODE) {
+            ff_hevc_unref_frame(s, s-&gt;ref, ~0);
+            return ret;
+        }
+    }
+    s-&gt;is_md5 = 0;
+
+    if (s-&gt;is_decoded) {
+        av_log(avctx, AV_LOG_DEBUG, "Decoded frame with POC %d.\n", s-&gt;poc);
+        s-&gt;is_decoded = 0;
+    }
+
+    if (s-&gt;output_frame-&gt;buf[0]) {
+    	//输出解码后数据
+        av_frame_move_ref(data, s-&gt;output_frame);
+        *got_output = 1;
+    }
+
+    return avpkt-&gt;size;
+}
+</pre>
+    <br/>
+    从源代码可以看出，hevc_decode_frame()根据输入的AVPacket的data是否为NULL分成两个情况：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）AVPacket的data为NULL的时候，代表没有输入码流，这时候直接调用ff_hevc_output_frame()输出解码器中缓存的帧。
+     <br/>
+     （2）AVPacket的data不为NULL的时候，调用decode_nal_units()解码输入的一帧数据的NALU。
+    </blockquote>
+    下面看一下一帧NALU的解码函数decode_nal_units()。
+    <br/>
+    <br/>
+    <h2>
+     decode_nal_units()
+    </h2>
+    decode_nal_units()用于解码一帧NALU。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">//解码一帧数据
+static int decode_nal_units(HEVCContext *s, const uint8_t *buf, int length)
+{
+    int i, consumed, ret = 0;
+
+    s-&gt;ref = NULL;
+    s-&gt;last_eos = s-&gt;eos;
+    s-&gt;eos = 0;
+
+    /* split the input packet into NAL units, so we know the upper bound on the
+     * number of slices in the frame */
+    s-&gt;nb_nals = 0;
+    while (length &gt;= 4) {
+        HEVCNAL *nal;
+        int extract_length = 0;
+
+        if (s-&gt;is_nalff) {
+            int i;
+            for (i = 0; i &lt; s-&gt;nal_length_size; i++)
+                extract_length = (extract_length &lt;&lt; 8) | buf[i];
+            buf    += s-&gt;nal_length_size;
+            length -= s-&gt;nal_length_size;
+
+            if (extract_length &gt; length) {
+                av_log(s-&gt;avctx, AV_LOG_ERROR, "Invalid NAL unit size.\n");
+                ret = AVERROR_INVALIDDATA;
+                goto fail;
+            }
+        } else {
+            /* search start code */
+        	//查找起始码0x000001
+            while (buf[0] != 0 || buf[1] != 0 || buf[2] != 1) {
+                ++buf;
+                --length;
+                if (length &lt; 4) {
+                    av_log(s-&gt;avctx, AV_LOG_ERROR, "No start code is found.\n");
+                    ret = AVERROR_INVALIDDATA;
+                    goto fail;
+                }
+            }
+            //找到后，跳过起始码（3Byte）
+            buf           += 3;
+            length        -= 3;
+        }
+
+        if (!s-&gt;is_nalff)
+            extract_length = length;
+
+        if (s-&gt;nals_allocated &lt; s-&gt;nb_nals + 1) {
+            int new_size = s-&gt;nals_allocated + 1;
+            HEVCNAL *tmp = av_realloc_array(s-&gt;nals, new_size, sizeof(*tmp));
+            if (!tmp) {
+                ret = AVERROR(ENOMEM);
+                goto fail;
+            }
+            s-&gt;nals = tmp;
+            memset(s-&gt;nals + s-&gt;nals_allocated, 0,
+                   (new_size - s-&gt;nals_allocated) * sizeof(*tmp));
+            av_reallocp_array(&amp;s-&gt;skipped_bytes_nal, new_size, sizeof(*s-&gt;skipped_bytes_nal));
+            av_reallocp_array(&amp;s-&gt;skipped_bytes_pos_size_nal, new_size, sizeof(*s-&gt;skipped_bytes_pos_size_nal));
+            av_reallocp_array(&amp;s-&gt;skipped_bytes_pos_nal, new_size, sizeof(*s-&gt;skipped_bytes_pos_nal));
+            s-&gt;skipped_bytes_pos_size_nal[s-&gt;nals_allocated] = 1024; // initial buffer size
+            s-&gt;skipped_bytes_pos_nal[s-&gt;nals_allocated] = av_malloc_array(s-&gt;skipped_bytes_pos_size_nal[s-&gt;nals_allocated], sizeof(*s-&gt;skipped_bytes_pos));
+            s-&gt;nals_allocated = new_size;
+        }
+        s-&gt;skipped_bytes_pos_size = s-&gt;skipped_bytes_pos_size_nal[s-&gt;nb_nals];
+        s-&gt;skipped_bytes_pos = s-&gt;skipped_bytes_pos_nal[s-&gt;nb_nals];
+        nal = &amp;s-&gt;nals[s-&gt;nb_nals];
+
+        consumed = ff_hevc_extract_rbsp(s, buf, extract_length, nal);
+
+        s-&gt;skipped_bytes_nal[s-&gt;nb_nals] = s-&gt;skipped_bytes;
+        s-&gt;skipped_bytes_pos_size_nal[s-&gt;nb_nals] = s-&gt;skipped_bytes_pos_size;
+        s-&gt;skipped_bytes_pos_nal[s-&gt;nb_nals++] = s-&gt;skipped_bytes_pos;
+
+
+        if (consumed &lt; 0) {
+            ret = consumed;
+            goto fail;
+        }
+
+        ret = init_get_bits8(&amp;s-&gt;HEVClc-&gt;gb, nal-&gt;data, nal-&gt;size);
+        if (ret &lt; 0)
+            goto fail;
+        hls_nal_unit(s);
+
+        if (s-&gt;nal_unit_type == NAL_EOB_NUT ||
+            s-&gt;nal_unit_type == NAL_EOS_NUT)
+            s-&gt;eos = 1;
+
+        buf    += consumed;
+        length -= consumed;
+    }
+
+    /* parse the NAL units */
+    for (i = 0; i &lt; s-&gt;nb_nals; i++) {
+        int ret;
+        s-&gt;skipped_bytes = s-&gt;skipped_bytes_nal[i];
+        s-&gt;skipped_bytes_pos = s-&gt;skipped_bytes_pos_nal[i];
+        //解码NALU
+        ret = decode_nal_unit(s, s-&gt;nals[i].data, s-&gt;nals[i].size);
+        if (ret &lt; 0) {
+            av_log(s-&gt;avctx, AV_LOG_WARNING,
+                   "Error parsing NAL unit #%d.\n", i);
+            goto fail;
+        }
+    }
+
+fail:
+    if (s-&gt;ref &amp;&amp; s-&gt;threads_type == FF_THREAD_FRAME)
+        ff_thread_report_progress(&amp;s-&gt;ref-&gt;tf, INT_MAX, 0);
+
+    return ret;
+}
+</pre>
+    <br/>
+    从源代码可以看出，decode_nal_units()中又调用了另一个函数decode_nal_unit()，两者的名字只相差一个“s”。由此可以看出decode_nal_unit()作用是解码一个NALU。
+    <br/>
+    <br/>
+    <h2>
+     decode_nal_unit()
+    </h2>
+    decode_nal_unit()用于解码一个NALU。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">//解码一个NALU
+static int decode_nal_unit(HEVCContext *s, const uint8_t *nal, int length)
+{
+    HEVCLocalContext *lc = s-&gt;HEVClc;
+    GetBitContext *gb    = &amp;lc-&gt;gb;
+    int ctb_addr_ts, ret;
+
+    ret = init_get_bits8(gb, nal, length);
+    if (ret &lt; 0)
+        return ret;
+
+    ret = hls_nal_unit(s);
+    if (ret &lt; 0) {
+        av_log(s-&gt;avctx, AV_LOG_ERROR, "Invalid NAL unit %d, skipping.\n",
+               s-&gt;nal_unit_type);
+        goto fail;
+    } else if (!ret)
+        return 0;
+
+    switch (s-&gt;nal_unit_type) {
+    case NAL_VPS:
+    	//解析VPS
+        ret = ff_hevc_decode_nal_vps(s);
+        if (ret &lt; 0)
+            goto fail;
+        break;
+    case NAL_SPS:
+    	//解析SPS
+        ret = ff_hevc_decode_nal_sps(s);
+        if (ret &lt; 0)
+            goto fail;
+        break;
+    case NAL_PPS:
+    	//解析PPS
+        ret = ff_hevc_decode_nal_pps(s);
+        if (ret &lt; 0)
+            goto fail;
+        break;
+    case NAL_SEI_PREFIX:
+    case NAL_SEI_SUFFIX:
+    	//解析SEI
+        ret = ff_hevc_decode_nal_sei(s);
+        if (ret &lt; 0)
+            goto fail;
+        break;
+    case NAL_TRAIL_R:
+    case NAL_TRAIL_N:
+    case NAL_TSA_N:
+    case NAL_TSA_R:
+    case NAL_STSA_N:
+    case NAL_STSA_R:
+    case NAL_BLA_W_LP:
+    case NAL_BLA_W_RADL:
+    case NAL_BLA_N_LP:
+    case NAL_IDR_W_RADL:
+    case NAL_IDR_N_LP:
+    case NAL_CRA_NUT:
+    case NAL_RADL_N:
+    case NAL_RADL_R:
+    case NAL_RASL_N:
+    case NAL_RASL_R:
+    	//解析Slice
+    	//解析Slice Header
+        ret = hls_slice_header(s);
+        if (ret &lt; 0)
+            return ret;
+
+        if (s-&gt;max_ra == INT_MAX) {
+            if (s-&gt;nal_unit_type == NAL_CRA_NUT || IS_BLA(s)) {
+                s-&gt;max_ra = s-&gt;poc;
+            } else {
+                if (IS_IDR(s))
+                    s-&gt;max_ra = INT_MIN;
+            }
+        }
+
+        if ((s-&gt;nal_unit_type == NAL_RASL_R || s-&gt;nal_unit_type == NAL_RASL_N) &amp;&amp;
+            s-&gt;poc &lt;= s-&gt;max_ra) {
+            s-&gt;is_decoded = 0;
+            break;
+        } else {
+            if (s-&gt;nal_unit_type == NAL_RASL_R &amp;&amp; s-&gt;poc &gt; s-&gt;max_ra)
+                s-&gt;max_ra = INT_MIN;
+        }
+
+        if (s-&gt;sh.first_slice_in_pic_flag) {
+            ret = hevc_frame_start(s);
+            if (ret &lt; 0)
+                return ret;
+        } else if (!s-&gt;ref) {
+            av_log(s-&gt;avctx, AV_LOG_ERROR, "First slice in a frame missing.\n");
+            goto fail;
+        }
+
+        if (s-&gt;nal_unit_type != s-&gt;first_nal_type) {
+            av_log(s-&gt;avctx, AV_LOG_ERROR,
+                   "Non-matching NAL types of the VCL NALUs: %d %d\n",
+                   s-&gt;first_nal_type, s-&gt;nal_unit_type);
+            return AVERROR_INVALIDDATA;
+        }
+
+        if (!s-&gt;sh.dependent_slice_segment_flag &amp;&amp;
+            s-&gt;sh.slice_type != I_SLICE) {
+            ret = ff_hevc_slice_rpl(s);
+            if (ret &lt; 0) {
+                av_log(s-&gt;avctx, AV_LOG_WARNING,
+                       "Error constructing the reference lists for the current slice.\n");
+                goto fail;
+            }
+        }
+        //解码 Slice Data
+        if (s-&gt;threads_number &gt; 1 &amp;&amp; s-&gt;sh.num_entry_point_offsets &gt; 0)
+            ctb_addr_ts = hls_slice_data_wpp(s, nal, length);
+        else
+            ctb_addr_ts = hls_slice_data(s);
+        if (ctb_addr_ts &gt;= (s-&gt;sps-&gt;ctb_width * s-&gt;sps-&gt;ctb_height)) {
+            s-&gt;is_decoded = 1;
+        }
+
+        if (ctb_addr_ts &lt; 0) {
+            ret = ctb_addr_ts;
+            goto fail;
+        }
+        break;
+    case NAL_EOS_NUT:
+    case NAL_EOB_NUT:
+        s-&gt;seq_decode = (s-&gt;seq_decode + 1) &amp; 0xff;
+        s-&gt;max_ra     = INT_MAX;
+        break;
+    case NAL_AUD:
+    case NAL_FD_NUT:
+        break;
+    default:
+        av_log(s-&gt;avctx, AV_LOG_INFO,
+               "Skipping NAL unit %d\n", s-&gt;nal_unit_type);
+    }
+
+    return 0;
+fail:
+    if (s-&gt;avctx-&gt;err_recognition &amp; AV_EF_EXPLODE)
+        return ret;
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码可以看出，decode_nal_unit()根据不同的NALU类型调用了不同的处理函数。这些处理函数可以分为两类——解析函数和解码函数，如下所示。
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）解析函数（获取信息）：
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_hevc_decode_nal_vps()：解析VPS。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_hevc_decode_nal_sps()：解析SPS。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_hevc_decode_nal_pps()：解析PPS。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_hevc_decode_nal_sei()：解析SEI。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      hls_slice_header()：解析Slice Header。
+     </blockquote>
+     （2）解码函数（解码得到图像）：
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      hls_slice_data()：解码Slice Data。
+     </blockquote>
+    </blockquote>
+    其中解析函数在文章《FFmpeg的HEVC解码器源代码简单分析：解析器（Parser）部分》已经有过介绍，就不再重复叙述了。解码函数hls_slice_data()完成了解码Slice的工作，下面看一下该函数的定义。
+    <br/>
+    <br/>
+    <h2>
+     hls_slice_data()
+    </h2>
+    hls_slice_data()用于解码Slice Data。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">//解码Slice Data
+static int hls_slice_data(HEVCContext *s)
+{
+    int arg[2];
+    int ret[2];
+
+    arg[0] = 0;
+    arg[1] = 1;
+    //解码入口函数
+    s-&gt;avctx-&gt;execute(s-&gt;avctx, hls_decode_entry, arg, ret , 1, sizeof(int));
+    return ret[0];
+}
+</pre>
+    <br/>
+    可以看出该函数的源代码很简单，调用了另一个函数hls_decode_entry()。
+    <br/>
+    <br/>
+    <h2>
+     hls_decode_entry()
+    </h2>
+    hls_decode_entry()是Slice Data解码的入口函数。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp">/*
+ * 解码入口函数
+ *
+ * 注释：雷霄骅
+ * leixiaohua1020@126.com
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ */
+static int hls_decode_entry(AVCodecContext *avctxt, void *isFilterThread)
+{
+    HEVCContext *s  = avctxt-&gt;priv_data;
+    //CTB尺寸
+    int ctb_size    = 1 &lt;&lt; s-&gt;sps-&gt;log2_ctb_size;
+    int more_data   = 1;
+    int x_ctb       = 0;
+    int y_ctb       = 0;
+    int ctb_addr_ts = s-&gt;pps-&gt;ctb_addr_rs_to_ts[s-&gt;sh.slice_ctb_addr_rs];
+
+    if (!ctb_addr_ts &amp;&amp; s-&gt;sh.dependent_slice_segment_flag) {
+        av_log(s-&gt;avctx, AV_LOG_ERROR, "Impossible initial tile.\n");
+        return AVERROR_INVALIDDATA;
+    }
+
+    if (s-&gt;sh.dependent_slice_segment_flag) {
+        int prev_rs = s-&gt;pps-&gt;ctb_addr_ts_to_rs[ctb_addr_ts - 1];
+        if (s-&gt;tab_slice_address[prev_rs] != s-&gt;sh.slice_addr) {
+            av_log(s-&gt;avctx, AV_LOG_ERROR, "Previous slice segment missing\n");
+            return AVERROR_INVALIDDATA;
+        }
+    }
+
+    while (more_data &amp;&amp; ctb_addr_ts &lt; s-&gt;sps-&gt;ctb_size) {
+        int ctb_addr_rs = s-&gt;pps-&gt;ctb_addr_ts_to_rs[ctb_addr_ts];
+        //CTB的位置x和y
+        x_ctb = (ctb_addr_rs % ((s-&gt;sps-&gt;width + ctb_size - 1) &gt;&gt; s-&gt;sps-&gt;log2_ctb_size)) &lt;&lt; s-&gt;sps-&gt;log2_ctb_size;
+        y_ctb = (ctb_addr_rs / ((s-&gt;sps-&gt;width + ctb_size - 1) &gt;&gt; s-&gt;sps-&gt;log2_ctb_size)) &lt;&lt; s-&gt;sps-&gt;log2_ctb_size;
+        //初始化周围的参数
+        hls_decode_neighbour(s, x_ctb, y_ctb, ctb_addr_ts);
+        //初始化CABAC
+        ff_hevc_cabac_init(s, ctb_addr_ts);
+        //样点自适应补偿参数
+        hls_sao_param(s, x_ctb &gt;&gt; s-&gt;sps-&gt;log2_ctb_size, y_ctb &gt;&gt; s-&gt;sps-&gt;log2_ctb_size);
+
+        s-&gt;deblock[ctb_addr_rs].beta_offset = s-&gt;sh.beta_offset;
+        s-&gt;deblock[ctb_addr_rs].tc_offset   = s-&gt;sh.tc_offset;
+        s-&gt;filter_slice_edges[ctb_addr_rs]  = s-&gt;sh.slice_loop_filter_across_slices_enabled_flag;
+        /*
+         * CU示意图
+         *
+		 * 64x64块
+		 *
+		 * 深度d=0
+		 * split_flag=1时候划分为4个32x32
+		 *
+		 * +--------+--------+--------+--------+--------+--------+--------+--------+
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * +                                   |                                   +
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * +                                   |                                   +
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * +                                   |                                   +
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * + --  --  --  --  --  --  --  --  --+ --  --  --  --  --  --  --  --  --+
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * +                                                                       +
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * +                                                                       +
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * +                                                                       +
+		 * |                                   |                                   |
+		 * |                                                                       |
+		 * |                                   |                                   |
+		 * +--------+--------+--------+--------+--------+--------+--------+--------+
+         *
+         *
+		 * 32x32 块
+		 * 深度d=1
+		 * split_flag=1时候划分为4个16x16
+		 *
+		 * +--------+--------+--------+--------+
+		 * |                                   |
+		 * |                 |                 |
+		 * |                                   |
+		 * +                 |                 +
+		 * |                                   |
+		 * |                 |                 |
+		 * |                                   |
+		 * + --  --  --  --  + --  --  --  --  +
+		 * |                                   |
+		 * |                 |                 |
+		 * |                                   |
+		 * +                 |                 +
+		 * |                                   |
+		 * |                 |                 |
+		 * |                                   |
+		 * +--------+--------+--------+--------+
+         *
+         *
+		 * 16x16 块
+		 * 深度d=2
+		 * split_flag=1时候划分为4个8x8
+		 *
+		 * +--------+--------+
+		 * |                 |
+		 * |        |        |
+		 * |                 |
+		 * +  --  --+ --  -- +
+		 * |                 |
+		 * |        |        |
+		 * |                 |
+		 * +--------+--------+
+         *
+         *
+         * 8x8块
+		 * 深度d=3
+		 * split_flag=1时候划分为4个4x4
+         *
+		 * +----+----+
+		 * |    |    |
+		 * + -- + -- +
+		 * |    |    |
+		 * +----+----+
+         *
+         */
+        /*
+         * 解析四叉树结构，并且解码
+         *
+         * hls_coding_quadtree(HEVCContext *s, int x0, int y0, int log2_cb_size, int cb_depth)中：
+         * s：HEVCContext上下文结构体
+         * x_ctb：CB位置的x坐标
+         * y_ctb：CB位置的y坐标
+         * log2_cb_size：CB大小取log2之后的值
+         * cb_depth：深度
+         *
+         */
+        more_data = hls_coding_quadtree(s, x_ctb, y_ctb, s-&gt;sps-&gt;log2_ctb_size, 0);
+        if (more_data &lt; 0) {
+            s-&gt;tab_slice_address[ctb_addr_rs] = -1;
+            return more_data;
+        }
+
+
+        ctb_addr_ts++;
+        //保存解码信息以供下次使用
+        ff_hevc_save_states(s, ctb_addr_ts);
+        //去块效应滤波
+        ff_hevc_hls_filters(s, x_ctb, y_ctb, ctb_size);
+    }
+
+    if (x_ctb + ctb_size &gt;= s-&gt;sps-&gt;width &amp;&amp;
+        y_ctb + ctb_size &gt;= s-&gt;sps-&gt;height)
+        ff_hevc_hls_filter(s, x_ctb, y_ctb, ctb_size);
+
+    return ctb_addr_ts;
+}
+</pre>
+    <br/>
+    从源代码可以看出，hls_decode_entry()以CTB为单位处理输入的视频流。每个CTB的压缩数据经过下面两个基本步骤进行处理：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）调用hls_coding_quadtree()对CTB解码。其中包括了CU、PU、TU的解码。
+     <br/>
+     （2）调用ff_hevc_hls_filters()进行滤波。其中包括去块效应滤波和SAO滤波。
+    </blockquote>
+    hls_decode_entry()的函数调用关系如下图所示。后续的几篇文章将会对其调用的函数进行分析。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150608152703235"/>
+    </div>
+    <br/>
+    至此，FFmpeg HEVC解码器的主干部分的源代码就分析完毕了。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <strong>
+     <span style="color:#990000;">
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </span>
+    </strong>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/46412897
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=CTU&amp;t=blog" target="_blank">
+    CTU
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=libavcodec&amp;t=blog" target="_blank">
+    libavcodec
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=HEVC&amp;t=blog" target="_blank">
+    HEVC
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码&amp;t=blog" target="_blank">
+    解码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

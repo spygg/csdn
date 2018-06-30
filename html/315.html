@@ -1,0 +1,442 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 传媒大学媒体中心资源批量获取工具的制作 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_315">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   传媒大学媒体中心资源批量获取工具的制作
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月25日 17:00:49
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：3853
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     中国传媒大学媒体中心（
+     <a href="http://media.cuc.edu.cn/">
+      http://media.cuc.edu.cn/
+     </a>
+     ）是中国传媒大学媒体资源最集中的地方，各种电影，电视剧，音乐等等，可以说是丰富多彩。然而它有一个缺点，就是只能在线看，不能下载。这导致想把自己喜爱的视频保存下来是比较困难的。为此我课余时间进行了一个小研究，做了一个MFC的小程序，可以实现媒体中心中资源URL的提取和保存，在此记录一下自己的制作过程。
+    </p>
+    <p>
+     该工具主要涉及以下三个技术：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      1.发送HTTP请求，获取网页的源代码
+     </p>
+     <p>
+      2.查找具有特定标记的字符串，并提取出来
+     </p>
+     <p>
+      3.数据写入xml文件
+     </p>
+    </blockquote>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       下面先看看实际情况
+      </span>
+     </strong>
+    </p>
+    <p>
+     首先登录媒体中心，打开一个视频，截图如图所示：
+    </p>
+    <p>
+     <img alt="" height="668" src="https://img-blog.csdn.net/20131023171505312?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="908"/>
+     <br/>
+    </p>
+    <p>
+     查看一下网页的源代码，看看有没有视频URL。在网页里搜索了关键字“.flv”，竟然找到了。
+    </p>
+    <p>
+     地址就是：
+    </p>
+    <p>
+     <span style="color:#990000;">
+      http://202.205.20.12:2048/02/video/2012/5/111309/1336492554022.flv
+     </span>
+     <br/>
+    </p>
+    <p>
+     <img alt="" height="394" src="https://img-blog.csdn.net/20131023171518906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="906"/>
+     <br/>
+    </p>
+    <p>
+     只要把上述地址粘贴到迅雷，快车里面就可以下载视频了。
+    </p>
+    <p>
+     现在有一个问题，就是下载一个视频可以这样翻网页源代码找一找，但是每次这样操作有点太过麻烦了。因此需要编程实现一个小工具。当输入一个视频播放网页的地址的时候，就可以输出该视频实际的下载地址。当然，最好可以批量输入页面地址，然后批量解析视频的实际地址。
+    </p>
+    <p>
+     其实这个东西已经实现出来了，最终界面如下所示：
+    </p>
+    <p>
+     在这个工具中，贴入视频所在的网页，就可以解析出视频的标题以及视频的地址。而且下半部分还提供了批量解析的功能，输入视频ID（随后会解释）的范围，就可以探测出该范围内所有的视频资源，同时输出成XML或者TXT。
+    </p>
+    <p>
+     <img alt="" height="527" src="https://img-blog.csdn.net/20131023182020156?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="739"/>
+     <br/>
+    </p>
+    <p>
+     批量解析输出成XML如下所示：
+    </p>
+    <p>
+    </p>
+    <pre class="html">&lt;URLList&gt;
+    &lt;URL id="4"&gt;
+        &lt;name&gt;恐惧拉斯维加斯&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/2008/6/恐惧拉斯维加斯/恐惧拉斯维加斯.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+    &lt;URL id="5"&gt;
+        &lt;name&gt;一球成名2CD1&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/2008/7/一球成名2CD1/一球成名2CD1.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+    &lt;URL id="6"&gt;
+        &lt;name&gt;一球成名2CD2&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/2008/7/一球成名2CD2/一球成名2CD2.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+    &lt;URL id="7"&gt;
+        &lt;name&gt;深海寻人&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/2008/7/深海寻人/深海寻人.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+    &lt;URL id="28"&gt;
+        &lt;name&gt;Oh_My_Friend&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/1970/1/28.BIGBANG_3rd_MINI_Oh_My_Friend_MV/BIGBANG_3rd_MINI_Oh_My_Friend_MV.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+    &lt;URL id="30"&gt;
+        &lt;name&gt;once in a lifetime&lt;/name&gt;
+        &lt;link&gt;http://202.205.20.12:2048/02/video/2008/9/30.once_in_a_lifetime/once_in_a_lifetime.flv&lt;/link&gt;
+        &lt;type&gt;vod&lt;/type&gt;
+        &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;/URL&gt;
+&lt;/URLList&gt;</pre>
+    <br/>
+    或者TXT格式：
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">视频ID:4		视频名称：恐惧拉斯维加斯					视频地址：http://202.205.20.12:2048/02/video/2008/6/恐惧拉斯维加斯/恐惧拉斯维加斯.flv
+视频ID:5		视频名称：一球成名2CD1						视频地址：http://202.205.20.12:2048/02/video/2008/7/一球成名2CD1/一球成名2CD1.flv
+视频ID:6		视频名称：一球成名2CD2						视频地址：http://202.205.20.12:2048/02/video/2008/7/一球成名2CD2/一球成名2CD2.flv
+视频ID:7		视频名称：深海寻人						视频地址：http://202.205.20.12:2048/02/video/2008/7/深海寻人/深海寻人.flv
+视频ID:28		视频名称：Oh_My_Friend						视频地址：http://202.205.20.12:2048/02/video/1970/1/28.BIGBANG_3rd_MINI_Oh_My_Friend_MV/BIGBANG_3rd_MINI_Oh_My_Friend_MV.flv
+视频ID:30		视频名称：once in a lifetime					视频地址：http://202.205.20.12:2048/02/video/2008/9/30.once_in_a_lifetime/once_in_a_lifetime.flv</pre>
+    <br/>
+    介绍完毕。现在简要介绍一下单个视频解析url的制作过程。
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       第一步：发送HTTP请求，获取网页的源代码
+      </span>
+     </strong>
+    </p>
+    <p>
+     曾经写过一篇发送HTTP请求获取网页源代码的文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12530683">
+      C++发送HTTP请求获取网页HTML代码
+     </a>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       第二步：查找具有特定标记的字符串，并提取出来
+      </span>
+     </strong>
+    </p>
+    <p>
+     曾经写过一篇查找字符串并提取出来的方法的文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11951941">
+      C++从文件中查找特定的字符串，并提取该字符串
+     </a>
+     <br/>
+    </p>
+    <p>
+     在此需要综合前两篇文章的方法，实现对特定url的网页源代码的请求，以及对特定字符串的查找和提取。
+    </p>
+    <p>
+     首先观察一下网页源代码，发现视频地址是在一对&lt;script&gt;标签里：
+    </p>
+    <p>
+    </p>
+    <pre class="html">&lt;script type='text/javascript'&gt;
+					var s1 = new SWFObject('/v/Y29uZmlnPS9tcGMuanNwP21pZD0xMTEzMDk=','mediaplayer','480','380','10');
+					//var s1 = new SWFObject('/scripts/player_4.4.swf?config=/mpc.jsp?mid=111309','mediaplayer','480','380','9');
+					//s1.addParam('flashvars','&amp;file=http://202.205.20.12:2048/02/video/2012/5/111309/1336492554022.flv&amp;streamer=lighttpd');
+					s1.useExpressInstall('/scripts/expressinstall.swf');
+					s1.addParam('allowfullscreen','true');
+					s1.addParam('allowscriptaccess','always');
+					s1.write('player_box');
+&lt;/script&gt;</pre>
+    <br/>
+    而地址开头“http://”前面是“('flashvars','&amp;file=”，地址结尾“.flv”后面是“&amp;streamer=lighttpd”。以这两个字符串作为标志，就能找到视频url地址。
+    <p>
+    </p>
+    <p>
+     视频标题的开头前面是“&lt;span class=text_bl&gt;”，地址结尾“&lt;/span&gt;&amp;nbsp;&amp;nbsp”。以这两个字符串作为标志，就能找到视频的标题。
+    </p>
+    <p>
+     下面贴上这部分的源代码
+    </p>
+    <p>
+     注意：本工程中使用了3个CString变量关联到3个Edit Control控件：
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     CString m_htmlurl;//输入页面url
+     <br/>
+     <span style="white-space:pre;">
+     </span>
+     CString m_videourl;//输出解析出来的视频url
+     <br/>
+     <span style="white-space:pre;">
+     </span>
+     CString m_videoname;//输出解析出来的视频名称
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">void Csocket_http_dialogDlg::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	//地址-----------------
+	char stringsearch_before[]="('flashvars','&amp;file=";
+	char stringsearch_after[]="&amp;streamer=lighttpd";
+	//标题-----------------
+	char stringsearch_before1[]="&lt;span class=text_bl&gt;";
+	char stringsearch_after1[]="&lt;/span&gt;  ";
+	//url_search_before位置，代表找到了相应字符串
+	const char *mark=NULL;
+	//开始和结束
+	const char *stringstart=NULL;
+	const char *stringend=NULL;
+	//结果
+	char url[200]={0};
+	char vname[200]={0};
+
+	char *content_temp=NULL;
+	char *string_temp=NULL;
+	//-----------------
+
+
+
+	CInternetSession session;//建立对话
+	CHttpFile *file;
+	//CException *e;
+	UpdateData(true);
+	CString URL = m_htmlurl.GetString();
+	if(URL==""){
+	AfxMessageBox("网页地址为空！");
+	}
+	try{
+		file=(CHttpFile*)session.OpenURL(URL);//打开文件
+	}catch(...){
+		file = 0;
+	}
+	if (file){
+		DWORD dwStatus;
+		file-&gt;QueryInfoStatusCode(dwStatus);
+		if(dwStatus == HTTP_STATUS_OK){
+			CString content;
+			CString data;
+			while (file-&gt;ReadString(data)){
+				content+=data+"\r\n";
+			}
+			content.TrimRight();
+			//MessageBox((LPCTSTR)content);
+			//处理数据,数据位于content之中---------------------------
+			//获得地址
+			mark=strstr(content,stringsearch_before);
+			if(mark==NULL){
+				AfxMessageBox("没有找到地址...本软件只适用于媒体中心");
+				goto end;
+			}
+			//注意要-1,，此处获得string开始
+			stringstart=mark+sizeof(stringsearch_before)-1;
+			//注意此处获得string结束之后的1位，因此最后一位应改为\0
+			stringend=strstr(stringstart,stringsearch_after);
+			string_temp=url;
+			for(content_temp=(char*)stringstart;content_temp!=stringend;content_temp++,string_temp++){
+				*string_temp=*content_temp;
+			}
+			string_temp='\0';
+			//获得标题-----------------------------
+			mark=strstr(content,stringsearch_before1);
+			if(mark==NULL){
+				AfxMessageBox("没有找到标题...本软件只适用于媒体中心");
+				goto end;
+			}
+			//注意要-1,，此处获得string开始
+			stringstart=mark+sizeof(stringsearch_before1)-1;
+			//注意此处获得string结束之后的1位，因此最后一位应改为\0
+			stringend=strstr(stringstart,stringsearch_after1);
+			//vname是最终输出
+			string_temp=vname;
+			for(content_temp=(char*)stringstart;content_temp!=stringend;content_temp++,string_temp++){
+				*string_temp=*content_temp;
+			}
+			string_temp='\0';
+
+			//----------------------------------
+			m_videourl=url;
+			m_videoname=vname;
+			UpdateData(FALSE);
+			
+		}else{
+			MessageBox("dwStatus!=HTTP_STATUS_OK");
+		}
+		end:
+		file-&gt;Close();
+		delete file;
+	}
+	session.Close();
+
+
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       第三步：数据写入xml文件
+      </span>
+     </strong>
+     <br/>
+    </p>
+    <p>
+     曾经写过一篇数据写入成xml的文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12460175">
+      TinyXML：一个优秀的C++ XML解析器
+     </a>
+     <br/>
+    </p>
+    <p>
+     在这里就不多说了，方法类似。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12974945
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=http&amp;t=blog" target="_blank">
+    http
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xml&amp;t=blog" target="_blank">
+    xml
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=字符串&amp;t=blog" target="_blank">
+    字符串
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=网页源代码&amp;t=blog" target="_blank">
+    网页源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,265 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ vc2005编译ffmpeg以及ffplay - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_457">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   vc2005编译ffmpeg以及ffplay
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月25日 21:35:02
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7018
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <strong>
+     <span style="font-size:18px;">
+      ffmpeg编译过程：
+     </span>
+    </strong>
+    <br/>
+    1
+    <a href="http://ffmpeg.zeranoe.com/builds/">
+     http://ffmpeg.zeranoe.com/builds/
+    </a>
+    <br/>
+    下载官方提供的源码，win32库和dll。
+    <br/>
+    2 新建vc2005 console空工程，把ffmpeg.h,ffmpeg.c,cmdutils.c,cmdutils.h,cmdutils_common_opts.h,
+    <br/>
+    ffmpeg_filter.c,ffmpeg_opt.c加到工程。
+    <br/>
+    3 http://drv.nu/ffmpeg/doxygen/config_8h-source.html
+    <br/>
+    从这里生成 config.h
+    <br/>
+    4 从mingw下复制stdint.h和inttypes.h
+    <br/>
+    <br/>
+    5 把.h里的inline换成__inline
+    <br/>
+    或
+    <br/>
+    <pre class="cpp">#if defined(WIN32) &amp;&amp; !defined(__cplusplus)
+#define inline __inline
+#endif</pre>
+    或
+    <br/>
+    project-&gt;[setting]-&gt;[c/c++]-&gt;Preprocessor definitions:编辑框里输入inline=__inline
+    <br/>
+    <br/>
+    6 找不到colorspace.h等一些文件，从源码里找到复制过来。
+    <br/>
+    <p>
+     7 有几个系统文件找不到，注释掉config.h相关定义，如
+    </p>
+    <p>
+    </p>
+    <pre class="cpp"> //#define HAVE_SYS_RESOURCE_H 1</pre>
+    <p>
+    </p>
+    另外，需要用到socket，修改：
+    <br/>
+    <pre class="cpp"> #define HAVE_WINSOCK2_H 1
+ #define HAVE_STRUCT_ADDRINFO 1</pre>
+    7 print_all_libs_info 里找不到什么东西，就注释掉。
+    <br/>
+    <br/>
+    <br/>
+    8参考 http://www.cnblogs.com/zyl910/archive/2012/08/08/c99int.html
+    <br/>
+    在config.h里面加上
+    <br/>
+    #define PRIu64       "I64u"
+    <br/>
+    #define PRId64       "I64d"
+    <br/>
+    <br/>
+    9
+    <br/>
+    //#define AV_TIME_BASE_Q          (AVRational){1, AV_TIME_BASE}
+    <br/>
+    <p>
+     改成
+    </p>
+    <p>
+     #define AV_TIME_BASE_Q          _AVRational(1, AV_TIME_BASE)
+    </p>
+    <br/>
+    <br/>
+    <p>
+     再加：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVRational _AVRational(int num, int den) {
+AVRational r = {num, den};
+return r;
+}</pre>
+    <p>
+    </p>
+    或者，在用到AV_TIME_BASE_Q 的地方，手写AVRational r = {1,AV_TIME_BASE };，再用上这个r.
+    <br/>
+    <br/>
+    最麻烦就是const OptionDef options[] 这个数组的初值处理，主要是里面的函数，参考ffmpeg_vc5的代码，把每一行改成这样：{ "f",  HAS_ARG | OPT_STRING | OPT_OFFSET,   { (void*)OFFSET(format) },
+    <br/>
+    就是把原来函数的地方{.fun = xxx}改成 {（void*）xxx}。编译通过了，常规的一些输入参数都好用。复杂的还没试。
+    <br/>
+    <br/>
+    最后会提示几个链接问题，手动加上const AVPixFmtDescriptor av_pix_fmt_descriptors[PIX_FMT_NB];
+    <br/>
+    然后，在config.h里加：
+    <br/>
+    <pre class="cpp">#define AVCONV_DATADIR "c:/ffmpeg1010/"
+
+
+#define snprintf _snprintf
+#define lrint(f) (f&gt;=0?(int32_t)(f+(double)0.5):(int32_t)(f-(double)0.4))
+#define lrintf(f) (f&gt;=0?(int32_t)(f+(float)0.5):(int32_t)(f-(float)0.4))
+#define llrintf(f) (f&gt;=0?(int64_t)(f+(double)0.5):(int64_t)(f-(double)0.4))
+#define llrint(f) (f&gt;=0?(int64_t)(f+(float)0.5):(int64_t)(f-(float)0.4))
+
+
+#define log2(x) (log(x) * 1.44269504088896340736)  </pre>
+    这个AVCONV_DATADIR 是随便写的，暂时还没用上。
+    <br/>
+    <br/>
+    到此，基本就完全成功了。编译出来，运行ffmpeg -i rtsp://xxx/test.264 out.mp4
+    <br/>
+    保存的质量非常好。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       ffplay编译过程
+      </span>
+     </strong>
+    </p>
+    ffplay编译比ffmpeg简单的多，新建工程，加上代码，稍改几行就OK了。然后ffplay rtsp，出了一个黑窗口，播放效果不错。再新生成一个mfc工程，给sdl指定一个窗口，视频就在指定窗口播放了。不过这时有个问题，拖动窗口时，视频就花掉了。估计sdl需要一些参数，以后有空再研究了。
+    <br/>
+    <br/>
+    <p>
+     源码下载：
+     <a href="http://download.csdn.net/detail/sxcong/4672795">
+      http://download.csdn.net/detail/sxcong/4672795
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://blog.csdn.net/sxcong/article/details/8097594">
+      http://blog.csdn.net/sxcong/article/details/8097594
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=vc&amp;t=blog" target="_blank">
+    vc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffplay&amp;t=blog" target="_blank">
+    ffplay
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编译&amp;t=blog" target="_blank">
+    编译
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

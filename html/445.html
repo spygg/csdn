@@ -1,0 +1,2126 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ PHP入门教程 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_445">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   PHP入门教程
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月02日 15:08:45
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4397
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p align="center">
+     <strong>
+      十天学会
+      <span style="font-family:'Times New Roman';">
+       PHP
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      <span style="font-size:18px;">
+       <strong>
+       </strong>
+      </span>
+     </span>
+     <span style="font-size:18px;">
+      <strong>
+       下面简单介绍一下
+       <span style="font-family:'Times New Roman';">
+        PHP
+       </span>
+       的语法。
+      </strong>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      1
+     </span>
+     、嵌入方法：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     类似
+     <span style="font-family:'Times New Roman';">
+      ASP
+     </span>
+     的
+     <span style="font-family:'Times New Roman';">
+      &lt;%
+     </span>
+     ，
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     可以是
+     <span style="font-family:'Times New Roman';">
+      &lt;?php
+     </span>
+     或者是
+     <span style="font-family:'Times New Roman';">
+      &lt;?
+     </span>
+     ，结束符号是
+     <span style="font-family:'Times New Roman';">
+      ?&gt;
+     </span>
+     ，当然您也可以自己指定。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      2
+     </span>
+     、引用文件：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     引用文件的方法有两种：
+     <span style="font-family:'Times New Roman';">
+      require
+     </span>
+     及
+     <span style="font-family:'Times New Roman';">
+      include
+     </span>
+     。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      require
+     </span>
+     的使用方法如
+     <span style="font-family:'Times New Roman';">
+      require("MyRequireFile.php");
+     </span>
+     。这个函数通常放在
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     程序的最前面，
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     程序在执行前，就会先读入
+     <span style="font-family:'Times New Roman';">
+      require
+     </span>
+     所指定引入的文件，使它变成
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     程序网页的一部份。常用的函数，亦可以这个方法将它引入网页中。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      include
+     </span>
+     使用方法如
+     <span style="font-family:'Times New Roman';">
+      include("MyIncludeFile.php");
+     </span>
+     。这个函数一般是放在流程控制的处理部分中。
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     程序网页在读到
+     <span style="font-family:'Times New Roman';">
+      include
+     </span>
+     的文件时，才将它读进来。这种方式，可以把程序执行时的流程简单化。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      3
+     </span>
+     、注释方法：
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">  &lt;?php 
+
+  echo "这是第一种例子。\n" ; //本例是 C++ 语法的注释
+
+  /* 本例采用多行的
+
+  注释方式 */
+
+  echo "这是第二种例子。\n" ;
+
+  echo "这是第三种例子。\n" ; #本例使用 UNIX Shell 语法注释
+
+  ?&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      4
+     </span>
+     、变量类型：
+    </p>
+    <pre class="php">  $mystring = "我是字符串" ;
+
+  $NewLine = "换行了\n" ;
+
+  $int1 = 38 ; 
+
+  $float1 = 1.732 ; 
+
+  $float2 = 1.4E+2 ;
+
+  $MyArray1 = array( "子" , "丑" , "寅" , "卯" ); 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     这里引出两个问题，首先
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     变量以
+     <span style="font-family:'Times New Roman';">
+      $
+     </span>
+     开头，第二
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     语句以
+     <span style="font-family:'Times New Roman';">
+      ;
+     </span>
+     结尾，可能
+     <span style="font-family:'Times New Roman';">
+      ASP
+     </span>
+     程序员会不适应。这两个遗漏也是程序上大多错误所在。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      5
+     </span>
+     、运算符号：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     数学运算：符号意义
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      +
+     </span>
+     加法运算
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      -
+     </span>
+     减法运算
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      *
+     </span>
+     乘法运算
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      /
+     </span>
+     除法运算
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      %
+     </span>
+     取余数
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      ++
+     </span>
+     累加
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      --
+     </span>
+     递减
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     字符串运算：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     运算符号只有一个，就是英文的句号。它可以将字符串连接起来，变成合并的新字符串。类似
+     <span style="font-family:'Times New Roman';">
+      ASP
+     </span>
+     中的
+     <span style="font-family:'Times New Roman';">
+      &amp;
+     </span>
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">  &lt;?
+  $a = "PHP 4" ; 
+  $b = "功能强大" ;
+  echo $a.$b; 
+  ?&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     这里也引出两个问题，首先
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     中输出语句是
+     <span style="font-family:'Times New Roman';">
+      echo
+     </span>
+     ，第二类似
+     <span style="font-family:'Times New Roman';">
+      ASP
+     </span>
+     中的
+     <span style="font-family:'Times New Roman';">
+      &lt;%=
+     </span>
+     变量
+     <span style="font-family:'Times New Roman';">
+      %&gt;
+     </span>
+     ，
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     中也可以
+     <span style="font-family:'Times New Roman';">
+      &lt;?=
+     </span>
+     变量
+     <span style="font-family:'Times New Roman';">
+      ?    &gt;
+     </span>
+     。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     逻辑运算：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     符号意义
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      &lt;
+     </span>
+     小于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      &gt;
+     </span>
+     大于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      &lt;=
+     </span>
+     小于或等于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      &gt;=
+     </span>
+     大于或等于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      ==
+     </span>
+     等于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      !=
+     </span>
+     不等于
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      &amp;&amp;
+     </span>
+     而且
+     <span style="font-family:'Times New Roman';">
+      (And)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      and
+     </span>
+     而且
+     <span style="font-family:'Times New Roman';">
+      (And)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      ||
+     </span>
+     或者
+     <span style="font-family:'Times New Roman';">
+      (Or)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      or
+     </span>
+     或者
+     <span style="font-family:'Times New Roman';">
+      (Or)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      xor
+     </span>
+     异或
+     <span style="font-family:'Times New Roman';">
+      (Xor)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      !
+     </span>
+     不
+     <span style="font-family:'Times New Roman';">
+      (Not)
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     今天就说到这里，明天说一下流程控制。
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       学习目的：掌握
+       <span style="font-family:'Times New Roman';">
+        php
+       </span>
+       的流程控制
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       1
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       if..else
+      </span>
+      循环有三种结构
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     第一种是只有用到
+     <span style="font-family:'Times New Roman';">
+      if
+     </span>
+     条件，当作单纯的判断。解释成
+     <span style="font-family:'Times New Roman';">
+      "
+     </span>
+     若发生了某事则怎样处理
+     <span style="font-family:'Times New Roman';">
+      "
+     </span>
+     。语法如下：
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      if (expr) { statement }
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     其中的
+     <span style="font-family:'Times New Roman';">
+      expr
+     </span>
+     为判断的条件，通常都是用逻辑运算符号当判断的条件。而
+     <span style="font-family:'Times New Roman';">
+      statement
+     </span>
+     为符合条件的执行部分程序，若程序只有一行，可以省略大括号
+     <span style="font-family:'Times New Roman';">
+      {}
+     </span>
+     。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     范例：本例省略大括号。
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <p>
+    </p>
+    <pre class="php">&lt;?php 
+  if ($state==1)echo "哈哈" ;
+  ?&gt; </pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     这里特别注意的是，判断是否相等是
+     <span style="font-family:'Times New Roman';">
+      ==
+     </span>
+     而不是
+     <span style="font-family:'Times New Roman';">
+      =
+     </span>
+     ，
+     <span style="font-family:'Times New Roman';">
+      ASP
+     </span>
+     程序员可能常犯这个错误，
+     <span style="font-family:'Times New Roman';">
+      =
+     </span>
+     是赋值。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     范例：本例的执行部分有三行，不可省略大括号。
+    </p>
+    <pre class="php">&lt;?php 
+
+  if ($state==1) { 
+  echo "哈哈 ;
+  echo "&lt;br&gt;"; 
+  } 
+  ?&gt; 
+</pre>
+    <p>
+     <br/>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     第两种是除了
+     <span style="font-family:'Times New Roman';">
+      if
+     </span>
+     之外，加上了
+     <span style="font-family:'Times New Roman';">
+      else
+     </span>
+     的条件，可解释成
+     <span style="font-family:'Times New Roman';">
+      "
+     </span>
+     若发生了某事则怎样处理，否则该如何解决
+     <span style="font-family:'Times New Roman';">
+      "
+     </span>
+     。语法如下
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      if (expr) { statement1 }else { statement2 }
+     </span>
+    </p>
+    <p>
+     范例：上面的例子来修改成更完整的处理。其中的
+     <span style="font-family:'Times New Roman';">
+      else
+     </span>
+     由于只有一行执行的指令，因此不用加上大括号。
+    </p>
+    <pre class="php"> &lt;?php 
+  if ($state==1) { 
+  echo "哈哈" ;
+  echo "&lt;br&gt;";
+  } 
+  else{
+  echo "呵呵";
+  echo "&lt;br&gt;";
+  } 
+  ?&gt; 
+</pre>
+    <p>
+     <br/>
+     第三种就是递归的
+     <span style="font-family:'Times New Roman';">
+      if..else
+     </span>
+     循环，通常用在多种决策判断时。它将数个
+     <span style="font-family:'Times New Roman';">
+      if..else
+     </span>
+     拿来合并运用处理。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     直接看下面的例子
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <p>
+    </p>
+    <pre class="php">&lt;?php 
+  if ( $a &gt; $b ) { 
+  echo "a 比 b大" ; 
+  } elseif ( $a == $b ) {
+  echo "a 等于 b" ;
+  } else { 
+  echo "a 比 b小" ; 
+  } 
+  ?&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     上例只用二层的
+     <span style="font-family:'Times New Roman';">
+      if..else
+     </span>
+     循环，用来比较
+     <span style="font-family:'Times New Roman';">
+      a
+     </span>
+     和
+     <span style="font-family:'Times New Roman';">
+      b
+     </span>
+     两个变量。实际要使用这种递归
+     <span style="font-family:'Times New Roman';">
+      if..else
+     </span>
+     循环时，请小心使用，因为太多层的循环容易使设计的逻辑出问题，或者少打了大括号等，都会造成程序出现莫名其妙的问题。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       2
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       for
+      </span>
+      循环就单纯只有一种，没有变化，它的语法如下
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      for (expr1; expr2; expr3) {statement }
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     其中的
+     <span style="font-family:'Times New Roman';">
+      expr1
+     </span>
+     为条件的初始值。
+     <span style="font-family:'Times New Roman';">
+      expr2
+     </span>
+     为判断的条件，通常都是用逻辑运算符号
+     <span style="font-family:'Times New Roman';">
+      (logicaloperators)
+     </span>
+     当判断的条件。
+     <span style="font-family:'Times New Roman';">
+      expr3
+     </span>
+     为执行
+     <span style="font-family:'Times New Roman';">
+      statement
+     </span>
+     后要执行的部份，用来改变条件，供下次的循环判断，如加一
+     <span style="font-family:'Times New Roman';">
+      ..
+     </span>
+     等等。而
+     <span style="font-family:'Times New Roman';">
+      statement
+     </span>
+     为符合条件的执行部分程序，若程序只有一行，可以省略大括号
+     <span style="font-family:'Times New Roman';">
+      {}
+     </span>
+     。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     下例是用
+     <span style="font-family:'Times New Roman';">
+      for
+     </span>
+     循环写的的例子。
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">  &lt;?php 
+  for ( $i = 1 ; $i &lt;= 10 ;$i ++) {
+  echo "这是第".$i."次循环&lt;br&gt;" ;
+  } 
+  ?&gt; 
+</pre>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      <strong>
+       3
+      </strong>
+     </span>
+     <strong>
+      、
+      <span style="font-family:'Times New Roman';">
+       switch
+      </span>
+      循环，通常处理复合式的条件判断，每个子条件，都是
+      <span style="font-family:'Times New Roman';">
+       case
+      </span>
+      指令部分。在实作上若使用许多类似的
+      <span style="font-family:'Times New Roman';">
+       if
+      </span>
+      指令，可以将它综合成
+      <span style="font-family:'Times New Roman';">
+       switch
+      </span>
+      循环。
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     语法如下
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      switch (expr) { case expr1:statement1; break; case expr2: statement2; break; default: statementN; break; }
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     其中的
+     <span style="font-family:'Times New Roman';">
+      expr
+     </span>
+     条件，通常为变量名称。而
+     <span style="font-family:'Times New Roman';">
+      case
+     </span>
+     后的
+     <span style="font-family:'Times New Roman';">
+      exprN
+     </span>
+     ，通常表示变量值。冒号后则为符合该条件要执行的部分。注意要用
+     <span style="font-family:'Times New Roman';">
+      break
+     </span>
+     跳离循环。
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <p>
+    </p>
+    <pre class="php">&lt;?php 
+  switch ( date ("D" )) {
+  case "Mon" : 
+  echo "今天星期一" ;
+  break; 
+  case "Tue" : 
+  echo "今天星期二" ;
+  break; 
+  case "Wed" : 
+  echo "今天星期三" ;
+  break; 
+  case "Thu" : 
+  echo "今天星期四" ;
+  break; 
+  case "Fri" : 
+  echo "今天星期五" ;
+  break; 
+  default: 
+  echo "今天放假" ;
+  break; 
+  } 
+?&gt; </pre>
+    <p>
+    </p>
+    <p>
+    </p>
+    <p>
+     这里需要注意的是
+     <span style="font-family:'Times New Roman';">
+      break;
+     </span>
+     别遗漏了，
+     <span style="font-family:'Times New Roman';">
+      default
+     </span>
+     ，省略是可以的。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     很明显的，上述的例子用
+     <span style="font-family:'Times New Roman';">
+      if
+     </span>
+     循环就很麻烦了。当然在设计时，要将出现机率最大的条件放在最前面，最少出现的条件放在最后面，可以增加程序的执行效率。上例由于每天出现的机率相同，所以不用注意条件的顺序。
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+     今天就说到这里，明天开始说数据库的使用。
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      <strong>
+       学习目的：学会连接数据库
+      </strong>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      PHP
+     </span>
+     简直就是一个函数库，丰富的函数使
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     的某些地方相当简单。建议大家
+     <span style="font-family:'Times New Roman';">
+      down
+     </span>
+     一本
+     <span style="font-family:'Times New Roman';">
+      PHP
+     </span>
+     的函数手册，总用的到。
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      我这里就简单说一下连接
+      <span style="font-family:'Times New Roman';">
+       MYSQL
+      </span>
+      数据库。
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       1
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       mysql_connect
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      打开
+      <span style="font-family:'Times New Roman';">
+       MySQL
+      </span>
+      服务器连接。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      语法
+      <span style="font-family:'Times New Roman';">
+       : int mysql_connect(string[hostname] [:port], string [username], string [password]);
+      </span>
+      返回值
+      <span style="font-family:'Times New Roman';">
+       :
+      </span>
+      整数
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      本函数建立与
+      <span style="font-family:'Times New Roman';">
+       MySQL
+      </span>
+      服务器的连接。其中所有的参数都可省略。当使用本函数却不加任何参数时，参数
+      <span style="font-family:'Times New Roman';">
+       hostname
+      </span>
+      的默认值为
+      <span style="font-family:'Times New Roman';">
+       localhost
+      </span>
+      、参数
+      <span style="font-family:'Times New Roman';">
+       username
+      </span>
+      的默认值为
+      <span style="font-family:'Times New Roman';">
+       PHP
+      </span>
+      执行行程的拥有者、参数
+      <span style="font-family:'Times New Roman';">
+       password
+      </span>
+      则为空字符串
+      <span style="font-family:'Times New Roman';">
+       (
+      </span>
+      即没有密码
+      <span style="font-family:'Times New Roman';">
+       )
+      </span>
+      。而参数
+      <span style="font-family:'Times New Roman';">
+       hostname
+      </span>
+      后面可以加冒号与端口号，代表使用哪个端口与
+      <span style="font-family:'Times New Roman';">
+       MySQL
+      </span>
+      连接。当然在使用数据库时，早点使用
+      <span style="font-family:'Times New Roman';">
+       mysql_close()
+      </span>
+      将连接关掉可以节省资源。
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       2
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       mysql_select_db
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      选择一个数据库。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      语法
+      <span style="font-family:'Times New Roman';">
+       : int mysql_select_db(stringdatabase_name, int [link_identifier]);
+      </span>
+      返回值
+      <span style="font-family:'Times New Roman';">
+       :
+      </span>
+      整数
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      本函数选择
+      <span style="font-family:'Times New Roman';">
+       MySQL
+      </span>
+      服务器中的数据库以供之后的资料查询作业
+      <span style="font-family:'Times New Roman';">
+       (query)
+      </span>
+      处理。成功返回
+      <span style="font-family:'Times New Roman';">
+       true
+      </span>
+      ，失败则返回
+      <span style="font-family:'Times New Roman';">
+       false
+      </span>
+      。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      最简单的例子就是：
+     </span>
+    </p>
+    <pre class="php">$conn=mysql_connect ("127.0.0.1", "","");
+mysql_select_db("shop");</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      连接机
+      <span style="font-family:'Times New Roman';">
+       MY SQL
+      </span>
+      数据库，打开
+      <span style="font-family:'Times New Roman';">
+       SHOP
+      </span>
+      数据库。在实际应用中应当加强点错误判断。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      今天就说到这里，明天再说一下数据库的读取。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      学习目的：学会读取数据
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      先看两个函数：
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       1
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       mysql_query
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      送出一个
+      <span style="font-family:'Times New Roman';">
+       query
+      </span>
+      字符串。语法
+      <span style="font-family:'Times New Roman';">
+       : int mysql_query(string query, int [link_identifier]);
+      </span>
+      返回值
+      <span style="font-family:'Times New Roman';">
+       :
+      </span>
+      整数
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      本函数送出
+      <span style="font-family:'Times New Roman';">
+       query
+      </span>
+      字符串供
+      <span style="font-family:'Times New Roman';">
+       MySQL
+      </span>
+      做相关的处理或者执行。若没有指定
+      <span style="font-family:'Times New Roman';">
+       link_identifier
+      </span>
+      参数，则程序会自动寻找最近打开的
+      <span style="font-family:'Times New Roman';">
+       ID
+      </span>
+      。当
+      <span style="font-family:'Times New Roman';">
+       query
+      </span>
+      查询字符串是
+      <span style="font-family:'Times New Roman';">
+       UPDATE
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       INSERT
+      </span>
+      及
+      <span style="font-family:'Times New Roman';">
+       DELETE
+      </span>
+      时，返回的可能是
+      <span style="font-family:'Times New Roman';">
+       true
+      </span>
+      或者
+      <span style="font-family:'Times New Roman';">
+       false
+      </span>
+      ；查询的字符串是
+      <span style="font-family:'Times New Roman';">
+       SELECT
+      </span>
+      则返回新的
+      <span style="font-family:'Times New Roman';">
+       ID
+      </span>
+      值，当返回
+      <span style="font-family:'Times New Roman';">
+       false
+      </span>
+      时，并不是执行成功但无返回值，而是查询的字符串有错误。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-family:'Times New Roman';font-size:14px;">
+       2
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       mysql_fetch_object
+      </span>
+      返回类资料
+     </strong>
+     。语法
+     <span style="font-family:'Times New Roman';">
+      : object mysql_fetch_object(int result, int [result_typ]);
+     </span>
+     返回值
+     <span style="font-family:'Times New Roman';">
+      :
+     </span>
+     类
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      本函数用来将查询结果
+      <span style="font-family:'Times New Roman';">
+       result
+      </span>
+      拆到类变量中。若
+      <span style="font-family:'Times New Roman';">
+       result
+      </span>
+      没有资料，则返回
+      <span style="font-family:'Times New Roman';">
+       false
+      </span>
+      值。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      看一个简单的例子：
+     </span>
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">&lt;? 
+$exec="select * from user";
+$result=mysql_query($exec);
+while($rs=mysql_fetch_object($result))
+{
+echo "username:".$rs-&gt;username."&lt;br&gt;";
+}
+?&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      当然，表
+      <span style="font-family:'Times New Roman';">
+       user
+      </span>
+      中有一个
+      <span style="font-family:'Times New Roman';">
+       username
+      </span>
+      的字段，这就类似
+      <span style="font-family:'Times New Roman';">
+       asp
+      </span>
+      中的
+     </span>
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="csharp">&lt;%
+exec="select * from user"
+set rs=server.createobject("adodb.recordset")
+rs.open exec,conn,1,1
+do while not rs.eof
+response.write"username:"&amp;rs("username")&amp;"&lt;br&gt;"
+rs.movenext 
+loop 
+%&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      当然先要连接数据库，一般我们
+      <span style="font-family:'Times New Roman';">
+       require_once('conn.php');
+      </span>
+      而
+      <span style="font-family:'Times New Roman';">
+       conn.php
+      </span>
+      里面就是上一次说的连接数据库的代码。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      小小的两条命令可以完成读取数据的工作了，今天说到这里下一次说数据的添加删除修改。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      学习目的：学会添加删除修改数据
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      mysql_query($exec);
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      单这个语句就可以执行所有的操作了，不同的就是
+      <span style="font-family:'Times New Roman';">
+       $exec
+      </span>
+      这个
+      <span style="font-family:'Times New Roman';">
+       sql
+      </span>
+      语句
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      添加：
+      <span style="font-family:'Times New Roman';">
+       $exec="insert into tablename(item1,item2) values ('".$_POST['item1']."',".$_POST['item1'].")";
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      删除：
+      <span style="font-family:'Times New Roman';">
+       $exec="delete from tablenamewhere...";
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      修改：
+      <span style="font-family:'Times New Roman';">
+       $exec="update tablename setitem1='".$_POST['item1']."' where ...";
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      说到这里就要说一下表单和
+      <span style="font-family:'Times New Roman';">
+       php
+      </span>
+      变量传递，如果表单中的一个
+      <span style="font-family:'Times New Roman';">
+       &lt;inputname="item1" type="text" id="item1"&gt;
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      表单以
+      <span style="font-family:'Times New Roman';">
+       POST
+      </span>
+      提交的，那么处理表单文件就可以用
+      <span style="font-family:'Times New Roman';">
+       $_POST['item1']
+      </span>
+      得到变量值，同样以
+      <span style="font-family:'Times New Roman';">
+       GET
+      </span>
+      提交的就是
+      <span style="font-family:'Times New Roman';">
+       $_GET['item1']
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      是不是很简单？但是通常
+      <span style="font-family:'Times New Roman';">
+       $exec
+      </span>
+      会有问题，因为可能您的
+      <span style="font-family:'Times New Roman';">
+       SQL
+      </span>
+      语句会很长，您会遗漏
+      <span style="font-family:'Times New Roman';">
+       .
+      </span>
+      连接符，或者
+      <span style="font-family:'Times New Roman';">
+       '
+      </span>
+      来包围字符型字段。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      我们可以注释
+      <span style="font-family:'Times New Roman';">
+       mysql_query($exec);
+      </span>
+      语句用
+      <span style="font-family:'Times New Roman';">
+       echo $exec;
+      </span>
+      代替来输出
+      <span style="font-family:'Times New Roman';">
+       $exec
+      </span>
+      以检查正确性。如果您还不能察觉
+      <span style="font-family:'Times New Roman';">
+       $exec
+      </span>
+      有什么错误的话，可以复制这个
+      <span style="font-family:'Times New Roman';">
+       sql
+      </span>
+      语句到
+      <span style="font-family:'Times New Roman';">
+       phpmyadmin
+      </span>
+      中执行，看看它的出错信息。还有需要注意的是，我们不要使用一些敏感的字符串作为字段名字，否则很可能会出现问题，比如说
+      <span style="font-family:'Times New Roman';">
+       date
+      </span>
+      什么的。变量的命名，字段的命名遵循一点规律有的时候对自己是一种好处，初学者并不可忽视其重要性。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      今天就说到这里，大家可以
+      <span style="font-family:'Times New Roman';">
+       DOWN
+      </span>
+      一个
+      <span style="font-family:'Times New Roman';">
+       SQL
+      </span>
+      语句的参考手册，再研究研究。明天继续说
+      <span style="font-family:'Times New Roman';">
+       SESSION
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       学习目的：学会
+       <span style="font-family:'Times New Roman';">
+        SESSION
+       </span>
+       的使用
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      SESSION
+     </span>
+     的作用很多，最多用的就是站点内页面间变量传递。在页面开始我们要
+     <span style="font-family:'Times New Roman';">
+      session_start();
+     </span>
+     开启
+     <span style="font-family:'Times New Roman';">
+      SESSION
+     </span>
+     ；
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      然后就可以使用
+      <span style="font-family:'Times New Roman';">
+       SESSION
+      </span>
+      变量了，比如说要赋值就是：
+      <span style="font-family:'Times New Roman';">
+       $_SESSION['item']="item1";
+      </span>
+      要得到值就是
+      <span style="font-family:'Times New Roman';">
+       $item1=$_SESSION['item'];
+      </span>
+      ，很简单吧。这里我们可能会使用到一些函数，比如说判断是不是某
+      <span style="font-family:'Times New Roman';">
+       SESSION
+      </span>
+      变量为空，可以这么写：
+      <span style="font-family:'Times New Roman';">
+       empty($_SESSION['inum'])
+      </span>
+      返回
+      <span style="font-family:'Times New Roman';">
+       true or false
+      </span>
+      。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      下面综合一下前面所说的我们来看一个登陆程序，判断用户名密码是否正确。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      登陆表单是这样：
+      <span style="font-family:'Times New Roman';">
+       login.php
+      </span>
+     </span>
+    </p>
+    <pre class="html">&lt;table width="100%" height="100%"border="0" align="center" cellpadding="0"cellspacing="0"&gt;
+&lt;tr&gt;
+&lt;form action="checklogin.php"method="post"&gt;&lt;td align="center"valign="middle"&gt;&lt;table width="400"border="0" cellpadding="5" cellspacing="1"class="tablebg"&gt;
+&lt;tr class="tdbg"&gt;
+&lt;td colspan="2"&gt;&lt;divalign="center"&gt;Administrators Login&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="tdbg"&gt;
+&lt;td&gt;&lt;divalign="center"&gt;Username&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div align="center"&gt;
+&lt;input name="username" type="text"id="username"&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="tdbg"&gt;
+&lt;td&gt;&lt;divalign="center"&gt;Password&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div align="center"&gt;
+&lt;input name="password" type="password"id="password"&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="tdbg"&gt;
+&lt;td colspan="2"&gt;&lt;div align="center"&gt;
+&lt;input type="submit" name="Submit"value="Submit"&gt;
+&lt;input type="reset" name="Submit2"value="Clear"&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;/td&gt;&lt;/form&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      处理文件是这样
+     </span>
+    </p>
+    <pre class="php">&lt;?
+require_once('conn.php');
+session_start();
+$username=$_POST['username'];
+$password=$_POST['password'];
+$exec="select * from admin whereusername='".$username."'";
+if($result=mysql_query($exec))
+{
+ if($rs=mysql_fetch_object($result))
+  {
+    if($rs-&gt;password==$password)
+    {
+     $_SESSION['adminname']=$username;
+     header("location:index.php");
+    }
+    else
+    {
+      echo"&lt;script&gt;alert('Password CheckError!');location.href='login.php';&lt;/script&gt;";
+    }
+  }
+  else
+  {
+  echo"&lt;script&gt;alert('Username CheckError!');location.href='login.php';&lt;/script&gt;";
+  }
+  }
+else
+{
+echo "&lt;script&gt;alert('Database ConnectionError!');location.href='login.php';&lt;/script&gt;";
+}
+
+?&gt;
+</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      conn.php
+     </span>
+     是这样：
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">&lt;?
+$conn=mysql_connect ("127.0.0.1", "","");
+mysql_select_db("shop");
+?&gt; 
+</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      由于
+      <span style="font-family:'Times New Roman';">
+       $_SESSION['adminname']=$username;
+      </span>
+      我们可以这样写验证是否登陆语句的文件：
+      <span style="font-family:'Times New Roman';">
+       checkadmin.asp
+      </span>
+     </span>
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">&lt;?
+
+session_start();
+
+if($_SESSION['adminname']=='')
+{
+echo "&lt;script&gt;alert('Please LoginFirst');location.href='login.php';&lt;/script&gt;";
+}
+?&gt; </pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      呵呵，今天说到这里，明天说一下怎么弄一个分页。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       学习目的：做一个分页显示
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      关键就是用到了
+      <span style="font-family:'Times New Roman';">
+       SQL
+      </span>
+      语句中的
+      <span style="font-family:'Times New Roman';">
+       limit
+      </span>
+      来限定显示的记录从几到几。我们需要一个记录当前页的变量
+      <span style="font-family:'Times New Roman';">
+       $page
+      </span>
+      ，还需要总共的记录数
+      <span style="font-family:'Times New Roman';">
+       $num
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      对于
+      <span style="font-family:'Times New Roman';">
+       $page
+      </span>
+      如果没有我们就让它
+      <span style="font-family:'Times New Roman';">
+       =0
+      </span>
+      ，如果有
+      <span style="font-family:'Times New Roman';">
+       &lt;0
+      </span>
+      就让它也
+      <span style="font-family:'Times New Roman';">
+       =0
+      </span>
+      ，如果超过了总的页数就让他
+      <span style="font-family:'Times New Roman';">
+       =
+      </span>
+      总的页数。
+     </span>
+    </p>
+    <span style="font-family:'Times New Roman';font-size:14px;">
+    </span>
+    <pre class="php">$execc="select count(*) from tablename ";
+$resultc=mysql_query($execc);
+$rsc=mysql_fetch_array($resultc);
+$num=$rsc[0];</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      这样可以得到记录总数
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      ceil($num/10))
+     </span>
+     如果一页
+     <span style="font-family:'Times New Roman';">
+      10
+     </span>
+     记录的话，这个就是总的页数
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      所以可以这么写
+     </span>
+    </p>
+    <pre class="php">if(empty($_GET['page'])){
+$page=0;
+}
+else{
+$page=$_GET['page'];
+if($page&lt;0)$page=0;
+if($page&gt;=ceil($num/10))$page=ceil($num/10)-1;//因为page是从0开始的，所以要-1
+} 
+</pre>
+    <p>
+     <span style="font-size:14px;">
+      这样
+      <span style="font-family:'Times New Roman';">
+       $exec
+      </span>
+      可以这么写
+      <span style="font-family:'Times New Roman';">
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="font-family:'Times New Roman';">
+       $exec="select * fromtablename limit ".($page*10).",10";
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      //
+     </span>
+     一页是
+     <span style="font-family:'Times New Roman';">
+      10
+     </span>
+     记录的
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      最后我们需要做的就是几个连接：
+     </span>
+    </p>
+    <pre class="html">&lt;a href="xxx.php?page=0"&gt;FirstPage&lt;/a&gt;
+&lt;a href="xxx.php?page=&lt;?=($page-1)?&gt;"&gt;PrevPage&lt;/a&gt;
+&lt;a href="xxx.php?page=&lt;?=($page+1)?&gt;"&gt;NextPage&lt;/a&gt;
+&lt;a href="xxx.php?page=&lt;?=ceil($num/10)-1?&gt;"&gt;LastPage&lt;/a&gt;</pre>
+    <p>
+     <br/>
+     <span style="font-size:14px;">
+      这是一个大致的思路，大家可以想想怎么来优化？今天说到这里，明天说一下一些注意的问题。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       学习目的：注意事项
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      因为我是先学
+      <span style="font-family:'Times New Roman';">
+       ASP
+      </span>
+      的，所以再做
+      <span style="font-family:'Times New Roman';">
+       PHP
+      </span>
+      的时候会发现很多地方需要适应。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      1
+     </span>
+     、注意不要漏了分号
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      2
+     </span>
+     、注意不要漏了变量前的
+     <span style="font-family:'Times New Roman';">
+      $
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      3
+     </span>
+     、使用
+     <span style="font-family:'Times New Roman';">
+      SESSION
+     </span>
+     的时候注意不要遗漏
+     <span style="font-family:'Times New Roman';">
+      session_start();
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      如果发生错误的时候，可以采用以下方法：
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      1
+     </span>
+     、如果是
+     <span style="font-family:'Times New Roman';">
+      SQL
+     </span>
+     语句出错，就注释了然后输出
+     <span style="font-family:'Times New Roman';">
+      SQL
+     </span>
+     语句，注意也要注释调后续的执行
+     <span style="font-family:'Times New Roman';">
+      SQL
+     </span>
+     语句
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      2
+     </span>
+     、如果是变量为空，大多是没有传递到位，输出变量检查一下，检查一下表单的
+     <span style="font-family:'Times New Roman';">
+      id
+     </span>
+     和
+     <span style="font-family:'Times New Roman';">
+      name
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      3
+     </span>
+     、如果是数据库连接出错，检查是否正确打开
+     <span style="font-family:'Times New Roman';">
+      MY SQL
+     </span>
+     和是否遗漏了连接语句
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      4
+     </span>
+     、注意缩进，排除括号不区配的错误
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      在做大网站的时候，我的思路是先构建数据库，确定每一个字段的作用，和表之间的关系。然后设计后台界面，从添加数据开始做起，因为添加是否成功可以直接到数据库里面验证，做好了添加再做显示的页面，最后才是两者的结合。一般来说后台就包括添加删除修改和显示，后台没有问题了，前台也没有什么大问题。前台还需要注意安全性和容错还有就是输出格式。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      好了，今天说到这里，明天说一下如果用
+      <span style="font-family:'Times New Roman';">
+       PHP
+      </span>
+      上传文件和发邮件。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      <strong>
+       学习目的：学会用
+       <span style="font-family:'Times New Roman';">
+        PHP
+       </span>
+       上传文件和发邮件
+      </strong>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      上传文件表单必须加上
+      <span style="font-family:'Times New Roman';">
+       enctype="multipart/form-data"
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      和
+      <span style="font-family:'Times New Roman';">
+       &lt;input type="file"name="file"&gt;
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      下面看一下代码：
+     </span>
+    </p>
+    <pre class="php">$f=&amp;$HTTP_POST_FILES['file'];
+$dest_dir='uploads';//设定上传目录
+$dest=$dest_dir.'/'.date("ymd")."_".$f['name'];//我这里设置文件名为日期加上文件名避免重复
+$r=move_uploaded_file($f['tmp_name'],$dest);
+chmod($dest, 0755);//设定上传的文件的属性
+</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      上传的文件名为
+      <span style="font-family:'Times New Roman';">
+       date("ymd")."_".$f['name']
+      </span>
+      ，可以在以后插入到数据库的时候用到，
+      <span style="font-family:'Times New Roman';">
+       PHP
+      </span>
+      实际上是把你上传的文件从临时目录移动到指定目录。
+      <span style="font-family:'Times New Roman';">
+       move_uploaded_file($f['tmp_name'],$dest);
+      </span>
+      这是关键
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      至于发邮件就更加简单，可以使用
+      <span style="font-family:'Times New Roman';">
+       mail()
+      </span>
+      函数
+     </span>
+    </p>
+    <pre class="php">mail("收件人地址","主题","正文","From:发件人\r\nReply-to:发件人的地址");</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      不过
+      <span style="font-family:'Times New Roman';">
+       mail()
+      </span>
+      需要服务器的支持，在
+      <span style="font-family:'Times New Roman';">
+       WINDOWS
+      </span>
+      下还需要配置
+      <span style="font-family:'Times New Roman';">
+       SMTP
+      </span>
+      服务器，一般来说外面的
+      <span style="font-family:'Times New Roman';">
+       LINUX
+      </span>
+      空间都行。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      好像上传文件和发邮件比
+      <span style="font-family:'Times New Roman';">
+       ASP
+      </span>
+      简单很多，只要调用函数就可以了。
+      <span style="font-family:'Times New Roman';">
+       ASP
+      </span>
+      还需要用到服务器的不同组件比如
+      <span style="font-family:'Times New Roman';">
+       FSO
+      </span>
+      、
+      <span style="font-family:'Times New Roman';">
+       JMAIL
+      </span>
+      什么的。
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=php&amp;t=blog" target="_blank">
+    php
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=教程&amp;t=blog" target="_blank">
+    教程
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=数据&amp;t=blog" target="_blank">
+    数据
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=服务器&amp;t=blog" target="_blank">
+    服务器
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

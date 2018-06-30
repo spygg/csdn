@@ -1,0 +1,2351 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ [总结]视音频编解码技术零基础学习方法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_4">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   [总结]视音频编解码技术零基础学习方法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="c-gray">
+    置顶
+   </span>
+   <span class="time">
+    2014年06月16日 00:12:43
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：198355
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     一直想把视音频编解码技术做一个简单的总结，可是苦于时间不充裕，一直没能完成。今天有着很大的空闲，终于可以总结一个有关视音频技术的入门教程，可以方便更多的人学习从零开始学习视音频技术。需要注意的是，本文所说的视音频技术，指的是理论层面的视音频技术，并不涉及到编程相关的东西。
+    </p>
+    <p>
+    </p>
+    <h2>
+     <strong>
+      0.     生活中的视音频技术
+     </strong>
+    </h2>
+    <p>
+     平时我们打开电脑中自己存电影的目录的话，一般都会如下图所示，一大堆五花八门的电影。（其实专业的影视爱好者一概会把影视文件分门别类的，但我比较懒，一股脑把电影放在了一起）
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140615181208437?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     因为下载的来源不同，这些电影文件有不同的格式，用不同的后缀表示：avi，rmvb，mp4，flv，mkv等等（当然也使用不同的图标）。在这里需要注意的是，这些格式代表的是
+     <strong>
+      封装格式
+     </strong>
+     。何为封装格式？就是把视频数据和音频数据打包成一个文件的规范。仅仅靠看文件的后缀，很难能看出具体使用了什么
+     <strong>
+      视音频编码标准
+     </strong>
+     。总的来说，不同的封装格式之间差距不大，各有优劣。
+    </p>
+    <p>
+     注：有些封装格式支持的视音频编码标准十分广泛，应该算比较优秀的封装格式，比如MKV；而有些封装格式支持的视音频编码标准很少，应该属于落后的封装格式，比如RMVB。
+    </p>
+    <p>
+    </p>
+    <p>
+     下面演示一下如何使用视频播放器查看一个视频文件采用的视音频技术：
+    </p>
+    <p>
+     注：在这里使用Media Player Classic作为演示，实际上暴风影音，KMplayer这些操作都差不太多。
+    </p>
+    <p>
+     1.打开一个视频文件
+    </p>
+    <p>
+     2.在视频画面上右键单击，选择属性。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140201115859843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     3.在弹出的“属性”对话框的“MediaInfo”选项卡中，就可以查看该视频文件采用的视音频技术了。如下图所示，“变形金刚预告片_h1080p.mov”采用MPEG4的QuickTime封装格式（MOV），采用了H.264（AVC）的压缩编码标准。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140201115933359?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     在这里用到了一个查看媒体信息的工具：MediaInfo。MediaInfo是一个专门查看视音频格式的工具，软件的详细使用可参考：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11903507">
+      <span style="color:#FF0000;">
+       MediaInfo
+      </span>
+      <span style="color:#FF0000;">
+       使用简介（新版本支持
+      </span>
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       ）
+      </span>
+     </a>
+    </p>
+    <p>
+     源代码分析可参考：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12016231">
+      <span style="color:#FF0000;">
+       MediaInfo
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析
+      </span>
+      <span style="color:#FF0000;">
+       1
+      </span>
+      <span style="color:#FF0000;">
+       ：整体结构
+      </span>
+      <span style="color:#FF0000;">
+       [
+      </span>
+      <span style="color:#FF0000;">
+       系列文章
+      </span>
+      <span style="color:#FF0000;">
+       ]
+      </span>
+     </a>
+    </p>
+    <p>
+     生活中的视音频技术到此为止，下面介绍一下具体的视音频技术。
+    </p>
+    <p>
+    </p>
+    <h2>
+     <strong>
+      1.     视频播放器原理
+     </strong>
+    </h2>
+    <p>
+     视音频技术主要包含以下几点：封装技术，视频压缩编码技术以及音频压缩编码技术。如果考虑到网络传输的话，还包括流媒体协议技术。
+    </p>
+    <p>
+     视频播放器的源代码详细解析（Media Player Classic - HC，Mplayer，FFplay，XBMC）可以参考系列文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13280659">
+      <span style="color:#FF0000;">
+       Media Player Classic
+      </span>
+      <span style="color:#FF0000;">
+       ：
+      </span>
+      <span style="color:#FF0000;">
+       Media Player Classic - HC
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析
+      </span>
+      <span style="color:#FF0000;">
+       1
+      </span>
+      <span style="color:#FF0000;">
+       ：整体结构
+      </span>
+      <span style="color:#FF0000;">
+       [
+      </span>
+      <span style="color:#FF0000;">
+       系列文章
+      </span>
+      <span style="color:#FF0000;">
+       ]
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11885509">
+      <span style="color:#FF0000;">
+       Mplayer
+      </span>
+      <span style="color:#FF0000;">
+       ：
+      </span>
+      <span style="color:#FF0000;">
+       MPlayer
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11980843">
+      <span style="color:#FF0000;">
+       FFplay
+      </span>
+      <span style="color:#FF0000;">
+       ：
+      </span>
+      <span style="color:#FF0000;">
+       FFplay
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析：整体流程图
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17454977">
+      <span style="color:#FF0000;">
+       XBMC
+      </span>
+      <span style="color:#FF0000;">
+       ：
+      </span>
+      <span style="color:#FF0000;">
+       XBMC
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析
+      </span>
+      <span style="color:#FF0000;">
+       1
+      </span>
+      <span style="color:#FF0000;">
+       ：整体结构以及编译方法
+      </span>
+      <span style="color:#FF0000;">
+       [
+      </span>
+      <span style="color:#FF0000;">
+       系列文章
+      </span>
+      <span style="color:#FF0000;">
+       ]
+      </span>
+     </a>
+    </p>
+    <p>
+     在这里不细说了，仅简要说明一下视频播放器的原理。
+    </p>
+    <p>
+     视频播放器播放一个互联网上的视频文件，需要经过以下几个步骤：解协议，解封装，解码视音频，视音频同步。如果播放本地文件则不需要解协议，为以下几个步骤：解封装，解码视音频，视音频同步。他们的过程如图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140201120523046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     <strong>
+      解协议
+     </strong>
+     的作用，就是将流媒体协议的数据，解析为标准的相应的封装格式数据。视音频在网络上传播的时候，常常采用各种流媒体协议，例如HTTP，RTMP，或是MMS等等。这些协议在传输视音频数据的同时，也会传输一些信令数据。这些信令数据包括对播放的控制（播放，暂停，停止），或者对网络状态的描述等。解协议的过程中会去除掉信令数据而只保留视音频数据。例如，采用RTMP协议传输的数据，经过解协议操作后，输出FLV格式的数据。
+    </p>
+    <p>
+     <strong>
+      解封装
+     </strong>
+     的作用，就是将输入的封装格式的数据，分离成为音频流压缩编码数据和视频流压缩编码数据。封装格式种类很多，例如MP4，MKV，RMVB，TS，FLV，AVI等等，它的作用就是将已经压缩编码的视频数据和音频数据按照一定的格式放到一起。例如，FLV格式的数据，经过解封装操作后，输出H.264编码的视频码流和AAC编码的音频码流。
+    </p>
+    <p>
+     <strong>
+      解码
+     </strong>
+     的作用，就是将视频/音频压缩编码数据，解码成为非压缩的视频/音频原始数据。音频的压缩编码标准包含AAC，MP3，AC-3等等，视频的压缩编码标准则包含H.264，MPEG2，VC-1等等。解码是整个系统中最重要也是最复杂的一个环节。通过解码，压缩编码的视频数据输出成为非压缩的颜色数据，例如YUV420P，RGB等等；压缩编码的音频数据输出成为非压缩的音频抽样数据，例如PCM数据。
+    </p>
+    <p>
+     <strong>
+      视音频同步
+     </strong>
+     的作用，就是根据解封装模块处理过程中获取到的参数信息，同步解码出来的视频和音频数据，并将视频音频数据送至系统的显卡和声卡播放出来。
+    </p>
+    <p>
+     接下来的几节我们将会列出主要的流媒体协议，封装格式，以及视音频编码标准。更详细的比较可以参考：
+    </p>
+    <p>
+     <span style="color:#ff0000;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/11842919">
+       视频参数（流媒体系统，封装格式，视频编码，音频编码，播放器）对比
+      </a>
+     </span>
+    </p>
+    <p>
+     有关本文中涉及到的协议数据、封装格式数据、视频编码数据、音频编码数据、视频像素数据、音频采样数据的分析可以参考下面系列文章：
+    </p>
+    <p>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50534150">
+      视音频数据处理入门：RGB、YUV像素数据处理
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50534316">
+      视音频数据处理入门：PCM音频采样数据处理
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50534369">
+      视音频数据处理入门：H.264视频码流解析
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50535042">
+      视音频数据处理入门：AAC音频码流解析
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50535082">
+      视音频数据处理入门：FLV封装格式解析
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/50535230">
+      视音频数据处理入门：UDP-RTP协议解析
+     </a>
+    </p>
+    <br/>
+    <h2>
+     <strong>
+      2.     流媒体协议
+     </strong>
+    </h2>
+    <p>
+     流媒体协议是服务器与客户端之间通信遵循的规定。当前网络上主要的流媒体协议如表所示。
+    </p>
+    <p align="center">
+     主要流媒体协议一览
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="600">
+      <tbody>
+       <tr>
+        <td valign="top">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          推出机构
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          传输层协议
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          客户端
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          目前使用领域
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          RTSP+RTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          IETF
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          TCP+UDP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          VLC, WMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          IPTV
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Adobe Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          TCP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          互联网直播
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          RTMFP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Adobe Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          UDP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          互联网直播
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MMS
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Microsoft Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          TCP/UDP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          WMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          互联网直播+点播
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          WWW+IETF
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          TCP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          互联网点播
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     RTSP+RTP经常用于IPTV领域。因为其采用UDP传输视音频，支持组播，效率较高。但其缺点是网络不好的情况下可能会丢包，影响视频观看质量。因而围绕IPTV的视频质量的研究还是挺多的。
+    </p>
+    <p>
+     RTSP规范可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11955341">
+      <span style="color:#FF0000;">
+       RTSP
+      </span>
+      <span style="color:#FF0000;">
+       协议学习笔记
+      </span>
+     </a>
+    </p>
+    <p>
+     RTSP+RTP系统中衡量服务质量可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11883393">
+      <span style="color:#FF0000;">
+       网络视频传输的服务质量（
+      </span>
+      <span style="color:#FF0000;">
+       QoS
+      </span>
+      <span style="color:#FF0000;">
+       ）
+      </span>
+     </a>
+    </p>
+    <p>
+     上海IPTV码流分析结果可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11846761">
+      <span style="color:#FF0000;">
+       IPTV
+      </span>
+      <span style="color:#FF0000;">
+       视频码流分析
+      </span>
+     </a>
+    </p>
+    <p>
+     因为互联网网络环境的不稳定性，RTSP+RTP较少用于互联网视音频传输。互联网视频服务通常采用TCP作为其流媒体的传输层协议，因而像RTMP，MMS，HTTP这类的协议广泛用于互联网视音频服务之中。这类协议不会发生丢包，因而保证了视频的质量，但是传输的效率会相对低一些。
+    </p>
+    <p>
+     此外RTMFP是一种比较新的流媒体协议，特点是支持P2P。
+    </p>
+    <p>
+     RTMP我做的研究相对多一些：比如
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11694129">
+      <span style="color:#FF0000;">
+       RTMP
+      </span>
+      <span style="color:#FF0000;">
+       规范简单分析
+      </span>
+     </a>
+     ，或者
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11704355">
+      <span style="color:#FF0000;">
+       RTMP
+      </span>
+      <span style="color:#FF0000;">
+       流媒体播放过程
+      </span>
+     </a>
+    </p>
+    <p>
+     相关工具的源代码分析：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12952977">
+      <span style="color:#FF0000;">
+       RTMPdump
+      </span>
+      <span style="color:#FF0000;">
+       源代码分析
+      </span>
+      <span style="color:#FF0000;">
+       1
+      </span>
+      <span style="color:#FF0000;">
+       ：
+      </span>
+      <span style="color:#FF0000;">
+       main()
+      </span>
+      <span style="color:#FF0000;">
+       函数
+      </span>
+      <span style="color:#FF0000;">
+       [
+      </span>
+      <span style="color:#FF0000;">
+       系列文章
+      </span>
+      <span style="color:#FF0000;">
+       ]
+      </span>
+     </a>
+    </p>
+    <p>
+     RTMP协议学习：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15814587">
+      <span style="color:#FF0000;">
+       RTMP
+      </span>
+      <span style="color:#FF0000;">
+       流媒体技术零基础学习方法
+      </span>
+     </a>
+    </p>
+    <h2>
+     <strong>
+      3.     封装格式
+     </strong>
+    </h2>
+    <p>
+     封装格式的主要作用是把视频码流和音频码流按照一定的格式存储在一个文件中。现如今流行的封装格式如下表所示：
+    </p>
+    <p align="center">
+     主要封装格式一览
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="600">
+      <tbody>
+       <tr>
+        <td valign="top">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          推出机构
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          流媒体
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持的视频编码
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持的音频编码
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          目前使用领域
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          AVI
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Microsoft Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          不支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          几乎所有格式
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          几乎所有格式
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          BT下载影视
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MP4
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          MPEG-2, MPEG-4, H.264, H.263等
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          AAC, MPEG-1 Layers I, II, III, AC-3等
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          互联网视频网站
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          TS
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          MPEG-1, MPEG-2, MPEG-4, H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          MPEG-1 Layers I, II, III, AAC,
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          IPTV，数字电视
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Adobe Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          Sorenson, VP6, H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          MP3, ADPCM, Linear PCM, AAC等
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          互联网视频网站
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MKV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          CoreCodec Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          几乎所有格式
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          几乎所有格式
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          互联网视频网站
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          RMVB
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Real Networks Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          支持
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          RealVideo 8, 9, 10
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          AAC, Cook Codec, RealAudio Lossless
+         </p>
+        </td>
+        <td valign="top">
+         <p align="left">
+          BT下载影视
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     由表可见，除了AVI之外，其他封装格式都支持流媒体，即可以“边下边播”。有些格式更“万能”一些，支持的视音频编码标准多一些，比如MKV。而有些格式则支持的相对比较少，比如说RMVB。
+    </p>
+    <p>
+     这些封装格式都有相关的文档，在这里就不一一例举了。
+    </p>
+    <p>
+     我自己也做过辅助学习的小项目：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17973587">
+      <span style="color:#FF0000;">
+       TS
+      </span>
+      <span style="color:#FF0000;">
+       封装格式分析器
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17934487">
+      <span style="color:#FF0000;">
+       FLV
+      </span>
+      <span style="color:#FF0000;">
+       封装格式分析器
+      </span>
+     </a>
+    </p>
+    <p>
+    </p>
+    <h2>
+     <strong>
+      4.     视频编码
+     </strong>
+    </h2>
+    <p>
+     视频编码的主要作用是将视频像素数据（RGB，YUV等）压缩成为视频码流，从而降低视频的数据量。如果视频不经过压缩编码的话，体积通常是非常大的，一部电影可能就要上百G的空间。视频编码是视音频技术中最重要的技术之一。视频码流的数据量占了视音频总数据量的绝大部分。高效率的视频编码在同等的码率下，可以获得更高的视频质量。
+    </p>
+    <p>
+     视频编码的简单原理可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/28114081">
+      <span style="color:#ff0000;">
+       视频压缩编码和音频压缩编码的基本原理
+      </span>
+     </a>
+    </p>
+    <p>
+     注：视频编码技术在整个视音频技术中应该是最复杂的技术。如果没有基础的话，可以先买一些书看一下原理，比如说《现代电视原理》《数字电视广播原理与应用》（本科的课本）中的部分章节。
+    </p>
+    <p align="center">
+     主要视频编码一览
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="500">
+      <tbody>
+       <tr>
+        <td valign="top" width="25%">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          推出机构
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          推出时间
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          目前使用领域
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          HEVC(H.265)
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG/ITU-T
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2013
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          研发中
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG/ITU-T
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2003
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          各个领域
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MPEG4
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2001
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          不温不火
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MPEG2
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          1994
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          数字电视
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          VP9
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Google
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2013
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          研发中
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          VP8
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Google
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2008
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          不普及
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          VC-1
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Microsoft Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          2006
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          微软平台
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     由表可见，有两种视频编码方案是最新推出的：VP9和HEVC。目前这两种方案都处于研发阶段，还没有到达实用的程度。当前使用最多的视频编码方案就是H.264。
+    </p>
+    <h3>
+     <strong>
+      4.1 主流编码标准
+     </strong>
+    </h3>
+    <p>
+     H.264仅仅是一个编码标准，而不是一个具体的编码器，H.264只是给编码器的实现提供参照用的。
+    </p>
+    <p>
+     基于H.264标准的编码器还是很多的，究竟孰优孰劣？可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12373947">
+      <span style="color:#FF0000;">
+       MSU
+      </span>
+      <span style="color:#FF0000;">
+       出品的
+      </span>
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       编码器比较
+      </span>
+      <span style="color:#FF0000;">
+       （
+      </span>
+      <span style="color:#FF0000;">
+       2011.5
+      </span>
+      <span style="color:#FF0000;">
+       ）
+      </span>
+     </a>
+    </p>
+    <p>
+     在学习视频编码的时候，可能会用到各种编码器（实际上就是一个exe文件），他们常用的编码命令可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11705495">
+      <span style="color:#ff0000;">
+       各种视频编码器的命令行格式
+      </span>
+     </a>
+    </p>
+    <p>
+     学习H.264最标准的源代码，就是其官方标准JM了。但是要注意，JM速度非常的慢，是无法用于实际的：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11980219">
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       参考软件
+      </span>
+      <span style="color:#FF0000;">
+       JM12.2RC
+      </span>
+      <span style="color:#FF0000;">
+       代码详细流程
+      </span>
+     </a>
+    </p>
+    <p>
+     实际中使用最多的就是x264了，性能强悍（超过了很多商业编码器），而且开源。其基本教程网上极多，不再赘述。编码时候可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12720135">
+      <span style="color:#FF0000;">
+       x264
+      </span>
+      <span style="color:#FF0000;">
+       编码指南——码率控制
+      </span>
+     </a>
+     。编码后统计值的含义：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11884559">
+      <span style="color:#FF0000;">
+       X264
+      </span>
+      <span style="color:#FF0000;">
+       输出的统计值的含义（
+      </span>
+      <span style="color:#FF0000;">
+       X264 Stats Output
+      </span>
+      <span style="color:#FF0000;">
+       ）
+      </span>
+     </a>
+    </p>
+    <p>
+     Google推出的VP8属于和H.264同一时代的标准。总体而言，VP8比H.264要稍微差一点。有一篇写的很好的VP8的介绍文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12760173">
+      <span style="color:#FF0000;">
+       深入了解
+      </span>
+      <span style="color:#FF0000;">
+       VP8
+      </span>
+     </a>
+     。除了在技术领域，VP8和H.264在专利等方面也是打的不可开交，可参考文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12720237">
+      <span style="color:#ff0000;">
+       WebM(VP8) vs H.264
+      </span>
+     </a>
+    </p>
+    <p>
+     此外，我国还推出了自己的国产标准AVS，性能也不错，但目前比H.264还是要稍微逊色一点。不过感觉我国在视频编解码领域还算比较先进的，可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12851745">
+      <span style="color:#FF0000;">
+       视频编码国家标准
+      </span>
+      <span style="color:#FF0000;">
+       AVS
+      </span>
+      <span style="color:#FF0000;">
+       与
+      </span>
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       的比较（节选）
+      </span>
+     </a>
+    </p>
+    <p>
+     近期又推出了AVS新一代的版本AVS+，具体的性能测试还没看过。不过据说AVS+得到了国家政策上非常强力的支持。
+    </p>
+    <h3>
+     <strong>
+      4.2 下一代编码标准
+     </strong>
+    </h3>
+    <p>
+     下一代的编解码标准就要数HEVC和VP9了。VP9是Google继VP8之后推出的新一代标准。VP9和HEVC相比，要稍微逊色一些。它们的对比可参考：（1）
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11713041">
+      <span style="color:#ff0000;">
+       HEVC与VP9编码效率对比
+      </span>
+     </a>
+     （2）
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/19014955">
+      <span style="color:#ff0000;">
+       HEVC，VP9，x264性能对比
+      </span>
+     </a>
+    </p>
+    <p>
+     HEVC在未来拥有很多大的优势，可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11844949">
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       将会取代
+      </span>
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       的原因
+      </span>
+     </a>
+    </p>
+    <p>
+     学习HEVC最标准的源代码，就是其官方标准HM了。其速度比H.264的官方标准代码又慢了一大截，使用可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12759297">
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       学习
+      </span>
+      <span style="color:#FF0000;">
+       ——
+      </span>
+      <span style="color:#FF0000;">
+       HM
+      </span>
+      <span style="color:#FF0000;">
+       的使用
+      </span>
+     </a>
+    </p>
+    <p>
+     未来实际使用的HEVC开源编码器很有可能是x265，目前该项目还处于发展阶段，可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13991351">
+      <span style="color:#FF0000;">
+       x265(HEVC
+      </span>
+      <span style="color:#FF0000;">
+       编码器，基于
+      </span>
+      <span style="color:#FF0000;">
+       x264)
+      </span>
+     </a>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13991351" style="color:#FF0000;">
+      介绍
+     </a>
+     。x265的使用可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/18861635">
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       （
+      </span>
+      <span style="color:#FF0000;">
+       H.265
+      </span>
+      <span style="color:#FF0000;">
+       ）标准的编码器（
+      </span>
+      <span style="color:#FF0000;">
+       x265
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       DivX265
+      </span>
+      <span style="color:#FF0000;">
+       ）试用
+      </span>
+     </a>
+    </p>
+    <p>
+     主流以及下一代编码标准之间的比较可以参考文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12237177">
+      <span style="color:#FF0000;">
+       视频编码方案之间的比较（
+      </span>
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       MPEG2
+      </span>
+      <span style="color:#FF0000;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p>
+     此外，在码率一定的情况下，几种编码标准的比较可参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12851975">
+      <span style="color:#FF0000;">
+       限制码率的视频编码标准比较（包括
+      </span>
+      <span style="color:#FF0000;">
+       MPEG-2
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       H.263
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       MPEG-4
+      </span>
+      <span style="color:#FF0000;">
+       ，以及
+      </span>
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       ）
+      </span>
+     </a>
+    </p>
+    <p>
+     结果大致是这样的：
+    </p>
+    <p style="text-align:center;">
+     HEVC &gt; VP9 &gt; H.264&gt; VP8 &gt; MPEG4 &gt; H.263 &gt; MPEG2。
+    </p>
+    <p>
+     截了一些图，可以比较直观的了解各种编码标准：
+    </p>
+    <p>
+     HEVC码流简析：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11845069">
+      <span style="color:#FF0000;">
+       HEVC
+      </span>
+      <span style="color:#FF0000;">
+       码流简单分析
+      </span>
+     </a>
+    </p>
+    <p>
+     H.264码流简析：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11845625">
+      <span style="color:#FF0000;">
+       H.264
+      </span>
+      <span style="color:#FF0000;">
+       简单码流分析
+      </span>
+     </a>
+    </p>
+    <p>
+     MPEG2码流简析：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11846185">
+      <span style="color:#FF0000;">
+       MPEG2
+      </span>
+      <span style="color:#FF0000;">
+       简单码流分析
+      </span>
+     </a>
+    </p>
+    <p>
+     以上简析使用的工具：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11845435">
+      <span style="color:#ff0000;">
+       视频码流分析工具
+      </span>
+     </a>
+    </p>
+    <p>
+     我自己做的小工具：
+     <span style="color:#ff0000;">
+     </span>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17933821">
+      <span style="color:#ff0000;">
+       H.264码流分析器
+      </span>
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     <strong>
+      5.     音频编码
+     </strong>
+    </h2>
+    <p>
+     音频编码的主要作用是将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。音频编码也是互联网视音频技术中一个重要的技术。但是一般情况下音频的数据量要远小于视频的数据量，因而即使使用稍微落后的音频编码标准，而导致音频数据量有所增加，也不会对视音频的总数据量产生太大的影响。高效率的音频编码在同等的码率下，可以获得更高的音质。
+    </p>
+    <p>
+     音频编码的简单原理可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/28114081">
+      <span style="color:#ff0000;">
+       视频压缩编码和音频压缩编码的基本原理
+      </span>
+     </a>
+     <br/>
+    </p>
+    <p align="center">
+     主要音频编码一览
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="500">
+      <tbody>
+       <tr>
+        <td valign="top" width="25%">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          推出机构
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          推出时间
+         </p>
+        </td>
+        <td valign="top" width="25%">
+         <p>
+          目前使用领域
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          1997
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          各个领域（新）
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          AC-3
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Dolby Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          1992
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          电影
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          MP3
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MPEG
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          1993
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          各个领域（旧）
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          WMA
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Microsoft Inc.
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          1999
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          微软平台
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     由表可见，近年来并未推出全新的音频编码方案，可见音频编码技术已经基本可以满足人们的需要。音频编码技术近期绝大部分的改动都是在MP3的继任者——AAC的基础上完成的。
+    </p>
+    <p>
+     这些编码标准之间的比较可以参考文章：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11730661">
+      <span style="color:#FF0000;">
+       音频编码方案之间音质比较（
+      </span>
+      <span style="color:#FF0000;">
+       AAC
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       MP3
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       WMA
+      </span>
+      <span style="color:#FF0000;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p>
+     结果大致是这样的：
+    </p>
+    <p style="text-align:center;">
+     AAC+ &gt; MP3PRO &gt; AAC&gt; RealAudio &gt; WMA &gt; MP3
+    </p>
+    <p>
+     AAC格式的介绍：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11822537">
+      <span style="color:#FF0000;">
+       AAC
+      </span>
+      <span style="color:#FF0000;">
+       格式简介
+      </span>
+     </a>
+    </p>
+    <p>
+     AAC几种不同版本之间的对比：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11971419">
+      <span style="color:#FF0000;">
+       AAC
+      </span>
+      <span style="color:#FF0000;">
+       规格（
+      </span>
+      <span style="color:#FF0000;">
+       LC
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       HE
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      <span style="color:#FF0000;">
+       HEv2
+      </span>
+      <span style="color:#FF0000;">
+       ）及性能对比
+      </span>
+     </a>
+    </p>
+    <p>
+     AAC专利方面的介绍：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11854587">
+      <span style="color:#FF0000;">
+       AAC
+      </span>
+      <span style="color:#FF0000;">
+       专利介绍
+      </span>
+     </a>
+    </p>
+    <p>
+     此外杜比数字的编码标准也比较流行，但是貌似比最新的AAC稍为逊色：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11822737">
+      <span style="color:#FF0000;">
+       AC-3
+      </span>
+      <span style="color:#FF0000;">
+       技术综述
+      </span>
+     </a>
+    </p>
+    <p>
+     我自己做的小工具：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/18155549">
+      <span style="color:#ff0000;">
+       AAC格式分析器
+      </span>
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     <strong>
+      6.     现有网络视音频平台对比
+     </strong>
+    </h2>
+    <p>
+     现有的网络视音频服务主要包括两种方式：点播和直播。点播意即根据用户的需要播放相应的视频节目，这是互联网视音频服务最主要的方式。绝大部分视频网站都提供了点播服务。直播意即互联网视音频平台直接将视频内容实时发送给用户，目前还处于发展阶段。直播在网络电视台，社交视频网站较为常见。
+    </p>
+    <h3>
+     <strong>
+      6.1 直播平台参数对比
+     </strong>
+    </h3>
+    <p>
+     主流互联网视音频平台直播服务的参数对比如表所示：
+    </p>
+    <p align="center">
+     现有网络视音频平台参数对比
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="500">
+      <tbody>
+       <tr>
+        <td valign="top" width="25%">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          协议
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          封装
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          视频编码
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          音频编码
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          播放器
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          CNTV
+         </p>
+        </td>
+        <td colspan="5" valign="top" width="416">
+         <p>
+          私有
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          华数TV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          六间房
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          中国教育电视台
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          北广传媒移动电视
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          上海IPTV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTSP+RTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          TS
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MP2
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          机顶盒
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p style="text-align:left;">
+     可以看出，直播服务普遍采用了RTMP作为流媒体协议，FLV作为封装格式，H.264作为视频编码格式，AAC作为音频编码格式。采用RTMP作为直播协议的好处在于其被Flash播放器支持。而Flash播放器如今已经安装在全球99%的电脑上，并且与浏览器结合的很好。因此这种流媒体直播平台可以实现“无插件直播”，极大的简化了客户端的操作。封装格式，视频编码，音频编码方面，无一例外的使用了FLV + H.264 + AAC的组合。FLV是RTMP使用的封装格式，H.264是当今实际应用中编码效率最高的视频编码标准，AAC则是当今实际应用中编码效率最高的音频编码标准。视频播放器方面，都使用了Flash播放器。
+     <br/>
+    </p>
+    <h3>
+     <strong>
+      6.2　点播平台参数对比
+     </strong>
+    </h3>
+    <p>
+     主流网络视音频平台点播服务的参数对比如表所示：
+    </p>
+    <p align="center">
+     现有互联网视音频平台参数对比
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0" width="500">
+      <tbody>
+       <tr>
+        <td valign="top" width="25%">
+         <p>
+          名称
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          协议
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          封装
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          视频编码
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          音频编码
+         </p>
+        </td>
+        <td valign="top" width="15%">
+         <p>
+          播放器
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          CNTV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MP4
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          CNTV（部分）
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          RTMP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          华数TV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MP4
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          优酷网
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          土豆网
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          F4V
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          56网
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          音悦台
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          MP4
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          乐视网
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          新浪视频
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          HTTP
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          FLV
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          H.264
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          AAC
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Flash
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     可以看出，点播服务普遍采用了HTTP作为流媒体协议，H.264作为视频编码格式，AAC作为音频编码格式。采用HTTP作为点播协议有以下两点优势：一方面，HTTP是基于TCP协议的应用层协议，媒体传输过程中不会出现丢包等现象，从而保证了视频的质量；另一方面，HTTP被绝大部分的Web服务器支持，因而流媒体服务机构不必投资购买额外的流媒体服务器，从而节约了开支。点播服务采用的封装格式有多种：MP4，FLV，F4V等，它们之间的区别不是很大。视频编码标准和音频编码标准是H.264和AAC。这两种标准分别是当今实际应用中编码效率最高的视频标准和音频标准。视频播放器方面，无一例外的都使用了Flash播放器。
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/18893769
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=网络&amp;t=blog" target="_blank">
+    网络
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=总结&amp;t=blog" target="_blank">
+    总结
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编码&amp;t=blog" target="_blank">
+    编码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=音频&amp;t=blog" target="_blank">
+    音频
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638135" target="_blank">
+    视频编码
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638137" target="_blank">
+    音频编码
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

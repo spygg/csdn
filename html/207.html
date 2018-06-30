@@ -1,0 +1,243 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 开源数字媒体资产管理系统：Razuna - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_207">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   开源数字媒体资产管理系统：Razuna
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年12月26日 12:54:12
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：10461
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      Razuna以一个使用Java语言编写的开源的数字媒体资产管理（Digital Asset Management）系统。功能很强大，可以用于管理各种格式的数字媒体资源。
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      <img alt="" src="https://img-blog.csdn.net/20131223231329687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      Razuna在本机的安装配置还是比较复杂的。主要是因为需要处理多种格式的视频，音频，图片等媒体格式。因此需要安装很多的视音频处理程序。
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      安装过程详见：
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/16951923">
+       开源数字媒体资产管理系统：Razuna安装方法
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      安装完成之后，启动服务器，在浏览器中输入：http://localhost:8080/razuna就可以访问系统了。
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      系统的登录页面如图所示：
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230124109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     登陆之后的页面如图所示。这是一个系统管理的页面，并不是实际数字媒体资产的页面。在这个页面中可以对系统的各种参数进行配置。如果想进入实际的数字资产管理的页面，可以点击页面最上方的“Load tenant”登录进入数字资产管理页面。
+    </p>
+    <p>
+     注：之前因为ImageMagik里面自带的ffmpeg与我本机的ffmpeg同时加入到了环境变量中，引起了冲突。所以就把ImageMagik给卸载了。结果就是系统提示没有正确安装ImageMagik。上传图片后，无法生成图片的缩略图应该也和这个有关。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230130250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     参数设置页面位于系统的左边。下图显示了System Settings里面的内容。可以看出选项卡很多：Storage，Database Settings，File type等等。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230135703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图显示了Tenant Settings里面的内容。可以看出选项卡很多：System Settings，Meta Tags等等一系列选项。下图正在设置媒体资产的存储位置。
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230140234?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图显示了Users里面的内容。可以对用户进行管理。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230146921?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230150843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     点击页面最上方的“Load tenant”，可以登录进入数字资产管理页面。界面很像Windows的资源管理器。可以新建文件夹，上传媒体文件等等。
+     <br/>
+    </p>
+    <p>
+     下图所示正准备上传两个媒体资源。一个是flv格式的视频，一个是JPEG格式的音频。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230201796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     上传完成后，在页面中单击媒体，可以对媒体的信息进行编辑。Razuna中媒体的可编辑的信息还是相当的多的。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230205906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图所示是打开了一个图片文件夹，里面包含了我当时去重庆的时候照的一些照片~
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223230209703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     Razuna界面通俗易懂，因此其他功能不再一一记录了。
+    </p>
+    <p>
+     Razuna官方网站：
+     <a href="http://www.razuna.org/">
+      http://www.razuna.org/
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/17515189
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源&amp;t=blog" target="_blank">
+    开源
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=服务器&amp;t=blog" target="_blank">
+    服务器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=媒体资产管理&amp;t=blog" target="_blank">
+    媒体资产管理
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Java&amp;t=blog" target="_blank">
+    Java
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362938" target="_blank">
+    开源多媒体系统
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1652801" target="_blank">
+    开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,2151 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg的H.264解码器源代码简单分析：解码器主干部分 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_69">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg的H.264解码器源代码简单分析：解码器主干部分
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年04月14日 16:04:50
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：15858
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     H.264源代码分析文章列表：
+    </p>
+    <p>
+     【编码 - x264】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45536607">
+      x264源代码简单分析：概述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45583217">
+      x264源代码简单分析：x264命令行工具（x264.exe）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45644367">
+      x264源代码简单分析：编码器主干部分-1
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45719905">
+      x264源代码简单分析：编码器主干部分-2
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45790195">
+      x264源代码简单分析：x264_slice_write()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45870269">
+      x264源代码简单分析：滤波（Filter）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45917757">
+      x264源代码简单分析：宏块分析（Analysis）部分-帧内宏块（Intra）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45936267">
+      x264源代码简单分析：宏块分析（Analysis）部分-帧间宏块（Inter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45938927">
+      x264源代码简单分析：宏块编码（Encode）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45944811">
+      x264源代码简单分析：熵编码（Entropy Encoding）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45960409">
+      FFmpeg与libx264接口源代码简单分析
+     </a>
+    </p>
+    <p>
+     【解码 - libavcodec H.264 解码器】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      FFmpeg的H.264解码器源代码简单分析：概述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45001033">
+      FFmpeg的H.264解码器源代码简单分析：解析器（Parser）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45042755">
+      FFmpeg的H.264解码器源代码简单分析：解码器主干部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45114453">
+      FFmpeg的H.264解码器源代码简单分析：熵解码（EntropyDecoding）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45143075">
+      FFmpeg的H.264解码器源代码简单分析：宏块解码（Decode）部分-帧内宏块（Intra）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45195291">
+      FFmpeg的H.264解码器源代码简单分析：宏块解码（Decode）部分-帧间宏块（Inter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45224579">
+      FFmpeg的H.264解码器源代码简单分析：环路滤波（Loop Filter）部分
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文分析FFmpeg的H.264解码器的主干部分。“主干部分”是相对于“熵解码”、“宏块解码”、“环路滤波”这些细节部分而言的。它包含了H.264解码器直到decode_slice()前面的函数调用关系（decode_slice()后面就是H.264解码器的细节部分，主要包含了“熵解码”、“宏块解码”、“环路滤波”3个部分）。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用关系图
+    </h2>
+    <p>
+     解码器主干部分的源代码在整个H.264解码器中的位置如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201504/04/1428080288_9350.jpg">
+      <img alt="" src="https://img-blog.csdn.net/20150414152900469?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </a>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1806347">
+      单击查看更清晰的图片
+     </a>
+     <br/>
+    </p>
+    <p>
+     解码器主干部分的源代码的调用关系如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201504/14/1428998546_8631.jpg">
+      <img alt="" src="https://img-blog.csdn.net/20150414152959578"/>
+     </a>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1806863">
+      单击查看更清晰的图片
+     </a>
+    </p>
+    从图中可以看出，H.264解码器（Decoder）在初始化的时候调用了ff_h264_decode_init()，ff_h264_decode_init()又调用了下面几个函数进行解码器汇编函数的初始化工作（仅举了几个例子）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ff_h264dsp_init()：初始化DSP相关的汇编函数。包含了IDCT、环路滤波函数等。
+     <br/>
+     ff_h264qpel_init()：初始化四分之一像素运动补偿相关的汇编函数。
+     <br/>
+     ff_h264_pred_init()：初始化帧内预测相关的汇编函数。
+    </blockquote>
+    H.264解码器在关闭的时候调用了h264_decode_end()，h264_decode_end()又调用了ff_h264_remove_all_refs()，ff_h264_free_context()等几个函数进行清理工作。
+    <br/>
+    H.264解码器在解码图像帧的时候调用了h264_decode_frame()，h264_decode_frame()调用了decode_nal_units()，decode_nal_units()调用了两类函数——解析函数和解码函数，如下所示。
+    <br/>
+    （1）解析函数（获取信息）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ff_h264_decode_nal()：解析NALU Header。
+     <br/>
+     ff_h264_decode_seq_parameter_set()：解析SPS。
+     <br/>
+     ff_h264_decode_picture_parameter_set()：解析PPS。
+     <br/>
+     ff_h264_decode_sei()：解析SEI。
+     <br/>
+     ff_h264_decode_slice_header()：解析Slice Header。
+    </blockquote>
+    （2）解码函数（解码获得图像）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ff_h264_execute_decode_slices()：解码Slice。
+    </blockquote>
+    其中ff_h264_execute_decode_slices()调用了decode_slice()，而decode_slice()中调用了解码器中细节处理的函数（暂不详细分析）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ff_h264_decode_mb_cabac()：CABAC熵解码函数。
+     <br/>
+     ff_h264_decode_mb_cavlc()：CAVLC熵解码函数。
+     <br/>
+     ff_h264_hl_decode_mb()：宏块解码函数。
+     <br/>
+     loop_filter()：环路滤波函数。
+    </blockquote>
+    本文针对H.264解码器decode_slice()前面的函数调用关系进行分析。
+    <br/>
+    <br/>
+    <h2>
+     ff_h264_decoder
+    </h2>
+    ff_h264_decoder是FFmpeg的H.264解码器对应的AVCodec结构体。它的定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">AVCodec ff_h264_decoder = {
+    .name                  = "h264",
+    .long_name             = NULL_IF_CONFIG_SMALL("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"),
+    .type                  = AVMEDIA_TYPE_VIDEO,
+    .id                    = AV_CODEC_ID_H264,
+    .priv_data_size        = sizeof(H264Context),
+    .init                  = ff_h264_decode_init,
+    .close                 = h264_decode_end,
+    .decode                = h264_decode_frame,
+    .capabilities          = /*CODEC_CAP_DRAW_HORIZ_BAND |*/ CODEC_CAP_DR1 |
+                             CODEC_CAP_DELAY | CODEC_CAP_SLICE_THREADS |
+                             CODEC_CAP_FRAME_THREADS,
+    .flush                 = flush_dpb,
+    .init_thread_copy      = ONLY_IF_THREADS_ENABLED(decode_init_thread_copy),
+    .update_thread_context = ONLY_IF_THREADS_ENABLED(ff_h264_update_thread_context),
+    .profiles              = NULL_IF_CONFIG_SMALL(profiles),
+    .priv_class            = &amp;h264_class,
+};</pre>
+    <br/>
+    从ff_h264_decoder的定义可以看出：解码器初始化的函数指针init()指向ff_h264_decode_init()函数，解码的函数指针decode()指向h264_decode_frame()函数，解码器关闭的函数指针close()指向h264_decode_end()函数。
+    <br/>
+    <br/>
+    <h2>
+     ff_h264_decode_init()
+    </h2>
+    ff_h264_decode_init()用于FFmpeg H.264解码器的初始化。该函数的定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">//H.264解码器初始化函数
+av_cold int ff_h264_decode_init(AVCodecContext *avctx)
+{
+    H264Context *h = avctx-&gt;priv_data;
+    int i;
+    int ret;
+
+    h-&gt;avctx = avctx;
+    //8颜色位深8bit
+    h-&gt;bit_depth_luma    = 8;
+    //1代表是YUV420P
+    h-&gt;chroma_format_idc = 1;
+
+    h-&gt;avctx-&gt;bits_per_raw_sample = 8;
+    h-&gt;cur_chroma_format_idc = 1;
+    //初始化DSP相关的汇编函数。包含了IDCT、环路滤波函数等
+    ff_h264dsp_init(&amp;h-&gt;h264dsp, 8, 1);
+    av_assert0(h-&gt;sps.bit_depth_chroma == 0);
+    ff_h264chroma_init(&amp;h-&gt;h264chroma, h-&gt;sps.bit_depth_chroma);
+    //初始化四分之一像素运动补偿相关的汇编函数
+    ff_h264qpel_init(&amp;h-&gt;h264qpel, 8);
+    //初始化帧内预测相关的汇编函数
+    ff_h264_pred_init(&amp;h-&gt;hpc, h-&gt;avctx-&gt;codec_id, 8, 1);
+
+    h-&gt;dequant_coeff_pps = -1;
+    h-&gt;current_sps_id = -1;
+
+    /* needed so that IDCT permutation is known early */
+    if (CONFIG_ERROR_RESILIENCE)
+        ff_me_cmp_init(&amp;h-&gt;mecc, h-&gt;avctx);
+    ff_videodsp_init(&amp;h-&gt;vdsp, 8);
+
+    memset(h-&gt;pps.scaling_matrix4, 16, 6 * 16 * sizeof(uint8_t));
+    memset(h-&gt;pps.scaling_matrix8, 16, 2 * 64 * sizeof(uint8_t));
+
+    h-&gt;picture_structure   = PICT_FRAME;
+    h-&gt;slice_context_count = 1;
+    h-&gt;workaround_bugs     = avctx-&gt;workaround_bugs;
+    h-&gt;flags               = avctx-&gt;flags;
+
+    /* set defaults */
+    // s-&gt;decode_mb = ff_h263_decode_mb;
+    if (!avctx-&gt;has_b_frames)
+        h-&gt;low_delay = 1;
+
+    avctx-&gt;chroma_sample_location = AVCHROMA_LOC_LEFT;
+    //初始化熵解码器
+    //CAVLC
+    ff_h264_decode_init_vlc();
+    //CABAC
+    ff_init_cabac_states();
+    //8-bit H264取0, 大于 8-bit H264取1
+    h-&gt;pixel_shift        = 0;
+    h-&gt;sps.bit_depth_luma = avctx-&gt;bits_per_raw_sample = 8;
+
+    h-&gt;thread_context[0] = h;
+    h-&gt;outputed_poc      = h-&gt;next_outputed_poc = INT_MIN;
+    for (i = 0; i &lt; MAX_DELAYED_PIC_COUNT; i++)
+        h-&gt;last_pocs[i] = INT_MIN;
+    h-&gt;prev_poc_msb = 1 &lt;&lt; 16;
+    h-&gt;prev_frame_num = -1;
+    h-&gt;x264_build   = -1;
+    h-&gt;sei_fpa.frame_packing_arrangement_cancel_flag = -1;
+    ff_h264_reset_sei(h);
+    if (avctx-&gt;codec_id == AV_CODEC_ID_H264) {
+        if (avctx-&gt;ticks_per_frame == 1) {
+            if(h-&gt;avctx-&gt;time_base.den &lt; INT_MAX/2) {
+                h-&gt;avctx-&gt;time_base.den *= 2;
+            } else
+                h-&gt;avctx-&gt;time_base.num /= 2;
+        }
+        avctx-&gt;ticks_per_frame = 2;
+    }
+    //AVCodecContext中是否包含extradata？包含的话，则解析之
+    if (avctx-&gt;extradata_size &gt; 0 &amp;&amp; avctx-&gt;extradata) {
+        ret = ff_h264_decode_extradata(h, avctx-&gt;extradata, avctx-&gt;extradata_size);
+        if (ret &lt; 0) {
+            ff_h264_free_context(h);
+            return ret;
+        }
+    }
+
+    if (h-&gt;sps.bitstream_restriction_flag &amp;&amp;
+        h-&gt;avctx-&gt;has_b_frames &lt; h-&gt;sps.num_reorder_frames) {
+        h-&gt;avctx-&gt;has_b_frames = h-&gt;sps.num_reorder_frames;
+        h-&gt;low_delay           = 0;
+    }
+
+    avctx-&gt;internal-&gt;allocate_progress = 1;
+
+    ff_h264_flush_change(h);
+
+    return 0;
+}
+</pre>
+    <br/>
+    <p>
+     从函数定义中可以看出，ff_h264_decode_init()一方面给H.264 解码器中一些变量（例如bit_depth_luma、chroma_format_idc等）设定了初始值，另一方面调用了一系列汇编函数的初始化函数（初始化函数的具体内容在后续文章中完成）。初始化汇编函数的的步骤是：首先将C语言版本函数赋值给相应模块的函数指针；然后检测平台的特性，如果不支持汇编优化（ARM、X86等），则不再做任何处理，如果支持汇编优化，则将相应的汇编优化函数赋值给相应模块的函数指针（替换掉C语言版本的效率较低的函数）。下面几个函数初始化了几个不同模块的汇编优化函数：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ff_h264dsp_init()：初始化DSP相关的汇编函数。包含了IDCT、环路滤波函数等。
+     <br/>
+     ff_h264qpel_init()：初始化四分之一像素运动补偿相关的汇编函数。
+     <br/>
+     ff_h264_pred_init()：初始化帧内预测相关的汇编函数。
+    </blockquote>
+    <p>
+     可以举例看一下个ff_h264_pred_init()的代码。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     ff_h264_pred_init()
+    </h3>
+    函数用于初始化帧内预测相关的汇编函数，定位于libavcodec\h264pred.c，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Set the intra prediction function pointers.
+ */
+//初始化帧内预测相关的汇编函数
+av_cold void ff_h264_pred_init(H264PredContext *h, int codec_id,
+                               const int bit_depth,
+                               int chroma_format_idc)
+{
+#undef FUNC
+#undef FUNCC
+#define FUNC(a, depth) a ## _ ## depth
+#define FUNCC(a, depth) a ## _ ## depth ## _c
+#define FUNCD(a) a ## _c
+//好长的宏定义...（这种很长的宏定义在H.264解码器中似乎很普遍！）
+//该宏用于给帧内预测模块的函数指针赋值
+//注意参数为颜色位深度
+#define H264_PRED(depth) \
+    if(codec_id != AV_CODEC_ID_RV40){\
+        if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {\
+            h-&gt;pred4x4[VERT_PRED       ]= FUNCD(pred4x4_vertical_vp8);\
+            h-&gt;pred4x4[HOR_PRED        ]= FUNCD(pred4x4_horizontal_vp8);\
+        } else {\
+            h-&gt;pred4x4[VERT_PRED       ]= FUNCC(pred4x4_vertical          , depth);\
+            h-&gt;pred4x4[HOR_PRED        ]= FUNCC(pred4x4_horizontal        , depth);\
+        }\
+        h-&gt;pred4x4[DC_PRED             ]= FUNCC(pred4x4_dc                , depth);\
+        if(codec_id == AV_CODEC_ID_SVQ3)\
+            h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED ]= FUNCD(pred4x4_down_left_svq3);\
+        else\
+            h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED ]= FUNCC(pred4x4_down_left     , depth);\
+        h-&gt;pred4x4[DIAG_DOWN_RIGHT_PRED]= FUNCC(pred4x4_down_right        , depth);\
+        h-&gt;pred4x4[VERT_RIGHT_PRED     ]= FUNCC(pred4x4_vertical_right    , depth);\
+        h-&gt;pred4x4[HOR_DOWN_PRED       ]= FUNCC(pred4x4_horizontal_down   , depth);\
+        if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {\
+            h-&gt;pred4x4[VERT_LEFT_PRED  ]= FUNCD(pred4x4_vertical_left_vp8);\
+        } else\
+            h-&gt;pred4x4[VERT_LEFT_PRED  ]= FUNCC(pred4x4_vertical_left     , depth);\
+        h-&gt;pred4x4[HOR_UP_PRED         ]= FUNCC(pred4x4_horizontal_up     , depth);\
+        if (codec_id != AV_CODEC_ID_VP7 &amp;&amp; codec_id != AV_CODEC_ID_VP8) {\
+            h-&gt;pred4x4[LEFT_DC_PRED    ]= FUNCC(pred4x4_left_dc           , depth);\
+            h-&gt;pred4x4[TOP_DC_PRED     ]= FUNCC(pred4x4_top_dc            , depth);\
+        } else {\
+            h-&gt;pred4x4[TM_VP8_PRED     ]= FUNCD(pred4x4_tm_vp8);\
+            h-&gt;pred4x4[DC_127_PRED     ]= FUNCC(pred4x4_127_dc            , depth);\
+            h-&gt;pred4x4[DC_129_PRED     ]= FUNCC(pred4x4_129_dc            , depth);\
+            h-&gt;pred4x4[VERT_VP8_PRED   ]= FUNCC(pred4x4_vertical          , depth);\
+            h-&gt;pred4x4[HOR_VP8_PRED    ]= FUNCC(pred4x4_horizontal        , depth);\
+        }\
+        if (codec_id != AV_CODEC_ID_VP8)\
+            h-&gt;pred4x4[DC_128_PRED     ]= FUNCC(pred4x4_128_dc            , depth);\
+    }else{\
+        h-&gt;pred4x4[VERT_PRED           ]= FUNCC(pred4x4_vertical          , depth);\
+        h-&gt;pred4x4[HOR_PRED            ]= FUNCC(pred4x4_horizontal        , depth);\
+        h-&gt;pred4x4[DC_PRED             ]= FUNCC(pred4x4_dc                , depth);\
+        h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED ]= FUNCD(pred4x4_down_left_rv40);\
+        h-&gt;pred4x4[DIAG_DOWN_RIGHT_PRED]= FUNCC(pred4x4_down_right        , depth);\
+        h-&gt;pred4x4[VERT_RIGHT_PRED     ]= FUNCC(pred4x4_vertical_right    , depth);\
+        h-&gt;pred4x4[HOR_DOWN_PRED       ]= FUNCC(pred4x4_horizontal_down   , depth);\
+        h-&gt;pred4x4[VERT_LEFT_PRED      ]= FUNCD(pred4x4_vertical_left_rv40);\
+        h-&gt;pred4x4[HOR_UP_PRED         ]= FUNCD(pred4x4_horizontal_up_rv40);\
+        h-&gt;pred4x4[LEFT_DC_PRED        ]= FUNCC(pred4x4_left_dc           , depth);\
+        h-&gt;pred4x4[TOP_DC_PRED         ]= FUNCC(pred4x4_top_dc            , depth);\
+        h-&gt;pred4x4[DC_128_PRED         ]= FUNCC(pred4x4_128_dc            , depth);\
+        h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED_RV40_NODOWN]= FUNCD(pred4x4_down_left_rv40_nodown);\
+        h-&gt;pred4x4[HOR_UP_PRED_RV40_NODOWN]= FUNCD(pred4x4_horizontal_up_rv40_nodown);\
+        h-&gt;pred4x4[VERT_LEFT_PRED_RV40_NODOWN]= FUNCD(pred4x4_vertical_left_rv40_nodown);\
+    }\
+\
+    h-&gt;pred8x8l[VERT_PRED           ]= FUNCC(pred8x8l_vertical            , depth);\
+    h-&gt;pred8x8l[HOR_PRED            ]= FUNCC(pred8x8l_horizontal          , depth);\
+    h-&gt;pred8x8l[DC_PRED             ]= FUNCC(pred8x8l_dc                  , depth);\
+    h-&gt;pred8x8l[DIAG_DOWN_LEFT_PRED ]= FUNCC(pred8x8l_down_left           , depth);\
+    h-&gt;pred8x8l[DIAG_DOWN_RIGHT_PRED]= FUNCC(pred8x8l_down_right          , depth);\
+    h-&gt;pred8x8l[VERT_RIGHT_PRED     ]= FUNCC(pred8x8l_vertical_right      , depth);\
+    h-&gt;pred8x8l[HOR_DOWN_PRED       ]= FUNCC(pred8x8l_horizontal_down     , depth);\
+    h-&gt;pred8x8l[VERT_LEFT_PRED      ]= FUNCC(pred8x8l_vertical_left       , depth);\
+    h-&gt;pred8x8l[HOR_UP_PRED         ]= FUNCC(pred8x8l_horizontal_up       , depth);\
+    h-&gt;pred8x8l[LEFT_DC_PRED        ]= FUNCC(pred8x8l_left_dc             , depth);\
+    h-&gt;pred8x8l[TOP_DC_PRED         ]= FUNCC(pred8x8l_top_dc              , depth);\
+    h-&gt;pred8x8l[DC_128_PRED         ]= FUNCC(pred8x8l_128_dc              , depth);\
+\
+    if (chroma_format_idc &lt;= 1) {\
+        h-&gt;pred8x8[VERT_PRED8x8   ]= FUNCC(pred8x8_vertical               , depth);\
+        h-&gt;pred8x8[HOR_PRED8x8    ]= FUNCC(pred8x8_horizontal             , depth);\
+    } else {\
+        h-&gt;pred8x8[VERT_PRED8x8   ]= FUNCC(pred8x16_vertical              , depth);\
+        h-&gt;pred8x8[HOR_PRED8x8    ]= FUNCC(pred8x16_horizontal            , depth);\
+    }\
+    if (codec_id != AV_CODEC_ID_VP7 &amp;&amp; codec_id != AV_CODEC_ID_VP8) {\
+        if (chroma_format_idc &lt;= 1) {\
+            h-&gt;pred8x8[PLANE_PRED8x8]= FUNCC(pred8x8_plane                , depth);\
+        } else {\
+            h-&gt;pred8x8[PLANE_PRED8x8]= FUNCC(pred8x16_plane               , depth);\
+        }\
+    } else\
+        h-&gt;pred8x8[PLANE_PRED8x8]= FUNCD(pred8x8_tm_vp8);\
+    if (codec_id != AV_CODEC_ID_RV40 &amp;&amp; codec_id != AV_CODEC_ID_VP7 &amp;&amp; \
+        codec_id != AV_CODEC_ID_VP8) {\
+        if (chroma_format_idc &lt;= 1) {\
+            h-&gt;pred8x8[DC_PRED8x8     ]= FUNCC(pred8x8_dc                     , depth);\
+            h-&gt;pred8x8[LEFT_DC_PRED8x8]= FUNCC(pred8x8_left_dc                , depth);\
+            h-&gt;pred8x8[TOP_DC_PRED8x8 ]= FUNCC(pred8x8_top_dc                 , depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_L0T_PRED8x8 ]= FUNC(pred8x8_mad_cow_dc_l0t, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_0LT_PRED8x8 ]= FUNC(pred8x8_mad_cow_dc_0lt, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_L00_PRED8x8 ]= FUNC(pred8x8_mad_cow_dc_l00, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_0L0_PRED8x8 ]= FUNC(pred8x8_mad_cow_dc_0l0, depth);\
+        } else {\
+            h-&gt;pred8x8[DC_PRED8x8     ]= FUNCC(pred8x16_dc                    , depth);\
+            h-&gt;pred8x8[LEFT_DC_PRED8x8]= FUNCC(pred8x16_left_dc               , depth);\
+            h-&gt;pred8x8[TOP_DC_PRED8x8 ]= FUNCC(pred8x16_top_dc                , depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_L0T_PRED8x8 ]= FUNC(pred8x16_mad_cow_dc_l0t, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_0LT_PRED8x8 ]= FUNC(pred8x16_mad_cow_dc_0lt, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_L00_PRED8x8 ]= FUNC(pred8x16_mad_cow_dc_l00, depth);\
+            h-&gt;pred8x8[ALZHEIMER_DC_0L0_PRED8x8 ]= FUNC(pred8x16_mad_cow_dc_0l0, depth);\
+        }\
+    }else{\
+        h-&gt;pred8x8[DC_PRED8x8     ]= FUNCD(pred8x8_dc_rv40);\
+        h-&gt;pred8x8[LEFT_DC_PRED8x8]= FUNCD(pred8x8_left_dc_rv40);\
+        h-&gt;pred8x8[TOP_DC_PRED8x8 ]= FUNCD(pred8x8_top_dc_rv40);\
+        if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {\
+            h-&gt;pred8x8[DC_127_PRED8x8]= FUNCC(pred8x8_127_dc              , depth);\
+            h-&gt;pred8x8[DC_129_PRED8x8]= FUNCC(pred8x8_129_dc              , depth);\
+        }\
+    }\
+    if (chroma_format_idc &lt;= 1) {\
+        h-&gt;pred8x8[DC_128_PRED8x8 ]= FUNCC(pred8x8_128_dc                 , depth);\
+    } else {\
+        h-&gt;pred8x8[DC_128_PRED8x8 ]= FUNCC(pred8x16_128_dc                , depth);\
+    }\
+\
+    h-&gt;pred16x16[DC_PRED8x8     ]= FUNCC(pred16x16_dc                     , depth);\
+    h-&gt;pred16x16[VERT_PRED8x8   ]= FUNCC(pred16x16_vertical               , depth);\
+    h-&gt;pred16x16[HOR_PRED8x8    ]= FUNCC(pred16x16_horizontal             , depth);\
+    switch(codec_id){\
+    case AV_CODEC_ID_SVQ3:\
+       h-&gt;pred16x16[PLANE_PRED8x8  ]= FUNCD(pred16x16_plane_svq3);\
+       break;\
+    case AV_CODEC_ID_RV40:\
+       h-&gt;pred16x16[PLANE_PRED8x8  ]= FUNCD(pred16x16_plane_rv40);\
+       break;\
+    case AV_CODEC_ID_VP7:\
+    case AV_CODEC_ID_VP8:\
+       h-&gt;pred16x16[PLANE_PRED8x8  ]= FUNCD(pred16x16_tm_vp8);\
+       h-&gt;pred16x16[DC_127_PRED8x8]= FUNCC(pred16x16_127_dc               , depth);\
+       h-&gt;pred16x16[DC_129_PRED8x8]= FUNCC(pred16x16_129_dc               , depth);\
+       break;\
+    default:\
+       h-&gt;pred16x16[PLANE_PRED8x8  ]= FUNCC(pred16x16_plane               , depth);\
+       break;\
+    }\
+    h-&gt;pred16x16[LEFT_DC_PRED8x8]= FUNCC(pred16x16_left_dc                , depth);\
+    h-&gt;pred16x16[TOP_DC_PRED8x8 ]= FUNCC(pred16x16_top_dc                 , depth);\
+    h-&gt;pred16x16[DC_128_PRED8x8 ]= FUNCC(pred16x16_128_dc                 , depth);\
+\
+    /* special lossless h/v prediction for h264 */ \
+    h-&gt;pred4x4_add  [VERT_PRED   ]= FUNCC(pred4x4_vertical_add            , depth);\
+    h-&gt;pred4x4_add  [ HOR_PRED   ]= FUNCC(pred4x4_horizontal_add          , depth);\
+    h-&gt;pred8x8l_add [VERT_PRED   ]= FUNCC(pred8x8l_vertical_add           , depth);\
+    h-&gt;pred8x8l_add [ HOR_PRED   ]= FUNCC(pred8x8l_horizontal_add         , depth);\
+    h-&gt;pred8x8l_filter_add [VERT_PRED   ]= FUNCC(pred8x8l_vertical_filter_add           , depth);\
+    h-&gt;pred8x8l_filter_add [ HOR_PRED   ]= FUNCC(pred8x8l_horizontal_filter_add         , depth);\
+    if (chroma_format_idc &lt;= 1) {\
+    h-&gt;pred8x8_add  [VERT_PRED8x8]= FUNCC(pred8x8_vertical_add            , depth);\
+    h-&gt;pred8x8_add  [ HOR_PRED8x8]= FUNCC(pred8x8_horizontal_add          , depth);\
+    } else {\
+        h-&gt;pred8x8_add  [VERT_PRED8x8]= FUNCC(pred8x16_vertical_add            , depth);\
+        h-&gt;pred8x8_add  [ HOR_PRED8x8]= FUNCC(pred8x16_horizontal_add          , depth);\
+    }\
+    h-&gt;pred16x16_add[VERT_PRED8x8]= FUNCC(pred16x16_vertical_add          , depth);\
+    h-&gt;pred16x16_add[ HOR_PRED8x8]= FUNCC(pred16x16_horizontal_add        , depth);\
+    //注意这里使用了前面那个很长的宏定义
+	//根据颜色位深的不同，初始化不同的函数
+    //颜色位深默认值为8，所以一般情况下调用H264_PRED(8)
+    switch (bit_depth) {
+        case 9:
+            H264_PRED(9)
+            break;
+        case 10:
+            H264_PRED(10)
+            break;
+        case 12:
+            H264_PRED(12)
+            break;
+        case 14:
+            H264_PRED(14)
+            break;
+        default:
+            av_assert0(bit_depth&lt;=8);
+            H264_PRED(8)
+            break;
+    }
+    //如果支持汇编优化，则会调用相应的汇编优化函数
+    //neon这些的
+    if (ARCH_ARM) ff_h264_pred_init_arm(h, codec_id, bit_depth, chroma_format_idc);
+    //mmx这些的
+    if (ARCH_X86) ff_h264_pred_init_x86(h, codec_id, bit_depth, chroma_format_idc);
+}
+</pre>
+    <br/>
+    初看一眼ff_h264_pred_init()定义会给人一种很奇怪的感觉：前面的这个H264_PRED(depth)的宏定义怎么这么长？！实际上在FFmpeg的H.264解码器中这种很长的宏定义是很常见的。我个人觉得这么做主要是为了方便为不同的颜色位深的码流初始化不同的功能函数。例如，对于常见的8bit码流，调用H264_PRED(8)就可以初始化相应的函数；对于比较新的10bit码流，调用H264_PRED(10)就可以初始化相应的函数。
+    <br/>
+    <p>
+     ff_h264_pred_init()的代码是开始于switch()语句的，可以看出该函数根据不同的bit_depth（颜色位深）调用了不同的H264_PRED(bit_depth)宏。我们不妨展开一个H264_PRED()宏看看里面的代码究竟是什么。在这里我们选择最常见的8bit为例，看看H264_PRED(8)宏展开后的结果。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     H264_PRED(8)
+    </h3>
+    H264_PRED(8)用于初始化8bit颜色位深C语言版本的帧内预测的函数。该宏定义展开后的结果如下所示。
+    <br/>
+    <pre class="cpp">if(codec_id != AV_CODEC_ID_RV40){
+	if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+		h-&gt;pred4x4[0       ]= pred4x4_vertical_vp8_c;
+		h-&gt;pred4x4[1        ]= pred4x4_horizontal_vp8_c;
+	} else {
+		//帧内4x4的Vertical预测方式
+		h-&gt;pred4x4[0       ]= pred4x4_vertical_8_c;
+		//帧内4x4的Horizontal预测方式
+		h-&gt;pred4x4[1        ]= pred4x4_horizontal_8_c;
+	}
+	//帧内4x4的DC预测方式
+	h-&gt;pred4x4[2             ]= pred4x4_dc_8_c;
+	if(codec_id == AV_CODEC_ID_SVQ3)
+		h-&gt;pred4x4[3 ]= pred4x4_down_left_svq3_c;
+	else
+		h-&gt;pred4x4[3 ]= pred4x4_down_left_8_c;
+	h-&gt;pred4x4[4]= pred4x4_down_right_8_c;
+	h-&gt;pred4x4[5     ]= pred4x4_vertical_right_8_c;
+	h-&gt;pred4x4[6       ]= pred4x4_horizontal_down_8_c;
+	if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+		h-&gt;pred4x4[7  ]= pred4x4_vertical_left_vp8_c;
+	} else
+		h-&gt;pred4x4[7  ]= pred4x4_vertical_left_8_c;
+	h-&gt;pred4x4[8         ]= pred4x4_horizontal_up_8_c;
+	if (codec_id != AV_CODEC_ID_VP7 &amp;&amp; codec_id != AV_CODEC_ID_VP8) {
+		h-&gt;pred4x4[9    ]= pred4x4_left_dc_8_c;
+		h-&gt;pred4x4[10     ]= pred4x4_top_dc_8_c;
+	} else {
+		h-&gt;pred4x4[9     ]= pred4x4_tm_vp8_c;
+		h-&gt;pred4x4[12     ]= pred4x4_127_dc_8_c;
+		h-&gt;pred4x4[13     ]= pred4x4_129_dc_8_c;
+		h-&gt;pred4x4[10   ]= pred4x4_vertical_8_c;
+		h-&gt;pred4x4[14    ]= pred4x4_horizontal_8_c;
+	}
+	if (codec_id != AV_CODEC_ID_VP8)
+		h-&gt;pred4x4[11     ]= pred4x4_128_dc_8_c;
+}else{
+	h-&gt;pred4x4[0           ]= pred4x4_vertical_8_c;
+	h-&gt;pred4x4[1            ]= pred4x4_horizontal_8_c;
+	h-&gt;pred4x4[2             ]= pred4x4_dc_8_c;
+	h-&gt;pred4x4[3 ]= pred4x4_down_left_rv40_c;
+	h-&gt;pred4x4[4]= pred4x4_down_right_8_c;
+	h-&gt;pred4x4[5     ]= pred4x4_vertical_right_8_c;
+	h-&gt;pred4x4[6       ]= pred4x4_horizontal_down_8_c;
+	h-&gt;pred4x4[7      ]= pred4x4_vertical_left_rv40_c;
+	h-&gt;pred4x4[8         ]= pred4x4_horizontal_up_rv40_c;
+	h-&gt;pred4x4[9        ]= pred4x4_left_dc_8_c;
+	h-&gt;pred4x4[10         ]= pred4x4_top_dc_8_c;
+	h-&gt;pred4x4[11         ]= pred4x4_128_dc_8_c;
+	h-&gt;pred4x4[12]= pred4x4_down_left_rv40_nodown_c;
+	h-&gt;pred4x4[13]= pred4x4_horizontal_up_rv40_nodown_c;
+	h-&gt;pred4x4[14]= pred4x4_vertical_left_rv40_nodown_c;
+}
+
+h-&gt;pred8x8l[0           ]= pred8x8l_vertical_8_c;
+h-&gt;pred8x8l[1            ]= pred8x8l_horizontal_8_c;
+h-&gt;pred8x8l[2             ]= pred8x8l_dc_8_c;
+h-&gt;pred8x8l[3 ]= pred8x8l_down_left_8_c;
+h-&gt;pred8x8l[4]= pred8x8l_down_right_8_c;
+h-&gt;pred8x8l[5     ]= pred8x8l_vertical_right_8_c;
+h-&gt;pred8x8l[6       ]= pred8x8l_horizontal_down_8_c;
+h-&gt;pred8x8l[7      ]= pred8x8l_vertical_left_8_c;
+h-&gt;pred8x8l[8         ]= pred8x8l_horizontal_up_8_c;
+h-&gt;pred8x8l[9        ]= pred8x8l_left_dc_8_c;
+h-&gt;pred8x8l[10         ]= pred8x8l_top_dc_8_c;
+h-&gt;pred8x8l[11         ]= pred8x8l_128_dc_8_c;
+
+if (chroma_format_idc &lt;= 1) {
+	h-&gt;pred8x8[2   ]= pred8x8_vertical_8_c;
+	h-&gt;pred8x8[1    ]= pred8x8_horizontal_8_c;
+} else {
+	h-&gt;pred8x8[2   ]= pred8x16_vertical_8_c;
+	h-&gt;pred8x8[1    ]= pred8x16_horizontal_8_c;
+}
+if (codec_id != AV_CODEC_ID_VP7 &amp;&amp; codec_id != AV_CODEC_ID_VP8) {
+	if (chroma_format_idc &lt;= 1) {
+		h-&gt;pred8x8[3]= pred8x8_plane_8_c;
+	} else {
+		h-&gt;pred8x8[3]= pred8x16_plane_8_c;
+	}
+} else
+	h-&gt;pred8x8[3]= pred8x8_tm_vp8_c;
+if (codec_id != AV_CODEC_ID_RV40 &amp;&amp; codec_id != AV_CODEC_ID_VP7 &amp;&amp; 
+	codec_id != AV_CODEC_ID_VP8) {
+	if (chroma_format_idc &lt;= 1) {
+		h-&gt;pred8x8[0     ]= pred8x8_dc_8_c;
+		h-&gt;pred8x8[4]= pred8x8_left_dc_8_c;
+		h-&gt;pred8x8[5 ]= pred8x8_top_dc_8_c;
+		h-&gt;pred8x8[7 ]= pred8x8_mad_cow_dc_l0t_8;
+		h-&gt;pred8x8[8 ]= pred8x8_mad_cow_dc_0lt_8;
+		h-&gt;pred8x8[9 ]= pred8x8_mad_cow_dc_l00_8;
+		h-&gt;pred8x8[10 ]= pred8x8_mad_cow_dc_0l0_8;
+	} else {
+		h-&gt;pred8x8[0     ]= pred8x16_dc_8_c;
+		h-&gt;pred8x8[4]= pred8x16_left_dc_8_c;
+		h-&gt;pred8x8[5 ]= pred8x16_top_dc_8_c;
+		h-&gt;pred8x8[7 ]= pred8x16_mad_cow_dc_l0t_8;
+		h-&gt;pred8x8[8 ]= pred8x16_mad_cow_dc_0lt_8;
+		h-&gt;pred8x8[9 ]= pred8x16_mad_cow_dc_l00_8;
+		h-&gt;pred8x8[10 ]= pred8x16_mad_cow_dc_0l0_8;
+	}
+}else{
+	h-&gt;pred8x8[0     ]= pred8x8_dc_rv40_c;
+	h-&gt;pred8x8[4]= pred8x8_left_dc_rv40_c;
+	h-&gt;pred8x8[5 ]= pred8x8_top_dc_rv40_c;
+	if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+		h-&gt;pred8x8[7]= pred8x8_127_dc_8_c;
+		h-&gt;pred8x8[8]= pred8x8_129_dc_8_c;
+	}
+}
+if (chroma_format_idc &lt;= 1) {
+	h-&gt;pred8x8[6 ]= pred8x8_128_dc_8_c;
+} else {
+	h-&gt;pred8x8[6 ]= pred8x16_128_dc_8_c;
+}
+
+h-&gt;pred16x16[0     ]= pred16x16_dc_8_c;
+h-&gt;pred16x16[2   ]= pred16x16_vertical_8_c;
+h-&gt;pred16x16[1    ]= pred16x16_horizontal_8_c;
+switch(codec_id){
+case AV_CODEC_ID_SVQ3:
+   h-&gt;pred16x16[3  ]= pred16x16_plane_svq3_c;
+   break;
+case AV_CODEC_ID_RV40:
+   h-&gt;pred16x16[3  ]= pred16x16_plane_rv40_c;
+   break;
+case AV_CODEC_ID_VP7:
+case AV_CODEC_ID_VP8:
+   h-&gt;pred16x16[3  ]= pred16x16_tm_vp8_c;
+   h-&gt;pred16x16[7]= pred16x16_127_dc_8_c;
+   h-&gt;pred16x16[8]= pred16x16_129_dc_8_c;
+   break;
+default:
+   h-&gt;pred16x16[3  ]= pred16x16_plane_8_c;
+   break;
+}
+h-&gt;pred16x16[4]= pred16x16_left_dc_8_c;
+h-&gt;pred16x16[5 ]= pred16x16_top_dc_8_c;
+h-&gt;pred16x16[6 ]= pred16x16_128_dc_8_c;
+
+/* special lossless h/v prediction for h264 */ 
+h-&gt;pred4x4_add  [0   ]= pred4x4_vertical_add_8_c;
+h-&gt;pred4x4_add  [ 1   ]= pred4x4_horizontal_add_8_c;
+h-&gt;pred8x8l_add [0   ]= pred8x8l_vertical_add_8_c;
+h-&gt;pred8x8l_add [ 1   ]= pred8x8l_horizontal_add_8_c;
+h-&gt;pred8x8l_filter_add [0   ]= pred8x8l_vertical_filter_add_8_c;
+h-&gt;pred8x8l_filter_add [ 1   ]= pred8x8l_horizontal_filter_add_8_c;
+if (chroma_format_idc &lt;= 1) {
+h-&gt;pred8x8_add  [2]= pred8x8_vertical_add_8_c;
+h-&gt;pred8x8_add  [ 1]= pred8x8_horizontal_add_8_c;
+} else {
+	h-&gt;pred8x8_add  [2]= pred8x16_vertical_add_8_c;
+	h-&gt;pred8x8_add  [ 1]= pred8x16_horizontal_add_8_c;
+}
+h-&gt;pred16x16_add[2]= pred16x16_vertical_add_8_c;
+h-&gt;pred16x16_add[ 1]= pred16x16_horizontal_add_8_c;
+</pre>
+    <br/>
+    可以看出在H264_PRED(8)展开后的代码中，帧内预测模块的函数指针都被赋值以xxxx_8_c()的函数。例如帧内4x4的模式0被赋值以pred4x4_vertical_8_c()，帧内4x4的模式1被赋值以pred4x4_horizontal_8_c()，如下所示。
+    <br/>
+    <pre class="cpp">//帧内4x4的Vertical预测方式
+h-&gt;pred4x4[0       ]= pred4x4_vertical_8_c;
+//帧内4x4的Horizontal预测方式
+h-&gt;pred4x4[1        ]= pred4x4_horizontal_8_c;</pre>
+    <br/>
+    <p>
+     在这里我们可以简单看一下pred4x4_vertical_8_c()函数。该函数完成了4x4帧内Vertical模式的预测。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     pred4x4_vertical_8_c()
+    </h3>
+    pred4x4_vertical_8_c()的定义位于libavcodec\h264pred_template.c，如下所示。
+    <br/>
+    <pre class="cpp">//垂直预测
+//由上边像素推出像素值
+static void pred4x4_vertical_8_c (uint8_t *_src, const uint8_t *topright,
+                                    ptrdiff_t _stride)
+{
+    pixel *src = (pixel*)_src;
+    int stride = _stride&gt;&gt;(sizeof(pixel)-1);
+
+    /*
+     * Vertical预测方式
+     *   |X1 X2 X3 X4
+     * --+-----------
+     *   |X1 X2 X3 X4
+     *   |X1 X2 X3 X4
+     *   |X1 X2 X3 X4
+     *   |X1 X2 X3 X4
+     *
+     */
+
+    //pixel4代表4个像素值。1个像素值占用8bit，4个像素值占用32bit。
+    const pixel4 a= AV_RN4PA(src-stride);
+    /* 宏定义展开后：
+     * const uint32_t a=(((const av_alias32*)(src-stride))-&gt;u32);
+     * 注：av_alias32是一个union类型的变量，存储4byte的int或者float。
+     * -stride代表了上一行对应位置的像素
+     * 即a取的是上1行像素的值。
+     */
+    AV_WN4PA(src+0*stride, a);
+    AV_WN4PA(src+1*stride, a);
+    AV_WN4PA(src+2*stride, a);
+    AV_WN4PA(src+3*stride, a);
+
+    /* 宏定义展开后：
+     * (((av_alias32*)(src+0*stride))-&gt;u32 = (a));
+     * (((av_alias32*)(src+1*stride))-&gt;u32 = (a));
+     * (((av_alias32*)(src+2*stride))-&gt;u32 = (a));
+     * (((av_alias32*)(src+3*stride))-&gt;u32 = (a));
+     * 即a把a的值赋给下面4行。
+     */
+
+}
+</pre>
+    <br/>
+    有关pred4x4_vertical_8_c()的代码在后续文章中再做详细分析，在这里就不再做过多解释了。
+    <br/>
+    <br/>
+    <h3>
+     ff_h264_pred_init_x86()
+    </h3>
+    当系统支持ARM汇编优化的时候（ARCH_ ARM取值为1），就会调用ff_h264_pred_init_arm()初始化ARM平台下帧内预测汇编优化的函数；当系统支持X86汇编优化的时候（ARCH_X86取值为1），就会调用ff_h264_pred_init_x86()初始化X86平台下帧内预测汇编优化的函数。在这里我们简单看一下ff_h264_pred_init_x86()的定义。
+    <br/>
+    ff_h264_pred_init_x86()的定义位于libavcodec\x86\h264_intrapred_init.c，如下所示。
+    <br/>
+    <pre class="cpp">av_cold void ff_h264_pred_init_x86(H264PredContext *h, int codec_id,
+                                   const int bit_depth,
+                                   const int chroma_format_idc)
+{
+    int cpu_flags = av_get_cpu_flags();
+
+    if (bit_depth == 8) {
+        if (EXTERNAL_MMX(cpu_flags)) {
+            h-&gt;pred16x16[VERT_PRED8x8         ] = ff_pred16x16_vertical_8_mmx;
+            h-&gt;pred16x16[HOR_PRED8x8          ] = ff_pred16x16_horizontal_8_mmx;
+            if (chroma_format_idc &lt;= 1) {
+                h-&gt;pred8x8  [VERT_PRED8x8     ] = ff_pred8x8_vertical_8_mmx;
+                h-&gt;pred8x8  [HOR_PRED8x8      ] = ff_pred8x8_horizontal_8_mmx;
+            }
+            if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+                h-&gt;pred16x16[PLANE_PRED8x8    ] = ff_pred16x16_tm_vp8_8_mmx;
+                h-&gt;pred8x8  [PLANE_PRED8x8    ] = ff_pred8x8_tm_vp8_8_mmx;
+                h-&gt;pred4x4  [TM_VP8_PRED      ] = ff_pred4x4_tm_vp8_8_mmx;
+            } else {
+                if (chroma_format_idc &lt;= 1)
+                    h-&gt;pred8x8  [PLANE_PRED8x8] = ff_pred8x8_plane_8_mmx;
+                if (codec_id == AV_CODEC_ID_SVQ3) {
+                    if (cpu_flags &amp; AV_CPU_FLAG_CMOV)
+                        h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_svq3_8_mmx;
+                } else if (codec_id == AV_CODEC_ID_RV40) {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_rv40_8_mmx;
+                } else {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_h264_8_mmx;
+                }
+            }
+        }
+
+        if (EXTERNAL_MMXEXT(cpu_flags)) {
+            h-&gt;pred16x16[HOR_PRED8x8            ] = ff_pred16x16_horizontal_8_mmxext;
+            h-&gt;pred16x16[DC_PRED8x8             ] = ff_pred16x16_dc_8_mmxext;
+            if (chroma_format_idc &lt;= 1)
+                h-&gt;pred8x8[HOR_PRED8x8          ] = ff_pred8x8_horizontal_8_mmxext;
+            h-&gt;pred8x8l [TOP_DC_PRED            ] = ff_pred8x8l_top_dc_8_mmxext;
+            h-&gt;pred8x8l [DC_PRED                ] = ff_pred8x8l_dc_8_mmxext;
+            h-&gt;pred8x8l [HOR_PRED               ] = ff_pred8x8l_horizontal_8_mmxext;
+            h-&gt;pred8x8l [VERT_PRED              ] = ff_pred8x8l_vertical_8_mmxext;
+            h-&gt;pred8x8l [DIAG_DOWN_RIGHT_PRED   ] = ff_pred8x8l_down_right_8_mmxext;
+            h-&gt;pred8x8l [VERT_RIGHT_PRED        ] = ff_pred8x8l_vertical_right_8_mmxext;
+            h-&gt;pred8x8l [HOR_UP_PRED            ] = ff_pred8x8l_horizontal_up_8_mmxext;
+            h-&gt;pred8x8l [DIAG_DOWN_LEFT_PRED    ] = ff_pred8x8l_down_left_8_mmxext;
+            h-&gt;pred8x8l [HOR_DOWN_PRED          ] = ff_pred8x8l_horizontal_down_8_mmxext;
+            h-&gt;pred4x4  [DIAG_DOWN_RIGHT_PRED   ] = ff_pred4x4_down_right_8_mmxext;
+            h-&gt;pred4x4  [VERT_RIGHT_PRED        ] = ff_pred4x4_vertical_right_8_mmxext;
+            h-&gt;pred4x4  [HOR_DOWN_PRED          ] = ff_pred4x4_horizontal_down_8_mmxext;
+            h-&gt;pred4x4  [DC_PRED                ] = ff_pred4x4_dc_8_mmxext;
+            if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8 ||
+                codec_id == AV_CODEC_ID_H264) {
+                h-&gt;pred4x4  [DIAG_DOWN_LEFT_PRED] = ff_pred4x4_down_left_8_mmxext;
+            }
+            if (codec_id == AV_CODEC_ID_SVQ3 || codec_id == AV_CODEC_ID_H264) {
+                h-&gt;pred4x4  [VERT_LEFT_PRED     ] = ff_pred4x4_vertical_left_8_mmxext;
+            }
+            if (codec_id != AV_CODEC_ID_RV40) {
+                h-&gt;pred4x4  [HOR_UP_PRED        ] = ff_pred4x4_horizontal_up_8_mmxext;
+            }
+            if (codec_id == AV_CODEC_ID_SVQ3 || codec_id == AV_CODEC_ID_H264) {
+                if (chroma_format_idc &lt;= 1) {
+                    h-&gt;pred8x8[TOP_DC_PRED8x8   ] = ff_pred8x8_top_dc_8_mmxext;
+                    h-&gt;pred8x8[DC_PRED8x8       ] = ff_pred8x8_dc_8_mmxext;
+                }
+            }
+            if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+                h-&gt;pred16x16[PLANE_PRED8x8      ] = ff_pred16x16_tm_vp8_8_mmxext;
+                h-&gt;pred8x8  [DC_PRED8x8         ] = ff_pred8x8_dc_rv40_8_mmxext;
+                h-&gt;pred8x8  [PLANE_PRED8x8      ] = ff_pred8x8_tm_vp8_8_mmxext;
+                h-&gt;pred4x4  [TM_VP8_PRED        ] = ff_pred4x4_tm_vp8_8_mmxext;
+                h-&gt;pred4x4  [VERT_PRED          ] = ff_pred4x4_vertical_vp8_8_mmxext;
+            } else {
+                if (chroma_format_idc &lt;= 1)
+                    h-&gt;pred8x8  [PLANE_PRED8x8] = ff_pred8x8_plane_8_mmxext;
+                if (codec_id == AV_CODEC_ID_SVQ3) {
+                    h-&gt;pred16x16[PLANE_PRED8x8  ] = ff_pred16x16_plane_svq3_8_mmxext;
+                } else if (codec_id == AV_CODEC_ID_RV40) {
+                    h-&gt;pred16x16[PLANE_PRED8x8  ] = ff_pred16x16_plane_rv40_8_mmxext;
+                } else {
+                    h-&gt;pred16x16[PLANE_PRED8x8  ] = ff_pred16x16_plane_h264_8_mmxext;
+                }
+            }
+        }
+
+        if (EXTERNAL_SSE(cpu_flags)) {
+            h-&gt;pred16x16[VERT_PRED8x8] = ff_pred16x16_vertical_8_sse;
+        }
+
+        if (EXTERNAL_SSE2(cpu_flags)) {
+            h-&gt;pred16x16[DC_PRED8x8           ] = ff_pred16x16_dc_8_sse2;
+            h-&gt;pred8x8l [DIAG_DOWN_LEFT_PRED  ] = ff_pred8x8l_down_left_8_sse2;
+            h-&gt;pred8x8l [DIAG_DOWN_RIGHT_PRED ] = ff_pred8x8l_down_right_8_sse2;
+            h-&gt;pred8x8l [VERT_RIGHT_PRED      ] = ff_pred8x8l_vertical_right_8_sse2;
+            h-&gt;pred8x8l [VERT_LEFT_PRED       ] = ff_pred8x8l_vertical_left_8_sse2;
+            h-&gt;pred8x8l [HOR_DOWN_PRED        ] = ff_pred8x8l_horizontal_down_8_sse2;
+            if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+                h-&gt;pred16x16[PLANE_PRED8x8    ] = ff_pred16x16_tm_vp8_8_sse2;
+                h-&gt;pred8x8  [PLANE_PRED8x8    ] = ff_pred8x8_tm_vp8_8_sse2;
+            } else {
+                if (chroma_format_idc &lt;= 1)
+                    h-&gt;pred8x8  [PLANE_PRED8x8] = ff_pred8x8_plane_8_sse2;
+                if (codec_id == AV_CODEC_ID_SVQ3) {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_svq3_8_sse2;
+                } else if (codec_id == AV_CODEC_ID_RV40) {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_rv40_8_sse2;
+                } else {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_h264_8_sse2;
+                }
+            }
+        }
+
+        if (EXTERNAL_SSSE3(cpu_flags)) {
+            h-&gt;pred16x16[HOR_PRED8x8          ] = ff_pred16x16_horizontal_8_ssse3;
+            h-&gt;pred16x16[DC_PRED8x8           ] = ff_pred16x16_dc_8_ssse3;
+            if (chroma_format_idc &lt;= 1)
+                h-&gt;pred8x8  [HOR_PRED8x8      ] = ff_pred8x8_horizontal_8_ssse3;
+            h-&gt;pred8x8l [TOP_DC_PRED          ] = ff_pred8x8l_top_dc_8_ssse3;
+            h-&gt;pred8x8l [DC_PRED              ] = ff_pred8x8l_dc_8_ssse3;
+            h-&gt;pred8x8l [HOR_PRED             ] = ff_pred8x8l_horizontal_8_ssse3;
+            h-&gt;pred8x8l [VERT_PRED            ] = ff_pred8x8l_vertical_8_ssse3;
+            h-&gt;pred8x8l [DIAG_DOWN_LEFT_PRED  ] = ff_pred8x8l_down_left_8_ssse3;
+            h-&gt;pred8x8l [DIAG_DOWN_RIGHT_PRED ] = ff_pred8x8l_down_right_8_ssse3;
+            h-&gt;pred8x8l [VERT_RIGHT_PRED      ] = ff_pred8x8l_vertical_right_8_ssse3;
+            h-&gt;pred8x8l [VERT_LEFT_PRED       ] = ff_pred8x8l_vertical_left_8_ssse3;
+            h-&gt;pred8x8l [HOR_UP_PRED          ] = ff_pred8x8l_horizontal_up_8_ssse3;
+            h-&gt;pred8x8l [HOR_DOWN_PRED        ] = ff_pred8x8l_horizontal_down_8_ssse3;
+            if (codec_id == AV_CODEC_ID_VP7 || codec_id == AV_CODEC_ID_VP8) {
+                h-&gt;pred8x8  [PLANE_PRED8x8    ] = ff_pred8x8_tm_vp8_8_ssse3;
+                h-&gt;pred4x4  [TM_VP8_PRED      ] = ff_pred4x4_tm_vp8_8_ssse3;
+            } else {
+                if (chroma_format_idc &lt;= 1)
+                    h-&gt;pred8x8  [PLANE_PRED8x8] = ff_pred8x8_plane_8_ssse3;
+                if (codec_id == AV_CODEC_ID_SVQ3) {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_svq3_8_ssse3;
+                } else if (codec_id == AV_CODEC_ID_RV40) {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_rv40_8_ssse3;
+                } else {
+                    h-&gt;pred16x16[PLANE_PRED8x8] = ff_pred16x16_plane_h264_8_ssse3;
+                }
+            }
+        }
+    } else if (bit_depth == 10) {
+        if (EXTERNAL_MMXEXT(cpu_flags)) {
+            h-&gt;pred4x4[DC_PRED             ] = ff_pred4x4_dc_10_mmxext;
+            h-&gt;pred4x4[HOR_UP_PRED         ] = ff_pred4x4_horizontal_up_10_mmxext;
+
+            if (chroma_format_idc &lt;= 1)
+                h-&gt;pred8x8[DC_PRED8x8      ] = ff_pred8x8_dc_10_mmxext;
+
+            h-&gt;pred8x8l[DC_128_PRED        ] = ff_pred8x8l_128_dc_10_mmxext;
+
+            h-&gt;pred16x16[DC_PRED8x8        ] = ff_pred16x16_dc_10_mmxext;
+            h-&gt;pred16x16[TOP_DC_PRED8x8    ] = ff_pred16x16_top_dc_10_mmxext;
+            h-&gt;pred16x16[DC_128_PRED8x8    ] = ff_pred16x16_128_dc_10_mmxext;
+            h-&gt;pred16x16[LEFT_DC_PRED8x8   ] = ff_pred16x16_left_dc_10_mmxext;
+            h-&gt;pred16x16[VERT_PRED8x8      ] = ff_pred16x16_vertical_10_mmxext;
+            h-&gt;pred16x16[HOR_PRED8x8       ] = ff_pred16x16_horizontal_10_mmxext;
+        }
+        if (EXTERNAL_SSE2(cpu_flags)) {
+            h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED ] = ff_pred4x4_down_left_10_sse2;
+            h-&gt;pred4x4[DIAG_DOWN_RIGHT_PRED] = ff_pred4x4_down_right_10_sse2;
+            h-&gt;pred4x4[VERT_LEFT_PRED      ] = ff_pred4x4_vertical_left_10_sse2;
+            h-&gt;pred4x4[VERT_RIGHT_PRED     ] = ff_pred4x4_vertical_right_10_sse2;
+            h-&gt;pred4x4[HOR_DOWN_PRED       ] = ff_pred4x4_horizontal_down_10_sse2;
+
+            if (chroma_format_idc &lt;= 1) {
+                h-&gt;pred8x8[DC_PRED8x8      ] = ff_pred8x8_dc_10_sse2;
+                h-&gt;pred8x8[TOP_DC_PRED8x8  ] = ff_pred8x8_top_dc_10_sse2;
+                h-&gt;pred8x8[PLANE_PRED8x8   ] = ff_pred8x8_plane_10_sse2;
+                h-&gt;pred8x8[VERT_PRED8x8    ] = ff_pred8x8_vertical_10_sse2;
+                h-&gt;pred8x8[HOR_PRED8x8     ] = ff_pred8x8_horizontal_10_sse2;
+            }
+
+            h-&gt;pred8x8l[VERT_PRED           ] = ff_pred8x8l_vertical_10_sse2;
+            h-&gt;pred8x8l[HOR_PRED            ] = ff_pred8x8l_horizontal_10_sse2;
+            h-&gt;pred8x8l[DC_PRED             ] = ff_pred8x8l_dc_10_sse2;
+            h-&gt;pred8x8l[DC_128_PRED         ] = ff_pred8x8l_128_dc_10_sse2;
+            h-&gt;pred8x8l[TOP_DC_PRED         ] = ff_pred8x8l_top_dc_10_sse2;
+            h-&gt;pred8x8l[DIAG_DOWN_LEFT_PRED ] = ff_pred8x8l_down_left_10_sse2;
+            h-&gt;pred8x8l[DIAG_DOWN_RIGHT_PRED] = ff_pred8x8l_down_right_10_sse2;
+            h-&gt;pred8x8l[VERT_RIGHT_PRED     ] = ff_pred8x8l_vertical_right_10_sse2;
+            h-&gt;pred8x8l[HOR_UP_PRED         ] = ff_pred8x8l_horizontal_up_10_sse2;
+
+            h-&gt;pred16x16[DC_PRED8x8        ] = ff_pred16x16_dc_10_sse2;
+            h-&gt;pred16x16[TOP_DC_PRED8x8    ] = ff_pred16x16_top_dc_10_sse2;
+            h-&gt;pred16x16[DC_128_PRED8x8    ] = ff_pred16x16_128_dc_10_sse2;
+            h-&gt;pred16x16[LEFT_DC_PRED8x8   ] = ff_pred16x16_left_dc_10_sse2;
+            h-&gt;pred16x16[VERT_PRED8x8      ] = ff_pred16x16_vertical_10_sse2;
+            h-&gt;pred16x16[HOR_PRED8x8       ] = ff_pred16x16_horizontal_10_sse2;
+        }
+        if (EXTERNAL_SSSE3(cpu_flags)) {
+            h-&gt;pred4x4[DIAG_DOWN_RIGHT_PRED] = ff_pred4x4_down_right_10_ssse3;
+            h-&gt;pred4x4[VERT_RIGHT_PRED     ] = ff_pred4x4_vertical_right_10_ssse3;
+            h-&gt;pred4x4[HOR_DOWN_PRED       ] = ff_pred4x4_horizontal_down_10_ssse3;
+
+            h-&gt;pred8x8l[HOR_PRED            ] = ff_pred8x8l_horizontal_10_ssse3;
+            h-&gt;pred8x8l[DIAG_DOWN_LEFT_PRED ] = ff_pred8x8l_down_left_10_ssse3;
+            h-&gt;pred8x8l[DIAG_DOWN_RIGHT_PRED] = ff_pred8x8l_down_right_10_ssse3;
+            h-&gt;pred8x8l[VERT_RIGHT_PRED     ] = ff_pred8x8l_vertical_right_10_ssse3;
+            h-&gt;pred8x8l[HOR_UP_PRED         ] = ff_pred8x8l_horizontal_up_10_ssse3;
+        }
+        if (EXTERNAL_AVX(cpu_flags)) {
+            h-&gt;pred4x4[DIAG_DOWN_LEFT_PRED ] = ff_pred4x4_down_left_10_avx;
+            h-&gt;pred4x4[DIAG_DOWN_RIGHT_PRED] = ff_pred4x4_down_right_10_avx;
+            h-&gt;pred4x4[VERT_LEFT_PRED      ] = ff_pred4x4_vertical_left_10_avx;
+            h-&gt;pred4x4[VERT_RIGHT_PRED     ] = ff_pred4x4_vertical_right_10_avx;
+            h-&gt;pred4x4[HOR_DOWN_PRED       ] = ff_pred4x4_horizontal_down_10_avx;
+
+            h-&gt;pred8x8l[VERT_PRED           ] = ff_pred8x8l_vertical_10_avx;
+            h-&gt;pred8x8l[HOR_PRED            ] = ff_pred8x8l_horizontal_10_avx;
+            h-&gt;pred8x8l[DC_PRED             ] = ff_pred8x8l_dc_10_avx;
+            h-&gt;pred8x8l[TOP_DC_PRED         ] = ff_pred8x8l_top_dc_10_avx;
+            h-&gt;pred8x8l[DIAG_DOWN_RIGHT_PRED] = ff_pred8x8l_down_right_10_avx;
+            h-&gt;pred8x8l[DIAG_DOWN_LEFT_PRED ] = ff_pred8x8l_down_left_10_avx;
+            h-&gt;pred8x8l[VERT_RIGHT_PRED     ] = ff_pred8x8l_vertical_right_10_avx;
+            h-&gt;pred8x8l[HOR_UP_PRED         ] = ff_pred8x8l_horizontal_up_10_avx;
+        }
+    }
+}
+</pre>
+    <br/>
+    从源代码可以看出，ff_h264_pred_init_x86()首先调用av_get_cpu_flags()获取标记CPU特性的cpu_flags，然后根据cpu_flags初始化不同的函数，包括{xxx}_mmx()，{xxx}_mmxext()，{xxx}_sse()，{xxx}_sse2()，{xxx}_ssse3()，{xxx}_avx()几种采用不同会变指令的函数。
+    <br/>
+    <br/>
+    <h2>
+     h264_decode_end()
+    </h2>
+    h264_decode_end()用于关闭FFmpeg的H.264解码器。该函数的定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">//关闭解码器
+static av_cold int h264_decode_end(AVCodecContext *avctx)
+{
+    H264Context *h = avctx-&gt;priv_data;
+    //移除参考帧
+    ff_h264_remove_all_refs(h);
+    //释放H264Context
+    ff_h264_free_context(h);
+
+    ff_h264_unref_picture(h, &amp;h-&gt;cur_pic);
+
+    return 0;
+}
+</pre>
+    <br/>
+    <p>
+     从函数定义中可以看出，h264_decode_end()调用了ff_h264_remove_all_refs()移除了所有的参考帧，然后又调用了ff_h264_free_context()释放了H264Context里面的所有内存。下面看一下这两个函数的定义。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     ff_h264_remove_all_refs()
+    </h3>
+    ff_h264_remove_all_refs()的定义如下所示。
+    <br/>
+    <pre class="cpp">//移除参考帧
+void ff_h264_remove_all_refs(H264Context *h)
+{
+    int i;
+    //循环16次
+    //长期参考帧
+    for (i = 0; i &lt; 16; i++) {
+        remove_long(h, i, 0);
+    }
+    assert(h-&gt;long_ref_count == 0);
+    //短期参考帧
+    for (i = 0; i &lt; h-&gt;short_ref_count; i++) {
+        unreference_pic(h, h-&gt;short_ref[i], 0);
+        h-&gt;short_ref[i] = NULL;
+    }
+    h-&gt;short_ref_count = 0;
+
+    memset(h-&gt;default_ref_list, 0, sizeof(h-&gt;default_ref_list));
+    memset(h-&gt;ref_list, 0, sizeof(h-&gt;ref_list));
+}
+</pre>
+    <br/>
+    从ff_h264_remove_all_refs()的定义中可以看出，该函数调用了remove_long()释放了长期参考帧，调用unreference_pic()释放了短期参考帧。
+    <br/>
+    <br/>
+    <h3>
+     ff_h264_free_context()
+    </h3>
+    ff_h264_free_context()的定义如下所示。
+    <br/>
+    <pre class="cpp">//释放H264Context
+av_cold void ff_h264_free_context(H264Context *h)
+{
+    int i;
+    //释放各种内存
+    ff_h264_free_tables(h, 1); // FIXME cleanup init stuff perhaps
+    //释放SPS缓存
+    for (i = 0; i &lt; MAX_SPS_COUNT; i++)
+        av_freep(h-&gt;sps_buffers + i);
+    //释放PPS缓存
+    for (i = 0; i &lt; MAX_PPS_COUNT; i++)
+        av_freep(h-&gt;pps_buffers + i);
+}</pre>
+    <br/>
+    从ff_h264_free_context()的定义可以看出，该函数调用了ff_h264_free_tables()释放H264Context中的各种内存。可以看一下该函数的定义。
+    <br/>
+    <br/>
+    <h3>
+     ff_h264_free_tables()
+    </h3>
+    ff_h264_free_tables()的定义如下所示。
+    <br/>
+    <pre class="cpp">//释放各种内存
+void ff_h264_free_tables(H264Context *h, int free_rbsp)
+{
+    int i;
+    H264Context *hx;
+
+    av_freep(&amp;h-&gt;intra4x4_pred_mode);
+    av_freep(&amp;h-&gt;chroma_pred_mode_table);
+    av_freep(&amp;h-&gt;cbp_table);
+    av_freep(&amp;h-&gt;mvd_table[0]);
+    av_freep(&amp;h-&gt;mvd_table[1]);
+    av_freep(&amp;h-&gt;direct_table);
+    av_freep(&amp;h-&gt;non_zero_count);
+    av_freep(&amp;h-&gt;slice_table_base);
+    h-&gt;slice_table = NULL;
+    av_freep(&amp;h-&gt;list_counts);
+
+    av_freep(&amp;h-&gt;mb2b_xy);
+    av_freep(&amp;h-&gt;mb2br_xy);
+
+    av_buffer_pool_uninit(&amp;h-&gt;qscale_table_pool);
+    av_buffer_pool_uninit(&amp;h-&gt;mb_type_pool);
+    av_buffer_pool_uninit(&amp;h-&gt;motion_val_pool);
+    av_buffer_pool_uninit(&amp;h-&gt;ref_index_pool);
+
+    if (free_rbsp &amp;&amp; h-&gt;DPB) {
+        for (i = 0; i &lt; H264_MAX_PICTURE_COUNT; i++)
+            ff_h264_unref_picture(h, &amp;h-&gt;DPB[i]);
+        memset(h-&gt;delayed_pic, 0, sizeof(h-&gt;delayed_pic));
+        av_freep(&amp;h-&gt;DPB);
+    } else if (h-&gt;DPB) {
+        for (i = 0; i &lt; H264_MAX_PICTURE_COUNT; i++)
+            h-&gt;DPB[i].needs_realloc = 1;
+    }
+
+    h-&gt;cur_pic_ptr = NULL;
+
+    for (i = 0; i &lt; H264_MAX_THREADS; i++) {
+        hx = h-&gt;thread_context[i];
+        if (!hx)
+            continue;
+        av_freep(&amp;hx-&gt;top_borders[1]);
+        av_freep(&amp;hx-&gt;top_borders[0]);
+        av_freep(&amp;hx-&gt;bipred_scratchpad);
+        av_freep(&amp;hx-&gt;edge_emu_buffer);
+        av_freep(&amp;hx-&gt;dc_val_base);
+        av_freep(&amp;hx-&gt;er.mb_index2xy);
+        av_freep(&amp;hx-&gt;er.error_status_table);
+        av_freep(&amp;hx-&gt;er.er_temp_buffer);
+        av_freep(&amp;hx-&gt;er.mbintra_table);
+        av_freep(&amp;hx-&gt;er.mbskip_table);
+
+        if (free_rbsp) {
+            av_freep(&amp;hx-&gt;rbsp_buffer[1]);
+            av_freep(&amp;hx-&gt;rbsp_buffer[0]);
+            hx-&gt;rbsp_buffer_size[0] = 0;
+            hx-&gt;rbsp_buffer_size[1] = 0;
+        }
+        if (i)
+            av_freep(&amp;h-&gt;thread_context[i]);
+    }
+}
+</pre>
+    <br/>
+    可以看出ff_h264_free_tables()调用了av_freep()等函数释放了H264Context中的各个内存。
+    <br/>
+    <br/>
+    <h2>
+     h264_decode_frame()
+    </h2>
+    h264_decode_frame()用于解码一帧图像数据。该函数的定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">//H.264解码器-解码
+static int h264_decode_frame(AVCodecContext *avctx, void *data,
+                             int *got_frame, AVPacket *avpkt)
+{
+	//赋值。buf对应的就是AVPacket的data
+    const uint8_t *buf = avpkt-&gt;data;
+    int buf_size       = avpkt-&gt;size;
+    //指向AVCodecContext的priv_data
+    H264Context *h     = avctx-&gt;priv_data;
+    AVFrame *pict      = data;
+    int buf_index      = 0;
+    H264Picture *out;
+    int i, out_idx;
+    int ret;
+
+    h-&gt;flags = avctx-&gt;flags;
+    /* reset data partitioning here, to ensure GetBitContexts from previous
+     * packets do not get used. */
+    h-&gt;data_partitioning = 0;
+
+    /* end of stream, output what is still in the buffers */
+    // Flush Decoder的时候会调用，此时输入为空的AVPacket=====================
+    if (buf_size == 0) {
+ out:
+
+        h-&gt;cur_pic_ptr = NULL;
+        h-&gt;first_field = 0;
+
+        // FIXME factorize this with the output code below
+        //输出out，源自于h-&gt;delayed_pic[]
+        //初始化
+        out     = h-&gt;delayed_pic[0];
+        out_idx = 0;
+        for (i = 1;
+             h-&gt;delayed_pic[i] &amp;&amp;
+             !h-&gt;delayed_pic[i]-&gt;f.key_frame &amp;&amp;
+             !h-&gt;delayed_pic[i]-&gt;mmco_reset;
+             i++)
+            if (h-&gt;delayed_pic[i]-&gt;poc &lt; out-&gt;poc) {
+            	//输出out，源自于h-&gt;delayed_pic[]
+            	//逐个处理
+                out     = h-&gt;delayed_pic[i];
+                out_idx = i;
+            }
+
+        for (i = out_idx; h-&gt;delayed_pic[i]; i++)
+            h-&gt;delayed_pic[i] = h-&gt;delayed_pic[i + 1];
+
+        if (out) {
+            out-&gt;reference &amp;= ~DELAYED_PIC_REF;
+            //输出
+            //out输出到pict
+            //即H264Picture到AVFrame
+            ret = output_frame(h, pict, out);
+            if (ret &lt; 0)
+                return ret;
+            *got_frame = 1;
+        }
+
+        return buf_index;
+    }
+    //=============================================================
+
+    if (h-&gt;is_avc &amp;&amp; av_packet_get_side_data(avpkt, AV_PKT_DATA_NEW_EXTRADATA, NULL)) {
+        int side_size;
+        uint8_t *side = av_packet_get_side_data(avpkt, AV_PKT_DATA_NEW_EXTRADATA, &amp;side_size);
+        if (is_extra(side, side_size))
+            ff_h264_decode_extradata(h, side, side_size);
+    }
+    if(h-&gt;is_avc &amp;&amp; buf_size &gt;= 9 &amp;&amp; buf[0]==1 &amp;&amp; buf[2]==0 &amp;&amp; (buf[4]&amp;0xFC)==0xFC &amp;&amp; (buf[5]&amp;0x1F) &amp;&amp; buf[8]==0x67){
+        if (is_extra(buf, buf_size))
+            return ff_h264_decode_extradata(h, buf, buf_size);
+    }
+
+    //关键：解码NALU最主要的函数
+    //=============================================================
+    buf_index = decode_nal_units(h, buf, buf_size, 0);
+    //=============================================================
+    if (buf_index &lt; 0)
+        return AVERROR_INVALIDDATA;
+
+    if (!h-&gt;cur_pic_ptr &amp;&amp; h-&gt;nal_unit_type == NAL_END_SEQUENCE) {
+        av_assert0(buf_index &lt;= buf_size);
+        goto out;
+    }
+
+    if (!(avctx-&gt;flags2 &amp; CODEC_FLAG2_CHUNKS) &amp;&amp; !h-&gt;cur_pic_ptr) {
+        if (avctx-&gt;skip_frame &gt;= AVDISCARD_NONREF ||
+            buf_size &gt;= 4 &amp;&amp; !memcmp("Q264", buf, 4))
+            return buf_size;
+        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
+        return AVERROR_INVALIDDATA;
+    }
+
+    if (!(avctx-&gt;flags2 &amp; CODEC_FLAG2_CHUNKS) ||
+        (h-&gt;mb_y &gt;= h-&gt;mb_height &amp;&amp; h-&gt;mb_height)) {
+        if (avctx-&gt;flags2 &amp; CODEC_FLAG2_CHUNKS)
+            decode_postinit(h, 1);
+
+        ff_h264_field_end(h, 0);
+
+        /* Wait for second field. */
+        //设置got_frame为0
+        *got_frame = 0;
+        if (h-&gt;next_output_pic &amp;&amp; (
+                                   h-&gt;next_output_pic-&gt;recovered)) {
+            if (!h-&gt;next_output_pic-&gt;recovered)
+                h-&gt;next_output_pic-&gt;f.flags |= AV_FRAME_FLAG_CORRUPT;
+            //输出Frame
+            //即H264Picture到AVFrame
+            ret = output_frame(h, pict, h-&gt;next_output_pic);
+            if (ret &lt; 0)
+                return ret;
+            //设置got_frame为1
+            *got_frame = 1;
+            if (CONFIG_MPEGVIDEO) {
+                ff_print_debug_info2(h-&gt;avctx, pict, h-&gt;er.mbskip_table,
+                                    h-&gt;next_output_pic-&gt;mb_type,
+                                    h-&gt;next_output_pic-&gt;qscale_table,
+                                    h-&gt;next_output_pic-&gt;motion_val,
+                                    &amp;h-&gt;low_delay,
+                                    h-&gt;mb_width, h-&gt;mb_height, h-&gt;mb_stride, 1);
+            }
+        }
+    }
+
+    assert(pict-&gt;buf[0] || !*got_frame);
+
+    return get_consumed_bytes(buf_index, buf_size);
+}
+</pre>
+    <br/>
+    从源代码可以看出，h264_decode_frame()根据输入的AVPacket的data是否为空作不同的处理：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）若果输入的AVPacket的data为空，则调用output_frame()输出delayed_pic[]数组中的H264Picture，即输出解码器中缓存的帧（对应的是通常称为“Flush Decoder”的功能）。
+     <br/>
+     （2）若果输入的AVPacket的data不为空，则首先调用decode_nal_units()解码AVPacket的data，然后再调用output_frame()输出解码后的视频帧（有一点需要注意：由于帧重排等因素，输出的AVFrame并非对应于输入的AVPacket）。
+    </blockquote>
+    下面看一下解码压缩编码数据时候用到的函数decode_nal_units()。
+    <br/>
+    <br/>
+    <h2>
+     decode_nal_units()
+    </h2>
+    decode_nal_units()是用于解码NALU的函数。函数定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">//解码NALU最主要的函数
+//h264_decode_frame()中：
+//buf一般是AVPacket-&gt;data
+//buf_size一般是AVPacket-&gt;size
+static int decode_nal_units(H264Context *h, const uint8_t *buf, int buf_size,
+                            int parse_extradata)
+{
+    AVCodecContext *const avctx = h-&gt;avctx;
+    H264Context *hx; ///&lt; thread context
+    int buf_index;
+    unsigned context_count;
+    int next_avc;
+    int nals_needed = 0; ///&lt; number of NALs that need decoding before the next frame thread starts
+    int nal_index;
+    int idr_cleared=0;
+    int ret = 0;
+
+    h-&gt;nal_unit_type= 0;
+
+    if(!h-&gt;slice_context_count)
+         h-&gt;slice_context_count= 1;
+    h-&gt;max_contexts = h-&gt;slice_context_count;
+    if (!(avctx-&gt;flags2 &amp; CODEC_FLAG2_CHUNKS)) {
+        h-&gt;current_slice = 0;
+        if (!h-&gt;first_field)
+            h-&gt;cur_pic_ptr = NULL;
+        ff_h264_reset_sei(h);
+    }
+
+    //AVC1和H264的区别：
+    //AVC1 描述:H.264 bitstream without start codes.是不带起始码0x00000001的。FLV/MKV/MOV种的H.264属于这种
+    //H264 描述:H.264 bitstream with start codes.是带有起始码0x00000001的。H.264裸流，MPEGTS种的H.264属于这种
+    //
+    //通过VLC播放器，可以查看到具体的格式。打开视频后，通过菜单【工具】/【编解码信息】可以查看到【编解码器】具体格式，举例如下，编解码器信息：
+    //编码: H264 – MPEG-4 AVC (part 10) (avc1)
+    //编码: H264 – MPEG-4 AVC (part 10) (h264)
+    //
+    if (h-&gt;nal_length_size == 4) {
+        if (buf_size &gt; 8 &amp;&amp; AV_RB32(buf) == 1 &amp;&amp; AV_RB32(buf+5) &gt; (unsigned)buf_size) {
+        	//前面4位是起始码0x00000001
+            h-&gt;is_avc = 0;
+        }else if(buf_size &gt; 3 &amp;&amp; AV_RB32(buf) &gt; 1 &amp;&amp; AV_RB32(buf) &lt;= (unsigned)buf_size)
+        	//前面4位是长度数据
+            h-&gt;is_avc = 1;
+    }
+
+    if (avctx-&gt;active_thread_type &amp; FF_THREAD_FRAME)
+        nals_needed = get_last_needed_nal(h, buf, buf_size);
+
+    {
+        buf_index     = 0;
+        context_count = 0;
+        next_avc      = h-&gt;is_avc ? 0 : buf_size;
+        nal_index     = 0;
+        for (;;) {
+            int consumed;
+            int dst_length;
+            int bit_length;
+            const uint8_t *ptr;
+            int nalsize = 0;
+            int err;
+
+            if (buf_index &gt;= next_avc) {
+                nalsize = get_avc_nalsize(h, buf, buf_size, &amp;buf_index);
+                if (nalsize &lt; 0)
+                    break;
+                next_avc = buf_index + nalsize;
+            } else {
+                buf_index = find_start_code(buf, buf_size, buf_index, next_avc);
+                if (buf_index &gt;= buf_size)
+                    break;
+                if (buf_index &gt;= next_avc)
+                    continue;
+            }
+
+            hx = h-&gt;thread_context[context_count];
+            //解析得到NAL（获得nal_unit_type等信息）
+            ptr = ff_h264_decode_nal(hx, buf + buf_index, &amp;dst_length,
+                                     &amp;consumed, next_avc - buf_index);
+            if (!ptr || dst_length &lt; 0) {
+                ret = -1;
+                goto end;
+            }
+
+            bit_length = get_bit_length(h, buf, ptr, dst_length,
+                                        buf_index + consumed, next_avc);
+
+            if (h-&gt;avctx-&gt;debug &amp; FF_DEBUG_STARTCODE)
+                av_log(h-&gt;avctx, AV_LOG_DEBUG,
+                       "NAL %d/%d at %d/%d length %d\n",
+                       hx-&gt;nal_unit_type, hx-&gt;nal_ref_idc, buf_index, buf_size, dst_length);
+
+            if (h-&gt;is_avc &amp;&amp; (nalsize != consumed) &amp;&amp; nalsize)
+                av_log(h-&gt;avctx, AV_LOG_DEBUG,
+                       "AVC: Consumed only %d bytes instead of %d\n",
+                       consumed, nalsize);
+
+            buf_index += consumed;
+            nal_index++;
+
+            if (avctx-&gt;skip_frame &gt;= AVDISCARD_NONREF &amp;&amp;
+                h-&gt;nal_ref_idc == 0 &amp;&amp;
+                h-&gt;nal_unit_type != NAL_SEI)
+                continue;
+
+again:
+            if (   !(avctx-&gt;active_thread_type &amp; FF_THREAD_FRAME)
+                || nals_needed &gt;= nal_index)
+                h-&gt;au_pps_id = -1;
+            /* Ignore per frame NAL unit type during extradata
+             * parsing. Decoding slices is not possible in codec init
+             * with frame-mt */
+            if (parse_extradata) {
+                switch (hx-&gt;nal_unit_type) {
+                case NAL_IDR_SLICE:
+                case NAL_SLICE:
+                case NAL_DPA:
+                case NAL_DPB:
+                case NAL_DPC:
+                    av_log(h-&gt;avctx, AV_LOG_WARNING,
+                           "Ignoring NAL %d in global header/extradata\n",
+                           hx-&gt;nal_unit_type);
+                    // fall through to next case
+                case NAL_AUXILIARY_SLICE:
+                    hx-&gt;nal_unit_type = NAL_FF_IGNORE;
+                }
+            }
+
+            err = 0;
+            //根据不同的 NALU Type，调用不同的函数
+            switch (hx-&gt;nal_unit_type) {
+            //IDR帧
+            case NAL_IDR_SLICE:
+                if ((ptr[0] &amp; 0xFC) == 0x98) {
+                    av_log(h-&gt;avctx, AV_LOG_ERROR, "Invalid inter IDR frame\n");
+                    h-&gt;next_outputed_poc = INT_MIN;
+                    ret = -1;
+                    goto end;
+                }
+                if (h-&gt;nal_unit_type != NAL_IDR_SLICE) {
+                    av_log(h-&gt;avctx, AV_LOG_ERROR,
+                           "Invalid mix of idr and non-idr slices\n");
+                    ret = -1;
+                    goto end;
+                }
+                if(!idr_cleared)
+                    idr(h); // FIXME ensure we don't lose some frames if there is reordering
+                idr_cleared = 1;
+                h-&gt;has_recovery_point = 1;
+                //注意没有break
+            case NAL_SLICE:
+                init_get_bits(&amp;hx-&gt;gb, ptr, bit_length);
+                hx-&gt;intra_gb_ptr      =
+                hx-&gt;inter_gb_ptr      = &amp;hx-&gt;gb;
+                hx-&gt;data_partitioning = 0;
+                //解码Slice Header
+                if ((err = ff_h264_decode_slice_header(hx, h)))
+                    break;
+
+                if (h-&gt;sei_recovery_frame_cnt &gt;= 0) {
+                    if (h-&gt;frame_num != h-&gt;sei_recovery_frame_cnt || hx-&gt;slice_type_nos != AV_PICTURE_TYPE_I)
+                        h-&gt;valid_recovery_point = 1;
+
+                    if (   h-&gt;recovery_frame &lt; 0
+                        || ((h-&gt;recovery_frame - h-&gt;frame_num) &amp; ((1 &lt;&lt; h-&gt;sps.log2_max_frame_num)-1)) &gt; h-&gt;sei_recovery_frame_cnt) {
+                        h-&gt;recovery_frame = (h-&gt;frame_num + h-&gt;sei_recovery_frame_cnt) &amp;
+                                            ((1 &lt;&lt; h-&gt;sps.log2_max_frame_num) - 1);
+
+                        if (!h-&gt;valid_recovery_point)
+                            h-&gt;recovery_frame = h-&gt;frame_num;
+                    }
+                }
+
+                h-&gt;cur_pic_ptr-&gt;f.key_frame |=
+                    (hx-&gt;nal_unit_type == NAL_IDR_SLICE);
+
+                if (hx-&gt;nal_unit_type == NAL_IDR_SLICE ||
+                    h-&gt;recovery_frame == h-&gt;frame_num) {
+                    h-&gt;recovery_frame         = -1;
+                    h-&gt;cur_pic_ptr-&gt;recovered = 1;
+                }
+                // If we have an IDR, all frames after it in decoded order are
+                // "recovered".
+                if (hx-&gt;nal_unit_type == NAL_IDR_SLICE)
+                    h-&gt;frame_recovered |= FRAME_RECOVERED_IDR;
+                h-&gt;frame_recovered |= 3*!!(avctx-&gt;flags2 &amp; CODEC_FLAG2_SHOW_ALL);
+                h-&gt;frame_recovered |= 3*!!(avctx-&gt;flags &amp; CODEC_FLAG_OUTPUT_CORRUPT);
+#if 1
+                h-&gt;cur_pic_ptr-&gt;recovered |= h-&gt;frame_recovered;
+#else
+                h-&gt;cur_pic_ptr-&gt;recovered |= !!(h-&gt;frame_recovered &amp; FRAME_RECOVERED_IDR);
+#endif
+
+                if (h-&gt;current_slice == 1) {
+                    if (!(avctx-&gt;flags2 &amp; CODEC_FLAG2_CHUNKS))
+                        decode_postinit(h, nal_index &gt;= nals_needed);
+
+                    if (h-&gt;avctx-&gt;hwaccel &amp;&amp;
+                        (ret = h-&gt;avctx-&gt;hwaccel-&gt;start_frame(h-&gt;avctx, NULL, 0)) &lt; 0)
+                        return ret;
+                    if (CONFIG_H264_VDPAU_DECODER &amp;&amp;
+                        h-&gt;avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_HWACCEL_VDPAU)
+                        ff_vdpau_h264_picture_start(h);
+                }
+
+                if (hx-&gt;redundant_pic_count == 0) {
+                    if (avctx-&gt;hwaccel) {
+                        ret = avctx-&gt;hwaccel-&gt;decode_slice(avctx,
+                                                           &amp;buf[buf_index - consumed],
+                                                           consumed);
+                        if (ret &lt; 0)
+                            return ret;
+                    } else if (CONFIG_H264_VDPAU_DECODER &amp;&amp;
+                               h-&gt;avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_HWACCEL_VDPAU) {
+                        ff_vdpau_add_data_chunk(h-&gt;cur_pic_ptr-&gt;f.data[0],
+                                                start_code,
+                                                sizeof(start_code));
+                        ff_vdpau_add_data_chunk(h-&gt;cur_pic_ptr-&gt;f.data[0],
+                                                &amp;buf[buf_index - consumed],
+                                                consumed);
+                    } else
+                        context_count++;
+                }
+                break;
+            case NAL_DPA:
+                if (h-&gt;avctx-&gt;flags &amp; CODEC_FLAG2_CHUNKS) {
+                    av_log(h-&gt;avctx, AV_LOG_ERROR,
+                           "Decoding in chunks is not supported for "
+                           "partitioned slices.\n");
+                    return AVERROR(ENOSYS);
+                }
+
+                init_get_bits(&amp;hx-&gt;gb, ptr, bit_length);
+                hx-&gt;intra_gb_ptr =
+                hx-&gt;inter_gb_ptr = NULL;
+                //解码Slice Header
+                if ((err = ff_h264_decode_slice_header(hx, h))) {
+                    /* make sure data_partitioning is cleared if it was set
+                     * before, so we don't try decoding a slice without a valid
+                     * slice header later */
+                    h-&gt;data_partitioning = 0;
+                    break;
+                }
+
+                hx-&gt;data_partitioning = 1;
+                break;
+            case NAL_DPB:
+                init_get_bits(&amp;hx-&gt;intra_gb, ptr, bit_length);
+                hx-&gt;intra_gb_ptr = &amp;hx-&gt;intra_gb;
+                break;
+            case NAL_DPC:
+                init_get_bits(&amp;hx-&gt;inter_gb, ptr, bit_length);
+                hx-&gt;inter_gb_ptr = &amp;hx-&gt;inter_gb;
+
+                av_log(h-&gt;avctx, AV_LOG_ERROR, "Partitioned H.264 support is incomplete\n");
+                break;
+
+                if (hx-&gt;redundant_pic_count == 0 &amp;&amp;
+                    hx-&gt;intra_gb_ptr &amp;&amp;
+                    hx-&gt;data_partitioning &amp;&amp;
+                    h-&gt;cur_pic_ptr &amp;&amp; h-&gt;context_initialized &amp;&amp;
+                    (avctx-&gt;skip_frame &lt; AVDISCARD_NONREF || hx-&gt;nal_ref_idc) &amp;&amp;
+                    (avctx-&gt;skip_frame &lt; AVDISCARD_BIDIR  ||
+                     hx-&gt;slice_type_nos != AV_PICTURE_TYPE_B) &amp;&amp;
+                    (avctx-&gt;skip_frame &lt; AVDISCARD_NONINTRA ||
+                     hx-&gt;slice_type_nos == AV_PICTURE_TYPE_I) &amp;&amp;
+                    avctx-&gt;skip_frame &lt; AVDISCARD_ALL)
+                    context_count++;
+                break;
+            case NAL_SEI:
+                init_get_bits(&amp;h-&gt;gb, ptr, bit_length);
+                //解析SEI补充增强信息单元
+                ret = ff_h264_decode_sei(h);
+                if (ret &lt; 0 &amp;&amp; (h-&gt;avctx-&gt;err_recognition &amp; AV_EF_EXPLODE))
+                    goto end;
+                break;
+            case NAL_SPS:
+                init_get_bits(&amp;h-&gt;gb, ptr, bit_length);
+                //解析SPS序列参数集
+                if (ff_h264_decode_seq_parameter_set(h) &lt; 0 &amp;&amp; (h-&gt;is_avc ? nalsize : 1)) {
+                    av_log(h-&gt;avctx, AV_LOG_DEBUG,
+                           "SPS decoding failure, trying again with the complete NAL\n");
+                    if (h-&gt;is_avc)
+                        av_assert0(next_avc - buf_index + consumed == nalsize);
+                    if ((next_avc - buf_index + consumed - 1) &gt;= INT_MAX/8)
+                        break;
+                    init_get_bits(&amp;h-&gt;gb, &amp;buf[buf_index + 1 - consumed],
+                                  8*(next_avc - buf_index + consumed - 1));
+                    ff_h264_decode_seq_parameter_set(h);
+                }
+
+                break;
+                //
+            case NAL_PPS:
+                init_get_bits(&amp;h-&gt;gb, ptr, bit_length);
+                //解析PPS图像参数集
+                ret = ff_h264_decode_picture_parameter_set(h, bit_length);
+                if (ret &lt; 0 &amp;&amp; (h-&gt;avctx-&gt;err_recognition &amp; AV_EF_EXPLODE))
+                    goto end;
+                break;
+            case NAL_AUD:
+            case NAL_END_SEQUENCE:
+            case NAL_END_STREAM:
+            case NAL_FILLER_DATA:
+            case NAL_SPS_EXT:
+            case NAL_AUXILIARY_SLICE:
+                break;
+            case NAL_FF_IGNORE:
+                break;
+            default:
+                av_log(avctx, AV_LOG_DEBUG, "Unknown NAL code: %d (%d bits)\n",
+                       hx-&gt;nal_unit_type, bit_length);
+            }
+
+            if (context_count == h-&gt;max_contexts) {
+                ret = ff_h264_execute_decode_slices(h, context_count);
+                if (ret &lt; 0 &amp;&amp; (h-&gt;avctx-&gt;err_recognition &amp; AV_EF_EXPLODE))
+                    goto end;
+                context_count = 0;
+            }
+
+            if (err &lt; 0 || err == SLICE_SKIPED) {
+                if (err &lt; 0)
+                    av_log(h-&gt;avctx, AV_LOG_ERROR, "decode_slice_header error\n");
+                h-&gt;ref_count[0] = h-&gt;ref_count[1] = h-&gt;list_count = 0;
+            } else if (err == SLICE_SINGLETHREAD) {
+                /* Slice could not be decoded in parallel mode, copy down
+                 * NAL unit stuff to context 0 and restart. Note that
+                 * rbsp_buffer is not transferred, but since we no longer
+                 * run in parallel mode this should not be an issue. */
+                h-&gt;nal_unit_type = hx-&gt;nal_unit_type;
+                h-&gt;nal_ref_idc   = hx-&gt;nal_ref_idc;
+                hx               = h;
+                goto again;
+            }
+        }
+    }
+    if (context_count) {
+    	//真正的解码
+        ret = ff_h264_execute_decode_slices(h, context_count);
+        if (ret &lt; 0 &amp;&amp; (h-&gt;avctx-&gt;err_recognition &amp; AV_EF_EXPLODE))
+            goto end;
+    }
+
+    ret = 0;
+end:
+    /* clean up */
+    if (h-&gt;cur_pic_ptr &amp;&amp; !h-&gt;droppable) {
+        ff_thread_report_progress(&amp;h-&gt;cur_pic_ptr-&gt;tf, INT_MAX,
+                                  h-&gt;picture_structure == PICT_BOTTOM_FIELD);
+    }
+
+    return (ret &lt; 0) ? ret : buf_index;
+}
+</pre>
+    <br/>
+    从源代码可以看出，decode_nal_units()首先调用ff_h264_decode_nal()判断NALU的类型，然后根据NALU类型的不同调用了不同的处理函数。这些处理函数可以分为两类——解析函数和解码函数，如下所示。
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）解析函数（获取信息）：
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_h264_decode_seq_parameter_set()：解析SPS。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_h264_decode_picture_parameter_set()：解析PPS。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_h264_decode_sei()：解析SEI。
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_h264_decode_slice_header()：解析Slice Header。
+     </blockquote>
+     （2）解码函数（解码得到图像）：
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      ff_h264_execute_decode_slices()：解码Slice。
+     </blockquote>
+    </blockquote>
+    其中解析函数在文章《
+    <a href="http://blog.csdn.net/leixiaohua1020/article/details/45001033">
+     FFmpeg的H.264解码器源代码简单分析：解析器（Parser）部分
+    </a>
+    》部分已经有过介绍，就不再重复叙述了。解码函数ff_h264_execute_decode_slices()完成了解码Slice的工作，下面看一下该函数的定义。
+    <br/>
+    <br/>
+    <h2>
+     ff_h264_execute_decode_slices()
+    </h2>
+    ff_h264_execute_decode_slices()用于解码获取图像信息，定义位于libavcodec\h264_slice.c，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Call decode_slice() for each context.
+ *
+ * @param h h264 master context
+ * @param context_count number of contexts to execute
+ */
+//真正的解码
+int ff_h264_execute_decode_slices(H264Context *h, unsigned context_count)
+{
+    AVCodecContext *const avctx = h-&gt;avctx;
+    H264Context *hx;
+    int i;
+
+    av_assert0(h-&gt;mb_y &lt; h-&gt;mb_height);
+
+    if (h-&gt;avctx-&gt;hwaccel ||
+        h-&gt;avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_HWACCEL_VDPAU)
+        return 0;
+    //context_count的数量
+    if (context_count == 1) {
+    	//解码Slice
+        return decode_slice(avctx, &amp;h);
+    } else {
+        av_assert0(context_count &gt; 0);
+        for (i = 1; i &lt; context_count; i++) {
+            hx                 = h-&gt;thread_context[i];
+            if (CONFIG_ERROR_RESILIENCE) {
+                hx-&gt;er.error_count = 0;
+            }
+            hx-&gt;x264_build     = h-&gt;x264_build;
+        }
+
+        avctx-&gt;execute(avctx, decode_slice, h-&gt;thread_context,
+                       NULL, context_count, sizeof(void *));
+
+        /* pull back stuff from slices to master context */
+        hx                   = h-&gt;thread_context[context_count - 1];
+        h-&gt;mb_x              = hx-&gt;mb_x;
+        h-&gt;mb_y              = hx-&gt;mb_y;
+        h-&gt;droppable         = hx-&gt;droppable;
+        h-&gt;picture_structure = hx-&gt;picture_structure;
+        if (CONFIG_ERROR_RESILIENCE) {
+            for (i = 1; i &lt; context_count; i++)
+                h-&gt;er.error_count += h-&gt;thread_context[i]-&gt;er.error_count;
+        }
+    }
+
+    return 0;
+}
+</pre>
+    <br/>
+    可以看出ff_h264_execute_decode_slices()调用了decode_slice()函数。在decode_slice()函数中完成了熵解码，宏块解码，环路滤波，错误隐藏等解码的细节工作。由于decode_slice()的内容比较多，本文暂不详细分析该函数，仅简单看一下该函数的定义。
+    <br/>
+    <br/>
+    <h2>
+     decode_slice()
+    </h2>
+    decode_slice()完成了熵解码，宏块解码，环路滤波，错误隐藏等解码的细节工作。该函数的定义位于定义位于libavcodec\h264_slice.c，如下所示。
+    <br/>
+    <pre class="cpp">//解码slice
+//三个主要步骤：
+//1.熵解码（CAVLC/CABAC）
+//2.宏块解码
+//3.环路滤波
+//此外还包含了错误隐藏代码
+static int decode_slice(struct AVCodecContext *avctx, void *arg)
+{
+    H264Context *h = *(void **)arg;
+    int lf_x_start = h-&gt;mb_x;
+
+    h-&gt;mb_skip_run = -1;
+
+    av_assert0(h-&gt;block_offset[15] == (4 * ((scan8[15] - scan8[0]) &amp; 7) &lt;&lt; h-&gt;pixel_shift) + 4 * h-&gt;linesize * ((scan8[15] - scan8[0]) &gt;&gt; 3));
+
+    h-&gt;is_complex = FRAME_MBAFF(h) || h-&gt;picture_structure != PICT_FRAME ||
+                    avctx-&gt;codec_id != AV_CODEC_ID_H264 ||
+                    (CONFIG_GRAY &amp;&amp; (h-&gt;flags &amp; CODEC_FLAG_GRAY));
+
+    if (!(h-&gt;avctx-&gt;active_thread_type &amp; FF_THREAD_SLICE) &amp;&amp; h-&gt;picture_structure == PICT_FRAME &amp;&amp; h-&gt;er.error_status_table) {
+        const int start_i  = av_clip(h-&gt;resync_mb_x + h-&gt;resync_mb_y * h-&gt;mb_width, 0, h-&gt;mb_num - 1);
+        if (start_i) {
+            int prev_status = h-&gt;er.error_status_table[h-&gt;er.mb_index2xy[start_i - 1]];
+            prev_status &amp;= ~ VP_START;
+            if (prev_status != (ER_MV_END | ER_DC_END | ER_AC_END))
+                h-&gt;er.error_occurred = 1;
+        }
+    }
+    //CABAC情况
+    if (h-&gt;pps.cabac) {
+        /* realign */
+        align_get_bits(&amp;h-&gt;gb);
+
+        /* init cabac */
+        //初始化CABAC解码器
+        ff_init_cabac_decoder(&amp;h-&gt;cabac,
+                              h-&gt;gb.buffer + get_bits_count(&amp;h-&gt;gb) / 8,
+                              (get_bits_left(&amp;h-&gt;gb) + 7) / 8);
+
+        ff_h264_init_cabac_states(h);
+        //循环处理每个宏块
+        for (;;) {
+            // START_TIMER
+        	//解码CABAC数据
+            int ret = ff_h264_decode_mb_cabac(h);
+            int eos;
+            // STOP_TIMER("decode_mb_cabac")
+            //解码宏块
+            if (ret &gt;= 0)
+                ff_h264_hl_decode_mb(h);
+
+            // FIXME optimal? or let mb_decode decode 16x32 ?
+            //宏块级帧场自适应。很少接触
+            if (ret &gt;= 0 &amp;&amp; FRAME_MBAFF(h)) {
+                h-&gt;mb_y++;
+
+                ret = ff_h264_decode_mb_cabac(h);
+                //解码宏块
+                if (ret &gt;= 0)
+                    ff_h264_hl_decode_mb(h);
+                h-&gt;mb_y--;
+            }
+            eos = get_cabac_terminate(&amp;h-&gt;cabac);
+
+            if ((h-&gt;workaround_bugs &amp; FF_BUG_TRUNCATED) &amp;&amp;
+                h-&gt;cabac.bytestream &gt; h-&gt;cabac.bytestream_end + 2) {
+            	//错误隐藏
+                er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y, h-&gt;mb_x - 1,
+                             h-&gt;mb_y, ER_MB_END);
+                if (h-&gt;mb_x &gt;= lf_x_start)
+                    loop_filter(h, lf_x_start, h-&gt;mb_x + 1);
+                return 0;
+            }
+            if (h-&gt;cabac.bytestream &gt; h-&gt;cabac.bytestream_end + 2 )
+                av_log(h-&gt;avctx, AV_LOG_DEBUG, "bytestream overread %"PTRDIFF_SPECIFIER"\n", h-&gt;cabac.bytestream_end - h-&gt;cabac.bytestream);
+            if (ret &lt; 0 || h-&gt;cabac.bytestream &gt; h-&gt;cabac.bytestream_end + 4) {
+                av_log(h-&gt;avctx, AV_LOG_ERROR,
+                       "error while decoding MB %d %d, bytestream %"PTRDIFF_SPECIFIER"\n",
+                       h-&gt;mb_x, h-&gt;mb_y,
+                       h-&gt;cabac.bytestream_end - h-&gt;cabac.bytestream);
+                er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y, h-&gt;mb_x,
+                             h-&gt;mb_y, ER_MB_ERROR);
+                return AVERROR_INVALIDDATA;
+            }
+            //mb_x自增
+            //如果自增后超过了一行的mb个数
+            if (++h-&gt;mb_x &gt;= h-&gt;mb_width) {
+            	//环路滤波
+                loop_filter(h, lf_x_start, h-&gt;mb_x);
+                h-&gt;mb_x = lf_x_start = 0;
+                decode_finish_row(h);
+                //mb_y自增（处理下一行）
+                ++h-&gt;mb_y;
+                //宏块级帧场自适应，暂不考虑
+                if (FIELD_OR_MBAFF_PICTURE(h)) {
+                    ++h-&gt;mb_y;
+                    if (FRAME_MBAFF(h) &amp;&amp; h-&gt;mb_y &lt; h-&gt;mb_height)
+                        predict_field_decoding_flag(h);
+                }
+            }
+            //如果mb_y超过了mb的行数
+            if (eos || h-&gt;mb_y &gt;= h-&gt;mb_height) {
+                tprintf(h-&gt;avctx, "slice end %d %d\n",
+                        get_bits_count(&amp;h-&gt;gb), h-&gt;gb.size_in_bits);
+                er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y, h-&gt;mb_x - 1,
+                             h-&gt;mb_y, ER_MB_END);
+                if (h-&gt;mb_x &gt; lf_x_start)
+                    loop_filter(h, lf_x_start, h-&gt;mb_x);
+                return 0;
+            }
+        }
+    } else {
+    	//CAVLC情况
+    	//循环处理每个宏块
+        for (;;) {
+        	//解码宏块的CAVLC
+            int ret = ff_h264_decode_mb_cavlc(h);
+            //解码宏块
+            if (ret &gt;= 0)
+                ff_h264_hl_decode_mb(h);
+
+            // FIXME optimal? or let mb_decode decode 16x32 ?
+            if (ret &gt;= 0 &amp;&amp; FRAME_MBAFF(h)) {
+                h-&gt;mb_y++;
+                ret = ff_h264_decode_mb_cavlc(h);
+
+                if (ret &gt;= 0)
+                    ff_h264_hl_decode_mb(h);
+                h-&gt;mb_y--;
+            }
+
+            if (ret &lt; 0) {
+                av_log(h-&gt;avctx, AV_LOG_ERROR,
+                       "error while decoding MB %d %d\n", h-&gt;mb_x, h-&gt;mb_y);
+                er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y, h-&gt;mb_x,
+                             h-&gt;mb_y, ER_MB_ERROR);
+                return ret;
+            }
+
+            if (++h-&gt;mb_x &gt;= h-&gt;mb_width) {
+            	//环路滤波
+                loop_filter(h, lf_x_start, h-&gt;mb_x);
+                h-&gt;mb_x = lf_x_start = 0;
+                decode_finish_row(h);
+                ++h-&gt;mb_y;
+                if (FIELD_OR_MBAFF_PICTURE(h)) {
+                    ++h-&gt;mb_y;
+                    if (FRAME_MBAFF(h) &amp;&amp; h-&gt;mb_y &lt; h-&gt;mb_height)
+                        predict_field_decoding_flag(h);
+                }
+                if (h-&gt;mb_y &gt;= h-&gt;mb_height) {
+                    tprintf(h-&gt;avctx, "slice end %d %d\n",
+                            get_bits_count(&amp;h-&gt;gb), h-&gt;gb.size_in_bits);
+
+                    if (   get_bits_left(&amp;h-&gt;gb) == 0
+                        || get_bits_left(&amp;h-&gt;gb) &gt; 0 &amp;&amp; !(h-&gt;avctx-&gt;err_recognition &amp; AV_EF_AGGRESSIVE)) {
+                    	//错误隐藏
+                        er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y,
+                                     h-&gt;mb_x - 1, h-&gt;mb_y, ER_MB_END);
+
+                        return 0;
+                    } else {
+                        er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y,
+                                     h-&gt;mb_x, h-&gt;mb_y, ER_MB_END);
+
+                        return AVERROR_INVALIDDATA;
+                    }
+                }
+            }
+
+            if (get_bits_left(&amp;h-&gt;gb) &lt;= 0 &amp;&amp; h-&gt;mb_skip_run &lt;= 0) {
+                tprintf(h-&gt;avctx, "slice end %d %d\n",
+                        get_bits_count(&amp;h-&gt;gb), h-&gt;gb.size_in_bits);
+
+                if (get_bits_left(&amp;h-&gt;gb) == 0) {
+                    er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y,
+                                 h-&gt;mb_x - 1, h-&gt;mb_y, ER_MB_END);
+                    if (h-&gt;mb_x &gt; lf_x_start)
+                        loop_filter(h, lf_x_start, h-&gt;mb_x);
+
+                    return 0;
+                } else {
+                    er_add_slice(h, h-&gt;resync_mb_x, h-&gt;resync_mb_y, h-&gt;mb_x,
+                                 h-&gt;mb_y, ER_MB_ERROR);
+
+                    return AVERROR_INVALIDDATA;
+                }
+            }
+        }
+    }
+}
+</pre>
+    <br/>
+    从源代码可以看出，decode_slice()按照宏块（16x16）的方式处理输入的视频流。每个宏块的压缩数据经过以下3个基本步骤的处理，得到解码后的数据：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）熵解码。如果熵编码为CABAC，则调用ff_h264_decode_mb_cabac()；如果熵编码为CAVLC，则调用ff_h264_decode_mb_cavlc()
+     <br/>
+     （2）宏块解码。这一步骤调用ff_h264_hl_decode_mb()
+     <br/>
+     （3）环路滤波。这一步骤调用loop_filter()
+    </blockquote>
+    此外，还有可能调用错误隐藏函数er_add_slice()。
+    <br/>
+    <br/>
+    至此，decode_nal_units()函数的调用流程就基本分析完毕了。h264_decode_frame()在调用完decode_nal_units()之后，还需要把解码后得到的H264Picture转换为AVFrame输出出来，这时候会调用一个相对比较简单的函数output_frame()。
+    <br/>
+    <br/>
+    <h2>
+     output_frame()
+    </h2>
+    output_frame()用于将一个H264Picture结构体转换为一个AVFrame结构体。该函数的定义位于libavcodec\h264.c，如下所示。
+    <br/>
+    <pre class="cpp">//Flush Decoder的时候用到
+//srcp输出到dst
+//即H264Picture到AVFrame
+static int output_frame(H264Context *h, AVFrame *dst, H264Picture *srcp)
+{
+	//src即H264Picture中的f
+    AVFrame *src = &amp;srcp-&gt;f;
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(src-&gt;format);
+    int i;
+    int ret = av_frame_ref(dst, src);
+    if (ret &lt; 0)
+        return ret;
+
+    av_dict_set(&amp;dst-&gt;metadata, "stereo_mode", ff_h264_sei_stereo_mode(h), 0);
+
+    if (srcp-&gt;sei_recovery_frame_cnt == 0)
+        dst-&gt;key_frame = 1;
+    if (!srcp-&gt;crop)
+        return 0;
+
+    for (i = 0; i &lt; desc-&gt;nb_components; i++) {
+        int hshift = (i &gt; 0) ? desc-&gt;log2_chroma_w : 0;
+        int vshift = (i &gt; 0) ? desc-&gt;log2_chroma_h : 0;
+        int off    = ((srcp-&gt;crop_left &gt;&gt; hshift) &lt;&lt; h-&gt;pixel_shift) +
+                      (srcp-&gt;crop_top  &gt;&gt; vshift) * dst-&gt;linesize[i];
+        dst-&gt;data[i] += off;
+    }
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码中可以看出，output_frame()实际上就是把H264Picture结构体中的“f”（AVFrame结构体）输出了出来。
+    <br/>
+    <br/>
+    至此，H.264解码器的主干部分的源代码就分析完毕了。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <span style="color:#990000;">
+     <strong>
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </strong>
+    </span>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/45042755
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码器&amp;t=blog" target="_blank">
+    解码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=NALU&amp;t=blog" target="_blank">
+    NALU
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=初始化&amp;t=blog" target="_blank">
+    初始化
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

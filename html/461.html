@@ -1,0 +1,414 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ live555 源代码简单分析1：主程序 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_461">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   live555 源代码简单分析1：主程序
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月25日 17:36:24
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：12906
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     live555是使用十分广泛的开源流媒体服务器，之前也看过其他人写的live555的学习笔记，在这里自己简单总结下。
+    </p>
+    <p>
+     live555源代码有以下几个明显的特点：
+    </p>
+    <p>
+     1.头文件是.hh后缀的，但没觉得和.h后缀的有什么不同
+    </p>
+    <p>
+     2.采用了面向对象的程序设计思路，里面各种对象
+    </p>
+    <p>
+    </p>
+    <p>
+     好了，不罗嗦，使用vc2010打开live555的vc工程，看到live555源代码结构如下：
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20130925172848296?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     源代码由5个工程构成（4个库和一个主程序）：
+    </p>
+    <p>
+     libUsageEnvironment.lib；libliveMedia.lib；libgroupsock.lib；libBasicUsageEnvironment.lib；以及live555MediaServer
+    </p>
+    <p>
+     这里我们只分析live555MediaServer这个主程序，其实代码量并不大，主要有两个CPP：DynamicRTSPServer.cpp和live555MediaServer.cpp
+    </p>
+    <p>
+     程序的main()在live555MediaServer.cpp中，在main()中调用了DynamicRTSPServer中的类
+    </p>
+    <p>
+    </p>
+    <p>
+     不废话，直接贴上有注释的源码
+    </p>
+    <p>
+     live555MediaServer.cpp：
+    </p>
+    <pre class="cpp">#include &lt;BasicUsageEnvironment.hh&gt;
+#include "DynamicRTSPServer.hh"
+#include "version.hh"
+
+int main(int argc, char** argv) {
+  // Begin by setting up our usage environment:
+  // TaskScheduler用于任务计划
+  TaskScheduler* scheduler = BasicTaskScheduler::createNew();
+  // UsageEnvironment用于输出
+  UsageEnvironment* env = BasicUsageEnvironment::createNew(*scheduler);
+
+  UserAuthenticationDatabase* authDB = NULL;
+#ifdef ACCESS_CONTROL
+  // To implement client access control to the RTSP server, do the following:
+  authDB = new UserAuthenticationDatabase;
+  authDB-&gt;addUserRecord("username1", "password1"); // replace these with real strings
+  // Repeat the above with each &lt;username&gt;, &lt;password&gt; that you wish to allow
+  // access to the server.
+#endif
+
+  //建立 RTSP server.  使用默认端口 (554),
+  // and then with the alternative port number (8554):
+  RTSPServer* rtspServer;
+  portNumBits rtspServerPortNum = 554;
+  //创建 RTSPServer实例
+  rtspServer = DynamicRTSPServer::createNew(*env, rtspServerPortNum, authDB);
+  if (rtspServer == NULL) {
+    rtspServerPortNum = 8554;
+    rtspServer = DynamicRTSPServer::createNew(*env, rtspServerPortNum, authDB);
+  }
+  if (rtspServer == NULL) {
+    *env &lt;&lt; "Failed to create RTSP server: " &lt;&lt; env-&gt;getResultMsg() &lt;&lt; "\n";
+    exit(1);
+  }
+  //用到了运算符重载
+  *env &lt;&lt; "LIVE555 Media Server\n";
+  *env &lt;&lt; "\tversion " &lt;&lt; MEDIA_SERVER_VERSION_STRING
+       &lt;&lt; " (LIVE555 Streaming Media library version "
+       &lt;&lt; LIVEMEDIA_LIBRARY_VERSION_STRING &lt;&lt; ").\n";
+
+  char* urlPrefix = rtspServer-&gt;rtspURLPrefix();
+  *env &lt;&lt; "Play streams from this server using the URL\n\t"
+       &lt;&lt; urlPrefix &lt;&lt; "&lt;filename&gt;\nwhere &lt;filename&gt; is a file present in the current directory.\n";
+  *env &lt;&lt; "Each file's type is inferred from its name suffix:\n";
+  *env &lt;&lt; "\t\".aac\" =&gt; an AAC Audio (ADTS format) file\n";
+  *env &lt;&lt; "\t\".amr\" =&gt; an AMR Audio file\n";
+  *env &lt;&lt; "\t\".m4e\" =&gt; a MPEG-4 Video Elementary Stream file\n";
+  *env &lt;&lt; "\t\".dv\" =&gt; a DV Video file\n";
+  *env &lt;&lt; "\t\".mp3\" =&gt; a MPEG-1 or 2 Audio file\n";
+  *env &lt;&lt; "\t\".mpg\" =&gt; a MPEG-1 or 2 Program Stream (audio+video) file\n";
+  *env &lt;&lt; "\t\".ts\" =&gt; a MPEG Transport Stream file\n";
+  *env &lt;&lt; "\t\t(a \".tsx\" index file - if present - provides server 'trick play' support)\n";
+  *env &lt;&lt; "\t\".wav\" =&gt; a WAV Audio file\n";
+  *env &lt;&lt; "See http://www.live555.com/mediaServer/ for additional documentation.\n";
+
+  // Also, attempt to create a HTTP server for RTSP-over-HTTP tunneling.
+  // Try first with the default HTTP port (80), and then with the alternative HTTP
+  // port numbers (8000 and 8080).
+
+  if (rtspServer-&gt;setUpTunnelingOverHTTP(80) || rtspServer-&gt;setUpTunnelingOverHTTP(8000) || rtspServer-&gt;setUpTunnelingOverHTTP(8080)) {
+    *env &lt;&lt; "(We use port " &lt;&lt; rtspServer-&gt;httpServerPortNum() &lt;&lt; " for optional RTSP-over-HTTP tunneling.)\n";
+  } else {
+    *env &lt;&lt; "(RTSP-over-HTTP tunneling is not available.)\n";
+  }
+  //进入一个永久的循环
+  env-&gt;taskScheduler().doEventLoop(); // does not return
+
+  return 0; // only to prevent compiler warning
+}
+</pre>
+    <p>
+     <br/>
+     DynamicRTSPServer.cpp：
+    </p>
+    <pre class="cpp">#include "DynamicRTSPServer.hh"
+#include &lt;liveMedia.hh&gt;
+#include &lt;string.h&gt;
+
+DynamicRTSPServer*
+DynamicRTSPServer::createNew(UsageEnvironment&amp; env, Port ourPort,
+			     UserAuthenticationDatabase* authDatabase,
+			     unsigned reclamationTestSeconds) {
+  int ourSocket = -1;
+
+  do {
+	//建立TCP socket(socket(),bind(),listen()...)
+    int ourSocket = setUpOurSocket(env, ourPort);
+    if (ourSocket == -1) break;
+
+    return new DynamicRTSPServer(env, ourSocket, ourPort, authDatabase, reclamationTestSeconds);
+  } while (0);
+
+  if (ourSocket != -1) ::closeSocket(ourSocket);
+  return NULL;
+}
+
+DynamicRTSPServer::DynamicRTSPServer(UsageEnvironment&amp; env, int ourSocket,
+				     Port ourPort,
+				     UserAuthenticationDatabase* authDatabase, unsigned reclamationTestSeconds)
+  : RTSPServer(env, ourSocket, ourPort, authDatabase, reclamationTestSeconds) {
+}
+
+DynamicRTSPServer::~DynamicRTSPServer() {
+}
+
+static ServerMediaSession* createNewSMS(UsageEnvironment&amp; env,
+					char const* fileName, FILE* fid); // forward
+
+
+
+//查找ServerMediaSession（对应服务器上一个媒体文件，，或设备），如果没有的话就创建一个
+//streamName例:A.avi
+ServerMediaSession*
+DynamicRTSPServer::lookupServerMediaSession(char const* streamName) {
+  // First, check whether the specified "streamName" exists as a local file:
+  FILE* fid = fopen(streamName, "rb");
+  //如果返回文件指针不为空，则文件存在
+  Boolean fileExists = fid != NULL;
+
+  // Next, check whether we already have a "ServerMediaSession" for this file:
+  //看看是否有这个ServerMediaSession
+  ServerMediaSession* sms = RTSPServer::lookupServerMediaSession(streamName);
+  Boolean smsExists = sms != NULL;
+
+  // Handle the four possibilities for "fileExists" and "smsExists":
+  //文件没了，ServerMediaSession有，删之
+  if (!fileExists) {
+    if (smsExists) {
+      // "sms" was created for a file that no longer exists. Remove it:
+      removeServerMediaSession(sms);
+    }
+    return NULL;
+  } else {
+	//文件有，ServerMediaSession无，加之
+    if (!smsExists) {
+      // Create a new "ServerMediaSession" object for streaming from the named file.
+      sms = createNewSMS(envir(), streamName, fid);
+      addServerMediaSession(sms);
+    }
+    fclose(fid);
+    return sms;
+  }
+}
+
+#define NEW_SMS(description) do {\
+char const* descStr = description\
+    ", streamed by the LIVE555 Media Server";\
+sms = ServerMediaSession::createNew(env, fileName, fileName, descStr);\
+} while(0)
+
+
+//创建一个ServerMediaSession
+static ServerMediaSession* createNewSMS(UsageEnvironment&amp; env,
+					char const* fileName, FILE* /*fid*/) {
+  // Use the file name extension to determine the type of "ServerMediaSession":
+	//获取扩展名，以“.”开始。不严密，万一文件名有多个点？
+  char const* extension = strrchr(fileName, '.');
+  if (extension == NULL) return NULL;
+
+  ServerMediaSession* sms = NULL;
+  Boolean const reuseSource = False;
+  if (strcmp(extension, ".aac") == 0) {
+    // Assumed to be an AAC Audio (ADTS format) file:
+	// 调用ServerMediaSession::createNew（）
+	//还会调用MediaSubsession
+    NEW_SMS("AAC Audio");
+    sms-&gt;addSubsession(ADTSAudioFileServerMediaSubsession::createNew(env, fileName, reuseSource));
+  } else if (strcmp(extension, ".amr") == 0) {
+    // Assumed to be an AMR Audio file:
+    NEW_SMS("AMR Audio");
+    sms-&gt;addSubsession(AMRAudioFileServerMediaSubsession::createNew(env, fileName, reuseSource));
+  } else if (strcmp(extension, ".m4e") == 0) {
+    // Assumed to be a MPEG-4 Video Elementary Stream file:
+    NEW_SMS("MPEG-4 Video");
+    sms-&gt;addSubsession(MPEG4VideoFileServerMediaSubsession::createNew(env, fileName, reuseSource));
+  } else if (strcmp(extension, ".mp3") == 0) {
+    // Assumed to be a MPEG-1 or 2 Audio file:
+    NEW_SMS("MPEG-1 or 2 Audio");
+    // To stream using 'ADUs' rather than raw MP3 frames, uncomment the following:
+//#define STREAM_USING_ADUS 1
+    // To also reorder ADUs before streaming, uncomment the following:
+//#define INTERLEAVE_ADUS 1
+    // (For more information about ADUs and interleaving,
+    //  see &lt;http://www.live555.com/rtp-mp3/&gt;)
+    Boolean useADUs = False;
+    Interleaving* interleaving = NULL;
+#ifdef STREAM_USING_ADUS
+    useADUs = True;
+#ifdef INTERLEAVE_ADUS
+    unsigned char interleaveCycle[] = {0,2,1,3}; // or choose your own...
+    unsigned const interleaveCycleSize
+      = (sizeof interleaveCycle)/(sizeof (unsigned char));
+    interleaving = new Interleaving(interleaveCycleSize, interleaveCycle);
+#endif
+#endif
+    sms-&gt;addSubsession(MP3AudioFileServerMediaSubsession::createNew(env, fileName, reuseSource, useADUs, interleaving));
+  } else if (strcmp(extension, ".mpg") == 0) {
+    // Assumed to be a MPEG-1 or 2 Program Stream (audio+video) file:
+    NEW_SMS("MPEG-1 or 2 Program Stream");
+    MPEG1or2FileServerDemux* demux
+      = MPEG1or2FileServerDemux::createNew(env, fileName, reuseSource);
+    sms-&gt;addSubsession(demux-&gt;newVideoServerMediaSubsession());
+    sms-&gt;addSubsession(demux-&gt;newAudioServerMediaSubsession());
+  } else if (strcmp(extension, ".ts") == 0) {
+    // Assumed to be a MPEG Transport Stream file:
+    // Use an index file name that's the same as the TS file name, except with ".tsx":
+    unsigned indexFileNameLen = strlen(fileName) + 2; // allow for trailing "x\0"
+    char* indexFileName = new char[indexFileNameLen];
+    sprintf(indexFileName, "%sx", fileName);
+    NEW_SMS("MPEG Transport Stream");
+    sms-&gt;addSubsession(MPEG2TransportFileServerMediaSubsession::createNew(env, fileName, indexFileName, reuseSource));
+    delete[] indexFileName;
+  } else if (strcmp(extension, ".wav") == 0) {
+    // Assumed to be a WAV Audio file:
+    NEW_SMS("WAV Audio Stream");
+    // To convert 16-bit PCM data to 8-bit u-law, prior to streaming,
+    // change the following to True:
+    Boolean convertToULaw = False;
+    sms-&gt;addSubsession(WAVAudioFileServerMediaSubsession::createNew(env, fileName, reuseSource, convertToULaw));
+  } else if (strcmp(extension, ".dv") == 0) {
+    // Assumed to be a DV Video file
+    // First, make sure that the RTPSinks' buffers will be large enough to handle the huge size of DV frames (as big as 288000).
+    OutPacketBuffer::maxSize = 300000;
+
+    NEW_SMS("DV Video");
+    sms-&gt;addSubsession(DVVideoFileServerMediaSubsession::createNew(env, fileName, reuseSource));
+  }
+
+  return sms;
+}
+</pre>
+    <p>
+     <br/>
+     live555源代码（VC6）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6374387">
+      http://download.csdn.net/detail/leixiaohua1020/6374387
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12022409
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=live555&amp;t=blog" target="_blank">
+    live555
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体服务器&amp;t=blog" target="_blank">
+    流媒体服务器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分析&amp;t=blog" target="_blank">
+    分析
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=主程序&amp;t=blog" target="_blank">
+    主程序
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362936" target="_blank">
+    Live555
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

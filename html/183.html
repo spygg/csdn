@@ -1,0 +1,934 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffmbc——为广播电视以及专业用途量身定制的FFmpeg - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_183">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffmbc——为广播电视以及专业用途量身定制的FFmpeg
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年02月16日 00:28:54
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：14474
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     无意中发现了个为广播电视以及专业用途量身定制的FFmpeg。也是开源的，记录之。
+    </p>
+    <p>
+     ffmbc 全称是 FFMedia Broadcast，是个改版的FFmpeg，有如下功能：
+     <br/>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     创建可以导入Final Cut Pro, AVID Media Composer, Adobe Premiere中的文件
+     <br/>
+     创建 XDCAM HD422 文件（.mov 或 .mxf）
+     <br/>
+     创建 XDCAM IMX/D-10 文件（.mov 或 .mxf）
+     <br/>
+     创建 AVID DNxHD 文件（.mov）
+     <br/>
+     创建 DVCPROHD 文件（.mov 或 .mxf）
+     <br/>
+     创建 ProRes 422 or 4444 文件（.mov）
+     <br/>
+     转换 V210 文件
+     <br/>
+     转换 HD YUV BT709 到 SD BT601 或者反过来
+     <br/>
+     转换 AVCIntra 50 和AVCIntra  100
+     <br/>
+     转换 MPEG-TS 文件
+     <br/>
+     转换 AVCHD 文件
+     <br/>
+     转换 ProRes 422 和 4444 文件
+     <br/>
+     合并或分离音轨
+     <br/>
+     创建 Quicktime 文件
+     <br/>
+     从 HD 到 SD的颜色转换
+     <p>
+     </p>
+     <p>
+      等等。。。
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <p>
+    </p>
+    项目主页上没有可执行文件，只有一个源代码压缩包。自己拿MinGW编译了一下源代码，发现和FFmpeg编译是一样的，编译后生成ffmbc.exe。
+    <p>
+     上传一个自己编译的ffmbc：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6908055">
+      http://download.csdn.net/detail/leixiaohua1020/6908055
+     </a>
+    </p>
+    <p>
+     项目主页：
+     <a href="http://code.google.com/p/ffmbc/">
+      http://code.google.com/p/ffmbc/
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     更新记录（2014.7.28）======================
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     前一段时间受朋友之托，研究了一下
+     <span style="text-align:center;">
+      ffmbc
+     </span>
+     的使用，最后做成了一个使用说明。自己的感触是，
+     <span style="text-align:center;">
+      ffmbc
+     </span>
+     最大的改动就在于增加了一个-target选项。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     ffmbc使用说明
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <h3>
+     1.
+     <span style="white-space:pre;">
+     </span>
+     编码IMX
+    </h3>
+    编码视频为 IMX 30/50 MXF 或 MOV
+    <br/>
+    <br/>
+    <h4>
+     1.1.命令行格式
+    </h4>
+    <p>
+     输出Imx30
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmbc -i &lt; file &gt; -target imx30 &lt; file.mxf | file.mov &gt;</pre>
+    <br/>
+    输出Imx50
+    <p>
+    </p>
+    <pre class="plain">ffmbc -i &lt; file &gt; -target imx50 &lt; file.mxf | file.mov &gt;</pre>
+    <br/>
+    注意：在MXF中，XDCAM要求至少为4声道。所以如果输入文件的音频流小于4声道，输出文件依然会被标记为4声道。
+    <br/>
+    <br/>
+    Target命令支持以下格式："vcd", "svcd", "dvd", "dvcam", "dvcpro", "dvcpro50", "dvcprohd", "imx30", "imx50", "xdcamhd422"
+    <br/>
+    <br/>
+    <br/>
+    <h4>
+     1.2.示例
+    </h4>
+    命令（转码为IMX30，MXF格式）：
+    <p>
+    </p>
+    <pre class="plain">ffmbc -i test.flv -target imx30 test.mxf</pre>
+    <br/>
+    转码前文件格式：
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.flv
+文件格式                                     : Flash Video
+文件大小                                     : 2.24 MiB
+长度                                       : 30秒 0ms
+平均混合码率                                   : 627 Kbps
+
+
+视频
+文件格式                                     : Sorenson Spark
+编码设置ID                                   : 2
+长度                                       : 30秒 0ms
+码率                                       : 562 Kbps
+画面宽度                                     : 320像素
+画面高度                                     : 180像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+位深度                                      : 8位
+bits/(pixel*frame)(数据密度)                 : 0.390
+大小                                       : 2.01 MiB (90%)
+
+
+音频
+文件格式                                     : MPEG Audio
+格式版本                                     : Version 1
+格式简介                                     : Layer 3
+模式                                       : Joint stereo
+扩展模式                                     : MS Stereo
+编码设置ID                                   : 2
+编码设置ID/提示信息                              : MP3
+长度                                       : 29秒 858ms
+码率模式                                     : CBR
+码率                                       : 32.0 Kbps
+声道                                       : 2声道
+采样率                                      : 44.1 KHz
+压缩模式                                     : 有损压缩
+大小                                       : 117 KiB (5%)
+编码函数库                                    : LAME3.98</pre>
+    <br/>
+    转码后MXF文件格式（IMX30）：
+    <br/>
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.mxf
+文件格式                                     : MXF
+Format_Commercial_IfAny                  : IMX 30
+格式简介                                     : OP-1a
+格式设置                                     : Closed / Complete
+文件大小                                     : 152 MiB
+长度                                       : 30秒 0ms
+平均混合码率                                   : 42.6 Mbps
+编码日期                                     : 2014-07-23 02:56:14.000
+编码程序                                     : FFmbc OP1a Muxer 53.6.0
+编码函数库                                    : FFmbc OP1a Muxer 53.6.0
+
+
+视频
+ID                                       : 2
+文件格式                                     : MPEG Video
+Format_Commercial_IfAny                  : IMX 30
+格式版本                                     : Version 2
+格式简介                                     : 4:2:2@Main
+格式设置, BVOP                               : 否
+格式设置, Matrix                             : 默认
+格式设置, GOP                                : N=1
+Format_Settings_Wrapping                 : Frame (D-10)
+编码设置ID                                   : 0D01030102010501-0401020201020105
+长度                                       : 30秒 0ms
+码率                                       : 30.3 Mbps
+最大码率                                     : 30.0 Mbps
+画面宽度                                     : 720像素
+画面高度                                     : 576像素
+原始高度                                     : 608像素
+画面比例                                     : 16:9
+帧率                                       : 25.000 fps
+标准                                       : Component
+色彩空间                                     : YUV
+色度抽样                                     : 4:2:2
+位深度                                      : 8位
+扫描方式                                     : 隔行扫描
+扫描顺序                                     : 奇数场(前场TFF)优先
+压缩模式                                     : 有损压缩
+bits/(pixel*frame)(数据密度)                 : 2.923
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Source                          : Group of pictures header
+大小                                       : 108 MiB (71%)
+颜色初选                                     : BT.601 PAL
+传输特质                                     : BT.709
+矩阵系数                                     : BT.601
+
+
+音频
+ID                                       : 3
+文件格式                                     : PCM
+格式设置, Endianness                         : Little
+Format_Settings_Wrapping                 : Frame (D-10)
+编码设置ID                                   : 0D01030102010501
+长度                                       : 30秒 0ms
+码率模式                                     : CBR
+码率                                       : 12.3 Mbps
+声道                                       : 4声道
+采样率                                      : 48.0 KHz
+位深度                                      : 16位
+大小                                       : 43.9 MiB (29%)
+
+
+其它 #1
+ID                                       : 1
+Type                                     : Time code
+文件格式                                     : MXF TC
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Settings                        : Striped
+
+
+其它 #2
+Type                                     : Time code
+文件格式                                     : SMPTE TC
+混合模式                                     : SDTI
+TimeCode_FirstFrame                      : 00:00:00:00</pre>
+    <br/>
+    转码后MOV文件格式（IMX30）：
+    <br/>
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.mov
+文件格式                                     : MPEG-4
+Format_Commercial_IfAny                  : IMX 30
+格式简介                                     : QuickTime
+编码设置ID                                   : qt  
+文件大小                                     : 113 MiB
+长度                                       : 30秒 0ms
+混合码率模式                                   : CBR
+平均混合码率                                   : 31.5 Mbps
+编码日期                                     : UTC 2014-07-23 03:03:09
+标记日期                                     : UTC 2014-07-23 03:03:09
+编码程序                                     : FFmbc 0.7
+
+
+视频
+ID                                       : 1
+文件格式                                     : MPEG Video
+Format_Commercial_IfAny                  : IMX 30
+格式版本                                     : Version 2
+格式简介                                     : 4:2:2@Main
+格式设置, BVOP                               : 否
+格式设置, Matrix                             : 默认
+格式设置, GOP                                : N=1
+混合模式                                     : MXF
+编码设置ID                                   : mx3p
+长度                                       : 30秒 0ms
+码率模式                                     : CBR
+码率                                       : 30.0 Mbps
+画面宽度                                     : 720像素
+画面高度                                     : 576像素
+原始高度                                     : 608像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+标准                                       : Component
+色彩空间                                     : YUV
+色度抽样                                     : 4:2:2
+位深度                                      : 8位
+扫描方式                                     : 隔行扫描
+扫描顺序                                     : 奇数场(前场TFF)优先
+压缩模式                                     : 有损压缩
+bits/(pixel*frame)(数据密度)                 : 2.894
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Source                          : Group of pictures header
+大小                                       : 107 MiB (95%)
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 03:03:09
+标记日期                                     : UTC 2014-07-23 03:03:09
+颜色初选                                     : BT.601 PAL
+传输特质                                     : BT.709
+矩阵系数                                     : BT.601
+
+
+音频
+ID                                       : 2
+文件格式                                     : PCM
+格式设置, Endianness                         : Little
+格式设置, Sign                               : Signed
+编码设置ID                                   : sowt
+长度                                       : 29秒 858ms
+码率模式                                     : CBR
+码率                                       : 1 536 Kbps
+声道                                       : 2声道
+声道位置                                     : Front: L R
+采样率                                      : 48.0 KHz
+位深度                                      : 16位
+大小                                       : 5.47 MiB (5%)
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 03:03:09
+标记日期                                     : UTC 2014-07-23 03:03:09</pre>
+    <br/>
+    转码后MOV文件格式（IMX50）：
+    <br/>
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.mov
+文件格式                                     : MPEG-4
+Format_Commercial_IfAny                  : IMX 50
+格式简介                                     : QuickTime
+编码设置ID                                   : qt  
+文件大小                                     : 184 MiB
+长度                                       : 30秒 0ms
+混合码率模式                                   : CBR
+平均混合码率                                   : 51.5 Mbps
+编码日期                                     : UTC 2014-07-23 03:06:35
+标记日期                                     : UTC 2014-07-23 03:06:35
+编码程序                                     : FFmbc 0.7
+
+
+视频
+ID                                       : 1
+文件格式                                     : MPEG Video
+Format_Commercial_IfAny                  : IMX 50
+格式版本                                     : Version 2
+格式简介                                     : 4:2:2@Main
+格式设置, BVOP                               : 否
+格式设置, Matrix                             : 默认
+格式设置, GOP                                : N=1
+混合模式                                     : MXF
+编码设置ID                                   : mx5p
+长度                                       : 30秒 0ms
+码率模式                                     : CBR
+码率                                       : 50.0 Mbps
+画面宽度                                     : 720像素
+画面高度                                     : 576像素
+原始高度                                     : 608像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+标准                                       : Component
+色彩空间                                     : YUV
+色度抽样                                     : 4:2:2
+位深度                                      : 8位
+扫描方式                                     : 隔行扫描
+扫描顺序                                     : 奇数场(前场TFF)优先
+压缩模式                                     : 有损压缩
+bits/(pixel*frame)(数据密度)                 : 4.823
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Source                          : Group of pictures header
+大小                                       : 179 MiB (97%)
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 03:06:35
+标记日期                                     : UTC 2014-07-23 03:06:35
+颜色初选                                     : BT.601 PAL
+传输特质                                     : BT.709
+矩阵系数                                     : BT.601
+
+
+音频
+ID                                       : 2
+文件格式                                     : PCM
+格式设置, Endianness                         : Little
+格式设置, Sign                               : Signed
+编码设置ID                                   : sowt
+长度                                       : 29秒 858ms
+码率模式                                     : CBR
+码率                                       : 1 536 Kbps
+声道                                       : 2声道
+声道位置                                     : Front: L R
+采样率                                      : 48.0 KHz
+位深度                                      : 16位
+大小                                       : 5.47 MiB (3%)
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 03:06:35
+标记日期                                     : UTC 2014-07-23 03:06:35</pre>
+    <br/>
+    <h3>
+     2.
+     <span style="white-space:pre;">
+     </span>
+     编码ProRes
+    </h3>
+    <br/>
+    编码视频为ProRes。
+    <br/>
+    <br/>
+    <br/>
+    码率控制方面，有以下3种选项：
+    <p>
+     (1)
+     <span style="white-space:pre;">
+     </span>
+     -qscale &lt; value &gt; 或 -cqp &lt; value &gt;
+    </p>
+    <p>
+     每帧视频设置固定的量化因子。这是可变码率的方法。
+    </p>
+    <p>
+     (2)
+     <span style="white-space:pre;">
+     </span>
+     -profile &lt; name &gt; ，有以下几个选项：
+     <br/>
+     *proxy
+     <br/>
+     *lt
+     <br/>
+     *std
+     <br/>
+     *hq
+     <br/>
+     如果没有设置码率，则该选项可以自动设置码率。该码率的值将会和apple encoder类似。
+     <br/>
+     (3)
+     <span style="white-space:pre;">
+     </span>
+     -b &lt; bitrate &gt;
+     <br/>
+     设置恒定码率。
+     <br/>
+     输出像素方面，支持444 编码：
+     <br/>
+     命令行中添加 -pix_fmt yuv444p10
+     <br/>
+    </p>
+    <h4>
+     2.1.命令行格式
+    </h4>
+    <pre class="plain">ffmbc.exe -i &lt; file &gt; -vcodec prores -profile hq -pix_fmt yuv444p10 –acodec copy &lt; file.mxf &gt;</pre>
+    <h4>
+     2.2.示例
+    </h4>
+    命令
+    <p>
+    </p>
+    <pre class="plain">ffmbc.exe -i test.flv -vcodec prores -profile hq -pix_fmt yuv444p10 –acodec copy test _prores.mov</pre>
+    <p>
+     输入文件格式
+     <br/>
+    </p>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.flv
+文件格式                                     : Flash Video
+文件大小                                     : 2.24 MiB
+长度                                       : 30秒 0ms
+平均混合码率                                   : 627 Kbps
+
+
+视频
+文件格式                                     : Sorenson Spark
+编码设置ID                                   : 2
+长度                                       : 30秒 0ms
+码率                                       : 562 Kbps
+画面宽度                                     : 320像素
+画面高度                                     : 180像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+位深度                                      : 8位
+bits/(pixel*frame)(数据密度)                 : 0.390
+大小                                       : 2.01 MiB (90%)
+
+
+音频
+文件格式                                     : MPEG Audio
+格式版本                                     : Version 1
+格式简介                                     : Layer 3
+模式                                       : Joint stereo
+扩展模式                                     : MS Stereo
+编码设置ID                                   : 2
+编码设置ID/提示信息                              : MP3
+长度                                       : 29秒 858ms
+码率模式                                     : CBR
+码率                                       : 32.0 Kbps
+声道                                       : 2声道
+采样率                                      : 44.1 KHz
+压缩模式                                     : 有损压缩
+大小                                       : 117 KiB (5%)
+编码函数库                                    : LAME3.98</pre>
+    <br/>
+    输出文件格式
+    <br/>
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test_prores.mov
+文件格式                                     : MPEG-4
+格式简介                                     : QuickTime
+编码设置ID                                   : qt  
+文件大小                                     : 46.6 MiB
+长度                                       : 30秒 0ms
+混合码率模式                                   : VBR
+平均混合码率                                   : 13.0 Mbps
+编码日期                                     : UTC 2014-07-23 04:25:20
+标记日期                                     : UTC 2014-07-23 04:25:20
+编码程序                                     : FFmbc 0.7
+
+
+视频
+ID                                       : 1
+文件格式                                     : ProRes
+格式版本                                     : Version 1
+编码设置ID                                   : ap4h
+长度                                       : 30秒 0ms
+码率模式                                     : VBR
+码率                                       : 13.0 Mbps
+画面宽度                                     : 320像素
+画面高度                                     : 180像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+色度抽样                                     : 4:4:4
+扫描方式                                     : 逐行扫描
+bits/(pixel*frame)(数据密度)                 : 9.003
+大小                                       : 46.4 MiB (99%)
+编码函数库                                    : ffm0
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 04:25:20
+标记日期                                     : UTC 2014-07-23 04:25:20
+
+
+音频
+ID                                       : 2
+文件格式                                     : MPEG Audio
+格式版本                                     : Version 1
+格式简介                                     : Layer 3
+模式                                       : Joint stereo
+扩展模式                                     : MS Stereo
+编码设置ID                                   : .mp3
+长度                                       : 29秒 859ms
+码率模式                                     : CBR
+码率                                       : 32.0 Kbps
+声道                                       : 2声道
+声道位置                                     : Front: L R
+采样率                                      : 44.1 KHz
+压缩模式                                     : 有损压缩
+大小                                       : 219 KiB (0%)
+编码函数库                                    : LAME3.98
+语言                                       : English
+编码日期                                     : UTC 2014-07-23 04:25:20
+标记日期                                     : UTC 2014-07-23 04:25:20</pre>
+    <br/>
+    <h3>
+     3.
+     <span style="white-space:pre;">
+     </span>
+     添加字幕
+    </h3>
+    <br/>
+    向视频文件中添加字幕。支持.srt和 .ass 文件（加字幕这个功能貌似ffmpeg本身也可以）。
+    <br/>
+    <br/>
+    <br/>
+    注意：需要将libass库编译进FFmbc
+    <br/>
+    <br/>
+    选项：
+    <p>
+     file: set subtitles file
+     <br/>
+     font: set font file
+     <br/>
+     textcolor: set text color
+     <br/>
+     boxcolor: set box background color (format is RRGGBBAA)
+     <br/>
+     box: a box will surround the text
+     <br/>
+     fontsize: set font size
+     <br/>
+     text: set text to be burned
+     <br/>
+     vmargin: set vertical margin
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmbc -i &lt; file &gt; -vf sub=file=captions.srt:box=1:boxcolor=0x00000080:font=arial.ttf &lt; out file &gt;</pre>
+    <br/>
+    <h3>
+     4.
+     <span style="white-space:pre;">
+     </span>
+     编码XDCAMHD422
+    </h3>
+    <br/>
+    将视频编译为 XDCAMHD422 MXF或MOV
+    <br/>
+    <br/>
+    <br/>
+    隔行编码：-target 前面添加-tff 或 -bff
+    <br/>
+    <br/>
+    <pre class="plain">ffmbc -i &lt; file &gt; -target xdcamhd422 &lt; file.mxf &gt;</pre>
+    <br/>
+    注意：XDCAM要求至少2个单声道。使用-newaudio 和 -map_audio_channel.
+    <br/>
+    <br/>
+    举个例子，如下命令将一个立体声的视频转换为两个单声道的视频：
+    <br/>
+    <pre class="plain">ffmbc -i &lt; file &gt; -target xdcamhd422 -an &lt; file.mxf &gt; -acodec pcm_s24le -ar 48000 -newaudio -acodec pcm_s24le -ar 48000 -newaudio -map_audio_channel 0:1:0:0:1:0 -map_audio_channel 0:1:1:0:2:0</pre>
+    <h4>
+     3.1.命令行格式
+    </h4>
+    <pre class="plain">ffmbc -i &lt; file &gt; -target xdcamhd422 -vtag &lt; tag &gt; &lt; file.mov &gt;</pre>
+    <br/>
+    tag有如下选项：
+    <br/>
+    * "xd54" XDCAM HD422 720p24 CBR
+    <br/>
+    * "xd59" XDCAM HD422 720p60 CBR
+    <br/>
+    * "xd5a" XDCAM HD422 720p50 CBR
+    <br/>
+    * "xd5b" XDCAM HD422 1080i60 CBR
+    <br/>
+    * "xd5c" XDCAM HD422 1080i50 CBR
+    <br/>
+    * "xd5d" XDCAM HD422 1080p24 CBR
+    <br/>
+    * "xd5e" XDCAM HD422 1080p25 CBR
+    <br/>
+    * "xd5f" XDCAM HD422 1080p30 CBR
+    <br/>
+    <h4>
+     3.2.示例
+    </h4>
+    <p>
+     命令
+     <br/>
+    </p>
+    <pre class="plain">ffmbc -i test.flv -s 1280x720 -ac 1 -target xdcamhd422 test_xdcamhd422.mxf</pre>
+    <br/>
+    注：
+    <br/>
+    1.只支持单声道，如果输入文件为多声道，则会出现如下错误提示：
+    <br/>
+    <div style="text-align:center;">
+     Error, target xdcamhd422 only supports mono audio tracks
+    </div>
+    可以通过添加-ac 1，将输入文件转换为单声道。
+    <br/>
+    2.只支持输入为1920x1080或者1280x720格式，其他分辨率不支持。如果输入文件为其他分辨率，则会出现如下错误提示：
+    <br/>
+    <div style="text-align:center;">
+     Error, target xdcamhd422 only supports 1920x1080 or 1280x720 resolutions
+    </div>
+    可以通过分辨率变换，将输入文件分辨率转换为1920x1080或者1280x720。
+    <br/>
+    <br/>
+    <br/>
+    转码前文件格式：
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test.flv
+文件格式                                     : Flash Video
+文件大小                                     : 2.24 MiB
+长度                                       : 30秒 0ms
+平均混合码率                                   : 627 Kbps
+
+
+视频
+文件格式                                     : Sorenson Spark
+编码设置ID                                   : 2
+长度                                       : 30秒 0ms
+码率                                       : 562 Kbps
+画面宽度                                     : 320像素
+画面高度                                     : 180像素
+画面比例                                     : 16:9
+帧率模式                                     : 恒定
+帧率                                       : 25.000 fps
+位深度                                      : 8位
+bits/(pixel*frame)(数据密度)                 : 0.390
+大小                                       : 2.01 MiB (90%)
+
+
+音频
+文件格式                                     : MPEG Audio
+格式版本                                     : Version 1
+格式简介                                     : Layer 3
+模式                                       : Joint stereo
+扩展模式                                     : MS Stereo
+编码设置ID                                   : 2
+编码设置ID/提示信息                              : MP3
+长度                                       : 29秒 858ms
+码率模式                                     : CBR
+码率                                       : 32.0 Kbps
+声道                                       : 2声道
+采样率                                      : 44.1 KHz
+压缩模式                                     : 有损压缩
+大小                                       : 117 KiB (5%)
+编码函数库                                    : LAME3.98</pre>
+    <br/>
+    转码后文件格式：
+    <br/>
+    <pre class="plain">概要
+完整名称                                     : E:\test\test_xdcamhd422.mxf
+文件格式                                     : MXF
+Format_Commercial_IfAny                  : XDCAM HD422
+格式简介                                     : OP-1a
+格式设置                                     : Closed / Complete
+文件大小                                     : 182 MiB
+长度                                       : 30秒 0ms
+平均混合码率                                   : 51.0 Mbps
+编码日期                                     : 2014-07-23 03:23:12.000
+编码程序                                     : FFmbc OP1a Muxer 53.6.0
+编码函数库                                    : FFmbc OP1a Muxer 53.6.0
+
+
+视频
+ID                                       : 2
+文件格式                                     : MPEG Video
+Format_Commercial_IfAny                  : XDCAM HD422
+格式版本                                     : Version 2
+格式简介                                     : 4:2:2@High
+格式设置, BVOP                               : 是
+格式设置, Matrix                             : 默认
+格式设置, GOP                                : M=3, N=12
+Format_Settings_Wrapping                 : Frame
+编码设置ID                                   : 0D01030102046001-0401020201040300
+长度                                       : 30秒 0ms
+码率                                       : 50.0 Mbps
+画面宽度                                     : 1 280像素
+画面高度                                     : 720像素
+画面比例                                     : 16:9
+帧率                                       : 25.000 fps
+标准                                       : Component
+色彩空间                                     : YUV
+色度抽样                                     : 4:2:2
+位深度                                      : 8位
+扫描方式                                     : 逐行扫描
+压缩模式                                     : 有损压缩
+bits/(pixel*frame)(数据密度)                 : 2.170
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Source                          : Group of pictures header
+大小                                       : 179 MiB (98%)
+颜色初选                                     : BT.709
+传输特质                                     : BT.709
+矩阵系数                                     : BT.709
+
+
+音频
+ID                                       : 3
+文件格式                                     : PCM
+格式设置, Endianness                         : Little
+Format_Settings_Wrapping                 : Frame (AES)
+编码设置ID                                   : 0D01030102060300
+长度                                       : 30秒 0ms
+码率模式                                     : CBR
+码率                                       : 768 Kbps
+声道                                       : 1声道
+采样率                                      : 48.0 KHz
+位深度                                      : 16位
+大小                                       : 2.75 MiB (2%)
+
+
+其它 #1
+ID                                       : 1
+Type                                     : Time code
+文件格式                                     : MXF TC
+TimeCode_FirstFrame                      : 00:00:00:00
+TimeCode_Settings                        : Striped
+
+
+其它 #2
+Type                                     : Time code
+文件格式                                     : SMPTE TC
+混合模式                                     : SDTI
+TimeCode_FirstFrame                      : 00:00:00:00</pre>
+    <br/>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/19020203
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmbc&amp;t=blog" target="_blank">
+    ffmbc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=广播电视&amp;t=blog" target="_blank">
+    广播电视
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源&amp;t=blog" target="_blank">
+    开源
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362938" target="_blank">
+    开源多媒体系统
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

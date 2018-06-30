@@ -1,0 +1,592 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Media Player Classic - HC 源代码分析 6：MediaInfo选项卡 （CPPageFileMediaInfo） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_300">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   Media Player Classic - HC 源代码分析 6：MediaInfo选项卡 （CPPageFileMediaInfo）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月30日 00:42:45
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6084
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      =====================================================
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      Media Player Classic - HC 源代码分析系列文章列表：
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13280659">
+       Media Player Classic - HC 源代码分析 1：整体结构
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13290345">
+       Media Player Classic - HC 源代码分析 2：核心类 （CMainFrame）（1）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297291">
+       Media Player Classic - HC 源代码分析 3：核心类 （CMainFrame）（2）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13298397">
+       Media Player Classic - HC 源代码分析 4：核心类 （CMainFrame）（3）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297555">
+       Media Player Classic - HC 源代码分析 5：关于对话框 （CAboutDlg）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297589">
+       Media Player Classic - HC 源代码分析 6：MediaInfo选项卡 （CPPageFileMediaInfo）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:rgb(51,51,51);line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297621">
+       Media Player Classic - HC 源代码分析 7：详细信息选项卡（CPPageFileInfoDetails）
+      </a>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      =====================================================
+     </span>
+    </p>
+    <span style="color:#660000;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297621" style="line-height:30px;font-family:Arial;text-decoration:none;">
+     </a>
+    </span>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140616104614937"/>
+     <br/>
+    </p>
+    <p>
+     前几篇文章分析了Media Player Classic - HC（mpc-hc）的核心类（CMainFrame）：
+    </p>
+    <p>
+     <span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     <span>
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13290345" style="color:rgb(51,102,153);text-decoration:none;">
+       Media Player Classic - HC 源代码分析 2：核心类 （CMainFrame）（1）
+      </a>
+      <br/>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     <span>
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297291" style="color:rgb(51,102,153);text-decoration:none;">
+       Media Player Classic - HC 源代码分析 3：核心类 （CMainFrame）（2）
+      </a>
+      <br/>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     <span>
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13298397" style="color:rgb(51,102,153);text-decoration:none;">
+       Media Player Classic - HC 源代码分析 4：核心类 （CMainFrame）（3）
+      </a>
+     </span>
+    </p>
+    <p>
+     核心类分析完之后，分析了一下CAboutDlg：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297555">
+      Media Player Classic - HC 源代码分析 5：关于对话框 （CAboutDlg）
+     </a>
+     <br/>
+    </p>
+    发现CAboutDlg和普通的MFC对话框类其实没有什么区别。CAboutDlg功能相对比较简单，本文将会分析一个功能相对比较复杂的类：MediaInfo选项卡。在播放视频的时候，右键点击视频-&gt;选择“属性”-&gt;MediaInfo就可以查看该选项卡。一般情况下，该选项卡给出了正在播放的视频文件的详细参数（确实是非常的详细），包括：封装格式，视频编码，音频编码等等。是获取视频详细参数的最佳途径。
+    <p>
+     该选项卡的功能实际上是调用了开源项目MediaInfo的库。MediaInfo之前已经进行过详细介绍：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11902195" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      <span style="color:#990000;">
+       C++中使用MediaInfo库获取视频信息
+      </span>
+     </a>
+     <br/>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/11903507">
+       MediaInfo使用简介（新版本支持HEVC）
+      </a>
+     </span>
+     <br/>
+    </p>
+    <p>
+     在此不再重复。先看看该选项卡长什么样子。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131028232332296?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     先来看看MediaInfo选项卡类的定义是什么样的吧。该类的定义位于PPageFileMediaInfo.h文件中。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/* 雷霄骅 
+ * 中国传媒大学/数字电视技术 
+ * leixiaohua1020@126.com 
+ * 
+ */  
+/*
+ * (C) 2009-2013 see Authors.txt
+ *
+ * This file is part of MPC-HC.
+ *
+ * MPC-HC is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MPC-HC is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
+#pragma once
+
+// CPPageFileMediaInfo dialog
+// 【属性】页面里面的【MediaInfo】
+class CPPageFileMediaInfo : public CPropertyPage
+{
+    DECLARE_DYNAMIC(CPPageFileMediaInfo)
+
+private:
+    CComPtr&lt;IFilterGraph&gt; m_pFG;
+public:
+	//构造函数都是两个参数
+    CPPageFileMediaInfo(CString fn, IFilterGraph* pFG);
+    virtual ~CPPageFileMediaInfo();
+
+    // Dialog Data
+    enum { IDD = IDD_FILEMEDIAINFO };
+	//显示信息的控件
+    CEdit m_mediainfo;
+    CString m_fn;
+    CFont* m_pCFont;
+	//信息
+    CString MI_Text;
+
+#if !USE_STATIC_MEDIAINFO
+    static bool HasMediaInfo();
+#endif
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	//初始化，加载MediaInfo库，读取文件信息
+    virtual BOOL OnInitDialog();
+
+    DECLARE_MESSAGE_MAP()
+
+public:
+	//显示窗口，并不做其他事情
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+};
+</pre>
+    <br/>
+    该类和普通的MFC对话框类差别也不大。需要注意的有以下几点：
+    <p>
+    </p>
+    <p>
+     1.有一个变量：CComPtr&lt;IFilterGraph&gt; m_pFG，这个是mpc-hc中的变量，先不分析该变量的全部代码，在这里仅说一下它的作用：获取正在播放的视频文件的路径。
+    </p>
+    <p>
+     2.有一个控件类：CEdit m_mediainfo，对应界面上那个大框框，用于显示信息。
+    </p>
+    <p>
+     3.有一个字符串变量：CString MI_Text，用于存储MediaInfo得到的媒体信息。
+    </p>
+    <p>
+     下面来看看具体类的实现，该类的实现位于PPageFileMediaInfo.cpp文件中。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/* 雷霄骅 
+ * 中国传媒大学/数字电视技术 
+ * leixiaohua1020@126.com 
+ * 
+ */  
+/*
+ * (C) 2009-2013 see Authors.txt
+ *
+ * This file is part of MPC-HC.
+ *
+ * MPC-HC is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MPC-HC is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
+// PPageFileMediaInfo.cpp : implementation file
+
+
+#include "stdafx.h"
+#include "mplayerc.h"
+#include "PPageFileMediaInfo.h"
+#include "WinAPIUtils.h"
+
+#if USE_STATIC_MEDIAINFO
+#include "MediaInfo/MediaInfo.h"
+using namespace MediaInfoLib;
+#else
+#include "MediaInfoDLL.h"
+using namespace MediaInfoDLL;
+#endif
+
+
+// CPPageFileMediaInfo dialog
+
+IMPLEMENT_DYNAMIC(CPPageFileMediaInfo, CPropertyPage)
+CPPageFileMediaInfo::CPPageFileMediaInfo(CString fn, IFilterGraph* pFG)
+    : CPropertyPage(CPPageFileMediaInfo::IDD, CPPageFileMediaInfo::IDD)
+    , m_fn(fn)
+    , m_pFG(pFG)
+    , m_pCFont(nullptr)
+{
+}
+
+CPPageFileMediaInfo::~CPPageFileMediaInfo()
+{
+    delete m_pCFont;
+    m_pCFont = nullptr;
+}
+
+void CPPageFileMediaInfo::DoDataExchange(CDataExchange* pDX)
+{
+    __super::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_MIEDIT, m_mediainfo);
+}
+
+
+BEGIN_MESSAGE_MAP(CPPageFileMediaInfo, CPropertyPage)
+    ON_WM_SHOWWINDOW()
+END_MESSAGE_MAP()
+
+// CPPageFileMediaInfo message handlers
+static WNDPROC OldControlProc;
+
+static LRESULT CALLBACK ControlProc(HWND control, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if (message == WM_KEYDOWN) {
+        if ((LOWORD(wParam) == 'A' || LOWORD(wParam) == 'a')
+                &amp;&amp; (GetKeyState(VK_CONTROL) &lt; 0)) {
+            CEdit* pEdit = (CEdit*)CWnd::FromHandle(control);
+            pEdit-&gt;SetSel(0, pEdit-&gt;GetWindowTextLength(), TRUE);
+            return 0;
+        }
+    }
+
+    return CallWindowProc(OldControlProc, control, message, wParam, lParam); // call edit control's own windowproc
+}
+//初始化，加载MediaInfo库，读取文件信息
+BOOL CPPageFileMediaInfo::OnInitDialog()
+{
+    __super::OnInitDialog();
+
+    if (!m_pCFont) {
+        m_pCFont = DEBUG_NEW CFont;
+    }
+    if (!m_pCFont) {
+        return TRUE;
+    }
+
+    if (m_fn.IsEmpty()) {
+        BeginEnumFilters(m_pFG, pEF, pBF) {
+            CComQIPtr&lt;IFileSourceFilter&gt; pFSF = pBF;
+            if (pFSF) {
+				//当前文件路径
+                LPOLESTR pFN = nullptr;
+				//媒体类型
+                AM_MEDIA_TYPE mt;
+				//获取当前文件的路径和媒体类型
+                if (SUCCEEDED(pFSF-&gt;GetCurFile(&amp;pFN, &amp;mt)) &amp;&amp; pFN &amp;&amp; *pFN) {
+                    m_fn = CStringW(pFN);
+                    CoTaskMemFree(pFN);
+                }
+                break;
+            }
+        }
+        EndEnumFilters;
+    }
+
+#if USE_STATIC_MEDIAINFO
+	//使用静态库MediaInfo
+	//文件路径
+    MediaInfoLib::String f_name = m_fn;
+    MediaInfoLib::MediaInfo MI;
+#else
+    MediaInfoDLL::String f_name = m_fn;
+    MediaInfo MI;
+#endif
+	//设置
+    MI.Option(_T("ParseSpeed"), _T("0"));
+    MI.Open(f_name);
+    MI.Option(_T("Complete"));
+    MI.Option(_T("Language"), _T("  Config_Text_ColumnSize;30"));
+	//信息字符串
+    MI_Text = MI.Inform().c_str();
+    MI.Close();
+    if (!MI_Text.Find(_T("Unable to load"))) {
+        MI_Text = _T("");
+    }
+
+    LOGFONT lf;
+    ZeroMemory(&amp;lf, sizeof(lf));
+    lf.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
+    // The empty string will fallback to the first font that matches the other specified attributes.
+    LPCTSTR fonts[] = { _T("Lucida Console"), _T("Courier New"), _T("") };
+    // Use a negative value to match the character height instead of the cell height.
+    int fonts_size[] = { -10, -11, -11 };
+    UINT i = 0;
+    BOOL success;
+    do {
+        _tcscpy_s(lf.lfFaceName, fonts[i]);
+        lf.lfHeight = fonts_size[i];
+        success = IsFontInstalled(fonts[i]) &amp;&amp; m_pCFont-&gt;CreateFontIndirect(&amp;lf);
+        i++;
+    } while (!success &amp;&amp; i &lt; _countof(fonts));
+	//控件设置字体和内容
+    m_mediainfo.SetFont(m_pCFont);
+    m_mediainfo.SetWindowText(MI_Text);
+
+    // subclass the edit control
+    OldControlProc = (WNDPROC)SetWindowLongPtr(m_mediainfo.m_hWnd, GWLP_WNDPROC, (LONG_PTR)ControlProc);
+
+    return TRUE;  // return TRUE unless you set the focus to a control
+    // EXCEPTION: OCX Property Pages should return FALSE
+}
+//显示or不显示？
+void CPPageFileMediaInfo::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+    __super::OnShowWindow(bShow, nStatus);
+    if (bShow) {
+        GetParent()-&gt;GetDlgItem(IDC_BUTTON_MI)-&gt;ShowWindow(SW_SHOW);
+    } else {
+        GetParent()-&gt;GetDlgItem(IDC_BUTTON_MI)-&gt;ShowWindow(SW_HIDE);
+    }
+}
+
+#if !USE_STATIC_MEDIAINFO
+bool CPPageFileMediaInfo::HasMediaInfo()
+{
+    MediaInfo MI;
+    return MI.IsReady();
+}
+#endif
+</pre>
+    <br/>
+    可以看出，主要的工作都是在OnInitDialog()函数中实现的。大体的步骤如下：
+    <p>
+    </p>
+    <p>
+     1.通过调用pFSF-&gt;GetCurFile(&amp;pFN, &amp;mt)，获得当前文件的路径，存入pFN中。
+    </p>
+    <p>
+     2.因为字符串类型不同，几经转换把pFN转换为MediaInfo可以识别的字符串f_name
+    </p>
+    <p>
+     3.根据该路径，调用MediaInfo库，获得视频的详细信息存入字符串变量MI_Text。
+    </p>
+    <p>
+     4.将MI_Text显示到控件上。
+    </p>
+    <p>
+     总体说来，过程并不复杂，理解起来还是比较简单的。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/13297589
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mpc-hc&amp;t=blog" target="_blank">
+    mpc-hc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=directshow&amp;t=blog" target="_blank">
+    directshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源&amp;t=blog" target="_blank">
+    开源
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645587" target="_blank">
+    MediaInfo
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286581" target="_blank">
+    MPC-HC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,561 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ RTMPdump（libRTMP） 源代码分析 5： 建立一个流媒体连接 （NetConnection部分） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_327">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   RTMPdump（libRTMP） 源代码分析 5： 建立一个流媒体连接 （NetConnection部分）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月23日 00:15:50
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：14619
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     RTMPdump(libRTMP) 源代码分析系列文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12952977">
+      <span style="color:rgb(51,102,255);">
+       RTMPdump 源代码分析 1： main()函数
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12953833">
+      <span style="color:#3366ff;">
+       RTMPDump (libRTMP) 源代码分析2：解析RTMP地址——RTMP_ParseURL()
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12954145">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析3： AMF编码
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12954329">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析4： 连接第一步——握手 (HandShake)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12957291">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析5： 建立一个流媒体连接  (NetConnection部分)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12957877">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析6： 建立一个流媒体连接  (NetStream部分 1)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12958617">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析7： 建立一个流媒体连接  (NetStream部分 2)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12958747">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析8： 发送消息 (Message)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12971635">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析9： 接收消息 (Message)  (接收视音频数据)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12972399">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析10： 处理各种消息 (Message)
+      </span>
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用结构图
+    </h2>
+    <p>
+     RTMPDump (libRTMP)的整体的函数调用结构图如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201602/10/1455087168_7199.png">
+      <img alt="" src="https://img-blog.csdn.net/20160219185241684"/>
+      <br/>
+     </a>
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201602/10/1455087168_7199.png">
+      单击查看大图
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     详细分析
+    </h2>
+    <p>
+     本篇文章分析一下RTMPdump里面的建立一个流媒体连接过程中的函数调用。
+    </p>
+    <p>
+     之前已经简单分析过流媒体链接的建立过程：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11704355">
+      RTMP流媒体播放过程
+     </a>
+     <br/>
+    </p>
+    <p>
+     而且分析过其函数调用过程：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11822855">
+      RTMPDump源代码分析 0： 主要函数调用分析
+     </a>
+     <br/>
+    </p>
+    <p>
+     在这里就不详细叙述了，其实主要是这两个函数：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      <strong>
+       RTMP_Connect()
+      </strong>
+     </p>
+     <p>
+      <strong>
+       RTMP_ConnectStream()
+      </strong>
+     </p>
+    </blockquote>
+    <p>
+     第一个函数用于建立RTMP中的NetConnection，第二个函数用于建立RTMP中的NetStream。一般是先调用第一个函数，然后调用第二个函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     下面先来看看RTMP_Connect()：
+    </p>
+    <p>
+     注意：贴上去的源代码是修改过的RTMPdump，我添加了输出信息的代码，形如：r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。开始建立Socket连接");改代码不影响程序运行，可忽略。
+    </p>
+    <p>
+     <strong>
+      RTMP_Connect()
+     </strong>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//连接
+int
+RTMP_Connect(RTMP *r, RTMPPacket *cp)
+{
+	//Socket结构体
+  struct sockaddr_in service;
+  if (!r-&gt;Link.hostname.av_len)
+    return FALSE;
+
+  memset(&amp;service, 0, sizeof(struct sockaddr_in));
+  service.sin_family = AF_INET;
+
+  if (r-&gt;Link.socksport)
+    {
+	//加入地址信息
+      /* 使用SOCKS连接 */
+      if (!add_addr_info(&amp;service, &amp;r-&gt;Link.sockshost, r-&gt;Link.socksport))
+	return FALSE;
+    }
+  else
+    {
+      /* 直接连接 */
+      if (!add_addr_info(&amp;service, &amp;r-&gt;Link.hostname, r-&gt;Link.port))
+	return FALSE;
+    }
+  //-----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。开始建立Socket连接");
+  //-----------------------------
+  if (!RTMP_Connect0(r, (struct sockaddr *)&amp;service)){
+	r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。建立Socket连接失败");
+    return FALSE;
+  }
+  //-----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。建立Socket连接成功");
+  //-----------------------------
+  r-&gt;m_bSendCounter = TRUE;
+
+  return RTMP_Connect1(r, cp);
+}</pre>
+    <br/>
+    我们可以看出调用了两个函数RTMP_Connect0()以及RTMP_Connect1()。按照按先后顺序看看吧：
+    <p>
+    </p>
+    <p>
+     <strong>
+      RTMP_Connect0()
+     </strong>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//sockaddr是Linux网络编程的地址结构体一种，其定义如下：
+//struct sockaddr{ 
+//	unsigned short sa_family; 
+//	char sa_data[14];
+//}; 
+//说明：sa_family：是地址家族，也称作，协议族，一般都是“AF_xxx”的形式。通常大多用的是都是AF_INET。
+//	sa_data：是14字节协议地址。
+//有时不使用sockaddr，而使用sockaddr_in（多用在windows）（等价）
+//struct sockaddr_in {
+//	short int sin_family;              /* Address family */
+//	unsigned short int sin_port;       /* Port number */
+//	struct in_addr sin_addr;           /* Internet address */
+//	unsigned char sin_zero[8];         /* Same size as struct sockaddr */
+//};
+//union {
+//   struct{
+//      unsigned char s_b1,s_b2,s_b3,s_b4;
+//         } S_un_b;
+//    struct {
+//      unsigned short s_w1,s_w2;
+//         } S_un_w;
+//    unsigned long S_addr;
+//   } S_un;
+//} in_addr;
+//第0次连接,建立Socket连接
+int
+RTMP_Connect0(RTMP *r, struct sockaddr * service)
+{
+  int on = 1;
+  r-&gt;m_sb.sb_timedout = FALSE;
+  r-&gt;m_pausing = 0;
+  r-&gt;m_fDuration = 0.0;
+  //创建一个Socket，并把Socket序号赋值给相应变量
+  //-----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。create一个Socket");
+  //-----------------------------
+  r-&gt;m_sb.sb_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (r-&gt;m_sb.sb_socket != -1)
+    {
+
+	//定义函数　int connect (int sockfd,struct sockaddr * serv_addr,int addrlen); 　　
+	//函数说明　connect()用来将参数sockfd 的Socket（刚刚创建）连至参数serv_addr 
+	//指定的网络地址。参数addrlen为sockaddr的结构长度。 
+	//连接
+	RTMP_LogPrintf("建立Socket连接！\n");
+	//-----------------
+	r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。connect该Socket");
+	//-----------------------------
+      if (connect(r-&gt;m_sb.sb_socket, service, sizeof(struct sockaddr)) &lt; 0)
+	{
+		//-----------------
+		r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。connect该Socket失败");
+		//-----------------------------
+	  int err = GetSockError();
+	  RTMP_Log(RTMP_LOGERROR, "%s, failed to connect socket. %d (%s)",
+	      __FUNCTION__, err, strerror(err));
+	  RTMP_Close(r);
+	  return FALSE;
+	}
+	  //-----------------
+	  r-&gt;dlg-&gt;AppendCInfo("建立连接：第0次连接。connect该Socket成功");
+	  //-----------------------------
+	  //指定了端口号。注：这不是必需的。
+      if (r-&gt;Link.socksport)
+	{
+	  RTMP_Log(RTMP_LOGDEBUG, "%s ... SOCKS negotiation", __FUNCTION__);
+	  //谈判？发送数据报以进行谈判？！
+	  if (!SocksNegotiate(r))
+	    {
+	      RTMP_Log(RTMP_LOGERROR, "%s, SOCKS negotiation failed.", __FUNCTION__);
+	      RTMP_Close(r);
+	      return FALSE;
+	    }
+	}
+    }
+  else
+    {
+      RTMP_Log(RTMP_LOGERROR, "%s, failed to create socket. Error: %d", __FUNCTION__,
+	  GetSockError());
+      return FALSE;
+    }
+
+  /* set timeout */
+  //超时
+  {
+    SET_RCVTIMEO(tv, r-&gt;Link.timeout);
+    if (setsockopt
+        (r-&gt;m_sb.sb_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&amp;tv, sizeof(tv)))
+      {
+        RTMP_Log(RTMP_LOGERROR, "%s, Setting socket timeout to %ds failed!",
+	    __FUNCTION__, r-&gt;Link.timeout);
+      }
+  }
+
+  setsockopt(r-&gt;m_sb.sb_socket, IPPROTO_TCP, TCP_NODELAY, (char *) &amp;on, sizeof(on));
+
+  return TRUE;
+}</pre>
+    <br/>
+    可见RTMP_Connect0()主要用于建立Socket连接，并未开始真正的建立RTMP连接。
+    <p>
+    </p>
+    <p>
+     再来看看RTMP_Connect1()，这是真正建立RTMP连接的函数：
+    </p>
+    <p>
+     <strong>
+      RTMP_Connect1()
+     </strong>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//第1次连接，从握手开始
+int
+RTMP_Connect1(RTMP *r, RTMPPacket *cp)
+{
+  if (r-&gt;Link.protocol &amp; RTMP_FEATURE_SSL)
+    {
+#if defined(CRYPTO) &amp;&amp; !defined(NO_SSL)
+      TLS_client(RTMP_TLS_ctx, r-&gt;m_sb.sb_ssl);
+      TLS_setfd((SSL *)r-&gt;m_sb.sb_ssl, r-&gt;m_sb.sb_socket);
+      if (TLS_connect((SSL *)r-&gt;m_sb.sb_ssl) &lt; 0)
+	{
+	  RTMP_Log(RTMP_LOGERROR, "%s, TLS_Connect failed", __FUNCTION__);
+	  RTMP_Close(r);
+	  return FALSE;
+	}
+#else
+      RTMP_Log(RTMP_LOGERROR, "%s, no SSL/TLS support", __FUNCTION__);
+      RTMP_Close(r);
+      return FALSE;
+
+#endif
+    }
+  //使用HTTP
+  if (r-&gt;Link.protocol &amp; RTMP_FEATURE_HTTP)
+    {
+      r-&gt;m_msgCounter = 1;
+      r-&gt;m_clientID.av_val = NULL;
+      r-&gt;m_clientID.av_len = 0;
+      HTTP_Post(r, RTMPT_OPEN, "", 1);
+      HTTP_read(r, 1);
+      r-&gt;m_msgCounter = 0;
+    }
+  RTMP_Log(RTMP_LOGDEBUG, "%s, ... connected, handshaking", __FUNCTION__);
+  //握手----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。开始握手(HandShake)");
+  //-----------------------------
+  RTMP_LogPrintf("开始握手（HandShake）！\n");
+  if (!HandShake(r, TRUE))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。握手(HandShake)失败！");
+		//-----------------------------
+      RTMP_Log(RTMP_LOGERROR, "%s, handshake failed.", __FUNCTION__);
+      RTMP_Close(r);
+      return FALSE;
+    }
+  //----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。握手(HandShake)成功");
+  //-----------------------------
+  RTMP_LogPrintf("握手（HandShake）完毕！\n");
+  RTMP_Log(RTMP_LOGDEBUG, "%s, handshaked", __FUNCTION__);
+  //发送“connect”命令--------------
+  //----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。开始建立网络连接(NetConnection)");
+  //-----------------------------
+  RTMP_LogPrintf("开始建立网络连接（NetConnection）！\n");
+  //----------------
+  r-&gt;dlg-&gt;AppendCInfo("发送数据。消息 命令 (typeID=20) (Connect)。");
+  //-----------------------------
+  if (!SendConnectPacket(r, cp))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。建立网络连接(NetConnection)失败！");
+		//-----------------------------
+      RTMP_Log(RTMP_LOGERROR, "%s, RTMP connect failed.", __FUNCTION__);
+      RTMP_Close(r);
+      return FALSE;
+    }
+  //----------------
+  r-&gt;dlg-&gt;AppendCInfo("建立连接：第1次连接。建立网络连接(NetConnection)成功");
+  //-----------------------------
+  RTMP_LogPrintf("命令消息“Connect”发送完毕！\n");
+  return TRUE;
+}</pre>
+    <br/>
+    该函数做了以下事情：
+    <p>
+    </p>
+    <p>
+     HandShake()完成握手，之前已经分析过：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12954329" style="line-height:30px;font-family:'Microsoft YaHei';text-decoration:none;">
+      <span style="font-size:12px;color:#660000;">
+       RTMPdump 源代码分析 4： 连接第一步——握手（Hand Shake）
+      </span>
+     </a>
+    </p>
+    <p>
+     SendConnectPacket()发送包含“connect”命令的数据报，用于开始建立RTMP连接。具体该函数是怎么调用的，以后有机会再进行分析。
+    </p>
+    <p>
+     至此RTMP_Connect()分析完毕。
+    </p>
+    <p>
+    </p>
+    <p style="margin-top:0px;margin-bottom:10px;padding-top:0px;padding-bottom:0px;line-height:21px;font-family:'微软雅黑', Verdana, sans-serif, '宋体';font-size:13px;">
+     rtmpdump源代码（Linux）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6376561">
+      http://download.csdn.net/detail/leixiaohua1020/6376561
+     </a>
+    </p>
+    <p style="margin-top:0px;margin-bottom:10px;padding-top:0px;padding-bottom:0px;line-height:21px;font-family:'微软雅黑', Verdana, sans-serif, '宋体';font-size:13px;">
+     rtmpdump源代码（VC 2005 工程）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6563163">
+      http://download.csdn.net/detail/leixiaohua1020/6563163
+     </a>
+    </p>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12957291
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RTMPdump&amp;t=blog" target="_blank">
+    RTMPdump
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=rtmp&amp;t=blog" target="_blank">
+    rtmp
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=连接&amp;t=blog" target="_blank">
+    连接
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank">
+    libRTMP
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

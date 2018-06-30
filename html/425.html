@@ -1,0 +1,524 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ DirectShow Filter 开发典型例子分析 ——字幕叠加 （FilterTitleOverlay）1 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_425">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   DirectShow Filter 开发典型例子分析 ——字幕叠加 （FilterTitleOverlay）1
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月09日 12:47:36
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：11017
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     本文分析一下《DirectShow开发指南》中的一个典型的Transform Filter的例子：字幕叠加（FilterTitleOverlay）。通过分析该例子，我们可以学习到DirectShow Transform Filter 开发的方式。
+    </p>
+    <p>
+     直接打开项目工程（我这里是VC2010），看到项目的结构如下图所示：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131009115022265?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     先看一下运行的结果：
+    </p>
+    <p>
+     注意，DirectShow的Filter是不可以直接运行进行调试的。一般情况下需要借助于Graphedit.exe这个程序进行调试。当然这不是绝对的，也可以用graph-studio-next这样的开源程序。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     选择右键点击工程-&gt;属性-&gt;调试-&gt;命令。在栏中输入Graphedit.exe的路径，如图所示
+    </p>
+    <p>
+     <img alt="" height="647" src="https://img-blog.csdn.net/20131009120225812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="907"/>
+     <br/>
+    </p>
+    <p>
+     这样就可以调试Filter了。
+    </p>
+    <p>
+     拖入一个文件"五月天 咸鱼.mp4"，然后插入本工程的Filter，如图所示。
+    </p>
+    <p>
+     <img alt="" height="302" src="https://img-blog.csdn.net/20131009120707109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="725"/>
+     <br/>
+    </p>
+    <p>
+     播放视频，效果如图，可见左上角显示出 "Hello, DirectShow!" 的字样。
+    </p>
+    <p>
+     <img alt="" height="461" src="https://img-blog.csdn.net/20131009120859421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="768"/>
+     <br/>
+    </p>
+    <p>
+     看完了结果，就要开始分析代码了~
+    </p>
+    <p>
+     回顾一下工程结构图：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131009115022265?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+     <br/>
+    </p>
+    <p>
+     先看一下CFilterTitleOverlay.h（已经在重要的地方加了注释）：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//
+// CFilterTitleOverlay.h
+//
+
+#ifndef __H_CFilterTitleOverlay__
+#define __H_CFilterTitleOverlay__
+
+#include "ITitleOverlay.h"
+#include "COverlayController.h"
+#include "OverlayDefs.h"
+
+class CFilterTitleOverlay : public CTransInPlaceFilter
+						  , public ISpecifyPropertyPages
+						  , public ITitleOverlay
+{
+private:
+	OVERLAY_TYPE            mOverlayType;
+	COverlayController *    mOverlayController;
+
+	CCritSec                mITitleOverlaySync;
+	BOOL                    mNeedEstimateFrameRate;
+
+private:
+	CFilterTitleOverlay(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
+	~CFilterTitleOverlay();
+
+	HRESULT SetInputVideoInfoToController(void);
+	void ReleaseOverlayController(void);
+	void SideEffectOverlayTypeChanged(void);
+
+public:
+	static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
+	//说明必须重写NonDelegatingQueryInterface
+	DECLARE_IUNKNOWN;
+	// Basic COM - used here to reveal our own interfaces
+	//暴露接口，使外部程序可以QueryInterface，关键！
+	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
+
+	// check if you can support mtIn
+    virtual HRESULT CheckInputType(const CMediaType* mtIn); // PURE
+	//必须重写的核心函数
+	virtual HRESULT Transform(IMediaSample *pSample); // PURE
+
+	// Delegating methods
+	virtual HRESULT CompleteConnect(PIN_DIRECTION direction, IPin *pReceivePin);
+	virtual HRESULT StartStreaming();
+    virtual HRESULT StopStreaming();
+
+	// --- ISpecifyPropertyPages ---
+	STDMETHODIMP GetPages(CAUUID *pPages);
+
+	// --- ITitleOverlay methods ---
+	//都是接口函数
+	STDMETHODIMP put_TitleOverlayType(long inOverlayType);
+	STDMETHODIMP get_TitleOverlayType(long * outOverlayType);
+	STDMETHODIMP put_TitleOverlayStyle(int inUsingCover);
+	STDMETHODIMP get_TitleOverlayStyle(int * outUsingCover);
+	STDMETHODIMP put_Title(const char * inTitle, int inLength);
+	STDMETHODIMP get_Title(char * outBuffer, int * outLength);
+	STDMETHODIMP put_TitleColor(BYTE inR, BYTE inG, BYTE inB);
+	STDMETHODIMP get_TitleColor(BYTE * outR, BYTE * outG, BYTE * outB);
+	STDMETHODIMP put_TitleStartPosition(POINT inStartPos);
+	STDMETHODIMP get_TitleStartPosition(POINT * outStartPos);
+	STDMETHODIMP put_TitleFont(LOGFONT inFont);
+	STDMETHODIMP get_TitleFont(LOGFONT * outFont);
+	STDMETHODIMP put_TitleDuration(double inStart, double inEnd);
+	STDMETHODIMP get_TitleDuration(double * outStart, double * outEnd);
+};
+
+#endif // __H_CFilterTitleOverlay__</pre>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    CFilterTitleOverlay继承了CTransInPlaceFilter，意味着Transform()函数输入和输出的数据位于同一块内存中。
+    <p>
+     以下几个函数是必须有的：
+    </p>
+    <p>
+     CreateInstance()：创建Filter
+     <br/>
+     NonDelegatingQueryInterface()：暴露接口，使外部程序可以QueryInterface
+     <br/>
+     CheckInputType()：检查输入类型
+     <br/>
+     Transform()：核心处理函数（字幕叠加）
+     <br/>
+    </p>
+    <p>
+     另外还包含了ITitleOverlay中的函数put_TitleOverlayType()等等一大堆。
+    </p>
+    <p>
+     下面看一下CFilterTitleOverlay.cpp吧，先列出注册信息部分：
+     <br/>
+    </p>
+    <pre class="cpp">//唯一标识符
+// {E3FB4BFE-8E5C-4aec-8162-7DA55BE486A1}
+DEFINE_GUID(CLSID_HQTitleOverlay, 
+0xe3fb4bfe, 0x8e5c, 0x4aec, 0x81, 0x62, 0x7d, 0xa5, 0x5b, 0xe4, 0x86, 0xa1);
+
+// {E70FE57A-19AA-4a4c-B39A-408D49D73851}
+DEFINE_GUID(CLSID_HQTitleOverlayProp, 
+0xe70fe57a, 0x19aa, 0x4a4c, 0xb3, 0x9a, 0x40, 0x8d, 0x49, 0xd7, 0x38, 0x51);
+
+
+//
+// setup data
+//
+//注册时候的信息
+const AMOVIESETUP_MEDIATYPE sudPinTypes =
+{
+    &amp;MEDIATYPE_NULL,            // Major type
+    &amp;MEDIASUBTYPE_NULL          // Minor type
+};
+//注册时候的信息
+const AMOVIESETUP_PIN psudPins[] =
+{
+    {
+        L"Input",           // String pin name
+        FALSE,              // Is it rendered
+        FALSE,              // Is it an output
+        FALSE,              // Allowed none
+        FALSE,              // Allowed many
+        &amp;CLSID_NULL,        // Connects to filter
+        L"Output",          // Connects to pin
+        1,                  // Number of types
+        &amp;sudPinTypes },     // The pin details
+      { L"Output",          // String pin name
+        FALSE,              // Is it rendered
+        TRUE,               // Is it an output
+        FALSE,              // Allowed none
+        FALSE,              // Allowed many
+        &amp;CLSID_NULL,        // Connects to filter
+        L"Input",           // Connects to pin
+        1,                  // Number of types
+        &amp;sudPinTypes        // The pin details
+    }
+};
+
+//注册时候的信息
+const AMOVIESETUP_FILTER sudFilter =
+{
+    &amp;CLSID_HQTitleOverlay,       // Filter CLSID
+    L"HQ Title Overlay Std.",    // Filter name
+    MERIT_DO_NOT_USE,        // Its merit
+    2,                       // Number of pins
+    psudPins                 // Pin details
+};
+
+
+// List of class IDs and creator functions for the class factory. This
+// provides the link between the OLE entry point in the DLL and an object
+// being created. The class factory will call the static CreateInstance
+//注意g_Templates名称是固定的
+CFactoryTemplate g_Templates[] = 
+{
+    { 
+		L"HQ Title Overlay Std.",
+		&amp;CLSID_HQTitleOverlay,
+		CFilterTitleOverlay::CreateInstance,
+		NULL,
+		&amp;sudFilter 
+	},
+	{ 
+		L"HQ Title Overlay Property Page",
+		&amp;CLSID_HQTitleOverlayProp,
+		CTitleOverlayProp::CreateInstance 
+	}
+};
+int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
+</pre>
+    <br/>
+    这一部分并不属于CFilterTitleOverlay这个类。主要是DirectShow Filter的一些注册信息。其结构是非常固定的。
+    <p>
+    </p>
+    <p>
+     再来看看CFilterTitleOverlay中函数实现部分（只列了几个函数，不然内容太多= =）：
+    </p>
+    <p>
+     CreateInstance()：
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//
+// CreateInstance
+//
+// Override CClassFactory method.
+// Provide the way for COM to create a CNullInPlace object
+//
+//创建
+CUnknown * WINAPI CFilterTitleOverlay::CreateInstance(LPUNKNOWN punk, HRESULT *phr) 
+{
+#if 1
+	//防伪？？！！
+	char    szCreatorPath[256], szCreatorName[256];
+	::strcpy(szCreatorPath, "");
+	::strcpy(szCreatorName, "");
+	HMODULE hModule = ::GetModuleHandle(NULL);
+	::GetModuleFileName(hModule, szCreatorPath, 256);
+	char * backSlash = ::strrchr(szCreatorPath, '\\');
+	if (backSlash)
+	{
+		strcpy(szCreatorName, backSlash);
+	}
+	::_strlwr(szCreatorName);
+	// Please specify your app name with lowercase
+	// 检查调用该Filter的程序
+	// 一开始调试不了，就卡在这了 = =
+	if (::strstr(szCreatorName, "graphedit") == NULL &amp;&amp;
+		::strstr(szCreatorName, "ourapp") == NULL)
+	{
+		*phr = E_FAIL;
+		return NULL;
+	}
+#endif
+	//通过New对象的方法
+	CFilterTitleOverlay *pNewObject = new CFilterTitleOverlay(NAME("TitleOverlay"), punk, phr);
+	if (pNewObject == NULL) 
+	{
+		*phr = E_OUTOFMEMORY;
+	}
+	return pNewObject;
+} 
+</pre>
+    <br/>
+    NonDelegatingQueryInterface()：
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//
+// Basic COM - used here to reveal our own interfaces
+//暴露接口，使外部程序可以QueryInterface，关键！
+STDMETHODIMP CFilterTitleOverlay::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
+{
+	CheckPointer(ppv, E_POINTER);
+	//根据不同的REFIID，获得不同的接口指针
+	if (riid == IID_ISpecifyPropertyPages) 
+	{
+		return GetInterface((ISpecifyPropertyPages *) this, ppv);
+	}
+	else if (riid == IID_ITitleOverlay)
+	{
+		return GetInterface((ITitleOverlay *) this, ppv);
+	}
+	else 
+	{
+		//不是以上的REFIID的话，调用父类的
+		return CTransInPlaceFilter::NonDelegatingQueryInterface(riid, ppv);
+	}
+} // NonDelegatingQueryInterface
+</pre>
+    <br/>
+    CheckInputType()：
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">// Only RGB 32/24/565/555 supported 
+HRESULT CFilterTitleOverlay::CheckInputType(const CMediaType* mtIn)
+{
+	// Dynamic format change will never be allowed!
+	if (IsStopped() &amp;&amp; *mtIn-&gt;Type() == MEDIATYPE_Video)
+	{
+		if (*mtIn-&gt;Subtype() == MEDIASUBTYPE_RGB32 ||
+			*mtIn-&gt;Subtype() == MEDIASUBTYPE_RGB24 ||
+			*mtIn-&gt;Subtype() == MEDIASUBTYPE_RGB555 ||
+			*mtIn-&gt;Subtype() == MEDIASUBTYPE_RGB565)
+		{
+			return NOERROR;
+		}
+	}
+	return E_INVALIDARG;
+}</pre>
+    <br/>
+    Transform()：
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">HRESULT CFilterTitleOverlay::Transform(IMediaSample *pSample)
+{
+	// If we cann't read frame rate info from input pin's connection media type,
+	// We estimate it from the first sample's time stamp!
+	if (mNeedEstimateFrameRate)
+	{
+		mNeedEstimateFrameRate = FALSE;
+		REFERENCE_TIME  startTime = 0;
+		REFERENCE_TIME  endTime   = 0;
+		double          estimated = 25;
+		if (SUCCEEDED(pSample-&gt;GetTime(&amp;startTime, &amp;endTime)))
+		{
+			estimated = 1.0 * UNITS / (endTime - startTime);
+		}
+		mOverlayController-&gt;SetEstimatedFrameRate(estimated);
+	}
+
+	if (mOverlayType != OT_NONE)
+	{
+		//PBYTE是unsigned char
+		PBYTE  pData = NULL;
+		//获取IMediaSample中的数据
+		pSample-&gt;GetPointer(&amp;pData);
+		//叠加
+		mOverlayController-&gt;DoTitleOverlay(pData);
+	}
+
+	return NOERROR;
+}</pre>
+    <br/>
+    下面列出实现ITitleOverlay接口的函数的实现，就列了一个。
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">STDMETHODIMP CFilterTitleOverlay::get_Title(char * outBuffer, int * outLength)
+{
+	CAutoLock   lockit(&amp;mITitleOverlaySync);
+	*outLength = mOverlayController-&gt;GetTitle(outBuffer);
+	return NOERROR;
+}</pre>
+    <br/>
+    <p>
+     暂且分析到这里。
+    </p>
+    <p>
+     书上提供的代码有误，这是经过修改后，添加了注释的代码：
+    </p>
+    <p>
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6371819">
+      http://download.csdn.net/detail/leixiaohua1020/6371819
+     </a>
+     <br/>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12498975
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=directshow&amp;t=blog" target="_blank">
+    directshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=filter&amp;t=blog" target="_blank">
+    filter
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分析&amp;t=blog" target="_blank">
+    分析
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=字幕&amp;t=blog" target="_blank">
+    字幕
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645657" target="_blank">
+    DirectShow
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

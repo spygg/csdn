@@ -1,0 +1,1598 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码结构图 - 编码 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_81">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码结构图 - 编码
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月13日 14:42:15
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：24358
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     上一篇文章深入分析了FFmpeg解码过程中核心API的内部源代码，本文继续分析FFmpeg编码过程中核心API的内部源代码。本文的编码流程可以参考程序《
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/25430425">
+      最简单的基于FFmpeg的视频编码器
+     </a>
+     》。
+    </p>
+    <br/>
+    <br/>
+    <h2>
+     函数调用关系图
+    </h2>
+    <p>
+     首先呈现分析的结果，如图所示。这张图的尺寸很大（大于4000x4000），因此需要打开图片链接之后将图片保存为本地文件，然后才能查看。它表明了FFmpeg在编码一个视频的时候的函数调用流程。为了保证结构清晰，其中仅列出了最关键的函数，剔除了其它不是特别重要的函数。
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201503/13/1426229411_4898.jpg">
+      <img alt="" src="https://img-blog.csdn.net/20150312195726711"/>
+     </a>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1805195">
+      单击查看更清晰的图片
+     </a>
+    </p>
+    <p style="text-align:center;">
+     <br/>
+    </p>
+    <p>
+     下面解释一下图中关键标记的含义。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     函数背景色
+    </h3>
+    函数在图中以方框的形式表现出来。不同的背景色标志了该函数不同的作用：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     粉红色背景函数：FFmpeg的API函数。
+     <br/>
+     白色背景的函数：FFmpeg的内部函数。
+     <br/>
+     黄色背景的函数：URLProtocol结构体中的函数，包含了读写各种协议的功能。
+     <br/>
+     绿色背景的函数：AVOutputFormat结构体中的函数，包含了读写各种封装格式的功能。
+     <br/>
+     蓝色背景的函数：AVCodec结构体中的函数，包含了编解码的功能。
+    </blockquote>
+    <br/>
+    <h3>
+     区域
+    </h3>
+    整个关系图可以分为以下几个区域：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     左边区域——架构函数区域：这些函数并不针对某一特定的视频格式。
+     <br/>
+     右上方黄色区域——协议处理函数区域：不同的协议（RTP，RTMP，FILE）会调用不同的协议处理函数。
+     <br/>
+     右边中间绿色区域——封装格式处理函数区域：不同的封装格式（MKV，FLV，MPEG2TS，AVI）会调用不同的封装格式处理函数。
+     <br/>
+     右边下方蓝色区域——编解码函数区域：不同的编码标准（HEVC，H.264，MPEG2）会调用不同的编解码函数。
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     箭头线
+    </h3>
+    为了把调用关系表示的更明显，图中的箭头线也使用了不同的颜色：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     红色的箭头线：标志了编码的流程。
+     <br/>
+     其他颜色的箭头线：标志了函数之间的调用关系。其中：
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      调用URLProtocol结构体中的函数用黄色箭头线标识；
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      调用AVOutputFormat结构体中的函数用绿色箭头线标识；
+     </blockquote>
+     <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+      <p>
+       调用AVCodec结构体中的函数用蓝色箭头线标识。
+      </p>
+     </blockquote>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     函数所在的文件
+    </h3>
+    每个函数标识了它所在的文件路径。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数功能简述
+    </h2>
+    下面简单列出几个区域中函数之间的调用关系（函数之间的调用关系使用缩进的方式表现出来）。详细的函数分析可以参考相关的《FFmpeg源代码分析》系列文章。
+    <br/>
+    <br/>
+    <h3>
+     左边区域（架构函数）
+    </h3>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       1.
+      </span>
+      <span style="color:#FF0000;">
+       av_register_all()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       1)
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_register_all()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) REGISTER_HWACCEL()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (b) REGISTER_ENCODER()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (c) REGISTER_DECODER()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (d) REGISTER_PARSER()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (e) REGISTER_BSF()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      2) REGISTER_MUXER()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      3) REGISTER_DEMUXER()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      4) REGISTER_PROTOCOL()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       2.
+      </span>
+      <span style="color:#FF0000;">
+       avformat_alloc_output_context2()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       1)
+      </span>
+      <span style="color:#FF0000;">
+       avformat_alloc_context()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) av_malloc(sizeof(AVFormatContext))
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (b) avformat_get_context_defaults()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      a) av_opt_set_defaults()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       2)
+      </span>
+      <span style="color:#FF0000;">
+       av_guess_format()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       (a)
+      </span>
+      <span style="color:#FF0000;">
+       av_oformat_next()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       (b)
+      </span>
+      <span style="color:#FF0000;">
+       av_match_name()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       (c)
+      </span>
+      <span style="color:#FF0000;">
+       av_match_ext()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       3.
+      </span>
+      <span style="color:#FF0000;">
+       avio_open2()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) ffurl_open()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) ffurl_alloc()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      a) url_find_protocol()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      b) url_alloc_for_protocol()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (b) ffurl_connect()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FFC000;">
+       <span style="white-space:pre;">
+       </span>
+       a)
+      </span>
+      <span style="color:#FFC000;">
+       URLProtocol-&gt;url_open()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      2) ffio_fdopen()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) av_malloc(buffer_size)
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       (b)
+      </span>
+      <span style="color:#FF0000;">
+       avio_alloc_context()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      a) av_mallocz(sizeof(AVIOContext))
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      b) ffio_init_context()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       4.
+      </span>
+      <span style="color:#FF0000;">
+       avformat_new_stream()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) av_mallocz(sizeof(AVStream))
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       <span style="white-space:pre;">
+       </span>
+       2)
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_alloc_context3()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) av_malloc(sizeof(AVCodecContext))
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (b) avcodec_get_context_defaults3()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       5.
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_find_encoder()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) find_encdec()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       6.
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_open2()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#558ED5;">
+       <span style="white-space:pre;">
+       </span>
+       1)
+      </span>
+      <span style="color:#558ED5;">
+       AVCodec-&gt;init()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       7.
+      </span>
+      <span style="color:#FF0000;">
+       avformat_write_header()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) init_muxer()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#007E39;">
+       <span style="white-space:pre;">
+       </span>
+       2)
+      </span>
+      <span style="color:#007E39;">
+       AVOutputFormat-&gt;write_header()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      3) init_pts()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       8.
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_encode_video2()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#558ED5;">
+       <span style="white-space:pre;">
+       </span>
+       1)
+      </span>
+      <span style="color:#558ED5;">
+       AVCodec-&gt;encode2()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       9.
+      </span>
+      <span style="color:#FF0000;">
+       av_write_frame()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) check_packet()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      2) compute_pkt_fields2()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      3) write_packet()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#007E39;">
+       <span style="white-space:pre;">
+       </span>
+       (a)
+      </span>
+      <span style="color:#007E39;">
+       AVOutputFormat-&gt;write_packet()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       10.
+      </span>
+      <span style="color:#FF0000;">
+       av_write_trailer()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) write_packet()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#007E39;">
+       <span style="white-space:pre;">
+       </span>
+       2)
+      </span>
+      <span style="color:#007E39;">
+       AVOutputFormat-&gt;write_trailer()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       11.
+      </span>
+      <span style="color:#FF0000;">
+       avcodec_close()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#558ED5;">
+       <span style="white-space:pre;">
+       </span>
+       1)
+      </span>
+      <span style="color:#558ED5;">
+       AVCodec-&gt;close()
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       12.
+      </span>
+      <span style="color:#FF0000;">
+       avformat_free_context()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) ff_free_stream()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FF0000;">
+       13.
+      </span>
+      <span style="color:#FF0000;">
+       avio_close()【
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+        函数简单分析
+       </a>
+       】
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      1) avio_flush()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) flush_buffer()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      2) ffurl_close()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="white-space:pre;">
+      </span>
+      (a) ffurl_closep()
+     </strong>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#FFC000;">
+       <span style="white-space:pre;">
+       </span>
+       a)
+      </span>
+      <span style="color:#FFC000;">
+       URLProtocol-&gt;url_close()
+      </span>
+     </strong>
+    </p>
+    <p>
+    </p>
+    <h3>
+     右上区域（URLProtocol协议处理函数）
+    </h3>
+    URLProtocol结构体包含如下协议处理函数指针：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <span style="color:#ffcc00;">
+      <strong>
+       url_open()：打开
+       <br/>
+      </strong>
+     </span>
+     <span style="color:#ffcc00;">
+      <strong>
+       url_read()：读取
+       <br/>
+      </strong>
+     </span>
+     <span style="color:#ffcc00;">
+      <strong>
+       url_write()：写入
+       <br/>
+      </strong>
+     </span>
+     <span style="color:#ffcc00;">
+      <strong>
+       url_seek()：调整进度
+       <br/>
+      </strong>
+     </span>
+     <span style="color:#ffcc00;">
+      <strong>
+       url_close()：关闭
+      </strong>
+     </span>
+    </blockquote>
+    <br/>
+    <p>
+     【例子】不同的协议对应着上述接口有不同的实现函数，举几个例子：
+    </p>
+    <strong>
+     File协议（即文件）对应的URLProtocol结构体ff_file_protocol：
+    </strong>
+    <br/>
+    url_open() -&gt; file_open() -&gt; open()
+    <br/>
+    url_read() -&gt; file_read() -&gt; read()
+    <br/>
+    url_write() -&gt; file_write() -&gt; write()
+    <br/>
+    url_seek() -&gt; file_seek() -&gt; lseek()
+    <br/>
+    <p>
+     url_close() -&gt; file_close() -&gt; close()
+    </p>
+    <strong>
+     RTMP协议（libRTMP）对应的URLProtocol结构体ff_librtmp_protocol：
+    </strong>
+    <br/>
+    url_open() -&gt; rtmp_open() -&gt; RTMP_Init(), RTMP_SetupURL(), RTMP_Connect(), RTMP_ConnectStream()
+    <br/>
+    url_read() -&gt; rtmp_read() -&gt; RTMP_Read()
+    <br/>
+    url_write() -&gt; rtmp_write() -&gt; RTMP_Write()
+    <br/>
+    url_seek() -&gt; rtmp_read_seek() -&gt; RTMP_SendSeek()
+    <br/>
+    <p>
+     url_close() -&gt; rtmp_close() -&gt; RTMP_Close()
+    </p>
+    <strong>
+     UDP协议对应的URLProtocol结构体ff_udp_protocol：
+    </strong>
+    <br/>
+    url_open() -&gt; udp_open()
+    <br/>
+    url_read() -&gt; udp_read()
+    <br/>
+    url_write() -&gt; udp_write()
+    <br/>
+    url_seek() -&gt; udp_close()
+    <br/>
+    url_close() -&gt; udp_close()
+    <br/>
+    <br/>
+    <h3>
+     右中区域（AVOutputFormat封装格式处理函数）
+    </h3>
+    AVOutputFormat包含如下封装格式处理函数指针：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <span style="background-color:rgb(255,255,255);">
+      <span style="color:#009900;">
+       write_header()：写文件头
+       <br/>
+      </span>
+     </span>
+     <span style="background-color:rgb(255,255,255);">
+      <span style="color:#009900;">
+       write_packet()：写一帧数据
+       <br/>
+      </span>
+     </span>
+     <span style="background-color:rgb(255,255,255);">
+      <span style="color:#009900;">
+       write_trailer()：写文件尾
+      </span>
+     </span>
+    </blockquote>
+    <br/>
+    <p>
+     【例子】不同的封装格式对应着上述接口有不同的实现函数，举几个例子：
+    </p>
+    <strong>
+     FLV封装格式对应的AVOutputFormat结构体ff_flv_muxer：
+    </strong>
+    <br/>
+    write_header() -&gt; flv_write_header()
+    <br/>
+    write_packet() –&gt; flv_write_packet()
+    <br/>
+    <p>
+     write_trailer() -&gt; flv_write_trailer()
+    </p>
+    <strong>
+     MKV封装格式对应的AVOutputFormat结构体ff_matroska_muxer：
+    </strong>
+    <br/>
+    write_header() -&gt; mkv_write_header()
+    <br/>
+    write_packet() –&gt; mkv_write_flush_packet()
+    <br/>
+    <p>
+     write_trailer() -&gt; mkv_write_trailer()
+    </p>
+    <strong>
+     MPEG2TS封装格式对应的AVOutputFormat结构体ff_mpegts_muxer：
+    </strong>
+    <br/>
+    write_header() -&gt; mpegts_write_header()
+    <br/>
+    write_packet() –&gt; mpegts_write_packet()
+    <br/>
+    <p>
+     write_trailer() -&gt; mpegts_write_end()
+    </p>
+    <strong>
+     AVI封装格式对应的AVOutputFormat结构体ff_avi_muxer：
+    </strong>
+    <br/>
+    write_header() -&gt; avi_write_header()
+    <br/>
+    write_packet() –&gt; avi_write_packet()
+    <br/>
+    write_trailer() -&gt; avi_write_trailer()
+    <br/>
+    <br/>
+    <h3>
+     右下区域（AVCodec编解码函数）
+    </h3>
+    AVCodec包含如下编解码函数指针：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <strong>
+      <span style="color:#3333ff;">
+       init()：初始化
+       <br/>
+      </span>
+      <span style="color:#3333ff;">
+       encode2()：编码一帧数据
+       <br/>
+      </span>
+      <span style="color:#3333ff;">
+       close()：关闭
+      </span>
+     </strong>
+    </blockquote>
+    <br/>
+    <p>
+     【例子】不同的编解码器对应着上述接口有不同的实现函数，举几个例子：
+    </p>
+    <strong>
+     HEVC编码器对应的AVCodec结构体ff_libx265_encoder：
+    </strong>
+    <br/>
+    init() -&gt; libx265_encode_init() -&gt; x265_param_alloc(), x265_param_default_preset(), x265_encoder_open()
+    <br/>
+    encode2() -&gt; libx265_encode_frame() -&gt; x265_encoder_encode()
+    <br/>
+    <p>
+     close() -&gt; libx265_encode_close() -&gt; x265_param_free(), x265_encoder_close()
+    </p>
+    <strong>
+     H.264编码器对应的AVCodec结构体ff_libx264_encoder：
+    </strong>
+    <br/>
+    init() -&gt; X264_init() -&gt; x264_param_default(), x264_encoder_open(), x264_encoder_headers()
+    <br/>
+    encode2() -&gt; X264_frame() -&gt; x264_encoder_encode()
+    <br/>
+    <p>
+     close() -&gt; X264_close() -&gt; x264_encoder_close()
+    </p>
+    <strong>
+     VP8编码器（libVPX）对应的AVCodec结构体ff_libvpx_vp8_encoder：
+    </strong>
+    <br/>
+    init() -&gt; vpx_init() -&gt; vpx_codec_enc_config_default()
+    <br/>
+    encode2() -&gt; vp8_encode() -&gt; vpx_codec_enc_init(), vpx_codec_encode()
+    <br/>
+    <p>
+     close() -&gt; vp8_free() -&gt; vpx_codec_destroy()
+    </p>
+    <strong>
+     MPEG2编码器对应的AVCodec结构体ff_mpeg2video_encoder：
+    </strong>
+    <br/>
+    init() -&gt; encode_init()
+    <br/>
+    encode2() -&gt; ff_mpv_encode_picture()
+    <br/>
+    close() -&gt; ff_mpv_encode_end()
+    <br/>
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <span style="color:#993300;">
+     <strong>
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </strong>
+    </span>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44226355
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=函数调用&amp;t=blog" target="_blank">
+    函数调用
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=函数&amp;t=blog" target="_blank">
+    函数
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,398 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 常用编码软件简单使用记录 1 : 自主编码器 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_154">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   常用编码软件简单使用记录 1 : 自主编码器
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年09月07日 11:47:45
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：8480
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     用于转码或者编码的软件很多。但是实际上编码器的数量是是相对比较少的。很多编码软件都算是编码器的GUI。它们外观不同，但是实际上都调用了同样的编码器。比如说一般情况下编码H.264的时候都调用了x264。这类软件很多，比如格式工厂，狸窝视频转换器，MediaCoder，TMPGEnc，HandBrake等等。而有一些公司的编码软件是使用自己的编码器的。这些公司规模较大，因而有足够的资源自己开发编码器。比如Mainconcept，Divx，Elecard，Intel。最近在做转码方面的研究，简单记录一下这两类软件的使用。
+    </p>
+    <p>
+     本文计划分成两篇文章。第一篇主要记录自主编码器的厂商的编码软件，第二篇主要记录不使用自主编码器的软件。
+    </p>
+    <p>
+    </p>
+    <p>
+     编码器的评测可以参考文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12373947">
+      MSU 出品的 H.264 编码器比较 （2012.5）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11914233">
+      MSU 出品的 H.264 编码器比较 （2011.5）（包含VP8以及XviD）
+     </a>
+    </p>
+    <p>
+     本文记录使用自主编码器的编码软件。包括以下3个公司的产品：Mainconcept，Divx，Elecard。其实还有一个公司Intel。由于只看到了它的Intel Media SDK而没有看到它的图形界面的转码工具，不再此记录了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113650171"/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113922536"/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113926373"/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113930117"/>
+    </p>
+    <h2>
+     （1）      Mainconcept
+    </h2>
+    <p>
+     官方网站：
+     <a href="http://www.mainconcept.com/">
+      http://www.mainconcept.com/
+     </a>
+    </p>
+    <p>
+     Mainconcept是一家德国的编解码器公司，总部位于德国的Aachen（亚琛）。Mainconcept现在属于Divx公司的子公司，规模很大，在世界各国有好几个分公司，服务于世界40多个国家和地区。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112500150?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     官网介绍中还有一张其公司分布图：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140907124634546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h3>
+     TotalCode Studio
+    </h3>
+    <p>
+     Mainconcept软件很丰富，包括各种SDK和应用程序。但是很多软件产品是不能下载试用的。如果感兴趣需要和他们公司联系。鉴于我只是自己试试，暂时没有必要去和他们联系，因而搜寻了一下他们的产品列表，发现他们的转码产品TotalCode Studio是可以下载试用的。从介绍页面中可以了解到，TotalCode Studio几乎包含了Mainconcept所有的编解码器，是一个专业级的转码程序。正版的很贵，449美元。在填了一张表格后，收到了Demo下载链接。
+    </p>
+    <p>
+     TotalCode Studio打开以后的界面如下图所示。左边包含一个“Input”和一个“Output”窗口，分别用于设置输入和输出参数。右边是“Preview”窗口，可以浏览视频信息。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112509682?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     单击菜单栏上的“File”，可以将视音频文件添加到“Input”窗口中。在这里发现了一个比较特别的添加文件的方法：“Open Media using…”。通过这个菜单可以指定不同的方式添加视音频文件。这在一般的转码软件里是很少见的。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112604891?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     在这里我们选择第一个“Rawvideo file reader”。它可以直接将Raw格式数据（YUV，RGB）作为输入视频。单击“Raw video file reader”之后弹出对话框如下图所示。通过该对话框可以配置Raw格式数据的信息，比如宽高，像素格式等等。设置完成后单击“OK”即可。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112639148?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     添加好的视频会显示在“Input”窗口里。用鼠标选中该视频拖拽至“Output”窗口里的“Target”中的“Video”，即可设置为对该视频进行编码。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112722017?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     在“Output”的最上方可以选择输出格式的Preset。TotalCode Studio提供的Preset的数量确实是多得惊人，如下图所列。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112517468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     在这里我们选择“HEVC”中的“HEVC Main”。然后对“Output”窗口下方的视频参数调整恰当后，就可以开始转码了。单击工具栏上的三角形按钮即可开始转码。这时候所有可以设置的选项都变成了灰色。
+    </p>
+    <p>
+     PS：在这里发现，Mainconcept的HEVC编码速度还是非常快的。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112801688?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     生成的视频如下图所示。由于是Demo版，右下角打上了Mainconcept的Logo。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112832779?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     此外，在转码前除了可以设置视频的编码标准、宽、高等基本信息外，还可以设置添加一些“Filter”。比如说添加水印Logo等等。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112632593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     最后，打开DirectShowGraph 图表工具GraphEdit，在“DirectShow Filters”里可以看见已经安装了大量的Mainconcept的编解码器（不过全都是Demo版的）。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112934664?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <h2>
+     （2）      Divx
+    </h2>
+    <p>
+     官方网站：
+     <a href="http://www.divx.com/">
+      http://www.divx.com/
+     </a>
+    </p>
+    <p>
+     Divx是一件美国的编解码器公司，总部位于SanDiego（圣迭戈，位于美国本土的极端西南角，紧挨着墨西哥）。关于Divx和Xvid有还有一段故事。早期只有一个开源的编码器叫OpenDivX。后来其中的一部分人通过一些方法关闭了OpenDivx的源代码，并且成立了现在的Divx公司。其实这种行为还是比较有争议的，它等于把大家为开源事业贡献的智慧变成了自己的私有财产。此事发生之后对原来的OpenDivx产生了毁灭性的影响。但是还有一部分开发者坚持维护OpenDivx项目，并最终演变成了Xvid。“Xvid”这个名字挺有意思的，正好是“Divx”的反过来，就好像是表达对Divx的不满一样。其实Divx和Xvid的性能相差不大，都是基于MPEG4 Part2的视频压缩编码器。
+    </p>
+    <p>
+     现在的Divx公司已经不只限于原先的Divx编码了，囊括了H.264，HEVC等各种编码标准，并且收购了前文所说的Mainconcept公司。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113019639?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h3>
+     Divx Converter
+    </h3>
+    <p>
+     Divx软件下载安装之后，包含了DivxPlayer，Divx Converter等好几个软件。在这里仅简单试用一下编码软件Divx Converter。Divx Converter界面打开后如图所示，挺美观的，做到了“简约而不简单”。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113049965?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     Divx Converter的转码确实做到了“傻瓜化”，非常的简单。添加文件，然后选择预设，就可以开始转码了。拖入文件后的效果如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831112850140?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     可以选择的预设种类并不多，这样不会让人感觉到“眼花缭乱”，更适合非专业人士使用。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113145751?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+    </p>
+    <h2>
+     （3）      Elecard
+    </h2>
+    <p>
+     Elecard是一家俄罗斯的编码器公司，总部位于俄国的Tomsk（托木斯克）。这个地方可是够陌生的，百度百科上说西伯利亚地区教育和科学中心，突发兴趣在查了一下它的位置，在俄国中部。看来视音频编解码技术很强的公司未必在大城市（确切的说，都在小城市）。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114105995?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     官方网站：
+     <a href="http://www.elecard.com/">
+      http://www.elecard.com/
+     </a>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114151407?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     Elecard有个特别有名的软件：Elecard StreamEye。这个软件工具集可以图形化的分析码流，封装格式等等。几乎是视频工作者必备的工具。后来又推出了HEVC的码流分析工具Elecard HEVC Analyzer，其HEVC的分析能力也很强大，此前也写过这些分析工具有关的文章，在此不再详述：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11846185">
+      MPEG2简单码流分析
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11845625">
+      H.264简单码流分析
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11845069">
+      HEVC码流简单分析
+     </a>
+     <br/>
+    </p>
+    <p>
+     除了码流分析工具外，Elecard还包含了一系列的产品，包括流媒体服务器，视频播放器等等。本文要测试的是它的转码工具：Elecard Converter Studio。
+    </p>
+    <h3>
+     Elecard Converter Studio
+    </h3>
+    <p>
+     下载并安装Elecard Converter Studio之后，就可以进入它的主界面了，如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831113948921?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     Elecard Converter Studio整体界面是黑色的，看上去还是挺美观的。中间的窗口是视频预览的窗口。左上方的“Profiles”窗口中保存了很多预设的Profile。左下方的“Statistics”窗口中显示了当前任务的状态（比如转码的速度等等）。下方的“Message”用于输出信息，此外下方还有一个窗口“Batch list”，用于保存待处理的任务。右边的“Task Parameters”用于设置任务的参数。
+    </p>
+    <p>
+     PS1：发现Elecard Converter Studio中很多按钮是图片而不是文字，因此要找相应功能的时候不是很方便。
+    </p>
+    <p>
+     PS2：从窗口的特性可以看出Elecard Converter Studio是用MFC中的“多文档”类型开发出来的，这个还是挺不常见的。一般编码软件都使用“基于对话框”类型开发出来。
+    </p>
+    <p>
+    </p>
+    <p>
+     选择菜单栏上“File-&gt;Open Media Files”即可打开添加媒体文件的对话框，如下图所示。可以添加想要编码的视频文件。这里有一个选项还是挺有特色的：“Speed/Quality”。可以通过拖动它的滑动条来设置编码的时候希望速度快一些（质量会低一点）还是质量高一些（速度会慢）。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114246600?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     添加完毕后，所有的媒体文件会显示在“Batch List”里面。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114043562?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图显示了添加完成一个视频后的截图。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114334819?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     可以通过“Task parameters”对话框设置任务的属性。各种选项很繁多，就不一一例举了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140831114354210?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <h2>
+     （4）      Intel
+    </h2>
+    <p>
+     Intel可以说是很有名了。以上三个公司都是专注于视频领域的公司。而视频领域对Intel来说应该只是一个小分支。Intel总部位于美国加州的Santa Clara（圣克拉拉，硅谷的腹地）。以后有机会使用Intel Media SDK的时候再做详细的介绍。
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/38959111
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编码器&amp;t=blog" target="_blank">
+    编码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=H.264&amp;t=blog" target="_blank">
+    H.264
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=转码&amp;t=blog" target="_blank">
+    转码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=使用&amp;t=blog" target="_blank">
+    使用
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638135" target="_blank">
+    视频编码
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

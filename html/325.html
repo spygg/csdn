@@ -1,0 +1,884 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ RTMPdump（libRTMP） 源代码分析 7： 建立一个流媒体连接 （NetStream部分 2） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_325">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   RTMPdump（libRTMP） 源代码分析 7： 建立一个流媒体连接 （NetStream部分 2）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月23日 14:17:40
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：9933
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     RTMPdump(libRTMP) 源代码分析系列文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12952977">
+      <span style="color:rgb(51,102,255);">
+       RTMPdump 源代码分析 1： main()函数
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12953833">
+      <span style="color:#3366ff;">
+       RTMPDump (libRTMP) 源代码分析2：解析RTMP地址——RTMP_ParseURL()
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12954145">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析3： AMF编码
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12954329">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析4： 连接第一步——握手 (HandShake)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12957291">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析5： 建立一个流媒体连接  (NetConnection部分)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12957877">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析6： 建立一个流媒体连接  (NetStream部分 1)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12958617">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析7： 建立一个流媒体连接  (NetStream部分 2)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12958747">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析8： 发送消息 (Message)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12971635">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析9： 接收消息 (Message)  (接收视音频数据)
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12972399">
+      <span style="color:#3366ff;">
+       RTMPdump (libRTMP) 源代码分析10： 处理各种消息 (Message)
+      </span>
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用结构图
+    </h2>
+    <p>
+     RTMPDump (libRTMP)的整体的函数调用结构图如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201602/10/1455087168_7199.png">
+      <img alt="" src="https://img-blog.csdn.net/20160219185241684"/>
+      <br/>
+     </a>
+    </p>
+    <p style="text-align:center;">
+     <a href="http://img.my.csdn.net/uploads/201602/10/1455087168_7199.png">
+      单击查看大图
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     详细分析
+    </h2>
+    <p>
+     书接上回：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12957877">
+      RTMPdump 源代码分析 6： 建立一个流媒体连接 （NetStream部分 1）
+     </a>
+    </p>
+    <p>
+     上回说到，有两个函数尤为重要：
+    </p>
+    <p>
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     <p>
+      <strong>
+       RTMP_ReadPacket()
+      </strong>
+     </p>
+     <p>
+      <strong>
+       RTMP_ClientPacket()
+      </strong>
+     </p>
+    </blockquote>
+    而且分析了第一个函数。现在我们再来看看第二个函数吧。
+    <span style="font-family:Arial;color:#333333;">
+     <span style="font-size:14px;line-height:26px;">
+      第二个函数的主要作用是：处理消息（Message），并做出响应。
+     </span>
+    </span>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       先把带注释的代码贴上：
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+      </span>
+     </span>
+    </p>
+    <pre class="cpp">//处理接收到的Chunk
+int
+RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
+{
+  int bHasMediaPacket = 0;
+  switch (packet-&gt;m_packetType)
+    {
+	//RTMP消息类型ID=1,设置块大小
+    case 0x01:
+      /* chunk size */
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("处理收到的数据。消息 Set Chunk Size (typeID=1)。");
+		//-----------------------------
+		RTMP_LogPrintf("处理消息 Set Chunk Size (typeID=1)\n");
+      HandleChangeChunkSize(r, packet);
+      break;
+	//RTMP消息类型ID=3，致谢
+    case 0x03:
+      /* bytes read report */
+      RTMP_Log(RTMP_LOGDEBUG, "%s, received: bytes read report", __FUNCTION__);
+      break;
+	//RTMP消息类型ID=4，用户控制
+    case 0x04:
+      /* ctrl */
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("处理收到的数据。消息 User Control (typeID=4)。");
+		//-----------------------------
+		RTMP_LogPrintf("处理消息 User Control (typeID=4)\n");
+      HandleCtrl(r, packet);
+      break;
+	//RTMP消息类型ID=5
+    case 0x05:
+      /* server bw */
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("处理收到的数据。消息 Window Acknowledgement Size (typeID=5)。");
+		//-----------------------------
+		RTMP_LogPrintf("处理消息 Window Acknowledgement Size (typeID=5)\n");
+      HandleServerBW(r, packet);
+      break;
+	//RTMP消息类型ID=6
+    case 0x06:
+      /* client bw */
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("处理收到的数据。消息 Set Peer Bandwidth (typeID=6)。");
+		//-----------------------------
+		RTMP_LogPrintf("处理消息 Set Peer Bandwidth (typeID=6)\n");
+      HandleClientBW(r, packet);
+      break;
+	//RTMP消息类型ID=8，音频数据
+    case 0x08:
+      /* audio data */
+      /*RTMP_Log(RTMP_LOGDEBUG, "%s, received: audio %lu bytes", __FUNCTION__, packet.m_nBodySize); */
+      HandleAudio(r, packet);
+      bHasMediaPacket = 1;
+      if (!r-&gt;m_mediaChannel)
+	r-&gt;m_mediaChannel = packet-&gt;m_nChannel;
+      if (!r-&gt;m_pausing)
+	r-&gt;m_mediaStamp = packet-&gt;m_nTimeStamp;
+      break;
+	//RTMP消息类型ID=9，视频数据
+    case 0x09:
+      /* video data */
+      /*RTMP_Log(RTMP_LOGDEBUG, "%s, received: video %lu bytes", __FUNCTION__, packet.m_nBodySize); */
+      HandleVideo(r, packet);
+      bHasMediaPacket = 1;
+      if (!r-&gt;m_mediaChannel)
+	r-&gt;m_mediaChannel = packet-&gt;m_nChannel;
+      if (!r-&gt;m_pausing)
+	r-&gt;m_mediaStamp = packet-&gt;m_nTimeStamp;
+      break;
+	//RTMP消息类型ID=15，AMF3编码，忽略
+    case 0x0F:			/* flex stream send */
+      RTMP_Log(RTMP_LOGDEBUG,
+	  "%s, flex stream send, size %lu bytes, not supported, ignoring",
+	  __FUNCTION__, packet-&gt;m_nBodySize);
+      break;
+	//RTMP消息类型ID=16，AMF3编码，忽略
+    case 0x10:			/* flex shared object */
+      RTMP_Log(RTMP_LOGDEBUG,
+	  "%s, flex shared object, size %lu bytes, not supported, ignoring",
+	  __FUNCTION__, packet-&gt;m_nBodySize);
+      break;
+	//RTMP消息类型ID=17，AMF3编码，忽略
+    case 0x11:			/* flex message */
+      {
+	RTMP_Log(RTMP_LOGDEBUG,
+	    "%s, flex message, size %lu bytes, not fully supported",
+	    __FUNCTION__, packet-&gt;m_nBodySize);
+	/*RTMP_LogHex(packet.m_body, packet.m_nBodySize); */
+
+	/* some DEBUG code */
+#if 0
+	   RTMP_LIB_AMFObject obj;
+	   int nRes = obj.Decode(packet.m_body+1, packet.m_nBodySize-1);
+	   if(nRes &lt; 0) {
+	   RTMP_Log(RTMP_LOGERROR, "%s, error decoding AMF3 packet", __FUNCTION__);
+	   /*return; */
+	   }
+
+	   obj.Dump();
+#endif
+
+	if (HandleInvoke(r, packet-&gt;m_body + 1, packet-&gt;m_nBodySize - 1) == 1)
+	  bHasMediaPacket = 2;
+	break;
+      }
+	//RTMP消息类型ID=18，AMF0编码，数据消息
+    case 0x12:
+      /* metadata (notify) */
+
+      RTMP_Log(RTMP_LOGDEBUG, "%s, received: notify %lu bytes", __FUNCTION__,
+	  packet-&gt;m_nBodySize);
+	  //处理元数据,暂时注释
+	  /*
+      if (HandleMetadata(r, packet-&gt;m_body, packet-&gt;m_nBodySize))
+	bHasMediaPacket = 1;
+      break;
+	  */
+	//RTMP消息类型ID=19，AMF0编码，忽略
+    case 0x13:
+      RTMP_Log(RTMP_LOGDEBUG, "%s, shared object, not supported, ignoring",
+	  __FUNCTION__);
+      break;
+	//RTMP消息类型ID=20，AMF0编码，命令消息
+	//处理命令消息！
+    case 0x14:
+		//----------------
+		r-&gt;dlg-&gt;AppendCInfo("处理收到的数据。消息 命令 (AMF0编码) (typeID=20)。");
+		//-----------------------------
+      /* invoke */
+      RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %lu bytes", __FUNCTION__,
+	  packet-&gt;m_nBodySize);
+	  RTMP_LogPrintf("处理命令消息 (typeID=20，AMF0编码)\n");
+      /*RTMP_LogHex(packet.m_body, packet.m_nBodySize); */
+
+      if (HandleInvoke(r, packet-&gt;m_body, packet-&gt;m_nBodySize) == 1)
+	bHasMediaPacket = 2;
+      break;
+	//RTMP消息类型ID=22
+    case 0x16:
+      {
+	/* go through FLV packets and handle metadata packets */
+	unsigned int pos = 0;
+	uint32_t nTimeStamp = packet-&gt;m_nTimeStamp;
+
+	while (pos + 11 &lt; packet-&gt;m_nBodySize)
+	  {
+	    uint32_t dataSize = AMF_DecodeInt24(packet-&gt;m_body + pos + 1);	/* size without header (11) and prevTagSize (4) */
+
+	    if (pos + 11 + dataSize + 4 &gt; packet-&gt;m_nBodySize)
+	      {
+		RTMP_Log(RTMP_LOGWARNING, "Stream corrupt?!");
+		break;
+	      }
+	    if (packet-&gt;m_body[pos] == 0x12)
+	      {
+		HandleMetadata(r, packet-&gt;m_body + pos + 11, dataSize);
+	      }
+	    else if (packet-&gt;m_body[pos] == 8 || packet-&gt;m_body[pos] == 9)
+	      {
+		nTimeStamp = AMF_DecodeInt24(packet-&gt;m_body + pos + 4);
+		nTimeStamp |= (packet-&gt;m_body[pos + 7] &lt;&lt; 24);
+	      }
+	    pos += (11 + dataSize + 4);
+	  }
+	if (!r-&gt;m_pausing)
+	  r-&gt;m_mediaStamp = nTimeStamp;
+
+	/* FLV tag(s) */
+	/*RTMP_Log(RTMP_LOGDEBUG, "%s, received: FLV tag(s) %lu bytes", __FUNCTION__, packet.m_nBodySize); */
+	bHasMediaPacket = 1;
+	break;
+      }
+    default:
+      RTMP_Log(RTMP_LOGDEBUG, "%s, unknown packet type received: 0x%02x", __FUNCTION__,
+	  packet-&gt;m_packetType);
+#ifdef _DEBUG
+      RTMP_LogHex(RTMP_LOGDEBUG, (const uint8_t *)packet-&gt;m_body, packet-&gt;m_nBodySize);
+#endif
+    }
+
+  return bHasMediaPacket;
+}</pre>
+    <br/>
+    里面注释的比较多，可以看出，大体的思路是，根据接收到的消息（Message）类型的不同，做出不同的响应。例如收到的消息类型为0x01，那么就是设置块（Chunk）大小的协议，那么就调用相应的函数进行处理。
+    <p>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       因此，本函数可以说是程序的灵魂，收到的各种命令消息都要经过本函数的判断决定调用哪个函数进行相应的处理。
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       在这里注意一下消息类型为0x14的消息，即消息类型ID为20的消息，是AMF0编码的命令消息。这在RTMP连接中是非常常见的，比如说各种控制命令：播放，暂停，停止等等。我们来仔细看看它的调用。
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       可以发现它调用了HandleInvoke()函数来处理服务器发来的AMF0编码的命令，来看看细节：
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+      </span>
+     </span>
+    </p>
+    <pre class="cpp">/* Returns 0 for OK/Failed/error, 1 for 'Stop or Complete' */
+static int
+HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+{
+  AMFObject obj;
+  AVal method;
+  int txn;
+  int ret = 0, nRes;
+  if (body[0] != 0x02)		/* make sure it is a string method name we start with */
+    {
+      RTMP_Log(RTMP_LOGWARNING, "%s, Sanity failed. no string method in invoke packet",
+	  __FUNCTION__);
+      return 0;
+    }
+
+  nRes = AMF_Decode(&amp;obj, body, nBodySize, FALSE);
+  if (nRes &lt; 0)
+    {
+      RTMP_Log(RTMP_LOGERROR, "%s, error decoding invoke packet", __FUNCTION__);
+      return 0;
+    }
+
+  AMF_Dump(&amp;obj);
+  AMFProp_GetString(AMF_GetProp(&amp;obj, NULL, 0), &amp;method);
+  txn = (int)AMFProp_GetNumber(AMF_GetProp(&amp;obj, NULL, 1));
+  RTMP_Log(RTMP_LOGDEBUG, "%s, server invoking &lt;%s&gt;", __FUNCTION__, method.av_val);
+
+  if (AVMATCH(&amp;method, &amp;av__result))
+    {
+      AVal methodInvoked = {0};
+      int i;
+
+      for (i=0; i&lt;r-&gt;m_numCalls; i++) {
+  	if (r-&gt;m_methodCalls[i].num == txn) {
+	  methodInvoked = r-&gt;m_methodCalls[i].name;
+	  AV_erase(r-&gt;m_methodCalls, &amp;r-&gt;m_numCalls, i, FALSE);
+	  break;
+	}
+      }
+      if (!methodInvoked.av_val) {
+        RTMP_Log(RTMP_LOGDEBUG, "%s, received result id %d without matching request",
+	  __FUNCTION__, txn);
+	goto leave;
+      }
+	  //----------------
+	  char temp_str[100];
+	  sprintf(temp_str,"接收数据。消息 %s 的 Result",methodInvoked.av_val);
+	  r-&gt;dlg-&gt;AppendCInfo(temp_str);
+	  //-----------------------------
+      RTMP_Log(RTMP_LOGDEBUG, "%s, received result for method call &lt;%s&gt;", __FUNCTION__,
+	  methodInvoked.av_val);
+
+      if (AVMATCH(&amp;methodInvoked, &amp;av_connect))
+	{
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","Result (Connect)");
+		//-----------------------------
+	  if (r-&gt;Link.token.av_len)
+	    {
+	      AMFObjectProperty p;
+	      if (RTMP_FindFirstMatchingProperty(&amp;obj, &amp;av_secureToken, &amp;p))
+		{
+		  DecodeTEA(&amp;r-&gt;Link.token, &amp;p.p_vu.p_aval);
+		  SendSecureTokenResponse(r, &amp;p.p_vu.p_aval);
+		}
+	    }
+	  if (r-&gt;Link.protocol &amp; RTMP_FEATURE_WRITE)
+	    {
+	      SendReleaseStream(r);
+	      SendFCPublish(r);
+	    }
+	  else
+	    {
+			//----------------
+			r-&gt;dlg-&gt;AppendCInfo("发送数据。消息 Window Acknowledgement Size (typeID=5)。");
+			//-----------------------------
+			RTMP_LogPrintf("发送消息Window Acknowledgement Size(typeID=5)\n");
+	      RTMP_SendServerBW(r);
+	      RTMP_SendCtrl(r, 3, 0, 300);
+	    }
+	  //----------------
+	  r-&gt;dlg-&gt;AppendCInfo("发送数据。消息 命令 (typeID=20) (CreateStream)。");
+	  //-----------------------------
+	  RTMP_LogPrintf("发送命令消息“CreateStream” (typeID=20)\n");
+	  RTMP_SendCreateStream(r);
+
+	  if (!(r-&gt;Link.protocol &amp; RTMP_FEATURE_WRITE))
+	    {
+	      /* Send the FCSubscribe if live stream or if subscribepath is set */
+	      if (r-&gt;Link.subscribepath.av_len)
+	        SendFCSubscribe(r, &amp;r-&gt;Link.subscribepath);
+	      else if (r-&gt;Link.lFlags &amp; RTMP_LF_LIVE)
+	        SendFCSubscribe(r, &amp;r-&gt;Link.playpath);
+	    }
+	}
+      else if (AVMATCH(&amp;methodInvoked, &amp;av_createStream))
+	{
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","Result (CreateStream)");
+		//-----------------------------
+	  r-&gt;m_stream_id = (int)AMFProp_GetNumber(AMF_GetProp(&amp;obj, NULL, 3));
+
+	  if (r-&gt;Link.protocol &amp; RTMP_FEATURE_WRITE)
+	    {
+	      SendPublish(r);
+	    }
+	  else
+	    {
+	      if (r-&gt;Link.lFlags &amp; RTMP_LF_PLST)
+	        SendPlaylist(r);
+		  //----------------
+		  r-&gt;dlg-&gt;AppendCInfo("发送数据。消息 命令 (typeID=20) (Play)。");
+		  //-----------------------------
+		  RTMP_LogPrintf("发送命令消息“play” (typeID=20)\n");
+	      SendPlay(r);
+	      RTMP_SendCtrl(r, 3, r-&gt;m_stream_id, r-&gt;m_nBufferMS);
+	    }
+	}
+      else if (AVMATCH(&amp;methodInvoked, &amp;av_play) ||
+      	AVMATCH(&amp;methodInvoked, &amp;av_publish))
+	{
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","Result (Play or Publish)");
+		//-----------------------------
+	  r-&gt;m_bPlaying = TRUE;
+	}
+      free(methodInvoked.av_val);
+    }
+  else if (AVMATCH(&amp;method, &amp;av_onBWDone))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","onBWDone");
+		//-----------------------------
+	  if (!r-&gt;m_nBWCheckCounter)
+        SendCheckBW(r);
+    }
+  else if (AVMATCH(&amp;method, &amp;av_onFCSubscribe))
+    {
+      /* SendOnFCSubscribe(); */
+    }
+  else if (AVMATCH(&amp;method, &amp;av_onFCUnsubscribe))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","onFCUnsubscribe");
+		//-----------------------------
+      RTMP_Close(r);
+      ret = 1;
+    }
+  else if (AVMATCH(&amp;method, &amp;av_ping))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","Ping");
+		//-----------------------------
+      SendPong(r, txn);
+    }
+  else if (AVMATCH(&amp;method, &amp;av__onbwcheck))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","onBWcheck");
+		//-----------------------------
+      SendCheckBWResult(r, txn);
+    }
+  else if (AVMATCH(&amp;method, &amp;av__onbwdone))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","onBWdone");
+		//-----------------------------
+      int i;
+      for (i = 0; i &lt; r-&gt;m_numCalls; i++)
+	if (AVMATCH(&amp;r-&gt;m_methodCalls[i].name, &amp;av__checkbw))
+	  {
+	    AV_erase(r-&gt;m_methodCalls, &amp;r-&gt;m_numCalls, i, TRUE);
+	    break;
+	  }
+    }
+  else if (AVMATCH(&amp;method, &amp;av__error))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","error");
+		//-----------------------------
+      RTMP_Log(RTMP_LOGERROR, "rtmp server sent error");
+    }
+  else if (AVMATCH(&amp;method, &amp;av_close))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","close");
+		//-----------------------------
+      RTMP_Log(RTMP_LOGERROR, "rtmp server requested close");
+      RTMP_Close(r);
+    }
+  else if (AVMATCH(&amp;method, &amp;av_onStatus))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","onStatus");
+		//-----------------------------
+      AMFObject obj2;
+      AVal code, level;
+      AMFProp_GetObject(AMF_GetProp(&amp;obj, NULL, 3), &amp;obj2);
+      AMFProp_GetString(AMF_GetProp(&amp;obj2, &amp;av_code, -1), &amp;code);
+      AMFProp_GetString(AMF_GetProp(&amp;obj2, &amp;av_level, -1), &amp;level);
+
+      RTMP_Log(RTMP_LOGDEBUG, "%s, onStatus: %s", __FUNCTION__, code.av_val);
+      if (AVMATCH(&amp;code, &amp;av_NetStream_Failed)
+	  || AVMATCH(&amp;code, &amp;av_NetStream_Play_Failed)
+	  || AVMATCH(&amp;code, &amp;av_NetStream_Play_StreamNotFound)
+	  || AVMATCH(&amp;code, &amp;av_NetConnection_Connect_InvalidApp))
+	{
+	  r-&gt;m_stream_id = -1;
+	  RTMP_Close(r);
+	  RTMP_Log(RTMP_LOGERROR, "Closing connection: %s", code.av_val);
+	}
+
+      else if (AVMATCH(&amp;code, &amp;av_NetStream_Play_Start))
+	{
+	  int i;
+	  r-&gt;m_bPlaying = TRUE;
+	  for (i = 0; i &lt; r-&gt;m_numCalls; i++)
+	    {
+	      if (AVMATCH(&amp;r-&gt;m_methodCalls[i].name, &amp;av_play))
+		{
+		  AV_erase(r-&gt;m_methodCalls, &amp;r-&gt;m_numCalls, i, TRUE);
+		  break;
+		}
+	    }
+	}
+
+      else if (AVMATCH(&amp;code, &amp;av_NetStream_Publish_Start))
+	{
+	  int i;
+	  r-&gt;m_bPlaying = TRUE;
+	  for (i = 0; i &lt; r-&gt;m_numCalls; i++)
+	    {
+	      if (AVMATCH(&amp;r-&gt;m_methodCalls[i].name, &amp;av_publish))
+		{
+		  AV_erase(r-&gt;m_methodCalls, &amp;r-&gt;m_numCalls, i, TRUE);
+		  break;
+		}
+	    }
+	}
+
+      /* Return 1 if this is a Play.Complete or Play.Stop */
+      else if (AVMATCH(&amp;code, &amp;av_NetStream_Play_Complete)
+	  || AVMATCH(&amp;code, &amp;av_NetStream_Play_Stop)
+	  || AVMATCH(&amp;code, &amp;av_NetStream_Play_UnpublishNotify))
+	{
+	  RTMP_Close(r);
+	  ret = 1;
+	}
+
+      else if (AVMATCH(&amp;code, &amp;av_NetStream_Seek_Notify))
+        {
+	  r-&gt;m_read.flags &amp;= ~RTMP_READ_SEEKING;
+	}
+
+      else if (AVMATCH(&amp;code, &amp;av_NetStream_Pause_Notify))
+        {
+	  if (r-&gt;m_pausing == 1 || r-&gt;m_pausing == 2)
+	  {
+	    RTMP_SendPause(r, FALSE, r-&gt;m_pauseStamp);
+	    r-&gt;m_pausing = 3;
+	  }
+	}
+    }
+  else if (AVMATCH(&amp;method, &amp;av_playlist_ready))
+    {
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","playlist_ready");
+		//-----------------------------
+      int i;
+      for (i = 0; i &lt; r-&gt;m_numCalls; i++)
+        {
+          if (AVMATCH(&amp;r-&gt;m_methodCalls[i].name, &amp;av_set_playlist))
+	    {
+	      AV_erase(r-&gt;m_methodCalls, &amp;r-&gt;m_numCalls, i, TRUE);
+	      break;
+	    }
+        }
+    }
+  else
+    {
+
+    }
+leave:
+  AMF_Reset(&amp;obj);
+  return ret;
+}
+
+int
+RTMP_FindFirstMatchingProperty(AMFObject *obj, const AVal *name,
+			       AMFObjectProperty * p)
+{
+  int n;
+  /* this is a small object search to locate the "duration" property */
+  for (n = 0; n &lt; obj-&gt;o_num; n++)
+    {
+      AMFObjectProperty *prop = AMF_GetProp(obj, NULL, n);
+
+      if (AVMATCH(&amp;prop-&gt;p_name, name))
+	{
+	  *p = *prop;
+	  return TRUE;
+	}
+
+      if (prop-&gt;p_type == AMF_OBJECT)
+	{
+	  if (RTMP_FindFirstMatchingProperty(&amp;prop-&gt;p_vu.p_object, name, p))
+	    return TRUE;
+	}
+    }
+  return FALSE;
+}</pre>
+    <br/>
+    <p>
+     该函数主要做了以下几步：
+    </p>
+    <p>
+     1.调用AMF_Decode()解码AMF命令数据
+    </p>
+    <p>
+     2.调用AMFProp_GetString()获取具体命令的字符串
+    </p>
+    <p>
+     3.调用AVMATCH()比较字符串，不同的命令做不同的处理，例如以下几个：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVMATCH(&amp;methodInvoked, &amp;av_connect)
+AVMATCH(&amp;methodInvoked, &amp;av_createStream)
+AVMATCH(&amp;methodInvoked, &amp;av_play)
+AVMATCH(&amp;methodInvoked, &amp;av_publish)
+AVMATCH(&amp;method, &amp;av_onBWDone)</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     等等，不一一例举了
+    </p>
+    <p>
+     具体的处理过程如下所示。在这里说一个“建立网络流”（createStream）的例子，通常发生在建立网络连接（NetConnection）之后，播放（Play）之前。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">else if (AVMATCH(&amp;methodInvoked, &amp;av_createStream))
+	{
+		//----------------
+		r-&gt;dlg-&gt;AppendMLInfo(20,0,"命令消息","Result (CreateStream)");
+		//-----------------------------
+	  r-&gt;m_stream_id = (int)AMFProp_GetNumber(AMF_GetProp(&amp;obj, NULL, 3));
+
+	  if (r-&gt;Link.protocol &amp; RTMP_FEATURE_WRITE)
+	    {
+	      SendPublish(r);
+	    }
+	  else
+	    {
+	      if (r-&gt;Link.lFlags &amp; RTMP_LF_PLST)
+	        SendPlaylist(r);
+		  //----------------
+		  r-&gt;dlg-&gt;AppendCInfo("发送数据。消息 命令 (typeID=20) (Play)。");
+		  //-----------------------------
+		  RTMP_LogPrintf("发送命令消息“play” (typeID=20)\n");
+	      SendPlay(r);
+	      RTMP_SendCtrl(r, 3, r-&gt;m_stream_id, r-&gt;m_nBufferMS);
+	    }
+	}</pre>
+    <br/>
+    由代码可见，程序先获取了stream_id，然后发送了两个消息（Message），分别是SendPlaylist()和SendPlay()，用于获取播放列表，以及开始播放流媒体数据。
+    <p>
+    </p>
+    <p>
+    </p>
+    <p style="margin-top:0px;margin-bottom:10px;padding-top:0px;padding-bottom:0px;line-height:21px;font-family:'微软雅黑', Verdana, sans-serif, '宋体';font-size:13px;">
+     rtmpdump源代码（Linux）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6376561">
+      http://download.csdn.net/detail/leixiaohua1020/6376561
+     </a>
+    </p>
+    <p style="margin-top:0px;margin-bottom:10px;padding-top:0px;padding-bottom:0px;line-height:21px;font-family:'微软雅黑', Verdana, sans-serif, '宋体';font-size:13px;">
+     rtmpdump源代码（VC 2005 工程）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6563163">
+      http://download.csdn.net/detail/leixiaohua1020/6563163
+     </a>
+    </p>
+    <br/>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12958617
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=rtmpdump&amp;t=blog" target="_blank">
+    rtmpdump
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=rtmp&amp;t=blog" target="_blank">
+    rtmp
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=连接&amp;t=blog" target="_blank">
+    连接
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体&amp;t=blog" target="_blank">
+    流媒体
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank">
+    libRTMP
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

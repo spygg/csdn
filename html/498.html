@@ -1,0 +1,430 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFMPEG源码分析：avformat_open_input()（媒体打开函数） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_498">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   FFMPEG源码分析：avformat_open_input()（媒体打开函数）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月22日 02:11:02
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：18035
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <div class="article_content" id="article_content" style="margin:20px 0px 0px;color:rgb(54,46,43);line-height:26px;font-family:Arial;font-size:14px;">
+     <p>
+      本文分析了FFMPEG中的媒体打开函数avformat_open_input()
+     </p>
+     <p>
+     </p>
+     <pre class="cpp">//参数ps包含一切媒体相关的上下文结构，有它就有了一切，本函数如果打开媒体成功，  
+//会返回一个AVFormatContext的实例．  
+//参数filename是媒体文件名或URL．  
+//参数fmt是要打开的媒体格式的操作结构，因为是读，所以是inputFormat．此处可以  
+//传入一个调用者定义的inputFormat，对应命令行中的 -f xxx段，如果指定了它，  
+//在打开文件中就不会探测文件的实际格式了，以它为准了．  
+//参数options是对某种格式的一些操作，是为了在命令行中可以对不同的格式传入  
+//特殊的操作参数而建的， 为了了解流程，完全可以无视它．  
+int avformat_open_input(AVFormatContext **ps,  
+        const char *filename,  
+        AVInputFormat *fmt,  
+        AVDictionary **options)  
+{  
+    AVFormatContext *s = *ps;  
+    int ret = 0;  
+    AVFormatParameters ap = { { 0 } };  
+    AVDictionary *tmp = NULL;  
+  
+    //创建上下文结构  
+    if (!s &amp;&amp; !(s = avformat_alloc_context()))  
+        return AVERROR(ENOMEM);  
+    //如果用户指定了输入格式，直接使用它  
+    if (fmt)  
+        s-&gt;iformat = fmt;  
+  
+    //忽略  
+    if (options)  
+        av_dict_copy(&amp;tmp, *options, 0);  
+  
+    if ((ret = av_opt_set_dict(s, &amp;tmp)) &lt; 0)  
+        goto fail;  
+  
+    //打开输入媒体（如果需要的话），初始化所有与媒体读写有关的结构们，比如  
+    //AVIOContext，AVInputFormat等等  
+    if ((ret = init_input(s, filename)) &lt; 0)  
+        goto fail;  
+    //执行完此函数后，s-&gt;pb和s-&gt;iformat都已经指向了有效实例．pb是用于读写数据的，它  
+    //把媒体数据当做流来读写，不管是什么媒体格式，而iformat把pb读出来的流按某种媒体格  
+    //式进行分析，也就是说pb在底层，iformat在上层．  
+  
+    //很多静态图像文件格式，都被当作一个格式处理，比如要打开.jpeg文件，需要的格式  
+    //名为image2．此处还不是很了解具体细节，作不得准哦．  
+    /* check filename in case an image number is expected */  
+    if (s-&gt;iformat-&gt;flags &amp; AVFMT_NEEDNUMBER) {  
+        if (!av_filename_number_test(filename)) {  
+            ret = AVERROR(EINVAL);  
+            goto fail;  
+        }  
+    }  
+  
+    s-&gt;duration = s-&gt;start_time = AV_NOPTS_VALUE;  
+    //上下文中保存下文件名  
+    av_strlcpy(s-&gt;filename, filename, sizeof(s-&gt;filename));  
+  
+    /* allocate private data */  
+    //为当前格式分配私有数据，主要用于某格式的读写操作时所用的私有结构．  
+    //此结构的大小在定义AVInputFormat时已指定了．  
+    if (s-&gt;iformat-&gt;priv_data_size &gt; 0) {  
+        if (!(s-&gt;priv_data = av_mallocz(s-&gt;iformat-&gt;priv_data_size))) {  
+            ret = AVERROR(ENOMEM);  
+            goto fail;  
+        }  
+        //这个可以先不必管它  
+        if (s-&gt;iformat-&gt;priv_class) {  
+            *(const AVClass**) s-&gt;priv_data = s-&gt;iformat-&gt;priv_class;  
+            av_opt_set_defaults(s-&gt;priv_data);  
+            if ((ret = av_opt_set_dict(s-&gt;priv_data, &amp;tmp)) &lt; 0)  
+                goto fail;  
+        }  
+    }  
+  
+    /* e.g. AVFMT_NOFILE formats will not have a AVIOContext */  
+    //从mp3文件中读ID3数据并保存之．  
+    if (s-&gt;pb)  
+        ff_id3v2_read(s, ID3v2_DEFAULT_MAGIC);  
+  
+    //读一下媒体的头部，在read_header()中主要是做某种格式的初始化工作，比如填充自己的  
+    //私有结构，根据流的数量分配流结构并初始化，把文件指针指向数据区开始处等．  
+    if (!(s-&gt;flags &amp; AVFMT_FLAG_PRIV_OPT) &amp;&amp; s-&gt;iformat-&gt;read_header)  
+        if ((ret = s-&gt;iformat-&gt;read_header(s, &amp;ap)) &lt; 0)  
+            goto fail;  
+  
+    //保存数据区开始的位置  
+    if (!(s-&gt;flags &amp; AVFMT_FLAG_PRIV_OPT) &amp;&amp; s-&gt;pb &amp;&amp; !s-&gt;data_offset)  
+        s-&gt;data_offset = avio_tell(s-&gt;pb);  
+  
+    s-&gt;raw_packet_buffer_remaining_size = RAW_PACKET_BUFFER_SIZE;  
+  
+    if (options) {  
+        av_dict_free(options);  
+        *options = tmp;  
+    }  
+    *ps = s;  
+    //执行成功  
+    return 0;  
+  
+    //执行失败  
+    fail: av_dict_free(&amp;tmp);  
+    if (s-&gt;pb &amp;&amp; !(s-&gt;flags &amp; AVFMT_FLAG_CUSTOM_IO))  
+        avio_close(s-&gt;pb);  
+    avformat_free_context(s);  
+    *ps = NULL;  
+    return ret;  
+}  </pre>
+     <br/>
+     <br/>
+     <div class="article_content" style="margin:20px 0px 0px;color:rgb(54,46,43);line-height:26px;font-family:Arial;font-size:14px;">
+      <br/>
+     </div>
+     init_input
+     <p>
+     </p>
+     <p>
+      <br/>
+     </p>
+     <pre class="cpp">//打开输入媒体并填充其AVInputFormat结构  
+static int init_input(AVFormatContext *s, const char *filename)  
+{  
+    int ret;  
+    AVProbeData pd = { filename, NULL, 0 };  
+  
+    //当调用者已指定了pb（数据取得的方式）－－一般不会这样．  
+    if (s-&gt;pb) {  
+        s-&gt;flags |= AVFMT_FLAG_CUSTOM_IO;  
+        if (!s-&gt;iformat)  
+            //如果已指定了pb但没指定iformat，以pb读取媒体数据进行探测，取得．取得iformat.  
+            return av_probe_input_buffer(s-&gt;pb, &amp;s-&gt;iformat, filename, s, 0, 0);  
+        else if (s-&gt;iformat-&gt;flags &amp; AVFMT_NOFILE)  
+            //如果已指定pb也指定了iformat，但是又指定了不需要文件（也包括URL指定的地址），这就矛盾了，  
+            //此时应是不需要pb的，因为不需操作文件，提示一下吧，也不算错．  
+            av_log(s, AV_LOG_WARNING, "Custom AVIOContext makes no sense and "  
+                    "will be ignored with AVFMT_NOFILE format.\n");  
+        return 0;  
+    }  
+  
+    //一般会执行到这里  
+    if ((s-&gt;iformat &amp;&amp; s-&gt;iformat-&gt;flags &amp; AVFMT_NOFILE)  
+            || (!s-&gt;iformat &amp;&amp; (s-&gt;iformat = av_probe_input_format(&amp;pd, 0))))  
+        //如果已指定了iformat并且不需要文件，也就不需要pb了，可以直接返回  
+        //如果没指定iformat，但是可以从文件名中猜出iformat，也成功．  
+        return 0;  
+  
+    //如果从文件名中也猜不出媒体格式，则只能打开这个文件进行探测了，先打开文件  
+    if ((ret = avio_open(&amp;s-&gt;pb, filename, AVIO_FLAG_READ)) &lt; 0)  
+        return ret;  
+    if (s-&gt;iformat)  
+        return 0;  
+    //再探测之  
+    return av_probe_input_buffer(s-&gt;pb, &amp;s-&gt;iformat, filename, s, 0, 0);  
+}  </pre>
+     <br/>
+     <br/>
+     <p>
+      <br/>
+     </p>
+     avio_open
+    </div>
+    <div class="article_content" style="margin:20px 0px 0px;color:rgb(54,46,43);line-height:26px;font-family:Arial;font-size:14px;">
+     <pre class="cpp">//打开一个地址指向的媒体  
+int avio_open(AVIOContext **s, const char *filename, int flags)  
+{  
+    //URLContext代表一个URL地址指向的媒体文件，本地路径也算一种．它封装了  
+    //操作一个媒体文件的相关数据，最重要的是prot变量，是URLProtocol型的．  
+    //prot代表一个特定的协义和协议操作函数们，URLContext包含不同的prot，  
+    //就可以通过URLContext使用不同的协议读写媒体数据，比如tcp,http，本地  
+    //文件用file协议．  
+    URLContext *h;  
+    int err;  
+  
+    //创建并初始化URLContext，其prot通过文件名确定．然后打开这个媒体文件  
+    err = ffurl_open(&amp;h, filename, flags);  
+    if (err &lt; 0)  
+        return err;  
+    //其实文件已经在上边真正打开了．这里只是填充AVIOContext．使它记录下  
+    //URLContext，以及填充读写数据的函数指针．  
+    err = ffio_fdopen(s, h);  
+    if (err &lt; 0) {  
+        ffurl_close(h);  
+        return err;  
+    }  
+    return 0;  
+}  </pre>
+     <br/>
+     <br/>
+     <br/>
+     av_probe_input_buffer
+    </div>
+    <div class="article_content" style="margin:20px 0px 0px;color:rgb(54,46,43);line-height:26px;font-family:Arial;font-size:14px;">
+     <p>
+     </p>
+     <pre class="cpp">int av_probe_input_buffer(AVIOContext *pb,  
+        AVInputFormat **fmt,  
+        const char *filename,  
+        void *logctx,  
+        unsigned int offset,  
+        unsigned int max_probe_size)  
+{  
+    AVProbeData pd = { filename ? filename : "", NULL, -offset };  
+    unsigned char *buf = NULL;  
+    int ret = 0, probe_size;  
+  
+    //计算最多探测数据的字节数  
+    if (!max_probe_size) {  
+        max_probe_size = PROBE_BUF_MAX;  
+    } else if (max_probe_size &gt; PROBE_BUF_MAX) {  
+        max_probe_size = PROBE_BUF_MAX;  
+    } else if (max_probe_size &lt; PROBE_BUF_MIN) {  
+        return AVERROR(EINVAL);  
+    }  
+  
+    if (offset &gt;= max_probe_size) {  
+        return AVERROR(EINVAL);  
+    }  
+  
+    //循环直到探测完指定的数据  
+    for (probe_size = PROBE_BUF_MIN;  
+            probe_size &lt;= max_probe_size &amp;&amp; !*fmt;  
+            probe_size =  
+                    FFMIN(probe_size&lt;&lt;1, FFMAX(max_probe_size, probe_size+1))) {  
+        int score = probe_size &lt; max_probe_size ? AVPROBE_SCORE_MAX / 4 : 0;  
+        int buf_offset = (probe_size == PROBE_BUF_MIN) ? 0 : probe_size &gt;&gt; 1;  
+        void *buftmp;  
+  
+        if (probe_size &lt; offset) {  
+            continue;  
+        }  
+  
+        /* read probe data */  
+        //分配读取数据存放的缓冲  
+        buftmp = av_realloc(buf, probe_size + AVPROBE_PADDING_SIZE);  
+        if (!buftmp) {  
+            av_free(buf);  
+            return AVERROR(ENOMEM);  
+        }  
+        buf = buftmp;  
+        //利用pb读数据到缓冲的剩余空间中  
+        if ((ret = avio_read(pb, buf + buf_offset, probe_size - buf_offset))  
+                &lt; 0) {  
+            /* fail if error was not end of file, otherwise, lower score */  
+            if (ret != AVERROR_EOF) {  
+                av_free(buf);  
+                return ret;  
+            }  
+            score = 0;  
+            ret = 0; /* error was end of file, nothing read */  
+        }  
+        pd.buf_size += ret;  
+        pd.buf = &amp;buf[offset];  
+  
+        //缓冲中没有数据的部分要清０  
+        memset(pd.buf + pd.buf_size, 0, AVPROBE_PADDING_SIZE);  
+  
+        /* guess file format */  
+        //从一个打开的文件只探测媒体格式  
+        *fmt = av_probe_input_format2(&amp;pd, 1, &amp;score);  
+        if (*fmt) {  
+            if (score &lt;= AVPROBE_SCORE_MAX / 4) { //this can only be true in the last iteration  
+                av_log(  
+                        logctx,  
+                        AV_LOG_WARNING,  
+                        "Format %s detected only with low score of %d, misdetection possible!\n",  
+                        (*fmt)-&gt;name, score);  
+            } else  
+                av_log(logctx, AV_LOG_DEBUG,  
+                        "Format %s probed with size=%d and score=%d\n",  
+                        (*fmt)-&gt;name, probe_size, score);  
+        }  
+        //不成功，继续  
+    }  
+  
+    if (!*fmt) {  
+        av_free(buf);  
+        return AVERROR_INVALIDDATA;  
+    }  
+  
+    /* rewind. reuse probe buffer to avoid seeking */  
+    //把探测时读入的数据保存到pb中，为的是真正读时直接利用之．  
+    if ((ret = ffio_rewind_with_probe_data(pb, buf, pd.buf_size)) &lt; 0)  
+        av_free(buf);  
+  
+    return ret;  
+}  </pre>
+     <br/>
+     <br/>
+     <p>
+     </p>
+    </div>
+    <p>
+     <span style="font-family:Arial;color:#362e2b;">
+      <span style="font-size:14px;line-height:26px;">
+       原文地址：
+       <a href="http://wodamazi.iteye.com/blog/1293994">
+        http://wodamazi.iteye.com/blog/1293994
+       </a>
+      </span>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=打开&amp;t=blog" target="_blank">
+    打开
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=avformat_open_input&amp;t=blog" target="_blank">
+    avformat_open_input
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源码&amp;t=blog" target="_blank">
+    源码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

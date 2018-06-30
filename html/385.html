@@ -1,0 +1,1029 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ LAV Filter 源代码分析 2： LAV Splitter - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_385">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   LAV Filter 源代码分析 2： LAV Splitter
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月14日 21:06:30
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：9445
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     LAV Filter 中最著名的就是 LAV Splitter，支持Matroska /WebM，MPEG-TS/PS，MP4/MOV，FLV，OGM / OGG，AVI等其他格式，广泛存在于各种视频播放器（暴风影音这类的）之中。
+    </p>
+    <p>
+     本文分析一下它的源代码。在分析之前，先看看它是什么样的。
+    </p>
+    <p>
+     使用GraphEdit随便打开一个视频文件，就可以看见LAV Filter：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131014172226406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     可以右键点击这个Filter看一下它的属性页面，如图所示：
+    </p>
+    <p>
+     属性设置页面：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131014172303531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     支持输入格式：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131014172324765?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下面我们在 VC 2010 中看一下它的源代码：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131014172912453?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     从何看起呢？就先从directshow的注册函数看起吧，位于dllmain.cpp之中。部分代码的含义已经用注释标注上了。从代码可以看出，和普通的DirectShow Filter没什么区别。
+    </p>
+    <p>
+     <strong>
+      dllmain.cpp
+     </strong>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/*
+ *      Copyright (C) 2010-2013 Hendrik Leppkes
+ *      http://www.1f0.de
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+// Based on the SampleParser Template by GDCL
+// --------------------------------------------------------------------------------
+// Copyright (c) GDCL 2004. All Rights Reserved. 
+// You are free to re-use this as the basis for your own filter development,
+// provided you retain this copyright notice in the source.
+// http://www.gdcl.co.uk
+// --------------------------------------------------------------------------------
+//各种定义。。。
+#include "stdafx.h"
+
+// Initialize the GUIDs
+#include &lt;InitGuid.h&gt;
+
+#include &lt;qnetwork.h&gt;
+#include "LAVSplitter.h"
+#include "moreuuids.h"
+
+#include "registry.h"
+#include "IGraphRebuildDelegate.h"
+
+// The GUID we use to register the splitter media types
+DEFINE_GUID(MEDIATYPE_LAVSplitter,
+  0x9c53931c, 0x7d5a, 0x4a75, 0xb2, 0x6f, 0x4e, 0x51, 0x65, 0x4d, 0xb2, 0xc0);
+
+// --- COM factory table and registration code --------------
+//注册时候的信息
+const AMOVIESETUP_MEDIATYPE 
+  sudMediaTypes[] = {
+    { &amp;MEDIATYPE_Stream, &amp;MEDIASUBTYPE_NULL },
+};
+//注册时候的信息（PIN）
+const AMOVIESETUP_PIN sudOutputPins[] = 
+{
+  {
+    L"Output",            // pin name
+      FALSE,              // is rendered?    
+      TRUE,               // is output?
+      FALSE,              // zero instances allowed?
+      TRUE,               // many instances allowed?
+      &amp;CLSID_NULL,        // connects to filter (for bridge pins)
+      NULL,               // connects to pin (for bridge pins)
+      0,                  // count of registered media types
+      NULL                // list of registered media types
+  },
+  {
+    L"Input",             // pin name
+      FALSE,              // is rendered?    
+      FALSE,              // is output?
+      FALSE,              // zero instances allowed?
+      FALSE,              // many instances allowed?
+      &amp;CLSID_NULL,        // connects to filter (for bridge pins)
+      NULL,               // connects to pin (for bridge pins)
+      1,                  // count of registered media types
+      &amp;sudMediaTypes[0]   // list of registered media types
+  }
+};
+//注册时候的信息（名称等）
+//CLAVSplitter
+const AMOVIESETUP_FILTER sudFilterReg =
+{
+  &amp;__uuidof(CLAVSplitter),        // filter clsid
+  L"LAV Splitter",                // filter name
+  MERIT_PREFERRED + 4,            // merit
+  2,                              // count of registered pins
+  sudOutputPins,                  // list of pins to register
+  CLSID_LegacyAmFilterCategory
+};
+//注册时候的信息（名称等）
+//CLAVSplitterSource
+const AMOVIESETUP_FILTER sudFilterRegSource =
+{
+  &amp;__uuidof(CLAVSplitterSource),  // filter clsid
+  L"LAV Splitter Source",         // filter name
+  MERIT_PREFERRED + 4,            // merit
+  1,                              // count of registered pins
+  sudOutputPins,                  // list of pins to register
+  CLSID_LegacyAmFilterCategory
+};
+
+// --- COM factory table and registration code --------------
+
+// DirectShow base class COM factory requires this table, 
+// declaring all the COM objects in this DLL
+// 注意g_Templates名称是固定的
+CFactoryTemplate g_Templates[] = {
+  // one entry for each CoCreate-able object
+  {
+    sudFilterReg.strName,
+      sudFilterReg.clsID,
+      CreateInstance&lt;CLAVSplitter&gt;,
+      CLAVSplitter::StaticInit,
+      &amp;sudFilterReg
+  },
+  {
+    sudFilterRegSource.strName,
+      sudFilterRegSource.clsID,
+      CreateInstance&lt;CLAVSplitterSource&gt;,
+      NULL,
+      &amp;sudFilterRegSource
+  },
+  // This entry is for the property page.
+  // 属性页
+  { 
+      L"LAV Splitter Properties",
+      &amp;CLSID_LAVSplitterSettingsProp,
+      CreateInstance&lt;CLAVSplitterSettingsProp&gt;,
+      NULL, NULL
+  },
+  {
+      L"LAV Splitter Input Formats",
+      &amp;CLSID_LAVSplitterFormatsProp,
+      CreateInstance&lt;CLAVSplitterFormatsProp&gt;,
+      NULL, NULL
+  }
+};
+int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
+
+// self-registration entrypoint
+STDAPI DllRegisterServer()
+{
+  std::list&lt;LPCWSTR&gt; chkbytes;
+
+  // BluRay
+  chkbytes.clear();
+  chkbytes.push_back(L"0,4,,494E4458"); // INDX (index.bdmv)
+  chkbytes.push_back(L"0,4,,4D4F424A"); // MOBJ (MovieObject.bdmv)
+  chkbytes.push_back(L"0,4,,4D504C53"); // MPLS
+  RegisterSourceFilter(__uuidof(CLAVSplitterSource),
+    MEDIASUBTYPE_LAVBluRay, chkbytes, NULL);
+
+  // base classes will handle registration using the factory template table
+  return AMovieDllRegisterServer2(true);
+}
+
+STDAPI DllUnregisterServer()
+{
+  UnRegisterSourceFilter(MEDIASUBTYPE_LAVBluRay);
+
+  // base classes will handle de-registration using the factory template table
+  return AMovieDllRegisterServer2(false);
+}
+
+// if we declare the correct C runtime entrypoint and then forward it to the DShow base
+// classes we will be sure that both the C/C++ runtimes and the base classes are initialized
+// correctly
+extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
+BOOL WINAPI DllMain(HANDLE hDllHandle, DWORD dwReason, LPVOID lpReserved)
+{
+  return DllEntryPoint(reinterpret_cast&lt;HINSTANCE&gt;(hDllHandle), dwReason, lpReserved);
+}
+
+void CALLBACK OpenConfiguration(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
+{
+  HRESULT hr = S_OK;
+  CUnknown *pInstance = CreateInstance&lt;CLAVSplitter&gt;(NULL, &amp;hr);
+  IBaseFilter *pFilter = NULL;
+  pInstance-&gt;NonDelegatingQueryInterface(IID_IBaseFilter, (void **)&amp;pFilter);
+  if (pFilter) {
+    pFilter-&gt;AddRef();
+    CBaseDSPropPage::ShowPropPageDialog(pFilter);
+  }
+  delete pInstance;
+}
+</pre>
+    <br/>
+    接下来就要进入正题了，看一看核心的分离器（解封装器）的类CLAVSplitter的定义文件LAVSplitter.h。乍一看这个类确实了得，居然继承了那么多的父类，实在是碉堡了。先不管那么多，看看里面都有什么函数吧。主要的函数上面都加了注释。注意还有一个类CLAVSplitterSource继承了CLAVSplitter。
+    <p>
+    </p>
+    <p>
+     <strong>
+      LAVSplitter.h
+     </strong>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/*
+ *      Copyright (C) 2010-2013 Hendrik Leppkes
+ *      http://www.1f0.de
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ *  Initial design and concept by Gabest and the MPC-HC Team, copyright under GPLv2
+ *  Contributions by Ti-BEN from the XBMC DSPlayer Project, also under GPLv2
+ */
+
+#pragma once
+
+#include &lt;string&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+#include "PacketQueue.h"
+
+#include "BaseDemuxer.h"
+
+#include "LAVSplitterSettingsInternal.h"
+#include "SettingsProp.h"
+#include "IBufferInfo.h"
+
+#include "ISpecifyPropertyPages2.h"
+
+#include "LAVSplitterTrayIcon.h"
+
+#define LAVF_REGISTRY_KEY L"Software\\LAV\\Splitter"
+#define LAVF_REGISTRY_KEY_FORMATS LAVF_REGISTRY_KEY L"\\Formats"
+#define LAVF_LOG_FILE     L"LAVSplitter.txt"
+
+#define MAX_PTS_SHIFT 50000000i64
+
+class CLAVOutputPin;
+class CLAVInputPin;
+
+#ifdef	_MSC_VER
+#pragma warning(disable: 4355)
+#endif
+//核心解复用（分离器）
+//暴漏的接口在ILAVFSettings中
+[uuid("171252A0-8820-4AFE-9DF8-5C92B2D66B04")]
+class CLAVSplitter 
+  : public CBaseFilter
+  , public CCritSec
+  , protected CAMThread
+  , public IFileSourceFilter
+  , public IMediaSeeking
+  , public IAMStreamSelect
+  , public IAMOpenProgress
+  , public ILAVFSettingsInternal
+  , public ISpecifyPropertyPages2
+  , public IObjectWithSite
+  , public IBufferInfo
+{
+public:
+  CLAVSplitter(LPUNKNOWN pUnk, HRESULT* phr);
+  virtual ~CLAVSplitter();
+
+  static void CALLBACK StaticInit(BOOL bLoading, const CLSID *clsid);
+
+  // IUnknown
+  //
+  DECLARE_IUNKNOWN;
+  //暴露接口，使外部程序可以QueryInterface，关键！
+  //翻译（“没有代表的方式查询接口”）
+  STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
+
+  // CBaseFilter methods
+  //输入是一个，输出就不一定了！
+  int GetPinCount();
+  CBasePin *GetPin(int n);
+  STDMETHODIMP GetClassID(CLSID* pClsID);
+
+  STDMETHODIMP Stop();
+  STDMETHODIMP Pause();
+  STDMETHODIMP Run(REFERENCE_TIME tStart);
+
+  STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
+
+  // IFileSourceFilter
+  // 源Filter的接口方法
+  STDMETHODIMP Load(LPCOLESTR pszFileName, const AM_MEDIA_TYPE * pmt);
+  STDMETHODIMP GetCurFile(LPOLESTR *ppszFileName, AM_MEDIA_TYPE *pmt);
+
+  // IMediaSeeking
+  STDMETHODIMP GetCapabilities(DWORD* pCapabilities);
+  STDMETHODIMP CheckCapabilities(DWORD* pCapabilities);
+  STDMETHODIMP IsFormatSupported(const GUID* pFormat);
+  STDMETHODIMP QueryPreferredFormat(GUID* pFormat);
+  STDMETHODIMP GetTimeFormat(GUID* pFormat);
+  STDMETHODIMP IsUsingTimeFormat(const GUID* pFormat);
+  STDMETHODIMP SetTimeFormat(const GUID* pFormat);
+  STDMETHODIMP GetDuration(LONGLONG* pDuration);
+  STDMETHODIMP GetStopPosition(LONGLONG* pStop);
+  STDMETHODIMP GetCurrentPosition(LONGLONG* pCurrent);
+  STDMETHODIMP ConvertTimeFormat(LONGLONG* pTarget, const GUID* pTargetFormat, LONGLONG Source, const GUID* pSourceFormat);
+  STDMETHODIMP SetPositions(LONGLONG* pCurrent, DWORD dwCurrentFlags, LONGLONG* pStop, DWORD dwStopFlags);
+  STDMETHODIMP GetPositions(LONGLONG* pCurrent, LONGLONG* pStop);
+  STDMETHODIMP GetAvailable(LONGLONG* pEarliest, LONGLONG* pLatest);
+  STDMETHODIMP SetRate(double dRate);
+  STDMETHODIMP GetRate(double* pdRate);
+  STDMETHODIMP GetPreroll(LONGLONG* pllPreroll);
+
+  // IAMStreamSelect
+  STDMETHODIMP Count(DWORD *pcStreams);
+  STDMETHODIMP Enable(long lIndex, DWORD dwFlags);
+  STDMETHODIMP Info(long lIndex, AM_MEDIA_TYPE **ppmt, DWORD *pdwFlags, LCID *plcid, DWORD *pdwGroup, WCHAR **ppszName, IUnknown **ppObject, IUnknown **ppUnk);
+
+  // IAMOpenProgress
+  STDMETHODIMP QueryProgress(LONGLONG *pllTotal, LONGLONG *pllCurrent);
+  STDMETHODIMP AbortOperation();
+
+  // ISpecifyPropertyPages2
+  STDMETHODIMP GetPages(CAUUID *pPages);
+  STDMETHODIMP CreatePage(const GUID&amp; guid, IPropertyPage** ppPage);
+
+  // IObjectWithSite
+  STDMETHODIMP SetSite(IUnknown *pUnkSite);
+  STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
+
+  // IBufferInfo
+  STDMETHODIMP_(int) GetCount();
+  STDMETHODIMP GetStatus(int i, int&amp; samples, int&amp; size);
+  STDMETHODIMP_(DWORD) GetPriority();
+
+  // ILAVFSettings
+  STDMETHODIMP SetRuntimeConfig(BOOL bRuntimeConfig);
+  STDMETHODIMP GetPreferredLanguages(LPWSTR *ppLanguages);
+  STDMETHODIMP SetPreferredLanguages(LPCWSTR pLanguages);
+  STDMETHODIMP GetPreferredSubtitleLanguages(LPWSTR *ppLanguages);
+  STDMETHODIMP SetPreferredSubtitleLanguages(LPCWSTR pLanguages);
+  STDMETHODIMP_(LAVSubtitleMode) GetSubtitleMode();
+  STDMETHODIMP SetSubtitleMode(LAVSubtitleMode mode);
+  STDMETHODIMP_(BOOL) GetSubtitleMatchingLanguage();
+  STDMETHODIMP SetSubtitleMatchingLanguage(BOOL dwMode);
+  STDMETHODIMP_(BOOL) GetPGSForcedStream();
+  STDMETHODIMP SetPGSForcedStream(BOOL bFlag);
+  STDMETHODIMP_(BOOL) GetPGSOnlyForced();
+  STDMETHODIMP SetPGSOnlyForced(BOOL bForced);
+  STDMETHODIMP_(int) GetVC1TimestampMode();
+  STDMETHODIMP SetVC1TimestampMode(int iMode);
+  STDMETHODIMP SetSubstreamsEnabled(BOOL bSubStreams);
+  STDMETHODIMP_(BOOL) GetSubstreamsEnabled();
+  STDMETHODIMP SetVideoParsingEnabled(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetVideoParsingEnabled();
+  STDMETHODIMP SetFixBrokenHDPVR(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetFixBrokenHDPVR();
+  STDMETHODIMP_(HRESULT) SetFormatEnabled(LPCSTR strFormat, BOOL bEnabled);
+  STDMETHODIMP_(BOOL) IsFormatEnabled(LPCSTR strFormat);
+  STDMETHODIMP SetStreamSwitchRemoveAudio(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetStreamSwitchRemoveAudio();
+  STDMETHODIMP GetAdvancedSubtitleConfig(LPWSTR *ppAdvancedConfig);
+  STDMETHODIMP SetAdvancedSubtitleConfig(LPCWSTR pAdvancedConfig);
+  STDMETHODIMP SetUseAudioForHearingVisuallyImpaired(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetUseAudioForHearingVisuallyImpaired();
+  STDMETHODIMP SetMaxQueueMemSize(DWORD dwMaxSize);
+  STDMETHODIMP_(DWORD) GetMaxQueueMemSize();
+  STDMETHODIMP SetTrayIcon(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetTrayIcon();
+  STDMETHODIMP SetPreferHighQualityAudioStreams(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetPreferHighQualityAudioStreams();
+  STDMETHODIMP SetLoadMatroskaExternalSegments(BOOL bEnabled);
+  STDMETHODIMP_(BOOL) GetLoadMatroskaExternalSegments();
+  STDMETHODIMP GetFormats(LPSTR** formats, UINT* nFormats);
+  STDMETHODIMP SetNetworkStreamAnalysisDuration(DWORD dwDuration);
+  STDMETHODIMP_(DWORD) GetNetworkStreamAnalysisDuration();
+
+  // ILAVSplitterSettingsInternal
+  STDMETHODIMP_(LPCSTR) GetInputFormat() { if (m_pDemuxer) return m_pDemuxer-&gt;GetContainerFormat(); return NULL; }
+  STDMETHODIMP_(std::set&lt;FormatInfo&gt;&amp;) GetInputFormats();
+  STDMETHODIMP_(BOOL) IsVC1CorrectionRequired();
+  STDMETHODIMP_(CMediaType *) GetOutputMediatype(int stream);
+  STDMETHODIMP_(IFilterGraph *) GetFilterGraph() { if (m_pGraph) { m_pGraph-&gt;AddRef(); return m_pGraph; } return NULL; }
+
+  STDMETHODIMP_(DWORD) GetStreamFlags(DWORD dwStream) { if (m_pDemuxer) return m_pDemuxer-&gt;GetStreamFlags(dwStream); return 0; }
+  STDMETHODIMP_(int) GetPixelFormat(DWORD dwStream) { if (m_pDemuxer) return m_pDemuxer-&gt;GetPixelFormat(dwStream); return AV_PIX_FMT_NONE; }
+  STDMETHODIMP_(int) GetHasBFrames(DWORD dwStream){ if (m_pDemuxer) return m_pDemuxer-&gt;GetHasBFrames(dwStream); return -1; }
+
+  // Settings helper
+  std::list&lt;std::string&gt; GetPreferredAudioLanguageList();
+  std::list&lt;CSubtitleSelector&gt; GetSubtitleSelectors();
+
+  bool IsAnyPinDrying();
+  void SetFakeASFReader(BOOL bFlag) { m_bFakeASFReader = bFlag; }
+protected:
+  // CAMThread
+  enum {CMD_EXIT, CMD_SEEK};
+  DWORD ThreadProc();
+
+  HRESULT DemuxSeek(REFERENCE_TIME rtStart);
+  HRESULT DemuxNextPacket();
+  HRESULT DeliverPacket(Packet *pPacket);
+
+  void DeliverBeginFlush();
+  void DeliverEndFlush();
+
+  STDMETHODIMP Close();
+  STDMETHODIMP DeleteOutputs();
+  //初始化解复用器
+  STDMETHODIMP InitDemuxer();
+
+  friend class CLAVOutputPin;
+  STDMETHODIMP SetPositionsInternal(void *caller, LONGLONG* pCurrent, DWORD dwCurrentFlags, LONGLONG* pStop, DWORD dwStopFlags);
+
+public:
+  CLAVOutputPin *GetOutputPin(DWORD streamId, BOOL bActiveOnly = FALSE);
+  STDMETHODIMP RenameOutputPin(DWORD TrackNumSrc, DWORD TrackNumDst, std::vector&lt;CMediaType&gt; pmts);
+  STDMETHODIMP UpdateForcedSubtitleMediaType();
+
+  STDMETHODIMP CompleteInputConnection();
+  STDMETHODIMP BreakInputConnection();
+
+protected:
+	//相关的参数设置
+  STDMETHODIMP LoadDefaults();
+  STDMETHODIMP ReadSettings(HKEY rootKey);
+  STDMETHODIMP LoadSettings();
+  STDMETHODIMP SaveSettings();
+  //创建图标
+  STDMETHODIMP CreateTrayIcon();
+
+protected:
+  CLAVInputPin *m_pInput;
+
+private:
+  CCritSec m_csPins;
+  //用vector存储输出PIN（解复用的时候是不确定的）
+  std::vector&lt;CLAVOutputPin *&gt; m_pPins;
+  //活动的
+  std::vector&lt;CLAVOutputPin *&gt; m_pActivePins;
+  //不用的
+  std::vector&lt;CLAVOutputPin *&gt; m_pRetiredPins;
+  std::set&lt;DWORD&gt; m_bDiscontinuitySent;
+
+  std::wstring m_fileName;
+  std::wstring m_processName;
+  //有很多纯虚函数的基本解复用类
+  //注意：绝大部分信息都是从这获得的
+  //这里的信息是由其派生类从FFMPEG中获取到的
+  CBaseDemuxer *m_pDemuxer;
+
+  BOOL m_bPlaybackStarted;
+  BOOL m_bFakeASFReader;
+
+  // Times
+  REFERENCE_TIME m_rtStart, m_rtStop, m_rtCurrent, m_rtNewStart, m_rtNewStop;
+  REFERENCE_TIME m_rtOffset;
+  double m_dRate;
+  BOOL m_bStopValid;
+
+  // Seeking
+  REFERENCE_TIME m_rtLastStart, m_rtLastStop;
+  std::set&lt;void *&gt; m_LastSeekers;
+
+  // flushing
+  bool m_fFlushing;
+  CAMEvent m_eEndFlush;
+
+  std::set&lt;FormatInfo&gt; m_InputFormats;
+
+  // Settings
+  //设置
+  struct Settings {
+    BOOL TrayIcon;
+    std::wstring prefAudioLangs;
+    std::wstring prefSubLangs;
+    std::wstring subtitleAdvanced;
+    LAVSubtitleMode subtitleMode;
+    BOOL PGSForcedStream;
+    BOOL PGSOnlyForced;
+    int vc1Mode;
+    BOOL substreams;
+
+    BOOL MatroskaExternalSegments;
+
+    BOOL StreamSwitchRemoveAudio;
+    BOOL ImpairedAudio;
+    BOOL PreferHighQualityAudio;
+    DWORD QueueMaxSize;
+    DWORD NetworkAnalysisDuration;
+
+    std::map&lt;std::string, BOOL&gt; formats;
+  } m_settings;
+
+  BOOL m_bRuntimeConfig;
+
+  IUnknown *m_pSite;
+
+  CBaseTrayIcon *m_pTrayIcon;
+};
+
+[uuid("B98D13E7-55DB-4385-A33D-09FD1BA26338")]
+class CLAVSplitterSource : public CLAVSplitter
+{
+public:
+  // construct only via class factory
+  CLAVSplitterSource(LPUNKNOWN pUnk, HRESULT* phr);
+  virtual ~CLAVSplitterSource();
+
+  // IUnknown
+  DECLARE_IUNKNOWN;
+  //暴露接口，使外部程序可以QueryInterface，关键！
+  //翻译（“没有代表的方式查询接口”）
+  STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
+};
+</pre>
+    <br/>
+    先来看一下查询接口的函数NonDelegatingQueryInterface()吧
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//暴露接口，使外部程序可以QueryInterface，关键！
+STDMETHODIMP CLAVSplitter::NonDelegatingQueryInterface(REFIID riid, void** ppv)
+{
+  CheckPointer(ppv, E_POINTER);
+
+  *ppv = NULL;
+
+  if (m_pDemuxer &amp;&amp; (riid == __uuidof(IKeyFrameInfo) || riid == __uuidof(ITrackInfo) || riid == IID_IAMExtendedSeeking || riid == IID_IAMMediaContent)) {
+    return m_pDemuxer-&gt;QueryInterface(riid, ppv);
+  }
+  //写法好特别啊，意思是一样的
+  return
+    QI(IMediaSeeking)
+    QI(IAMStreamSelect)
+    QI(ISpecifyPropertyPages)
+    QI(ISpecifyPropertyPages2)
+    QI2(ILAVFSettings)
+    QI2(ILAVFSettingsInternal)
+    QI(IObjectWithSite)
+    QI(IBufferInfo)
+    __super::NonDelegatingQueryInterface(riid, ppv);
+}</pre>
+    <br/>
+    这个NonDelegatingQueryInterface()的写法确实够特别的，不过其作用还是一样的：根据不同的REFIID，获得不同的接口指针。在这里就不多说了。
+    <p>
+    </p>
+    <p>
+     再看一下Load()函数
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">// IFileSourceFilter
+// 打开
+STDMETHODIMP CLAVSplitter::Load(LPCOLESTR pszFileName, const AM_MEDIA_TYPE * pmt)
+{
+  CheckPointer(pszFileName, E_POINTER);
+
+  m_bPlaybackStarted = FALSE;
+
+  m_fileName = std::wstring(pszFileName);
+
+  HRESULT hr = S_OK;
+  SAFE_DELETE(m_pDemuxer);
+  LPWSTR extension = PathFindExtensionW(pszFileName);
+
+  DbgLog((LOG_TRACE, 10, L"::Load(): Opening file '%s' (extension: %s)", pszFileName, extension));
+
+  // BDMV uses the BD demuxer, everything else LAVF
+  if (_wcsicmp(extension, L".bdmv") == 0 || _wcsicmp(extension, L".mpls") == 0) {
+    m_pDemuxer = new CBDDemuxer(this, this);
+  } else {
+    m_pDemuxer = new CLAVFDemuxer(this, this);
+  }
+  //打开
+  if(FAILED(hr = m_pDemuxer-&gt;Open(pszFileName))) {
+    SAFE_DELETE(m_pDemuxer);
+    return hr;
+  }
+  m_pDemuxer-&gt;AddRef();
+
+  return InitDemuxer();
+}</pre>
+    <br/>
+    在这里我们要注意CLAVSplitter的一个变量：m_pDemuxer。这是一个指向 CBaseDemuxer的指针。因此在这里CLAVSplitter实际上调用了 CBaseDemuxer中的方法。
+    <p>
+    </p>
+    <p>
+     从代码中的逻辑我们可以看出：
+    </p>
+    <p>
+     1.寻找文件后缀
+    </p>
+    <p>
+     2.当文件后缀是：".bdmv"或者".mpls"的时候，m_pDemuxer指向一个CBDDemuxer（我推测这代表目标文件是蓝光文件什么的），其他情况下m_pDemuxer指向一个CLAVFDemuxer。
+    </p>
+    <p>
+     <span style="color:#993300;">
+      3.然后m_pDemuxer会调用Open()方法。
+     </span>
+    </p>
+    <p>
+     4.最后会调用一个InitDemuxer()方法。
+    </p>
+    <p>
+     在这里我们应该看看m_pDemuxer-&gt;Open()这个方法里面有什么。我们先考虑m_pDemuxer指向CLAVFDemuxer的情况。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">// Demuxer Functions
+// 打开（就是一个封装）
+STDMETHODIMP CLAVFDemuxer::Open(LPCOLESTR pszFileName)
+{
+  return OpenInputStream(NULL, pszFileName, NULL, TRUE);
+}</pre>
+    发现是一层封装，于是果断决定层层深入。
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//实际的打开,使用FFMPEG
+STDMETHODIMP CLAVFDemuxer::OpenInputStream(AVIOContext *byteContext, LPCOLESTR pszFileName, const char *format, BOOL bForce)
+{
+  CAutoLock lock(m_pLock);
+  HRESULT hr = S_OK;
+
+  int ret; // return code from avformat functions
+
+  // Convert the filename from wchar to char for avformat
+  char fileName[4100] = {0};
+  if (pszFileName) {
+    ret = WideCharToMultiByte(CP_UTF8, 0, pszFileName, -1, fileName, 4096, NULL, NULL);
+  }
+
+  if (_strnicmp("mms:", fileName, 4) == 0) {
+    memmove(fileName+1, fileName, strlen(fileName));
+    memcpy(fileName, "mmsh", 4);
+  }
+
+  AVIOInterruptCB cb = {avio_interrupt_cb, this};
+
+trynoformat:
+  // Create the avformat_context
+  // FFMPEG中的函数
+  m_avFormat = avformat_alloc_context();
+  m_avFormat-&gt;pb = byteContext;
+  m_avFormat-&gt;interrupt_callback = cb;
+
+  if (m_avFormat-&gt;pb)
+    m_avFormat-&gt;flags |= AVFMT_FLAG_CUSTOM_IO;
+
+  LPWSTR extension = pszFileName ? PathFindExtensionW(pszFileName) : NULL;
+
+  AVInputFormat *inputFormat = NULL;
+  //如果指定了格式
+  if (format) {
+	  //查查有木有
+    inputFormat = av_find_input_format(format);
+  } else if (pszFileName) {
+    LPWSTR extension = PathFindExtensionW(pszFileName);
+    for (int i = 0; i &lt; countof(wszImageExtensions); i++) {
+      if (_wcsicmp(extension, wszImageExtensions[i]) == 0) {
+        if (byteContext) {
+          inputFormat = av_find_input_format("image2pipe");
+        } else {
+          inputFormat = av_find_input_format("image2");
+        }
+        break;
+      }
+    }
+    for (int i = 0; i &lt; countof(wszBlockedExtensions); i++) {
+      if (_wcsicmp(extension, wszBlockedExtensions[i]) == 0) {
+        goto done;
+      }
+    }
+  }
+
+  // Disable loading of external mkv segments, if required
+  if (!m_pSettings-&gt;GetLoadMatroskaExternalSegments())
+    m_avFormat-&gt;flags |= AVFMT_FLAG_NOEXTERNAL;
+
+  m_timeOpening = time(NULL);
+  //实际的打开
+  ret = avformat_open_input(&amp;m_avFormat, fileName, inputFormat, NULL);
+  //出错了
+  if (ret &lt; 0) {
+    DbgLog((LOG_ERROR, 0, TEXT("::OpenInputStream(): avformat_open_input failed (%d)"), ret));
+    if (format) {
+      DbgLog((LOG_ERROR, 0, TEXT(" -&gt; trying again without specific format")));
+      format = NULL;
+	  //实际的关闭
+      avformat_close_input(&amp;m_avFormat);
+      goto trynoformat;
+    }
+    goto done;
+  }
+  DbgLog((LOG_TRACE, 10, TEXT("::OpenInputStream(): avformat_open_input opened file of type '%S' (took %I64d seconds)"), m_avFormat-&gt;iformat-&gt;name, time(NULL) - m_timeOpening));
+  m_timeOpening = 0;
+  //初始化AVFormat
+  CHECK_HR(hr = InitAVFormat(pszFileName, bForce));
+
+  return S_OK;
+done:
+  CleanupAVFormat();
+  return E_FAIL;
+}
+</pre>
+    <br/>
+    看到这个函数，立马感受到了一种“拨云见日”的感觉。看到了很多FFMPEG的API函数。最重要的依据当属avformat_open_input()了，通过这个函数，打开了实际的文件。如果出现错误，则调用avformat_close_input()进行清理。
+    <p>
+    </p>
+    <p>
+     最后，还调用了InitAVFormat()函数：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//初始化AVFormat
+STDMETHODIMP CLAVFDemuxer::InitAVFormat(LPCOLESTR pszFileName, BOOL bForce)
+{
+  HRESULT hr = S_OK;
+  const char *format = NULL;
+  //获取InputFormat信息（，短名称，长名称）
+  lavf_get_iformat_infos(m_avFormat-&gt;iformat, &amp;format, NULL);
+  if (!bForce &amp;&amp; (!format || !m_pSettings-&gt;IsFormatEnabled(format))) {
+    DbgLog((LOG_TRACE, 20, L"::InitAVFormat() - format of type '%S' disabled, failing", format ? format : m_avFormat-&gt;iformat-&gt;name));
+    return E_FAIL;
+  }
+
+  m_pszInputFormat = format ? format : m_avFormat-&gt;iformat-&gt;name;
+
+  m_bVC1SeenTimestamp = FALSE;
+
+  LPWSTR extension = pszFileName ? PathFindExtensionW(pszFileName) : NULL;
+
+  m_bMatroska = (_strnicmp(m_pszInputFormat, "matroska", 8) == 0);
+  m_bOgg = (_strnicmp(m_pszInputFormat, "ogg", 3) == 0);
+  m_bAVI = (_strnicmp(m_pszInputFormat, "avi", 3) == 0);
+  m_bMPEGTS = (_strnicmp(m_pszInputFormat, "mpegts", 6) == 0);
+  m_bMPEGPS = (_stricmp(m_pszInputFormat, "mpeg") == 0);
+  m_bRM = (_stricmp(m_pszInputFormat, "rm") == 0);
+  m_bPMP = (_stricmp(m_pszInputFormat, "pmp") == 0);
+  m_bMP4 = (_stricmp(m_pszInputFormat, "mp4") == 0);
+
+  m_bTSDiscont = m_avFormat-&gt;iformat-&gt;flags &amp; AVFMT_TS_DISCONT;
+
+  WCHAR szProt[24] = L"file";
+  if (pszFileName) {
+    DWORD dwNumChars = 24;
+    hr = UrlGetPart(pszFileName, szProt, &amp;dwNumChars, URL_PART_SCHEME, 0);
+    if (SUCCEEDED(hr) &amp;&amp; dwNumChars &amp;&amp; (_wcsicmp(szProt, L"file") != 0)) {
+      m_avFormat-&gt;flags |= AVFMT_FLAG_NETWORK;
+      DbgLog((LOG_TRACE, 10, TEXT("::InitAVFormat(): detected network protocol: %s"), szProt));
+    }
+  }
+
+  // TODO: make both durations below configurable
+  // decrease analyze duration for network streams
+  if (m_avFormat-&gt;flags &amp; AVFMT_FLAG_NETWORK || (m_avFormat-&gt;flags &amp; AVFMT_FLAG_CUSTOM_IO &amp;&amp; !m_avFormat-&gt;pb-&gt;seekable)) {
+    // require at least 0.2 seconds
+    m_avFormat-&gt;max_analyze_duration = max(m_pSettings-&gt;GetNetworkStreamAnalysisDuration() * 1000, 200000);
+  } else {
+    // And increase it for mpeg-ts/ps files
+    if (m_bMPEGTS || m_bMPEGPS)
+      m_avFormat-&gt;max_analyze_duration = 10000000;
+  }
+
+  av_opt_set_int(m_avFormat, "correct_ts_overflow", !m_pBluRay, 0);
+
+  if (m_bMatroska)
+    m_avFormat-&gt;flags |= AVFMT_FLAG_KEEP_SIDE_DATA;
+
+  m_timeOpening = time(NULL);
+  //获取媒体流信息
+  int ret = avformat_find_stream_info(m_avFormat, NULL);
+  if (ret &lt; 0) {
+    DbgLog((LOG_ERROR, 0, TEXT("::InitAVFormat(): av_find_stream_info failed (%d)"), ret));
+    goto done;
+  }
+  DbgLog((LOG_TRACE, 10, TEXT("::InitAVFormat(): avformat_find_stream_info finished, took %I64d seconds"), time(NULL) - m_timeOpening));
+  m_timeOpening = 0;
+
+  // Check if this is a m2ts in a BD structure, and if it is, read some extra stream properties out of the CLPI files
+  if (m_pBluRay) {
+    m_pBluRay-&gt;ProcessClipLanguages();
+  } else if (pszFileName &amp;&amp; m_bMPEGTS) {
+    CheckBDM2TSCPLI(pszFileName);
+  }
+
+  SAFE_CO_FREE(m_stOrigParser);
+  m_stOrigParser = (enum AVStreamParseType *)CoTaskMemAlloc(m_avFormat-&gt;nb_streams * sizeof(enum AVStreamParseType));
+  if (!m_stOrigParser)
+    return E_OUTOFMEMORY;
+
+  for(unsigned int idx = 0; idx &lt; m_avFormat-&gt;nb_streams; ++idx) {
+    AVStream *st = m_avFormat-&gt;streams[idx];
+
+    // Disable full stream parsing for these formats
+    if (st-&gt;need_parsing == AVSTREAM_PARSE_FULL) {
+      if (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_DVB_SUBTITLE) {
+        st-&gt;need_parsing = AVSTREAM_PARSE_NONE;
+      }
+    }
+
+    if (m_bOgg &amp;&amp; st-&gt;codec-&gt;codec_id == AV_CODEC_ID_H264) {
+      st-&gt;need_parsing = AVSTREAM_PARSE_FULL;
+    }
+
+    // Create the parsers with the appropriate flags
+    init_parser(m_avFormat, st);
+    UpdateParserFlags(st);
+
+#ifdef DEBUG
+    AVProgram *streamProg = av_find_program_from_stream(m_avFormat, NULL, idx);
+    DbgLog((LOG_TRACE, 30, L"Stream %d (pid %d) - program: %d, codec: %S; parsing: %S;", idx, st-&gt;id, streamProg ? streamProg-&gt;pmt_pid : -1, avcodec_get_name(st-&gt;codec-&gt;codec_id), lavf_get_parsing_string(st-&gt;need_parsing)));
+#endif
+    m_stOrigParser[idx] = st-&gt;need_parsing;
+
+    if ((st-&gt;codec-&gt;codec_id == AV_CODEC_ID_DTS &amp;&amp; st-&gt;codec-&gt;codec_tag == 0xA2)
+     || (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_EAC3 &amp;&amp; st-&gt;codec-&gt;codec_tag == 0xA1))
+      st-&gt;disposition |= LAVF_DISPOSITION_SECONDARY_AUDIO;
+
+    UpdateSubStreams();
+
+    if (st-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_ATTACHMENT &amp;&amp; (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_TTF || st-&gt;codec-&gt;codec_id == AV_CODEC_ID_OTF)) {
+      if (!m_pFontInstaller) {
+        m_pFontInstaller = new CFontInstaller();
+      }
+      m_pFontInstaller-&gt;InstallFont(st-&gt;codec-&gt;extradata, st-&gt;codec-&gt;extradata_size);
+    }
+  }
+
+  CHECK_HR(hr = CreateStreams());
+
+  return S_OK;
+done:
+  //关闭输入
+  CleanupAVFormat();
+  return E_FAIL;
+}</pre>
+    <br/>
+    该函数通过avformat_find_stream_info()等获取到流信息，这里就不多说了。
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12711723
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=LAVFilter&amp;t=blog" target="_blank">
+    LAVFilter
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=LAVSplitter&amp;t=blog" target="_blank">
+    LAVSplitter
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分析&amp;t=blog" target="_blank">
+    分析
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2628695" target="_blank">
+    LAV Filter
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

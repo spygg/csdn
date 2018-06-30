@@ -1,0 +1,1700 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 基于内容的图像检索系统（合集） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_422">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   基于内容的图像检索系统（合集）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月09日 19:24:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6587
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     基于内容的图像检索，即CBIR(Content-based image retrieval)，是计算机视觉领域中关注大规模数字图像内容检索的研究分支。典型的CBIR系统，允许用户输入一张图片，以查找具有相同或相似内容的其他图片。而传统的图像检索是基于文本的，即通过图片的名称、文字信息和索引关系来实现查询功能。
+    </p>
+    <p>
+     本文是Wiki上统计的当前主要的基于内容的图像检索系统。
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      <strong>
+       商业图像搜索引擎：
+      </strong>
+     </span>
+    </p>
+    <p>
+    </p>
+    <table class="wikitable sortable jquery-tablesorter" style="margin:1em 0px;border:1px solid rgb(170,170,170);color:rgb(0,0,0);line-height:19px;font-family:sans-serif;font-size:13px;border-collapse:collapse;background-color:rgb(249,249,249);">
+     <thead>
+      <tr>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        名称
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        描述
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        外部图像查询
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        元数据查询
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        索引的大小 (
+        <br/>
+        <span style="line-height:normal;">
+         估计值
+        </span>
+        , Millions of Images)
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        组织
+       </th>
+       <th class="headerSort" style="padding:.2em 21px .2em .2em;border:1px solid rgb(170,170,170);text-align:center;background-color:rgb(242,242,242);" title="Sort ascending">
+        协议 (Open/Closed)
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://elastic-vision.software.informer.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Elastic
+ Vision
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Smart image searcher with content-based clustering in a visual network.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://images.google.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Google Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Google's CBIR system, note: does not work on all images
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Public Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://stu.baidu.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Baidu Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Baidu's CBIR system
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        1000M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Public Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.idmypill.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         ID My Pill
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Automatic prescription pill identification (CBIR)
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Open (via API)
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.imense.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Imense Image Search Portal
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR search engine, by Imense.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        3M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.imprezzeo.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Imprezzeo Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR search engine, by Imprezzeo.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://pixolution.does-it.net/fileadmin/template/visual_web_demo.html" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Visual
+ Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR search engine, by pixolution
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        10M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.incogna.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Incogna Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR search engine, by Incogna Inc.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        100M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.like.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Like.com
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Shopping &amp; fashion based CBIR engine
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        1M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.chicengine.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Chic Engine
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Visual fashion search engine (CBIR)
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://mipai.esuli.it/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         MiPai similarity search
+ engine
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Online similarity search engine
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        100M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Individual
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://labs.ideeinc.com/visual/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Piximilar
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Demo engine, developed by Idee Inc.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        3M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company1
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.empora.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Empora
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Product comparison &amp; shopping using CBIR for product images. Previously known as Pixsta
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        0.5M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.shopachu.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Shopachu
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Shopping &amp; fashion CBIR engine, by Incogna Inc.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        1M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.tineye.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         TinEye
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR site for finding variations of web images, by Idee Inc.
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        1800M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.tiltomo.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Tiltomo
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR system using Flickr photos
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://morelikethis.ebay.com/IS?_catid=11450&amp;_kw=t-shirt" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         eBay
+ Image Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Image Search for eBay Fashion
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        20M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Public Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.visual-recognition.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         Visual Recognition
+ Factory
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Visual Recognition Factory
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a class="external text" href="http://www.immenselab.com/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         IMMENSELAB
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR search engine by
+        <a class="external text" href="http://www.kbkgroup.org/" style="color:rgb(102,51,102);padding-right:13px;text-decoration:none;">
+         KBKGROUP
+        </a>
+        .
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        10M
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+      <tr>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        <a href="http://en.wikipedia.org/wiki/Macroglossa_Visual_Search" style="color:rgb(11,0,128);text-decoration:none;" title="Macroglossa Visual Search">
+         Macroglossa Visual
+ Search
+        </a>
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        CBIR visual search engine
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Yes
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        No
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Private Company
+       </td>
+       <td style="padding:.2em;border:1px solid rgb(170,170,170);">
+        Closed
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <strong>
+     <span style="font-size:18px;">
+      研究项目（有一部分是开源的）：
+     </span>
+    </strong>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+      </span>
+     </strong>
+    </p>
+    <table border="1" cellpadding="0" cellspacing="0" style="background:rgb(249,249,249);">
+     <thead>
+      <tr>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          名称
+         </strong>
+        </p>
+       </td>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          外部图像查询
+         </strong>
+        </p>
+       </td>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          元数据查询
+         </strong>
+        </p>
+       </td>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          索引大小 (估计值, Millions of Images)
+         </strong>
+        </p>
+       </td>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          组织
+         </strong>
+        </p>
+       </td>
+       <td style="background:rgb(242,242,242);">
+        <p align="center">
+         <strong>
+          协议 (Open/Closed)
+         </strong>
+        </p>
+       </td>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.akiwi.eu/">
+          <span style="color:#663366;">
+           akiwi
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         15M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.alipr.com/">
+          <span style="color:#663366;">
+           ALIPR
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.anaktisi.net/">
+          <span style="color:#663366;">
+           Anaktisi
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         0.225M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Open
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://brisc.sourceforge.net/">
+          <span style="color:#663366;">
+           BRISC
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         GPL
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.semanticmetadata.net/features/">
+          <span style="color:#663366;">
+           Caliph &amp; Emir
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         <a href="http://en.wikipedia.org/wiki/GPL" title="GPL">
+          <span style="color:#0b0080;">
+           GPL
+          </span>
+         </a>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://thomas.deselaers.de/fire/">
+          <span style="color:#663366;">
+           FIRE
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Open
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.gnu.org/software/gift/">
+          <span style="color:#663366;">
+           GNU Image Finding Tool
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         GNU
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         <a href="http://en.wikipedia.org/wiki/GPL" title="GPL">
+          <span style="color:#0b0080;">
+           GPL
+          </span>
+         </a>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://imense.com/similarsearch/desktop">
+          <span style="color:#663366;">
+           ISSBP
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         free-beta limited to 4k images
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Private Company
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.img-rummager.com/">
+          <span style="color:#663366;">
+           img(Rummager)
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Individual
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://server.imgseek.net/">
+          <span style="color:#663366;">
+           imgSeek
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Individual
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         <a href="http://en.wikipedia.org/wiki/GPL" title="GPL">
+          <span style="color:#0b0080;">
+           GPL
+          </span>
+         </a>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="https://www.rocq.inria.fr/cgi-bin/imedia/circario.cgi/demos">
+          <span style="color:#663366;">
+           IKONA
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.iosb.fraunhofer.de/servlet/is/27836/">
+          <span style="color:#663366;">
+           IOSB
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Research Institute
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.lire-project.net/">
+          <span style="color:#663366;">
+           LIRE
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         GPL
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://lucignolo.isti.cnr.it/">
+          <span style="color:#663366;">
+           Lucignolo
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         106M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Research Institute
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://mi-file.isti.cnr.it/CophirSearch/">
+          <span style="color:#663366;">
+           MIFile
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         106M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Research Institute
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Open
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://muvis.cs.tut.fi/">
+          <span style="color:#663366;">
+           MUVIS
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.kalisteo.org/en/index.htm">
+          <span style="color:#663366;">
+           PIRIA
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         130M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.picslikethat.com/">
+          <span style="color:#663366;">
+           PicsLikeThat
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         12M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://inperc.com/wiki/index.php?title=Pixcavator_image_search">
+          <span style="color:#663366;">
+           Pixcavator
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Desktop-based
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Private company
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www.pixolu.de/">
+          <span style="color:#663366;">
+           pixolu
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Private Company / University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://retin.ensea.fr/">
+          <span style="color:#663366;">
+           RETIN
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://labs.systemone.at/retrievr/">
+          <span style="color:#663366;">
+           Retrievr
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://simba.informatik.uni-freiburg.de/">
+          <span style="color:#663366;">
+           SIMBA
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         0.002M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://pascal.inrialpes.fr/local/tagprop/">
+          <span style="color:#663366;">
+           TagProp
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Institute
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://viral.image.ntua.gr/">
+          <span style="color:#663366;">
+           VIRaL
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         2.221M
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www-db.deis.unibo.it/Windsurf/">
+          <span style="color:#663366;">
+           Windsurf
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         <a href="http://www-db.deis.unibo.it/PIBE/">
+          <span style="color:#663366;">
+           PIBE
+          </span>
+         </a>
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         No
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="left">
+         SHIATSU
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Yes
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         University
+        </p>
+       </td>
+       <td>
+        <p align="left">
+         Closed
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <br/>
+    <p>
+     <span style="font-size:14px;">
+      用过其中的LIRE和Caliph &amp; Emir，还是比较好用的
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       <br/>
+      </span>
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      原文地址：
+      <a href="http://en.wikipedia.org/wiki/List_of_CBIR_Engines">
+       http://en.wikipedia.org/wiki/List_of_CBIR_Engines
+      </a>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=基于内容&amp;t=blog" target="_blank">
+    基于内容
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=系统&amp;t=blog" target="_blank">
+    系统
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362935" target="_blank">
+    MPEG7/图像检索
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

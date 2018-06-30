@@ -1,0 +1,220 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 开源视频会议系统：OpenMeetings 安装方法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_224">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   开源视频会议系统：OpenMeetings 安装方法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月27日 00:07:27
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：12208
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131126145353453"/>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:'微软雅黑', Verdana, sans-serif, '宋体';font-size:13px;line-height:21px;">
+      OpenMeetings是一个多语言可定制的视频会议和协作系统。
+     </span>
+     说到OpenMeetings就应该提一下red5因为OpenMeetings 的视频服务是加载red5上面的。Red5是一款基于JAVA的免费的开源的Flash流媒体server.是当前最好的替代Adobe提供的FMS的开源软件。而且在可扩展性上有FMS不可比拟的优势。OpenMeetings是一款基于Flex开发的开源视频软件，通过RTMP和HTTP协议传送视频数据。支持在线聊天，视频，文件共享，桌面共享。支持多语言。
+    </p>
+    <p>
+    </p>
+    <p>
+     OpenMeetings简单的安装步骤：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131125204106562?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     注意：安装并配置java环境，需要JRE 6。
+    </p>
+    <p>
+     1.      OpenMeetings默认使用ApacheDerby数据库，也可以选择MySQL, Postgres , IBM DB2 , Oracle ,或 MSSQL。
+    </p>
+    <p>
+     <strong>
+      2.       允许导入图片文件至白板
+     </strong>
+    </p>
+    <p>
+     安装ImageMagick 。
+     <a href="http://www.imagemagick.org">
+      http://www.imagemagick.org
+     </a>
+    </p>
+    <p>
+     <strong>
+      3.       允许导入PDF文件至白板
+     </strong>
+    </p>
+    <p>
+     安装GhostScript。
+     <a href="http://www.ghostscript.com/download/gsdnld.html">
+      http://www.ghostscript.com/download/gsdnld.html
+     </a>
+    </p>
+    <p>
+     安装SWFTools。
+     <a href="http://www.swftools.org/">
+      http://www.swftools.org/
+     </a>
+    </p>
+    <p>
+     <strong>
+      4.       允许导入.doc, .docx, .ppt, .pptx, ... 等Office 文档
+      <span style="font-weight:bold;">
+       至白板
+      </span>
+     </strong>
+    </p>
+    <p>
+     安装JODConverter。
+    </p>
+    <p>
+     安装OpenOffice 或者LibreOffice。
+    </p>
+    <p>
+     <strong>
+      5.       允许导入（以及录制）.avi, .flv, .mov 以及 .mp4文件
+     </strong>
+    </p>
+    <p>
+     安装FFMpeg (包含libmp3lame 以及 libx264)。
+     <a href="http://ffmpeg.zeranoe.com/builds/">
+      http://ffmpeg.zeranoe.com/builds/
+     </a>
+    </p>
+    <p>
+     安装SoX。
+     <a href="http://sox.sourceforge.net/">
+      http://sox.sourceforge.net/
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://openmeetings.apache.org/installation.html">
+      http://openmeetings.apache.org/installation.html
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源软件&amp;t=blog" target="_blank">
+    开源软件
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频会议&amp;t=blog" target="_blank">
+    视频会议
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Java&amp;t=blog" target="_blank">
+    Java
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Flash&amp;t=blog" target="_blank">
+    Flash
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362938" target="_blank">
+    开源多媒体系统
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1652801" target="_blank">
+    开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

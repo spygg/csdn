@@ -1,0 +1,423 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于FFMPEG的推流器附件：收流器 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_43">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于FFMPEG的推流器附件：收流器
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年07月18日 08:47:14
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：17655
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="white-space:pre;">
+     </span>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     最简单的基于FFmpeg的推流器系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39803457">
+      《最简单的基于FFmpeg的推流器（以推送RTMP为例）》
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/46890487">
+      《最简单的基于FFMPEG的推流器附件：收流器》
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     出于对《最简单的基于FFmpeg的推流器》的补充，本文记录一个最简单的基于FFmpeg的收流器。收流器和推流器的作用正好相反：推流器用于将本地文件以流媒体的形式发送出去，而收流器用于将流媒体内容保存为本地文件。
+    </p>
+    <span style="white-space:pre;">
+    </span>
+    本文记录的推流器可以将RTMP流媒体保存成为一个本地的FLV文件。由于FFmpeg本身支持很多的流媒体协议和封装格式，所以也支持其它的封装格式和流媒体协议。
+    <br/>
+    <br/>
+    <h2>
+     源代码
+    </h2>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * 最简单的基于FFmpeg的收流器（接收RTMP）
+ * Simplest FFmpeg Receiver (Receive RTMP)
+ * 
+ * 雷霄骅 Lei Xiaohua
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ * 
+ * 本例子将流媒体数据（以RTMP为例）保存成本地文件。
+ * 是使用FFmpeg进行流媒体接收最简单的教程。
+ *
+ * This example saves streaming media data (Use RTMP as example)
+ * as a local file.
+ * It's the simplest FFmpeg stream receiver.
+ * 
+ */
+
+#include &lt;stdio.h&gt;
+
+#define __STDC_CONSTANT_MACROS
+
+#ifdef _WIN32
+//Windows
+extern "C"
+{
+#include "libavformat/avformat.h"
+#include "libavutil/mathematics.h"
+#include "libavutil/time.h"
+};
+#else
+//Linux...
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include &lt;libavformat/avformat.h&gt;
+#include &lt;libavutil/mathematics.h&gt;
+#include &lt;libavutil/time.h&gt;
+#ifdef __cplusplus
+};
+#endif
+#endif
+
+//'1': Use H.264 Bitstream Filter 
+#define USE_H264BSF 0
+
+int main(int argc, char* argv[])
+{
+	AVOutputFormat *ofmt = NULL;
+	//Input AVFormatContext and Output AVFormatContext
+	AVFormatContext *ifmt_ctx = NULL, *ofmt_ctx = NULL;
+	AVPacket pkt;
+	const char *in_filename, *out_filename;
+	int ret, i;
+	int videoindex=-1;
+	int frame_index=0;
+	in_filename  = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
+	//in_filename  = "rtp://233.233.233.233:6666";
+	//out_filename = "receive.ts";
+	//out_filename = "receive.mkv";
+	out_filename = "receive.flv";
+
+	av_register_all();
+	//Network
+	avformat_network_init();
+	//Input
+	if ((ret = avformat_open_input(&amp;ifmt_ctx, in_filename, 0, 0)) &lt; 0) {
+		printf( "Could not open input file.");
+		goto end;
+	}
+	if ((ret = avformat_find_stream_info(ifmt_ctx, 0)) &lt; 0) {
+		printf( "Failed to retrieve input stream information");
+		goto end;
+	}
+
+	for(i=0; i&lt;ifmt_ctx-&gt;nb_streams; i++) 
+		if(ifmt_ctx-&gt;streams[i]-&gt;codec-&gt;codec_type==AVMEDIA_TYPE_VIDEO){
+			videoindex=i;
+			break;
+		}
+
+	av_dump_format(ifmt_ctx, 0, in_filename, 0);
+
+	//Output
+	avformat_alloc_output_context2(&amp;ofmt_ctx, NULL, NULL, out_filename); //RTMP
+
+	if (!ofmt_ctx) {
+		printf( "Could not create output context\n");
+		ret = AVERROR_UNKNOWN;
+		goto end;
+	}
+	ofmt = ofmt_ctx-&gt;oformat;
+	for (i = 0; i &lt; ifmt_ctx-&gt;nb_streams; i++) {
+		//Create output AVStream according to input AVStream
+		AVStream *in_stream = ifmt_ctx-&gt;streams[i];
+		AVStream *out_stream = avformat_new_stream(ofmt_ctx, in_stream-&gt;codec-&gt;codec);
+		if (!out_stream) {
+			printf( "Failed allocating output stream\n");
+			ret = AVERROR_UNKNOWN;
+			goto end;
+		}
+		//Copy the settings of AVCodecContext
+		ret = avcodec_copy_context(out_stream-&gt;codec, in_stream-&gt;codec);
+		if (ret &lt; 0) {
+			printf( "Failed to copy context from input to output stream codec context\n");
+			goto end;
+		}
+		out_stream-&gt;codec-&gt;codec_tag = 0;
+		if (ofmt_ctx-&gt;oformat-&gt;flags &amp; AVFMT_GLOBALHEADER)
+			out_stream-&gt;codec-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;
+	}
+	//Dump Format------------------
+	av_dump_format(ofmt_ctx, 0, out_filename, 1);
+	//Open output URL
+	if (!(ofmt-&gt;flags &amp; AVFMT_NOFILE)) {
+		ret = avio_open(&amp;ofmt_ctx-&gt;pb, out_filename, AVIO_FLAG_WRITE);
+		if (ret &lt; 0) {
+			printf( "Could not open output URL '%s'", out_filename);
+			goto end;
+		}
+	}
+	//Write file header
+	ret = avformat_write_header(ofmt_ctx, NULL);
+	if (ret &lt; 0) {
+		printf( "Error occurred when opening output URL\n");
+		goto end;
+	}
+
+#if USE_H264BSF
+	AVBitStreamFilterContext* h264bsfc =  av_bitstream_filter_init("h264_mp4toannexb"); 
+#endif
+
+	while (1) {
+		AVStream *in_stream, *out_stream;
+		//Get an AVPacket
+		ret = av_read_frame(ifmt_ctx, &amp;pkt);
+		if (ret &lt; 0)
+			break;
+		
+		in_stream  = ifmt_ctx-&gt;streams[pkt.stream_index];
+		out_stream = ofmt_ctx-&gt;streams[pkt.stream_index];
+		/* copy packet */
+		//Convert PTS/DTS
+		pkt.pts = av_rescale_q_rnd(pkt.pts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		pkt.dts = av_rescale_q_rnd(pkt.dts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		pkt.duration = av_rescale_q(pkt.duration, in_stream-&gt;time_base, out_stream-&gt;time_base);
+		pkt.pos = -1;
+		//Print to Screen
+		if(pkt.stream_index==videoindex){
+			printf("Receive %8d video frames from input URL\n",frame_index);
+			frame_index++;
+
+#if USE_H264BSF
+			av_bitstream_filter_filter(h264bsfc, in_stream-&gt;codec, NULL, &amp;pkt.data, &amp;pkt.size, pkt.data, pkt.size, 0);
+#endif
+		}
+		//ret = av_write_frame(ofmt_ctx, &amp;pkt);
+		ret = av_interleaved_write_frame(ofmt_ctx, &amp;pkt);
+
+		if (ret &lt; 0) {
+			printf( "Error muxing packet\n");
+			break;
+		}
+		
+		av_free_packet(&amp;pkt);
+		
+	}
+
+#if USE_H264BSF
+	av_bitstream_filter_close(h264bsfc);  
+#endif
+
+	//Write file trailer
+	av_write_trailer(ofmt_ctx);
+end:
+	avformat_close_input(&amp;ifmt_ctx);
+	/* close output */
+	if (ofmt_ctx &amp;&amp; !(ofmt-&gt;flags &amp; AVFMT_NOFILE))
+		avio_close(ofmt_ctx-&gt;pb);
+	avformat_free_context(ofmt_ctx);
+	if (ret &lt; 0 &amp;&amp; ret != AVERROR_EOF) {
+		printf( "Error occurred.\n");
+		return -1;
+	}
+	return 0;
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <h2>
+     运行结果
+    </h2>
+    程序运行之后，即可获取流媒体数据并且在本地保存成一个视频文件。
+    <br/>
+    <br/>
+    <h2>
+     下载
+    </h2>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      simplest ffmpeg streamer
+     </strong>
+    </p>
+    <br/>
+    <strong>
+     项目主页
+    </strong>
+    <br/>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestffmpegstreamer/">
+      https://sourceforge.net/projects/simplestffmpegstreamer/
+     </a>
+    </p>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_ffmpeg_streamer">
+      https://github.com/leixiaohua1020/simplest_ffmpeg_streamer
+     </a>
+    </p>
+    <p>
+     开源中国：
+     <a href="http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_streamer">
+      http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_streamer
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     CSDN下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/8924345">
+      http://download.csdn.net/detail/leixiaohua1020/8924345
+     </a>
+    </p>
+    <br/>
+    <p>
+     解决方案包含2个项目：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p>
+      simplest_ffmpeg_streamer: 将本地视频文件推送至流媒体服务器。
+     </p>
+     <p>
+      <span style="color:#ff0000;">
+       simplest_ffmpeg_receiver: 将流媒体数据保存成本地文件。
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/46890487
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体&amp;t=blog" target="_blank">
+    流媒体
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RTMP&amp;t=blog" target="_blank">
+    RTMP
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,1636 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：avformat_open_input() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_92">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：avformat_open_input()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月05日 00:13:10
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：32507
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="white-space:pre;">
+     </span>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     本文简单分析FFmpeg中一个常用的函数：avformat_open_input()。该函数用于打开多媒体数据并且获得一些相关的信息。它的声明位于libavformat\avformat.h，如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">/**
+ * Open an input stream and read the header. The codecs are not opened.
+ * The stream must be closed with avformat_close_input().
+ *
+ * @param ps Pointer to user-supplied AVFormatContext (allocated by avformat_alloc_context).
+ *           May be a pointer to NULL, in which case an AVFormatContext is allocated by this
+ *           function and written into ps.
+ *           Note that a user-supplied AVFormatContext will be freed on failure.
+ * @param filename Name of the stream to open.
+ * @param fmt If non-NULL, this parameter forces a specific input format.
+ *            Otherwise the format is autodetected.
+ * @param options  A dictionary filled with AVFormatContext and demuxer-private options.
+ *                 On return this parameter will be destroyed and replaced with a dict containing
+ *                 options that were not found. May be NULL.
+ *
+ * @return 0 on success, a negative AVERROR on failure.
+ *
+ * @note If you want to use custom IO, preallocate the format context and set its pb field.
+ */
+int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options);</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    代码中的英文注释写的已经比较详细了，在这里拿中文简单叙述一下。
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ps：函数调用成功之后处理过的AVFormatContext结构体。
+     <br/>
+     file：打开的视音频流的URL。
+     <br/>
+     fmt：强制指定AVFormatContext中AVInputFormat的。这个参数一般情况下可以设置为NULL，这样FFmpeg可以自动检测AVInputFormat。
+     <p>
+      dictionay：附加的一些选项，一般情况下可以设置为NULL。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     函数执行成功的话，其返回值大于等于0。
+     <br/>
+     <br/>
+     <span style="white-space:pre;">
+     </span>
+     该函数最典型的例子可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/38868499">
+      最简单的基于FFMPEG+SDL的视频播放器 ver2 （采用SDL2.0）
+     </a>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     此前已经粗略写了1篇关于avformat_open_input()的文章《
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      图解FFMPEG打开媒体的函数avformat_open_input
+     </a>
+     》，还转载了一篇注释比较详细的文章《
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11885813">
+      FFMPEG源码分析：avformat_open_input()（媒体打开函数
+     </a>
+     ）》。但是个人感觉这个函数确实太重要了，可以算作FFmpeg的“灵魂”，所以打算再写一篇文章分析一下它的结构。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用关系图
+    </h2>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     函数调用结构图如下所示。
+    </p>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1804831">
+      <img alt="" src="https://img-blog.csdn.net/20150304201149635"/>
+     </a>
+     <br/>
+    </div>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1804831">
+      单击查看更清晰的图片
+     </a>
+    </div>
+    <br/>
+    <h2>
+     avformat_open_input()
+    </h2>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     下面看一下的定义，位于libavformat\utils.c中，如下所示。
+    </p>
+    <pre class="cpp">int avformat_open_input(AVFormatContext **ps, const char *filename,
+                        AVInputFormat *fmt, AVDictionary **options)
+{
+    AVFormatContext *s = *ps;
+    int ret = 0;
+    AVDictionary *tmp = NULL;
+    ID3v2ExtraMeta *id3v2_extra_meta = NULL;
+
+    if (!s &amp;&amp; !(s = avformat_alloc_context()))
+        return AVERROR(ENOMEM);
+    if (!s-&gt;av_class) {
+        av_log(NULL, AV_LOG_ERROR, "Input context has not been properly allocated by avformat_alloc_context() and is not NULL either\n");
+        return AVERROR(EINVAL);
+    }
+    if (fmt)
+        s-&gt;iformat = fmt;
+
+    if (options)
+        av_dict_copy(&amp;tmp, *options, 0);
+
+    if ((ret = av_opt_set_dict(s, &amp;tmp)) &lt; 0)
+        goto fail;
+
+    if ((ret = init_input(s, filename, &amp;tmp)) &lt; 0)
+        goto fail;
+    s-&gt;probe_score = ret;
+
+    if (s-&gt;format_whitelist &amp;&amp; av_match_list(s-&gt;iformat-&gt;name, s-&gt;format_whitelist, ',') &lt;= 0) {
+        av_log(s, AV_LOG_ERROR, "Format not on whitelist\n");
+        ret = AVERROR(EINVAL);
+        goto fail;
+    }
+
+    avio_skip(s-&gt;pb, s-&gt;skip_initial_bytes);
+
+    /* Check filename in case an image number is expected. */
+    if (s-&gt;iformat-&gt;flags &amp; AVFMT_NEEDNUMBER) {
+        if (!av_filename_number_test(filename)) {
+            ret = AVERROR(EINVAL);
+            goto fail;
+        }
+    }
+
+    s-&gt;duration = s-&gt;start_time = AV_NOPTS_VALUE;
+    av_strlcpy(s-&gt;filename, filename ? filename : "", sizeof(s-&gt;filename));
+
+    /* Allocate private data. */
+    if (s-&gt;iformat-&gt;priv_data_size &gt; 0) {
+        if (!(s-&gt;priv_data = av_mallocz(s-&gt;iformat-&gt;priv_data_size))) {
+            ret = AVERROR(ENOMEM);
+            goto fail;
+        }
+        if (s-&gt;iformat-&gt;priv_class) {
+            *(const AVClass **) s-&gt;priv_data = s-&gt;iformat-&gt;priv_class;
+            av_opt_set_defaults(s-&gt;priv_data);
+            if ((ret = av_opt_set_dict(s-&gt;priv_data, &amp;tmp)) &lt; 0)
+                goto fail;
+        }
+    }
+
+    /* e.g. AVFMT_NOFILE formats will not have a AVIOContext */
+    if (s-&gt;pb)
+        ff_id3v2_read(s, ID3v2_DEFAULT_MAGIC, &amp;id3v2_extra_meta, 0);
+
+    if (!(s-&gt;flags&amp;AVFMT_FLAG_PRIV_OPT) &amp;&amp; s-&gt;iformat-&gt;read_header)
+        if ((ret = s-&gt;iformat-&gt;read_header(s)) &lt; 0)
+            goto fail;
+
+    if (id3v2_extra_meta) {
+        if (!strcmp(s-&gt;iformat-&gt;name, "mp3") || !strcmp(s-&gt;iformat-&gt;name, "aac") ||
+            !strcmp(s-&gt;iformat-&gt;name, "tta")) {
+            if ((ret = ff_id3v2_parse_apic(s, &amp;id3v2_extra_meta)) &lt; 0)
+                goto fail;
+        } else
+            av_log(s, AV_LOG_DEBUG, "demuxer does not support additional id3 data, skipping\n");
+    }
+    ff_id3v2_free_extra_meta(&amp;id3v2_extra_meta);
+
+    if ((ret = avformat_queue_attached_pictures(s)) &lt; 0)
+        goto fail;
+
+    if (!(s-&gt;flags&amp;AVFMT_FLAG_PRIV_OPT) &amp;&amp; s-&gt;pb &amp;&amp; !s-&gt;data_offset)
+        s-&gt;data_offset = avio_tell(s-&gt;pb);
+
+    s-&gt;raw_packet_buffer_remaining_size = RAW_PACKET_BUFFER_SIZE;
+
+    if (options) {
+        av_dict_free(options);
+        *options = tmp;
+    }
+    *ps = s;
+    return 0;
+
+fail:
+    ff_id3v2_free_extra_meta(&amp;id3v2_extra_meta);
+    av_dict_free(&amp;tmp);
+    if (s-&gt;pb &amp;&amp; !(s-&gt;flags &amp; AVFMT_FLAG_CUSTOM_IO))
+        avio_close(s-&gt;pb);
+    avformat_free_context(s);
+    *ps = NULL;
+    return ret;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    avformat_open_input()源代码比较长，一部分是一些容错代码，比如说如果发现传入的AVFormatContext指针没有初始化过，就调用avformat_alloc_context()初始化该结构体；还有一部分是针对一些格式做的特殊处理，比如id3v2信息的处理等等。有关上述两种信息不再详细分析，在这里只选择它关键的两个函数进行分析：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <strong>
+      init_input()
+     </strong>
+     ：绝大部分初始化工作都是在这里做的。
+     <p>
+      <strong>
+       s-&gt;iformat-&gt;read_header()
+      </strong>
+      ：读取多媒体数据文件头，根据视音频流创建相应的AVStream。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     下面我们逐一看看上述函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     init_input()
+    </h2>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     init_input()作为一个内部函数，竟然包含了一行注释（一般内部函数都没有注释），足可以看出它的重要性。它的主要工作就是打开输入的视频数据并且探测视频的格式。该函数的定义位于libavformat\utils.c，如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">/* Open input file and probe the format if necessary. */
+static int init_input(AVFormatContext *s, const char *filename,
+                      AVDictionary **options)
+{
+    int ret;
+    AVProbeData pd = { filename, NULL, 0 };
+    int score = AVPROBE_SCORE_RETRY;
+
+    if (s-&gt;pb) {
+        s-&gt;flags |= AVFMT_FLAG_CUSTOM_IO;
+        if (!s-&gt;iformat)
+            return av_probe_input_buffer2(s-&gt;pb, &amp;s-&gt;iformat, filename,
+                                         s, 0, s-&gt;format_probesize);
+        else if (s-&gt;iformat-&gt;flags &amp; AVFMT_NOFILE)
+            av_log(s, AV_LOG_WARNING, "Custom AVIOContext makes no sense and "
+                                      "will be ignored with AVFMT_NOFILE format.\n");
+        return 0;
+    }
+
+    if ((s-&gt;iformat &amp;&amp; s-&gt;iformat-&gt;flags &amp; AVFMT_NOFILE) ||
+        (!s-&gt;iformat &amp;&amp; (s-&gt;iformat = av_probe_input_format2(&amp;pd, 0, &amp;score))))
+        return score;
+
+    if ((ret = avio_open2(&amp;s-&gt;pb, filename, AVIO_FLAG_READ | s-&gt;avio_flags,
+                          &amp;s-&gt;interrupt_callback, options)) &lt; 0)
+        return ret;
+    if (s-&gt;iformat)
+        return 0;
+    return av_probe_input_buffer2(s-&gt;pb, &amp;s-&gt;iformat, filename,
+                                 s, 0, s-&gt;format_probesize);
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    这个函数在短短的几行代码中包含了好几个return，因此逻辑还是有点复杂的，我们可以梳理一下：
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    在函数的开头的score变量是一个判决AVInputFormat的分数的门限值，如果最后得到的AVInputFormat的分数低于该门限值，就认为没有找到合适的AVInputFormat。FFmpeg内部判断封装格式的原理实际上是对每种AVInputFormat给出一个分数，满分是100分，越有可能正确的AVInputFormat给出的分数就越高。最后选择分数最高的AVInputFormat作为推测结果。score的值是一个宏定义AVPROBE_SCORE_RETRY，我们可以看一下它的定义：
+    <br/>
+    <pre class="cpp">#define AVPROBE_SCORE_RETRY (AVPROBE_SCORE_MAX/4)</pre>
+    <span style="white-space:pre;">
+    </span>
+    其中AVPROBE_SCORE_MAX是score的最大值，取值是100：
+    <br/>
+    <pre class="cpp">#define AVPROBE_SCORE_MAX       100 ///&lt; maximum score</pre>
+    <span style="white-space:pre;">
+    </span>
+    由此我们可以得出score取值是25，即如果推测后得到的最佳AVInputFormat的分值低于25，就认为没有找到合适的AVInputFormat。
+    <br/>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    整个函数的逻辑大体如下：
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）当使用了自定义的AVIOContext的时候（AVFormatContext中的AVIOContext不为空，即s-&gt;pb!=NULL），如果指定了AVInputFormat就直接返回，如果没有指定就调用av_probe_input_buffer2()推测AVInputFormat。这一情况出现的不算很多，但是当我们从内存中读取数据的时候（需要初始化自定义的AVIOContext），就会执行这一步骤。
+     <br/>
+     （2）在更一般的情况下，如果已经指定了AVInputFormat，就直接返回；如果没有指定AVInputFormat，就调用av_probe_input_format(NULL,…)根据文件路径判断文件格式。这里特意把av_probe_input_format()的第1个参数写成“NULL”，是为了强调这个时候实际上并没有给函数提供输入数据，此时仅仅通过文件路径推测AVInputFormat。
+     <p>
+      （3）如果发现通过文件路径判断不出来文件格式，那么就需要打开文件探测文件格式了，这个时候会首先调用avio_open2()打开文件，然后调用av_probe_input_buffer2()推测AVInputFormat。
+     </p>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     下面分析一下av_probe_input_format()，avio_open2()，av_probe_input_buffer2()这几个函数。
+     <br/>
+     <br/>
+    </p>
+    <h2>
+     av_probe_input_format2()
+    </h2>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     av_probe_input_format2()是一个API函数，声明位于libavformat\avformat.h，如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">/**
+ * Guess the file format.
+ *
+ * @param pd        data to be probed
+ * @param is_opened Whether the file is already opened; determines whether
+ *                  demuxers with or without AVFMT_NOFILE are probed.
+ * @param score_max A probe score larger that this is required to accept a
+ *                  detection, the variable is set to the actual detection
+ *                  score afterwards.
+ *                  If the score is &lt;= AVPROBE_SCORE_MAX / 4 it is recommended
+ *                  to retry with a larger probe buffer.
+ */
+AVInputFormat *av_probe_input_format2(AVProbeData *pd, int is_opened, int *score_max);</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    该函数用于根据输入数据查找合适的AVInputFormat。参数含义如下所示：
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     pd：存储输入数据信息的AVProbeData结构体。
+     <br/>
+     is_opened：文件是否打开。
+     <p>
+      score_max：判决AVInputFormat的门限值。只有某格式判决分数大于该门限值的时候，函数才会返回该封装格式，否则返回NULL。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     该函数中涉及到一个结构体AVProbeData，用于存储输入文件的一些信息，它的定义如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">/**
+ * This structure contains the data a format has to probe a file.
+ */
+typedef struct AVProbeData {
+    const char *filename;
+    unsigned char *buf; /**&lt; Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero. */
+    int buf_size;       /**&lt; Size of buf except extra allocated bytes */
+    const char *mime_type; /**&lt; mime_type, when known. */
+} AVProbeData;</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_format2()函数的定义位于libavformat\format.c，如下所示。
+    <br/>
+    <pre class="cpp">AVInputFormat *av_probe_input_format2(AVProbeData *pd, int is_opened, int *score_max)
+{
+    int score_ret;
+    AVInputFormat *fmt = av_probe_input_format3(pd, is_opened, &amp;score_ret);
+    if (score_ret &gt; *score_max) {
+        *score_max = score_ret;
+        return fmt;
+    } else
+        return NULL;
+}</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    从函数中可以看出，av_probe_input_format2()调用了av_probe_input_format3()，并且增加了一个判断，当av_probe_input_format3()返回的分数大于score_max的时候，才会返回AVInputFormat，否则返回NULL。
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     下面我们看一下av_probe_input_format3()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     av_probe_input_format3()
+    </h2>
+    <p>
+     av_probe_input_format3()是一个API函数，声明位于libavformat\avformat.h，如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">/**
+ * Guess the file format.
+ *
+ * @param is_opened Whether the file is already opened; determines whether
+ *                  demuxers with or without AVFMT_NOFILE are probed.
+ * @param score_ret The score of the best detection.
+ */
+AVInputFormat *av_probe_input_format3(AVProbeData *pd, int is_opened, int *score_ret);</pre>
+    <br/>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     从函数声明中可以看出，av_probe_input_format3()和av_probe_input_format2()的区别是函数的第3个参数不同：av_probe_input_format2()是一个分数的门限值，而av_probe_input_format3()是一个探测后的最匹配的格式的分数值。
+    </p>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_format3()的定义位于libavformat\format.c，如下所示。
+    <br/>
+    <pre class="cpp">#define AVPROBE_PADDING_SIZE 32             ///&lt; extra allocated bytes at the end of the probe buffer
+#define AVPROBE_SCORE_EXTENSION  50 ///&lt; score for file extension
+#define AVPROBE_SCORE_MIME       75 ///&lt; score for file mime type
+#define AVPROBE_SCORE_MAX       100 ///&lt; maximum score
+
+AVInputFormat *av_probe_input_format3(AVProbeData *pd, int is_opened,
+                                      int *score_ret)
+{
+    AVProbeData lpd = *pd;
+    AVInputFormat *fmt1 = NULL, *fmt;
+    int score, nodat = 0, score_max = 0;
+    const static uint8_t zerobuffer[AVPROBE_PADDING_SIZE];
+
+    if (!lpd.buf)
+        lpd.buf = zerobuffer;
+
+    if (lpd.buf_size &gt; 10 &amp;&amp; ff_id3v2_match(lpd.buf, ID3v2_DEFAULT_MAGIC)) {
+        int id3len = ff_id3v2_tag_len(lpd.buf);
+        if (lpd.buf_size &gt; id3len + 16) {
+            lpd.buf      += id3len;
+            lpd.buf_size -= id3len;
+        } else if (id3len &gt;= PROBE_BUF_MAX) {
+            nodat = 2;
+        } else
+            nodat = 1;
+    }
+
+    fmt = NULL;
+    while ((fmt1 = av_iformat_next(fmt1))) {
+        if (!is_opened == !(fmt1-&gt;flags &amp; AVFMT_NOFILE) &amp;&amp; strcmp(fmt1-&gt;name, "image2"))
+            continue;
+        score = 0;
+        if (fmt1-&gt;read_probe) {
+            score = fmt1-&gt;read_probe(&amp;lpd);
+            if (fmt1-&gt;extensions &amp;&amp; av_match_ext(lpd.filename, fmt1-&gt;extensions)) {
+                if      (nodat == 0) score = FFMAX(score, 1);
+                else if (nodat == 1) score = FFMAX(score, AVPROBE_SCORE_EXTENSION / 2 - 1);
+                else                 score = FFMAX(score, AVPROBE_SCORE_EXTENSION);
+            }
+        } else if (fmt1-&gt;extensions) {
+            if (av_match_ext(lpd.filename, fmt1-&gt;extensions))
+                score = AVPROBE_SCORE_EXTENSION;
+        }
+        if (av_match_name(lpd.mime_type, fmt1-&gt;mime_type))
+            score = FFMAX(score, AVPROBE_SCORE_MIME);
+        if (score &gt; score_max) {
+            score_max = score;
+            fmt       = fmt1;
+        } else if (score == score_max)
+            fmt = NULL;
+    }
+    if (nodat == 1)
+        score_max = FFMIN(AVPROBE_SCORE_EXTENSION / 2 - 1, score_max);
+    *score_ret = score_max;
+
+    return fmt;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_format3()根据输入数据查找合适的AVInputFormat。输入的数据位于AVProbeData中。前文已经提到过，AVProbeData定义如下。
+    <br/>
+    <pre class="cpp">/**
+ * This structure contains the data a format has to probe a file.
+ */
+typedef struct AVProbeData {
+    const char *filename;
+    unsigned char *buf; /**&lt; Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero. */
+    int buf_size;       /**&lt; Size of buf except extra allocated bytes */
+    const char *mime_type; /**&lt; mime_type, when known. */
+} AVProbeData;</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    其中filename是文件路径， buf存储用于推测AVInputFormat的媒体数据，最后还有个mime_type保存媒体的类型。其中buf可以为空，但是其后面无论如何都需要填充AVPROBE_PADDING_SIZE个0（AVPROBE_PADDING_SIZE取值为32，即32个0）。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    该函数最主要的部分是一个循环。该循环调用av_iformat_next()遍历FFmpeg中所有的AVInputFormat，并根据以下规则确定AVInputFormat和输入媒体数据的匹配分数（score，反应匹配程度）：
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）如果AVInputFormat中包含read_probe()，就调用read_probe()函数获取匹配分数（这一方法如果结果匹配的话，一般会获得AVPROBE_SCORE_MAX的分值，即100分）。如果不包含该函数，就使用av_match_ext()函数比较输入媒体的扩展名和AVInputFormat的扩展名是否匹配，如果匹配的话，设定匹配分数为AVPROBE_SCORE_EXTENSION（AVPROBE_SCORE_EXTENSION取值为50，即50分）。
+     <br/>
+     （2）使用av_match_name()比较输入媒体的mime_type和AVInputFormat的mime_type，如果匹配的话，设定匹配分数为AVPROBE_SCORE_MIME（AVPROBE_SCORE_MIME取值为75，即75分）。
+     <p>
+      （3）如果该AVInputFormat的匹配分数大于此前的最大匹配分数，则记录当前的匹配分数为最大匹配分数，并且记录当前的AVInputFormat为最佳匹配的AVInputFormat。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     上述过程中涉及到以下几个知识点：
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     AVInputFormat-&gt;read_probe()
+    </h3>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     AVInputFormat中包含read_probe()是用于获得匹配函数的函数指针，不同的封装格式包含不同的实现函数。例如，FLV封装格式的AVInputFormat模块定义（位于libavformat\flvdec.c）如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">AVInputFormat ff_flv_demuxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .priv_data_size = sizeof(FLVContext),
+    .read_probe     = flv_probe,
+    .read_header    = flv_read_header,
+    .read_packet    = flv_read_packet,
+    .read_seek      = flv_read_seek,
+    .read_close     = flv_read_close,
+    .extensions     = "flv",
+    .priv_class     = &amp;flv_class,
+};</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    其中，read_probe()函数对应的是flv_probe()函数。我们可以看一下flv_probe()函数的定义：
+    <br/>
+    <pre class="cpp">static int flv_probe(AVProbeData *p)
+{
+    return probe(p, 0);
+}</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    可见flv_probe()调用了一个probe()函数。probe()函数的定义如下。
+    <br/>
+    <pre class="cpp">static int probe(AVProbeData *p, int live)
+{
+    const uint8_t *d = p-&gt;buf;
+    unsigned offset = AV_RB32(d + 5);
+
+    if (d[0] == 'F' &amp;&amp;
+        d[1] == 'L' &amp;&amp;
+        d[2] == 'V' &amp;&amp;
+        d[3] &lt; 5 &amp;&amp; d[5] == 0 &amp;&amp;
+        offset + 100 &lt; p-&gt;buf_size &amp;&amp;
+        offset &gt; 8) {
+        int is_live = !memcmp(d + offset + 40, "NGINX RTMP", 10);
+
+        if (live == is_live)
+            return AVPROBE_SCORE_MAX;
+    }
+    return 0;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    从probe()函数我们可以看出，该函数做了如下工作：
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p>
+      （1）获得第6至第9字节的数据（对应Headersize字段）并且做大小端转换，然后存入offset变量。之所以要进行大小端转换是因为FLV是以“大端”方式存储数据，而操作系统是以“小端”方式存储数据，这一转换主要通过AV_RB32()函数实现。AV_RB32()是一个宏定义，其对应的函数是av_bswap32()。
+     </p>
+     <p>
+      （2）检查开头3个字符（Signature）是否为“FLV”。
+     </p>
+     <p>
+      （3）第4个字节（Version）小于5。
+     </p>
+     <p>
+      （4）第6个字节（Headersize的第1个字节？）为0。
+     </p>
+     <p>
+      （5）offset取值大于8。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     参照FLV文件头的格式可以对上述判断有一个更清晰的认识：
+     <br/>
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150304203241824?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    此外代码中还包含了有关live方式的FLV格式的判断，在这里我们不加探讨。对于我们打开FLV文件来说，live和is_live两个变量取值都为0。也就是说满足上述5个条件的话，就可以认为输入媒体数据是FLV封装格式了。满足上述条件，probe()函数返回AVPROBE_SCORE_MAX（AVPROBE_SCORE_MAX取值为100，即100分），否则返回0（0分）。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_match_name()
+    </h3>
+    <span style="white-space:pre;">
+    </span>
+    av_match_name()是一个API函数，声明位于libavutil\avstring.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Match instances of a name in a comma-separated list of names.
+ * @param name  Name to look for.
+ * @param names List of names.
+ * @return 1 on match, 0 otherwise.
+ */
+int av_match_name(const char *name, const char *names);</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_match_name()用于比较两个格式的名称。简单地说就是比较字符串。注意该函数的字符串是不区分大小写的：字符都转换为小写进行比较。
+    <br/>
+    <pre class="cpp">int av_match_name(const char *name, const char *names)
+{
+    const char *p;
+    int len, namelen;
+
+    if (!name || !names)
+        return 0;
+
+    namelen = strlen(name);
+    while ((p = strchr(names, ','))) {
+        len = FFMAX(p - names, namelen);
+        if (!av_strncasecmp(name, names, len))
+            return 1;
+        names = p + 1;
+    }
+    return !av_strcasecmp(name, names);
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    上述函数还有一点需要注意，其中使用了一个while()循环，用于搜索“,”。这是因为FFmpeg中有些格式是对应多种格式名称的，例如MKV格式的解复用器（Demuxer）的定义如下。
+    <br/>
+    <pre class="cpp">AVInputFormat ff_matroska_demuxer = {
+    .name           = "matroska,webm",
+    .long_name      = NULL_IF_CONFIG_SMALL("Matroska / WebM"),
+    .extensions     = "mkv,mk3d,mka,mks",
+    .priv_data_size = sizeof(MatroskaDemuxContext),
+    .read_probe     = matroska_probe,
+    .read_header    = matroska_read_header,
+    .read_packet    = matroska_read_packet,
+    .read_close     = matroska_read_close,
+    .read_seek      = matroska_read_seek,
+    .mime_type      = "audio/webm,audio/x-matroska,video/webm,video/x-matroska"
+};</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    从代码可以看出，ff_matroska_demuxer中的name字段对应“matroska,webm”，mime_type字段对应“audio/webm,audio/x-matroska,video/webm,video/x-matroska”。av_match_name()函数对于这样的字符串，会把它按照“,”截断成一个个的名称，然后一一进行比较。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_match_ext()
+    </h3>
+    <span style="white-space:pre;">
+    </span>
+    av_match_ext()是一个API函数，声明位于libavformat\avformat.h（注意位置和av_match_name()不一样），如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Return a positive value if the given filename has one of the given
+ * extensions, 0 otherwise.
+ *
+ * @param filename   file name to check against the given extensions
+ * @param extensions a comma-separated list of filename extensions
+ */
+int av_match_ext(const char *filename, const char *extensions);</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_match_ext()用于比较文件的后缀。该函数首先通过反向查找的方式找到输入文件名中的“.”，就可以通过获取“.”后面的字符串来得到该文件的后缀。然后调用av_match_name()，采用和比较格式名称的方法比较两个后缀。
+    <br/>
+    <pre class="cpp">int av_match_ext(const char *filename, const char *extensions)
+{
+    const char *ext;
+
+    if (!filename)
+        return 0;
+
+    ext = strrchr(filename, '.');
+    if (ext)
+        return av_match_name(ext + 1, extensions);
+    return 0;
+}
+</pre>
+    <br/>
+    <h2>
+     avio_open2()
+    </h2>
+    <span style="white-space:pre;">
+    </span>
+    有关avio_open2()的分析可以参考文章：
+    <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+     FFmpeg源代码简单分析：avio_open2()
+    </a>
+    <br/>
+    <br/>
+    <h2>
+     av_probe_input_buffer2()
+    </h2>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_buffer2()是一个API函数，它根据输入的媒体数据推测该媒体数据的AVInputFormat，声明位于libavformat\avformat.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Probe a bytestream to determine the input format. Each time a probe returns
+ * with a score that is too low, the probe buffer size is increased and another
+ * attempt is made. When the maximum probe size is reached, the input format
+ * with the highest score is returned.
+ *
+ * @param pb the bytestream to probe
+ * @param fmt the input format is put here
+ * @param filename the filename of the stream
+ * @param logctx the log context
+ * @param offset the offset within the bytestream to probe from
+ * @param max_probe_size the maximum probe buffer size (zero for default)
+ * @return the score in case of success, a negative value corresponding to an
+ *         the maximal score is AVPROBE_SCORE_MAX
+ * AVERROR code otherwise
+ */
+int av_probe_input_buffer2(AVIOContext *pb, AVInputFormat **fmt,
+                           const char *filename, void *logctx,
+                           unsigned int offset, unsigned int max_probe_size);</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_buffer2()参数的含义如下所示：
+    <br/>
+    <p>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     pb：用于读取数据的AVIOContext。
+     <br/>
+     fmt：输出推测出来的AVInputFormat。
+     <br/>
+     filename：输入媒体的路径。
+     <br/>
+     logctx：日志（没有研究过）。
+     <br/>
+     offset：开始推测AVInputFormat的偏移量。
+     <p>
+      max_probe_size：用于推测格式的媒体数据的最大值。
+     </p>
+    </blockquote>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     返回推测后的得到的AVInputFormat的匹配分数。
+     <br/>
+     <br/>
+     <span style="white-space:pre;">
+     </span>
+     av_probe_input_buffer2()的定义位于libavformat\format.c，如下所示。
+     <br/>
+    </p>
+    <pre class="cpp">int av_probe_input_buffer2(AVIOContext *pb, AVInputFormat **fmt,
+                          const char *filename, void *logctx,
+                          unsigned int offset, unsigned int max_probe_size)
+{
+    AVProbeData pd = { filename ? filename : "" };
+    uint8_t *buf = NULL;
+    int ret = 0, probe_size, buf_offset = 0;
+    int score = 0;
+    int ret2;
+
+    if (!max_probe_size)
+        max_probe_size = PROBE_BUF_MAX;
+    else if (max_probe_size &lt; PROBE_BUF_MIN) {
+        av_log(logctx, AV_LOG_ERROR,
+               "Specified probe size value %u cannot be &lt; %u\n", max_probe_size, PROBE_BUF_MIN);
+        return AVERROR(EINVAL);
+    }
+
+    if (offset &gt;= max_probe_size)
+        return AVERROR(EINVAL);
+
+    if (pb-&gt;av_class) {
+        uint8_t *mime_type_opt = NULL;
+        av_opt_get(pb, "mime_type", AV_OPT_SEARCH_CHILDREN, &amp;mime_type_opt);
+        pd.mime_type = (const char *)mime_type_opt;
+    }
+#if 0
+    if (!*fmt &amp;&amp; pb-&gt;av_class &amp;&amp; av_opt_get(pb, "mime_type", AV_OPT_SEARCH_CHILDREN, &amp;mime_type) &gt;= 0 &amp;&amp; mime_type) {
+        if (!av_strcasecmp(mime_type, "audio/aacp")) {
+            *fmt = av_find_input_format("aac");
+        }
+        av_freep(&amp;mime_type);
+    }
+#endif
+
+    for (probe_size = PROBE_BUF_MIN; probe_size &lt;= max_probe_size &amp;&amp; !*fmt;
+         probe_size = FFMIN(probe_size &lt;&lt; 1,
+                            FFMAX(max_probe_size, probe_size + 1))) {
+        score = probe_size &lt; max_probe_size ? AVPROBE_SCORE_RETRY : 0;
+
+        /* Read probe data. */
+        if ((ret = av_reallocp(&amp;buf, probe_size + AVPROBE_PADDING_SIZE)) &lt; 0)
+            goto fail;
+        if ((ret = avio_read(pb, buf + buf_offset,
+                             probe_size - buf_offset)) &lt; 0) {
+            /* Fail if error was not end of file, otherwise, lower score. */
+            if (ret != AVERROR_EOF)
+                goto fail;
+
+            score = 0;
+            ret   = 0;          /* error was end of file, nothing read */
+        }
+        buf_offset += ret;
+        if (buf_offset &lt; offset)
+            continue;
+        pd.buf_size = buf_offset - offset;
+        pd.buf = &amp;buf[offset];
+
+        memset(pd.buf + pd.buf_size, 0, AVPROBE_PADDING_SIZE);
+
+        /* Guess file format. */
+        *fmt = av_probe_input_format2(&amp;pd, 1, &amp;score);
+        if (*fmt) {
+            /* This can only be true in the last iteration. */
+            if (score &lt;= AVPROBE_SCORE_RETRY) {
+                av_log(logctx, AV_LOG_WARNING,
+                       "Format %s detected only with low score of %d, "
+                       "misdetection possible!\n", (*fmt)-&gt;name, score);
+            } else
+                av_log(logctx, AV_LOG_DEBUG,
+                       "Format %s probed with size=%d and score=%d\n",
+                       (*fmt)-&gt;name, probe_size, score);
+#if 0
+            FILE *f = fopen("probestat.tmp", "ab");
+            fprintf(f, "probe_size:%d format:%s score:%d filename:%s\n", probe_size, (*fmt)-&gt;name, score, filename);
+            fclose(f);
+#endif
+        }
+    }
+
+    if (!*fmt)
+        ret = AVERROR_INVALIDDATA;
+
+fail:
+    /* Rewind. Reuse probe buffer to avoid seeking. */
+    ret2 = ffio_rewind_with_probe_data(pb, &amp;buf, buf_offset);
+    if (ret &gt;= 0)
+        ret = ret2;
+
+    av_freep(&amp;pd.mime_type);
+    return ret &lt; 0 ? ret : score;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    av_probe_input_buffer2()首先需要确定用于推测格式的媒体数据的最大值max_probe_size。max_probe_size默认为PROBE_BUF_MAX（PROBE_BUF_MAX取值为1 &lt;&lt; 20，即1048576Byte，大约1MB）。
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     在确定了max_probe_size之后，函数就会进入到一个循环中，调用avio_read()读取数据并且使用av_probe_input_format2()（该函数前文已经记录过）推测文件格式。
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     肯定有人会奇怪这里为什么要使用一个循环，而不是只运行一次？其实这个循环是一个逐渐增加输入媒体数据量的过程。av_probe_input_buffer2()并不是一次性读取max_probe_size字节的媒体数据，我个人感觉可能是因为这样做不是很经济，因为推测大部分媒体格式根本用不到1MB这么多的媒体数据。因此函数中使用一个probe_size存储需要读取的字节数，并且随着循环次数的增加逐渐增加这个值。函数首先从PROBE_BUF_MIN（取值为2048）个字节开始读取，如果通过这些数据已经可以推测出AVInputFormat，那么就可以直接退出循环了（参考for循环的判断条件“!*fmt”）；如果没有推测出来，就增加probe_size的量为过去的2倍（参考for循环的表达式“probe_size &lt;&lt; 1”），继续推测AVInputFormat；如果一直读取到max_probe_size字节的数据依然没能确定AVInputFormat，则会退出循环并且返回错误信息。
+     <br/>
+     <br/>
+    </p>
+    <h2>
+     AVInputFormat-&gt; read_header()
+    </h2>
+    <p>
+    </p>
+    <p>
+     <span style="white-space:pre;">
+     </span>
+     在调用完init_input()完成基本的初始化并且推测得到相应的AVInputFormat之后，avformat_open_input()会调用AVInputFormat的read_header()方法读取媒体文件的文件头并且完成相关的初始化工作。read_header()是一个位于AVInputFormat结构体中的一个函数指针，对于不同的封装格式，会调用不同的read_header()的实现函数。举个例子，当输入视频的封装格式为FLV的时候，会调用FLV的AVInputFormat中的read_header()。FLV的AVInputFormat定义位于libavformat\flvdec.c文件中，如下所示。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVInputFormat ff_flv_demuxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .priv_data_size = sizeof(FLVContext),
+    .read_probe     = flv_probe,
+    .read_header    = flv_read_header,
+    .read_packet    = flv_read_packet,
+    .read_seek      = flv_read_seek,
+    .read_close     = flv_read_close,
+    .extensions     = "flv",
+    .priv_class     = &amp;flv_class,
+};</pre>
+    <p>
+    </p>
+    <span style="white-space:pre;">
+    </span>
+    可以看出read_header()指向了flv_read_header()函数。flv_read_header()的实现同样位于libavformat\flvdec.c文件中，如下所示。
+    <br/>
+    <pre class="cpp">static int flv_read_header(AVFormatContext *s)
+{
+    int offset, flags;
+
+    avio_skip(s-&gt;pb, 4);
+    flags = avio_r8(s-&gt;pb);
+
+    s-&gt;ctx_flags |= AVFMTCTX_NOHEADER;
+
+    if (flags &amp; FLV_HEADER_FLAG_HASVIDEO)
+        if (!create_stream(s, AVMEDIA_TYPE_VIDEO))
+            return AVERROR(ENOMEM);
+    if (flags &amp; FLV_HEADER_FLAG_HASAUDIO)
+        if (!create_stream(s, AVMEDIA_TYPE_AUDIO))
+            return AVERROR(ENOMEM);
+    // Flag doesn't indicate whether or not there is script-data present. Must
+    // create that stream if it's encountered.
+
+    offset = avio_rb32(s-&gt;pb);
+    avio_seek(s-&gt;pb, offset, SEEK_SET);
+    avio_skip(s-&gt;pb, 4);
+
+    s-&gt;start_time = 0;
+
+    return 0;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    可以看出，函数读取了FLV的文件头并且判断其中是否包含视频流和音频流。如果包含视频流或者音频流，就会调用create_stream()函数。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    create_stream()函数定义也位于libavformat\flvdec.c中，如下所示。
+    <br/>
+    <pre class="cpp">static AVStream *create_stream(AVFormatContext *s, int codec_type)
+{
+    AVStream *st = avformat_new_stream(s, NULL);
+    if (!st)
+        return NULL;
+    st-&gt;codec-&gt;codec_type = codec_type;
+    if (s-&gt;nb_streams&gt;=3 ||(   s-&gt;nb_streams==2
+                           &amp;&amp; s-&gt;streams[0]-&gt;codec-&gt;codec_type != AVMEDIA_TYPE_DATA
+                           &amp;&amp; s-&gt;streams[1]-&gt;codec-&gt;codec_type != AVMEDIA_TYPE_DATA))
+        s-&gt;ctx_flags &amp;= ~AVFMTCTX_NOHEADER;
+
+    avpriv_set_pts_info(st, 32, 1, 1000); /* 32 bit pts in ms */
+    return st;
+}
+</pre>
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    从代码中可以看出，create_stream()调用了API函数avformat_new_stream()创建相应的视频流和音频流。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    上面这段解析FLV头的代码可以参考一下FLV封装格式的文件头格式，如下图所示。
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150304204037946?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <span style="white-space:pre;">
+    </span>
+    经过上面的步骤AVInputFormat的read_header()完成了视音频流对应的AVStream的创建。至此，avformat_open_input()中的主要代码分析完毕。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <strong>
+     <span style="color:#660000;">
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </span>
+    </strong>
+    <br/>
+    <br/>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44064715
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVFormatContext&amp;t=blog" target="_blank">
+    AVFormatContext
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=打开媒体&amp;t=blog" target="_blank">
+    打开媒体
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVInputFormat&amp;t=blog" target="_blank">
+    AVInputFormat
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

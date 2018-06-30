@@ -1,0 +1,992 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：avcodec_encode_video() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_84">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：avcodec_encode_video()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月11日 22:26:14
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：20371
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单分析FFmpeg的avcodec_encode_video2()函数。该函数用于编码一帧视频数据。avcodec_encode_video2()函数的声明位于libavcodec\avcodec.h，如下所示。
+    </p>
+    <pre class="cpp">/**
+ * Encode a frame of video.
+ *
+ * Takes input raw video data from frame and writes the next output packet, if
+ * available, to avpkt. The output packet does not necessarily contain data for
+ * the most recent frame, as encoders can delay and reorder input frames
+ * internally as needed.
+ *
+ * @param avctx     codec context
+ * @param avpkt     output AVPacket.
+ *                  The user can supply an output buffer by setting
+ *                  avpkt-&gt;data and avpkt-&gt;size prior to calling the
+ *                  function, but if the size of the user-provided data is not
+ *                  large enough, encoding will fail. All other AVPacket fields
+ *                  will be reset by the encoder using av_init_packet(). If
+ *                  avpkt-&gt;data is NULL, the encoder will allocate it.
+ *                  The encoder will set avpkt-&gt;size to the size of the
+ *                  output packet. The returned data (if any) belongs to the
+ *                  caller, he is responsible for freeing it.
+ *
+ *                  If this function fails or produces no output, avpkt will be
+ *                  freed using av_free_packet() (i.e. avpkt-&gt;destruct will be
+ *                  called to free the user supplied buffer).
+ * @param[in] frame AVFrame containing the raw video data to be encoded.
+ *                  May be NULL when flushing an encoder that has the
+ *                  CODEC_CAP_DELAY capability set.
+ * @param[out] got_packet_ptr This field is set to 1 by libavcodec if the
+ *                            output packet is non-empty, and to 0 if it is
+ *                            empty. If the function returns an error, the
+ *                            packet can be assumed to be invalid, and the
+ *                            value of got_packet_ptr is undefined and should
+ *                            not be used.
+ * @return          0 on success, negative error code on failure
+ */
+int avcodec_encode_video2(AVCodecContext *avctx, AVPacket *avpkt,
+                          const AVFrame *frame, int *got_packet_ptr);</pre>
+    <br/>
+    该函数每个参数的含义在注释里面已经写的很清楚了，在这里用中文简述一下：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     avctx：编码器的AVCodecContext。
+     <br/>
+     avpkt：编码输出的AVPacket。
+     <br/>
+     frame：编码输入的AVFrame。
+     <br/>
+     got_packet_ptr：成功编码一个AVPacket的时候设置为1。
+    </blockquote>
+    <p>
+     函数返回0代表编码成功。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用关系图
+    </h2>
+    函数的调用关系如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311222209829"/>
+    </div>
+    <br/>
+    <h2>
+     avcodec_encode_video2()
+    </h2>
+    avcodec_encode_video2()的定义位于libavcodec\utils.c，如下所示。
+    <br/>
+    <pre class="cpp">int attribute_align_arg avcodec_encode_video2(AVCodecContext *avctx,
+                                              AVPacket *avpkt,
+                                              const AVFrame *frame,
+                                              int *got_packet_ptr)
+{
+    int ret;
+    AVPacket user_pkt = *avpkt;
+    int needs_realloc = !user_pkt.data;
+
+    *got_packet_ptr = 0;
+
+    if(CONFIG_FRAME_THREAD_ENCODER &amp;&amp;
+       avctx-&gt;internal-&gt;frame_thread_encoder &amp;&amp; (avctx-&gt;active_thread_type&amp;FF_THREAD_FRAME))
+        return ff_thread_video_encode_frame(avctx, avpkt, frame, got_packet_ptr);
+
+    if ((avctx-&gt;flags&amp;CODEC_FLAG_PASS1) &amp;&amp; avctx-&gt;stats_out)
+        avctx-&gt;stats_out[0] = '\0';
+
+    if (!(avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_DELAY) &amp;&amp; !frame) {
+        av_free_packet(avpkt);
+        av_init_packet(avpkt);
+        avpkt-&gt;size = 0;
+        return 0;
+    }
+    //检查输入
+    if (av_image_check_size(avctx-&gt;width, avctx-&gt;height, 0, avctx))
+        return AVERROR(EINVAL);
+
+    av_assert0(avctx-&gt;codec-&gt;encode2);
+    //编码
+    ret = avctx-&gt;codec-&gt;encode2(avctx, avpkt, frame, got_packet_ptr);
+    av_assert0(ret &lt;= 0);
+
+    if (avpkt-&gt;data &amp;&amp; avpkt-&gt;data == avctx-&gt;internal-&gt;byte_buffer) {
+        needs_realloc = 0;
+        if (user_pkt.data) {
+            if (user_pkt.size &gt;= avpkt-&gt;size) {
+                memcpy(user_pkt.data, avpkt-&gt;data, avpkt-&gt;size);
+            } else {
+                av_log(avctx, AV_LOG_ERROR, "Provided packet is too small, needs to be %d\n", avpkt-&gt;size);
+                avpkt-&gt;size = user_pkt.size;
+                ret = -1;
+            }
+            avpkt-&gt;buf      = user_pkt.buf;
+            avpkt-&gt;data     = user_pkt.data;
+#if FF_API_DESTRUCT_PACKET
+FF_DISABLE_DEPRECATION_WARNINGS
+            avpkt-&gt;destruct = user_pkt.destruct;
+FF_ENABLE_DEPRECATION_WARNINGS
+#endif
+        } else {
+            if (av_dup_packet(avpkt) &lt; 0) {
+                ret = AVERROR(ENOMEM);
+            }
+        }
+    }
+
+    if (!ret) {
+        if (!*got_packet_ptr)
+            avpkt-&gt;size = 0;
+        else if (!(avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_DELAY))
+            avpkt-&gt;pts = avpkt-&gt;dts = frame-&gt;pts;
+
+        if (needs_realloc &amp;&amp; avpkt-&gt;data) {
+            ret = av_buffer_realloc(&amp;avpkt-&gt;buf, avpkt-&gt;size + FF_INPUT_BUFFER_PADDING_SIZE);
+            if (ret &gt;= 0)
+                avpkt-&gt;data = avpkt-&gt;buf-&gt;data;
+        }
+
+        avctx-&gt;frame_number++;
+    }
+
+    if (ret &lt; 0 || !*got_packet_ptr)
+        av_free_packet(avpkt);
+    else
+        av_packet_merge_side_data(avpkt);
+
+    emms_c();
+    return ret;
+}
+</pre>
+    <br/>
+    <p>
+     从函数的定义可以看出，avcodec_encode_video2()首先调用了av_image_check_size()检查设置的宽高参数是否合理，然后调用了AVCodec的encode2()调用具体的解码器。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     av_image_check_size()
+    </h2>
+    av_image_check_size()是一个很简单的函数，用于检查图像宽高是否正常，它的定义如下所示。
+    <br/>
+    <pre class="cpp">int av_image_check_size(unsigned int w, unsigned int h, int log_offset, void *log_ctx)
+{
+    ImgUtils imgutils = { &amp;imgutils_class, log_offset, log_ctx };
+
+    if ((int)w&gt;0 &amp;&amp; (int)h&gt;0 &amp;&amp; (w+128)*(uint64_t)(h+128) &lt; INT_MAX/8)
+        return 0;
+
+    av_log(&amp;imgutils, AV_LOG_ERROR, "Picture size %ux%u is invalid\n", w, h);
+    return AVERROR(EINVAL);
+}
+</pre>
+    <br/>
+    <p>
+     从代码中可以看出，av_image_check_size()主要是要求图像宽高必须为正数，而且取值不能太大。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     AVCodec-&gt;encode2()
+    </h2>
+    AVCodec的encode2()是一个函数指针，指向特定编码器的编码函数。在这里我们以libx264为例，看一下它对应的AVCodec的结构体的定义，如下所示。
+    <br/>
+    <pre class="cpp">AVCodec ff_libx264_encoder = {
+    .name             = "libx264",
+    .long_name        = NULL_IF_CONFIG_SMALL("libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"),
+    .type             = AVMEDIA_TYPE_VIDEO,
+    .id               = AV_CODEC_ID_H264,
+    .priv_data_size   = sizeof(X264Context),
+    .init             = X264_init,
+    .encode2          = X264_frame,
+    .close            = X264_close,
+    .capabilities     = CODEC_CAP_DELAY | CODEC_CAP_AUTO_THREADS,
+    .priv_class       = &amp;x264_class,
+    .defaults         = x264_defaults,
+    .init_static_data = X264_init_static,
+};</pre>
+    <br/>
+    <p>
+     从ff_libx264_encoder的定义可以看出，encode2()函数指向的是X264_frame()函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     X264_frame()
+    </h2>
+    X264_frame()函数的定义位于libavcodec\libx264.c，如下所示。
+    <br/>
+    <pre class="cpp">static int X264_frame(AVCodecContext *ctx, AVPacket *pkt, const AVFrame *frame,
+                      int *got_packet)
+{
+    X264Context *x4 = ctx-&gt;priv_data;
+    x264_nal_t *nal;
+    int nnal, i, ret;
+    x264_picture_t pic_out = {0};
+    AVFrameSideData *side_data;
+
+    x264_picture_init( &amp;x4-&gt;pic );
+    x4-&gt;pic.img.i_csp   = x4-&gt;params.i_csp;
+    if (x264_bit_depth &gt; 8)
+        x4-&gt;pic.img.i_csp |= X264_CSP_HIGH_DEPTH;
+    x4-&gt;pic.img.i_plane = avfmt2_num_planes(ctx-&gt;pix_fmt);
+
+    if (frame) {
+        for (i = 0; i &lt; x4-&gt;pic.img.i_plane; i++) {
+            x4-&gt;pic.img.plane[i]    = frame-&gt;data[i];
+            x4-&gt;pic.img.i_stride[i] = frame-&gt;linesize[i];
+        }
+
+        x4-&gt;pic.i_pts  = frame-&gt;pts;
+        x4-&gt;pic.i_type =
+            frame-&gt;pict_type == AV_PICTURE_TYPE_I ? X264_TYPE_KEYFRAME :
+            frame-&gt;pict_type == AV_PICTURE_TYPE_P ? X264_TYPE_P :
+            frame-&gt;pict_type == AV_PICTURE_TYPE_B ? X264_TYPE_B :
+                                            X264_TYPE_AUTO;
+
+        if (x4-&gt;avcintra_class &lt; 0) {
+        if (x4-&gt;params.b_interlaced &amp;&amp; x4-&gt;params.b_tff != frame-&gt;top_field_first) {
+            x4-&gt;params.b_tff = frame-&gt;top_field_first;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+        if (x4-&gt;params.vui.i_sar_height != ctx-&gt;sample_aspect_ratio.den ||
+            x4-&gt;params.vui.i_sar_width  != ctx-&gt;sample_aspect_ratio.num) {
+            x4-&gt;params.vui.i_sar_height = ctx-&gt;sample_aspect_ratio.den;
+            x4-&gt;params.vui.i_sar_width  = ctx-&gt;sample_aspect_ratio.num;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+
+        if (x4-&gt;params.rc.i_vbv_buffer_size != ctx-&gt;rc_buffer_size / 1000 ||
+            x4-&gt;params.rc.i_vbv_max_bitrate != ctx-&gt;rc_max_rate    / 1000) {
+            x4-&gt;params.rc.i_vbv_buffer_size = ctx-&gt;rc_buffer_size / 1000;
+            x4-&gt;params.rc.i_vbv_max_bitrate = ctx-&gt;rc_max_rate    / 1000;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+
+        if (x4-&gt;params.rc.i_rc_method == X264_RC_ABR &amp;&amp;
+            x4-&gt;params.rc.i_bitrate != ctx-&gt;bit_rate / 1000) {
+            x4-&gt;params.rc.i_bitrate = ctx-&gt;bit_rate / 1000;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+
+        if (x4-&gt;crf &gt;= 0 &amp;&amp;
+            x4-&gt;params.rc.i_rc_method == X264_RC_CRF &amp;&amp;
+            x4-&gt;params.rc.f_rf_constant != x4-&gt;crf) {
+            x4-&gt;params.rc.f_rf_constant = x4-&gt;crf;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+
+        if (x4-&gt;params.rc.i_rc_method == X264_RC_CQP &amp;&amp;
+            x4-&gt;cqp &gt;= 0 &amp;&amp;
+            x4-&gt;params.rc.i_qp_constant != x4-&gt;cqp) {
+            x4-&gt;params.rc.i_qp_constant = x4-&gt;cqp;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+
+        if (x4-&gt;crf_max &gt;= 0 &amp;&amp;
+            x4-&gt;params.rc.f_rf_constant_max != x4-&gt;crf_max) {
+            x4-&gt;params.rc.f_rf_constant_max = x4-&gt;crf_max;
+            x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+        }
+        }
+
+        side_data = av_frame_get_side_data(frame, AV_FRAME_DATA_STEREO3D);
+        if (side_data) {
+            AVStereo3D *stereo = (AVStereo3D *)side_data-&gt;data;
+            int fpa_type;
+
+            switch (stereo-&gt;type) {
+            case AV_STEREO3D_CHECKERBOARD:
+                fpa_type = 0;
+                break;
+            case AV_STEREO3D_COLUMNS:
+                fpa_type = 1;
+                break;
+            case AV_STEREO3D_LINES:
+                fpa_type = 2;
+                break;
+            case AV_STEREO3D_SIDEBYSIDE:
+                fpa_type = 3;
+                break;
+            case AV_STEREO3D_TOPBOTTOM:
+                fpa_type = 4;
+                break;
+            case AV_STEREO3D_FRAMESEQUENCE:
+                fpa_type = 5;
+                break;
+            default:
+                fpa_type = -1;
+                break;
+            }
+
+            if (fpa_type != x4-&gt;params.i_frame_packing) {
+                x4-&gt;params.i_frame_packing = fpa_type;
+                x264_encoder_reconfig(x4-&gt;enc, &amp;x4-&gt;params);
+            }
+        }
+    }
+    do {
+        if (x264_encoder_encode(x4-&gt;enc, &amp;nal, &amp;nnal, frame? &amp;x4-&gt;pic: NULL, &amp;pic_out) &lt; 0)
+            return -1;
+
+        ret = encode_nals(ctx, pkt, nal, nnal);
+        if (ret &lt; 0)
+            return -1;
+    } while (!ret &amp;&amp; !frame &amp;&amp; x264_encoder_delayed_frames(x4-&gt;enc));
+
+    pkt-&gt;pts = pic_out.i_pts;
+    pkt-&gt;dts = pic_out.i_dts;
+
+    switch (pic_out.i_type) {
+    case X264_TYPE_IDR:
+    case X264_TYPE_I:
+        ctx-&gt;coded_frame-&gt;pict_type = AV_PICTURE_TYPE_I;
+        break;
+    case X264_TYPE_P:
+        ctx-&gt;coded_frame-&gt;pict_type = AV_PICTURE_TYPE_P;
+        break;
+    case X264_TYPE_B:
+    case X264_TYPE_BREF:
+        ctx-&gt;coded_frame-&gt;pict_type = AV_PICTURE_TYPE_B;
+        break;
+    }
+
+    pkt-&gt;flags |= AV_PKT_FLAG_KEY*pic_out.b_keyframe;
+    if (ret)
+        ctx-&gt;coded_frame-&gt;quality = (pic_out.i_qpplus1 - 1) * FF_QP2LAMBDA;
+
+    *got_packet = ret;
+    return 0;
+}
+</pre>
+    <br/>
+    有关X264编码的代码在以后分析X264的时候再进行详细分析。在这里我们可以我们可以简单看出该函数中有一个do while循环，其中调用了x264_encoder_encode()完成了编码的工作。
+    <br/>
+    <br/>
+    <br/>
+    <span style="color:#660000;">
+     <strong>
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </strong>
+    </span>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44206485
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVCodec&amp;t=blog" target="_blank">
+    AVCodec
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编码&amp;t=blog" target="_blank">
+    编码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

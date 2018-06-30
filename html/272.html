@@ -1,0 +1,613 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFMPEG 实现 YUV，RGB各种图像原始数据之间的转换（swscale） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_272">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFMPEG 实现 YUV，RGB各种图像原始数据之间的转换（swscale）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月06日 15:37:09
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：88034
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <h1>
+     <span style="font-weight:normal;">
+      <span style="font-size:12px;">
+       FFMPEG中的
+       <span style="font-family:Arial;line-height:26px;">
+        swscale提供了视频原始数据（YUV420，YUV422，YUV444，RGB24...）之间的转换，分辨率变换等操作，使用起来十分方便，在这里记录一下它的用法。
+       </span>
+      </span>
+     </span>
+    </h1>
+    <div>
+     <span style="font-weight:normal;">
+      <span style="font-size:12px;">
+       <span style="font-family:Arial;line-height:26px;">
+        swscale主要用于在2个AVFrame之间进行转换。
+       </span>
+      </span>
+     </span>
+    </div>
+    <div>
+     <span style="font-weight:normal;">
+      <span style="font-size:12px;">
+       <span style="font-family:Arial;line-height:26px;">
+        下面来看一个视频解码的简单例子，这个程序完成了对"北京移动开发者大会茶歇视频2.flv"（其实就是优酷上的一个普通视频）的解码工作，并将解码后的数据保存为原始数据文件（例如YUV420，YUV422，RGB24等等）。其中略去了很多的代码。
+       </span>
+      </span>
+     </span>
+    </div>
+    <div>
+     <span style="font-weight:normal;">
+      <span style="font-size:12px;">
+       <span style="font-family:Arial;line-height:26px;">
+        注：完整代码在文章：
+        <a href="http://blog.csdn.net/leixiaohua1020/article/details/8652605">
+         100行代码实现最简单的基于FFMPEG+SDL的视频播放器
+        </a>
+       </span>
+      </span>
+     </span>
+    </div>
+    <p>
+    </p>
+    <pre class="cpp">//ffmpeg simple player
+//
+//媒资检索系统子系统
+//
+//2013 雷霄骅 leixiaohua1020@126.com
+//中国传媒大学/数字电视技术
+//
+#include "stdafx.h"
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	AVFormatContext	*pFormatCtx;
+	int				i, videoindex;
+	AVCodecContext	*pCodecCtx;
+	AVCodec			*pCodec;
+	char filepath[]="北京移动开发者大会茶歇视频2.flv";
+	av_register_all();
+	avformat_network_init();
+	pFormatCtx = avformat_alloc_context();
+	if(avformat_open_input(&amp;pFormatCtx,filepath,NULL,NULL)!=0){
+		printf("无法打开文件\n");
+		return -1;
+	}
+	
+	......
+	
+		AVFrame	*pFrame,*pFrameYUV;
+		pFrame=avcodec_alloc_frame();
+		pFrameYUV=avcodec_alloc_frame();
+		uint8_t *out_buffer;
+
+		out_buffer=new uint8_t[avpicture_get_size(PIX_FMT_RGB24, pCodecCtx-&gt;width, pCodecCtx-&gt;height)];
+		avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_RGB24, pCodecCtx-&gt;width, pCodecCtx-&gt;height);
+/*
+		out_buffer=new uint8_t[avpicture_get_size(PIX_FMT_YUV420P, pCodecCtx-&gt;width, pCodecCtx-&gt;height)];
+		avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_YUV420P, pCodecCtx-&gt;width, pCodecCtx-&gt;height);*/
+
+/*
+		out_buffer=new uint8_t[avpicture_get_size(PIX_FMT_UYVY422, pCodecCtx-&gt;width, pCodecCtx-&gt;height)];
+		avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_UYVY422, pCodecCtx-&gt;width, pCodecCtx-&gt;height);
+		out_buffer=new uint8_t[avpicture_get_size(PIX_FMT_YUV422P, pCodecCtx-&gt;width, pCodecCtx-&gt;height)];
+		avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_YUV422P, pCodecCtx-&gt;width, pCodecCtx-&gt;height);*/
+		
+		......
+		
+		FILE *output=fopen("out.rgb","wb+");
+		//------------------------------
+		while(av_read_frame(pFormatCtx, packet)&gt;=0)
+		{
+			if(packet-&gt;stream_index==videoindex)
+			{
+				ret = avcodec_decode_video2(pCodecCtx, pFrame, &amp;got_picture, packet);
+				
+				if(ret &lt; 0)
+				{
+					printf("解码错误\n");
+					return -1;
+				}
+				if(got_picture)
+				{
+					/*img_convert_ctx = sws_getContext(pCodecCtx-&gt;width, pCodecCtx-&gt;height, pCodecCtx-&gt;pix_fmt, pCodecCtx-&gt;width, pCodecCtx-&gt;height, PIX_FMT_UYVY422, SWS_BICUBIC, NULL, NULL, NULL); 
+					sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame-&gt;data, pFrame-&gt;linesize, 0, pCodecCtx-&gt;height, pFrameYUV-&gt;data, pFrameYUV-&gt;linesize);
+					img_convert_ctx = sws_getContext(pCodecCtx-&gt;width, pCodecCtx-&gt;height, pCodecCtx-&gt;pix_fmt, pCodecCtx-&gt;width, pCodecCtx-&gt;height, PIX_FMT_YUV422P, SWS_BICUBIC, NULL, NULL, NULL); 
+					sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame-&gt;data, pFrame-&gt;linesize, 0, pCodecCtx-&gt;height, pFrameYUV-&gt;data, pFrameYUV-&gt;linesize);*/
+					//转换
+					img_convert_ctx = sws_getContext(pCodecCtx-&gt;width, pCodecCtx-&gt;height, pCodecCtx-&gt;pix_fmt, pCodecCtx-&gt;width, pCodecCtx-&gt;height, PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL); 
+					sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame-&gt;data, pFrame-&gt;linesize, 0, pCodecCtx-&gt;height, pFrameYUV-&gt;data, pFrameYUV-&gt;linesize);
+					
+					
+					//RGB
+					fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)*3,1,output);
+					/*
+					//UYVY
+					fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height),2,output);
+					//YUV420P
+					fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height),1,output);
+					fwrite(pFrameYUV-&gt;data[1],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)/4,1,output);
+					fwrite(pFrameYUV-&gt;data[2],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)/4,1,output);
+					*/
+					......
+
+				}
+			}
+			av_free_packet(packet);
+		}
+
+		fclose(output);
+
+		......
+
+		return 0;
+}
+</pre>
+    <br/>
+    从代码中可以看出，解码后的视频帧数据保存在pFrame变量中，然后经过swscale函数转换后，将视频帧数据保存在pFrameYUV变量中。最后将pFrameYUV中的数据写入成文件。
+    <p>
+    </p>
+    <p>
+     在本代码中，将数据保存成了RGB24的格式。如果想保存成其他格式，比如YUV420，YUV422等，需要做2个步骤：
+    </p>
+    <p>
+     <strong>
+      1.初始化pFrameYUV的时候，设定想要转换的格式：
+     </strong>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVFrame	*pFrame,*pFrameYUV;
+pFrame=avcodec_alloc_frame();
+pFrameYUV=avcodec_alloc_frame();
+uint8_t *out_buffer;
+
+out_buffer=new uint8_t[avpicture_get_size(PIX_FMT_RGB24, pCodecCtx-&gt;width, pCodecCtx-&gt;height)];
+avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_RGB24, pCodecCtx-&gt;width, pCodecCtx-&gt;height);
+</pre>
+    只需要把PIX_FMT_***改了就可以了
+    <p>
+    </p>
+    <p>
+     <strong>
+      2.在sws_getContext()中更改想要转换的格式：
+     </strong>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">img_convert_ctx = sws_getContext(pCodecCtx-&gt;width, pCodecCtx-&gt;height, pCodecCtx-&gt;pix_fmt, pCodecCtx-&gt;width, pCodecCtx-&gt;height, PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL); </pre>
+    也是把PIX_FMT_***改了就可以了
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     最后，如果想将转换后的原始数据存成文件，只需要将pFrameYUV的data指针指向的数据写入文件就可以了。
+    </p>
+    <p>
+     例如，保存YUV420P格式的数据，用以下代码：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height),1,output);
+fwrite(pFrameYUV-&gt;data[1],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)/4,1,output);
+fwrite(pFrameYUV-&gt;data[2],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)/4,1,output);</pre>
+    <p>
+    </p>
+    <p>
+     保存RGB24格式的数据，用以下代码：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height)*3,1,output);</pre>
+    <p>
+    </p>
+    <p>
+     保存UYVY格式的数据，用以下代码：
+     <br/>
+    </p>
+    <pre class="cpp">fwrite(pFrameYUV-&gt;data[0],(pCodecCtx-&gt;width)*(pCodecCtx-&gt;height),2,output);</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     在这里又有一个问题，YUV420P格式需要写入data[0]，data[1]，data[2]；而RGB24，UYVY格式却仅仅是写入data[0]，他们的区别到底是什么呢？经过研究发现，在FFMPEG中，图像原始数据包括两种：planar和packed。planar就是将几个分量分开存，比如YUV420中，data[0]专门存Y，data[1]专门存U，data[2]专门存V。而packed则是打包存，所有数据都存在data[0]中。
+    </p>
+    <p>
+     具体哪个格式是planar，哪个格式是packed，可以查看pixfmt.h文件。注：有些格式名称后面是LE或BE，分别对应little-endian或big-endian。另外名字后面有P的是planar格式。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/* 雷霄骅
+ * 中国传媒大学/数字电视技术
+ * leixiaohua1020@126.com
+ *
+ */
+ /*
+ * copyright (c) 2006 Michael Niedermayer &lt;michaelni@gmx.at&gt;
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+#ifndef AVUTIL_PIXFMT_H
+#define AVUTIL_PIXFMT_H
+
+/**
+ * @file
+ * pixel format definitions
+ *
+ */
+
+#include "libavutil/avconfig.h"
+
+/**
+ * Pixel format.
+ *
+ * @note
+ * PIX_FMT_RGB32 is handled in an endian-specific manner. An RGBA
+ * color is put together as:
+ *  (A &lt;&lt; 24) | (R &lt;&lt; 16) | (G &lt;&lt; 8) | B
+ * This is stored as BGRA on little-endian CPU architectures and ARGB on
+ * big-endian CPUs.
+ *
+ * @par
+ * When the pixel format is palettized RGB (PIX_FMT_PAL8), the palettized
+ * image data is stored in AVFrame.data[0]. The palette is transported in
+ * AVFrame.data[1], is 1024 bytes long (256 4-byte entries) and is
+ * formatted the same as in PIX_FMT_RGB32 described above (i.e., it is
+ * also endian-specific). Note also that the individual RGB palette
+ * components stored in AVFrame.data[1] should be in the range 0..255.
+ * This is important as many custom PAL8 video codecs that were designed
+ * to run on the IBM VGA graphics adapter use 6-bit palette components.
+ *
+ * @par
+ * For all the 8bit per pixel formats, an RGB32 palette is in data[1] like
+ * for pal8. This palette is filled in automatically by the function
+ * allocating the picture.
+ *
+ * @note
+ * make sure that all newly added big endian formats have pix_fmt&amp;1==1
+ * and that all newly added little endian formats have pix_fmt&amp;1==0
+ * this allows simpler detection of big vs little endian.
+ */
+enum PixelFormat {
+    PIX_FMT_NONE= -1,
+    PIX_FMT_YUV420P,   ///&lt; planar YUV 4:2:0, 12bpp, (1 Cr &amp; Cb sample per 2x2 Y samples)
+    PIX_FMT_YUYV422,   ///&lt; packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
+    PIX_FMT_RGB24,     ///&lt; packed RGB 8:8:8, 24bpp, RGBRGB...
+    PIX_FMT_BGR24,     ///&lt; packed RGB 8:8:8, 24bpp, BGRBGR...
+    PIX_FMT_YUV422P,   ///&lt; planar YUV 4:2:2, 16bpp, (1 Cr &amp; Cb sample per 2x1 Y samples)
+    PIX_FMT_YUV444P,   ///&lt; planar YUV 4:4:4, 24bpp, (1 Cr &amp; Cb sample per 1x1 Y samples)
+    PIX_FMT_YUV410P,   ///&lt; planar YUV 4:1:0,  9bpp, (1 Cr &amp; Cb sample per 4x4 Y samples)
+    PIX_FMT_YUV411P,   ///&lt; planar YUV 4:1:1, 12bpp, (1 Cr &amp; Cb sample per 4x1 Y samples)
+    PIX_FMT_GRAY8,     ///&lt;        Y        ,  8bpp
+    PIX_FMT_MONOWHITE, ///&lt;        Y        ,  1bpp, 0 is white, 1 is black, in each byte pixels are ordered from the msb to the lsb
+    PIX_FMT_MONOBLACK, ///&lt;        Y        ,  1bpp, 0 is black, 1 is white, in each byte pixels are ordered from the msb to the lsb
+    PIX_FMT_PAL8,      ///&lt; 8 bit with PIX_FMT_RGB32 palette
+    PIX_FMT_YUVJ420P,  ///&lt; planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV420P and setting color_range
+    PIX_FMT_YUVJ422P,  ///&lt; planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV422P and setting color_range
+    PIX_FMT_YUVJ444P,  ///&lt; planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range
+    PIX_FMT_XVMC_MPEG2_MC,///&lt; XVideo Motion Acceleration via common packet passing
+    PIX_FMT_XVMC_MPEG2_IDCT,
+    PIX_FMT_UYVY422,   ///&lt; packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
+    PIX_FMT_UYYVYY411, ///&lt; packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3
+    PIX_FMT_BGR8,      ///&lt; packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb)
+    PIX_FMT_BGR4,      ///&lt; packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits
+    PIX_FMT_BGR4_BYTE, ///&lt; packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb)
+    PIX_FMT_RGB8,      ///&lt; packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb)
+    PIX_FMT_RGB4,      ///&lt; packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits
+    PIX_FMT_RGB4_BYTE, ///&lt; packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb)
+    PIX_FMT_NV12,      ///&lt; planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)
+    PIX_FMT_NV21,      ///&lt; as above, but U and V bytes are swapped
+
+    PIX_FMT_ARGB,      ///&lt; packed ARGB 8:8:8:8, 32bpp, ARGBARGB...
+    PIX_FMT_RGBA,      ///&lt; packed RGBA 8:8:8:8, 32bpp, RGBARGBA...
+    PIX_FMT_ABGR,      ///&lt; packed ABGR 8:8:8:8, 32bpp, ABGRABGR...
+    PIX_FMT_BGRA,      ///&lt; packed BGRA 8:8:8:8, 32bpp, BGRABGRA...
+
+    PIX_FMT_GRAY16BE,  ///&lt;        Y        , 16bpp, big-endian
+    PIX_FMT_GRAY16LE,  ///&lt;        Y        , 16bpp, little-endian
+    PIX_FMT_YUV440P,   ///&lt; planar YUV 4:4:0 (1 Cr &amp; Cb sample per 1x2 Y samples)
+    PIX_FMT_YUVJ440P,  ///&lt; planar YUV 4:4:0 full scale (JPEG), deprecated in favor of PIX_FMT_YUV440P and setting color_range
+    PIX_FMT_YUVA420P,  ///&lt; planar YUV 4:2:0, 20bpp, (1 Cr &amp; Cb sample per 2x2 Y &amp; A samples)
+    PIX_FMT_VDPAU_H264,///&lt; H.264 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_VDPAU_MPEG1,///&lt; MPEG-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_VDPAU_MPEG2,///&lt; MPEG-2 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_VDPAU_WMV3,///&lt; WMV3 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_VDPAU_VC1, ///&lt; VC-1 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_RGB48BE,   ///&lt; packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian
+    PIX_FMT_RGB48LE,   ///&lt; packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian
+
+    PIX_FMT_RGB565BE,  ///&lt; packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian
+    PIX_FMT_RGB565LE,  ///&lt; packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian
+    PIX_FMT_RGB555BE,  ///&lt; packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), big-endian, most significant bit to 0
+    PIX_FMT_RGB555LE,  ///&lt; packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), little-endian, most significant bit to 0
+
+    PIX_FMT_BGR565BE,  ///&lt; packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian
+    PIX_FMT_BGR565LE,  ///&lt; packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian
+    PIX_FMT_BGR555BE,  ///&lt; packed BGR 5:5:5, 16bpp, (msb)1A 5B 5G 5R(lsb), big-endian, most significant bit to 1
+    PIX_FMT_BGR555LE,  ///&lt; packed BGR 5:5:5, 16bpp, (msb)1A 5B 5G 5R(lsb), little-endian, most significant bit to 1
+
+    PIX_FMT_VAAPI_MOCO, ///&lt; HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers
+    PIX_FMT_VAAPI_IDCT, ///&lt; HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers
+    PIX_FMT_VAAPI_VLD,  ///&lt; HW decoding through VA API, Picture.data[3] contains a vaapi_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+
+    PIX_FMT_YUV420P16LE,  ///&lt; planar YUV 4:2:0, 24bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), little-endian
+    PIX_FMT_YUV420P16BE,  ///&lt; planar YUV 4:2:0, 24bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), big-endian
+    PIX_FMT_YUV422P16LE,  ///&lt; planar YUV 4:2:2, 32bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), little-endian
+    PIX_FMT_YUV422P16BE,  ///&lt; planar YUV 4:2:2, 32bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), big-endian
+    PIX_FMT_YUV444P16LE,  ///&lt; planar YUV 4:4:4, 48bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), little-endian
+    PIX_FMT_YUV444P16BE,  ///&lt; planar YUV 4:4:4, 48bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), big-endian
+    PIX_FMT_VDPAU_MPEG4,  ///&lt; MPEG4 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers
+    PIX_FMT_DXVA2_VLD,    ///&lt; HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer
+
+    PIX_FMT_RGB444LE,  ///&lt; packed RGB 4:4:4, 16bpp, (msb)4A 4R 4G 4B(lsb), little-endian, most significant bits to 0
+    PIX_FMT_RGB444BE,  ///&lt; packed RGB 4:4:4, 16bpp, (msb)4A 4R 4G 4B(lsb), big-endian, most significant bits to 0
+    PIX_FMT_BGR444LE,  ///&lt; packed BGR 4:4:4, 16bpp, (msb)4A 4B 4G 4R(lsb), little-endian, most significant bits to 1
+    PIX_FMT_BGR444BE,  ///&lt; packed BGR 4:4:4, 16bpp, (msb)4A 4B 4G 4R(lsb), big-endian, most significant bits to 1
+    PIX_FMT_GRAY8A,    ///&lt; 8bit gray, 8bit alpha
+    PIX_FMT_BGR48BE,   ///&lt; packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as big-endian
+    PIX_FMT_BGR48LE,   ///&lt; packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian
+
+    //the following 10 formats have the disadvantage of needing 1 format for each bit depth, thus
+    //If you want to support multiple bit depths, then using PIX_FMT_YUV420P16* with the bpp stored seperately
+    //is better
+    PIX_FMT_YUV420P9BE, ///&lt; planar YUV 4:2:0, 13.5bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), big-endian
+    PIX_FMT_YUV420P9LE, ///&lt; planar YUV 4:2:0, 13.5bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), little-endian
+    PIX_FMT_YUV420P10BE,///&lt; planar YUV 4:2:0, 15bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), big-endian
+    PIX_FMT_YUV420P10LE,///&lt; planar YUV 4:2:0, 15bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), little-endian
+    PIX_FMT_YUV422P10BE,///&lt; planar YUV 4:2:2, 20bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), big-endian
+    PIX_FMT_YUV422P10LE,///&lt; planar YUV 4:2:2, 20bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), little-endian
+    PIX_FMT_YUV444P9BE, ///&lt; planar YUV 4:4:4, 27bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), big-endian
+    PIX_FMT_YUV444P9LE, ///&lt; planar YUV 4:4:4, 27bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), little-endian
+    PIX_FMT_YUV444P10BE,///&lt; planar YUV 4:4:4, 30bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), big-endian
+    PIX_FMT_YUV444P10LE,///&lt; planar YUV 4:4:4, 30bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), little-endian
+    PIX_FMT_YUV422P9BE, ///&lt; planar YUV 4:2:2, 18bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), big-endian
+    PIX_FMT_YUV422P9LE, ///&lt; planar YUV 4:2:2, 18bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), little-endian
+    PIX_FMT_VDA_VLD,    ///&lt; hardware decoding through VDA
+
+#ifdef AV_PIX_FMT_ABI_GIT_MASTER
+    PIX_FMT_RGBA64BE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian
+    PIX_FMT_RGBA64LE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian
+    PIX_FMT_BGRA64BE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian
+    PIX_FMT_BGRA64LE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian
+#endif
+    PIX_FMT_GBRP,      ///&lt; planar GBR 4:4:4 24bpp
+    PIX_FMT_GBRP9BE,   ///&lt; planar GBR 4:4:4 27bpp, big endian
+    PIX_FMT_GBRP9LE,   ///&lt; planar GBR 4:4:4 27bpp, little endian
+    PIX_FMT_GBRP10BE,  ///&lt; planar GBR 4:4:4 30bpp, big endian
+    PIX_FMT_GBRP10LE,  ///&lt; planar GBR 4:4:4 30bpp, little endian
+    PIX_FMT_GBRP16BE,  ///&lt; planar GBR 4:4:4 48bpp, big endian
+    PIX_FMT_GBRP16LE,  ///&lt; planar GBR 4:4:4 48bpp, little endian
+
+#ifndef AV_PIX_FMT_ABI_GIT_MASTER
+    PIX_FMT_RGBA64BE=0x123,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian
+    PIX_FMT_RGBA64LE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian
+    PIX_FMT_BGRA64BE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian
+    PIX_FMT_BGRA64LE,  ///&lt; packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian
+#endif
+    PIX_FMT_0RGB=0x123+4,      ///&lt; packed RGB 8:8:8, 32bpp, 0RGB0RGB...
+    PIX_FMT_RGB0,      ///&lt; packed RGB 8:8:8, 32bpp, RGB0RGB0...
+    PIX_FMT_0BGR,      ///&lt; packed BGR 8:8:8, 32bpp, 0BGR0BGR...
+    PIX_FMT_BGR0,      ///&lt; packed BGR 8:8:8, 32bpp, BGR0BGR0...
+    PIX_FMT_YUVA444P,  ///&lt; planar YUV 4:4:4 32bpp, (1 Cr &amp; Cb sample per 1x1 Y &amp; A samples)
+
+    PIX_FMT_NB,        ///&lt; number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions
+};
+
+#define PIX_FMT_Y400A PIX_FMT_GRAY8A
+#define PIX_FMT_GBR24P PIX_FMT_GBRP
+
+#if AV_HAVE_BIGENDIAN
+#   define PIX_FMT_NE(be, le) PIX_FMT_##be
+#else
+#   define PIX_FMT_NE(be, le) PIX_FMT_##le
+#endif
+
+#define PIX_FMT_RGB32   PIX_FMT_NE(ARGB, BGRA)
+#define PIX_FMT_RGB32_1 PIX_FMT_NE(RGBA, ABGR)
+#define PIX_FMT_BGR32   PIX_FMT_NE(ABGR, RGBA)
+#define PIX_FMT_BGR32_1 PIX_FMT_NE(BGRA, ARGB)
+#define PIX_FMT_0RGB32  PIX_FMT_NE(0RGB, BGR0)
+#define PIX_FMT_0BGR32  PIX_FMT_NE(0BGR, RGB0)
+
+#define PIX_FMT_GRAY16 PIX_FMT_NE(GRAY16BE, GRAY16LE)
+#define PIX_FMT_RGB48  PIX_FMT_NE(RGB48BE,  RGB48LE)
+#define PIX_FMT_RGB565 PIX_FMT_NE(RGB565BE, RGB565LE)
+#define PIX_FMT_RGB555 PIX_FMT_NE(RGB555BE, RGB555LE)
+#define PIX_FMT_RGB444 PIX_FMT_NE(RGB444BE, RGB444LE)
+#define PIX_FMT_BGR48  PIX_FMT_NE(BGR48BE,  BGR48LE)
+#define PIX_FMT_BGR565 PIX_FMT_NE(BGR565BE, BGR565LE)
+#define PIX_FMT_BGR555 PIX_FMT_NE(BGR555BE, BGR555LE)
+#define PIX_FMT_BGR444 PIX_FMT_NE(BGR444BE, BGR444LE)
+
+#define PIX_FMT_YUV420P9  PIX_FMT_NE(YUV420P9BE , YUV420P9LE)
+#define PIX_FMT_YUV422P9  PIX_FMT_NE(YUV422P9BE , YUV422P9LE)
+#define PIX_FMT_YUV444P9  PIX_FMT_NE(YUV444P9BE , YUV444P9LE)
+#define PIX_FMT_YUV420P10 PIX_FMT_NE(YUV420P10BE, YUV420P10LE)
+#define PIX_FMT_YUV422P10 PIX_FMT_NE(YUV422P10BE, YUV422P10LE)
+#define PIX_FMT_YUV444P10 PIX_FMT_NE(YUV444P10BE, YUV444P10LE)
+#define PIX_FMT_YUV420P16 PIX_FMT_NE(YUV420P16BE, YUV420P16LE)
+#define PIX_FMT_YUV422P16 PIX_FMT_NE(YUV422P16BE, YUV422P16LE)
+#define PIX_FMT_YUV444P16 PIX_FMT_NE(YUV444P16BE, YUV444P16LE)
+
+#define PIX_FMT_RGBA64 PIX_FMT_NE(RGBA64BE, RGBA64LE)
+#define PIX_FMT_BGRA64 PIX_FMT_NE(BGRA64BE, BGRA64LE)
+#define PIX_FMT_GBRP9     PIX_FMT_NE(GBRP9BE ,    GBRP9LE)
+#define PIX_FMT_GBRP10    PIX_FMT_NE(GBRP10BE,    GBRP10LE)
+#define PIX_FMT_GBRP16    PIX_FMT_NE(GBRP16BE,    GBRP16LE)
+
+#endif /* AVUTIL_PIXFMT_H */
+</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/14215391
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFMPEG&amp;t=blog" target="_blank">
+    FFMPEG
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=YUV&amp;t=blog" target="_blank">
+    YUV
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RGB&amp;t=blog" target="_blank">
+    RGB
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=转换&amp;t=blog" target="_blank">
+    转换
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

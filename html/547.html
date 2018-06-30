@@ -1,0 +1,284 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 使用Live555类库实现的网络直播系统 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_547">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   使用Live555类库实现的网络直播系统
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月15日 00:22:08
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：20734
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     Live555主要有四个类库：
+    </p>
+    <p>
+     libUsageEnvironment.lib；libliveMedia.lib；libgroupsock.lib；libBasicUsageEnvironment.lib
+     <br/>
+    </p>
+    <p>
+     将这四个类库以及相关的头文件导入VC++2010之后，可以轻松实现网络直播系统。
+    </p>
+    <p>
+     在这里直接贴上完整代码，粘贴到VC里面就可以运行。
+    </p>
+    <p>
+     注：程序运行后，使用播放器软件（VLC Media Player，FFplay等），打开URL：rtp://239.255.42.42:1234，即可收看直播的视频。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">// 网络直播系统.cpp : 定义控制台应用程序的入口点。
+// 雷霄骅
+// 中国传媒大学/数字电视技术
+// leixiaohua1020@126.com
+
+#include "stdafx.h"
+
+#include "liveMedia.hh"
+#include "BasicUsageEnvironment.hh"
+#include "GroupsockHelper.hh"
+
+//#define IMPLEMENT_RTSP_SERVER
+//#define USE_SSM 1
+#ifdef USE_SSM
+Boolean const isSSM = True;
+#else
+Boolean const isSSM = False;
+#endif
+
+
+
+#define TRANSPORT_PACKET_SIZE 188
+#define TRANSPORT_PACKETS_PER_NETWORK_PACKET 7
+
+
+UsageEnvironment* env;
+char const* inputFileName = "test.ts";
+FramedSource* videoSource;
+RTPSink* videoSink;
+
+void play(); // forward
+
+int main(int argc, char** argv) {
+  // 首先建立使用环境：
+  TaskScheduler* scheduler = BasicTaskScheduler::createNew();
+  env = BasicUsageEnvironment::createNew(*scheduler);
+
+  // 创建 'groupsocks' for RTP and RTCP:
+  char const* destinationAddressStr
+#ifdef USE_SSM
+    = "232.255.42.42";
+#else
+    = "239.255.42.42";
+  // Note: 这是一个多播地址。如果你希望流使用单播地址,然后替换这个字符串与单播地址  
+#endif
+  const unsigned short rtpPortNum = 1234;
+  const unsigned short rtcpPortNum = rtpPortNum+1;
+  const unsigned char ttl = 7; //
+
+
+  struct in_addr destinationAddress;
+  destinationAddress.s_addr = our_inet_addr(destinationAddressStr);
+  const Port rtpPort(rtpPortNum);
+  const Port rtcpPort(rtcpPortNum);
+
+  Groupsock rtpGroupsock(*env, destinationAddress, rtpPort, ttl);
+  Groupsock rtcpGroupsock(*env, destinationAddress, rtcpPort, ttl);
+#ifdef USE_SSM
+  rtpGroupsock.multicastSendOnly();
+  rtcpGroupsock.multicastSendOnly();
+#endif
+
+  // 创建一个适当的“RTPSink”:
+
+  videoSink =
+    SimpleRTPSink::createNew(*env, &amp;rtpGroupsock, 33, 90000, "video", "mp2t",
+			     1, True, False /*no 'M' bit*/);
+
+
+  const unsigned estimatedSessionBandwidth = 5000; // in kbps; for RTCP b/w share
+  const unsigned maxCNAMElen = 100;
+  unsigned char CNAME[maxCNAMElen+1];
+  gethostname((char*)CNAME, maxCNAMElen);
+  CNAME[maxCNAMElen] = '\0'; 
+#ifdef IMPLEMENT_RTSP_SERVER
+  RTCPInstance* rtcp =
+#endif
+    RTCPInstance::createNew(*env, &amp;rtcpGroupsock,
+			    estimatedSessionBandwidth, CNAME,
+			    videoSink, NULL /* we're a server */, isSSM);
+  // 开始自动运行的媒体
+
+#ifdef IMPLEMENT_RTSP_SERVER
+  RTSPServer* rtspServer = RTSPServer::createNew(*env);
+  
+  if (rtspServer == NULL) {
+    *env &lt;&lt; "Failed to create RTSP server: " &lt;&lt; env-&gt;getResultMsg() &lt;&lt; "\n";
+    exit(1);
+  }
+  ServerMediaSession* sms
+    = ServerMediaSession::createNew(*env, "testStream", inputFileName,
+		   "Session streamed by \"testMPEG2TransportStreamer\"",
+					   isSSM);
+  sms-&gt;addSubsession(PassiveServerMediaSubsession::createNew(*videoSink, rtcp));
+  rtspServer-&gt;addServerMediaSession(sms);
+
+  char* url = rtspServer-&gt;rtspURL(sms);
+  *env &lt;&lt; "Play this stream using the URL \"" &lt;&lt; url &lt;&lt; "\"\n";
+  delete[] url;
+#endif
+
+ 
+  *env &lt;&lt; "开始发送流媒体...\n";
+  play();
+
+  env-&gt;taskScheduler().doEventLoop(); 
+
+  return 0; // 只是为了防止编译器警告
+
+}
+
+void afterPlaying(void* /*clientData*/) {
+  *env &lt;&lt; "...从文件中读取完毕\n";
+
+  Medium::close(videoSource);
+  // 将关闭从源读取的输入文件
+
+  play();
+}
+
+void play() {
+  unsigned const inputDataChunkSize
+    = TRANSPORT_PACKETS_PER_NETWORK_PACKET*TRANSPORT_PACKET_SIZE;
+
+  // 打开输入文件作为一个“ByteStreamFileSource":
+
+  ByteStreamFileSource* fileSource
+    = ByteStreamFileSource::createNew(*env, inputFileName, inputDataChunkSize);
+  if (fileSource == NULL) {
+    *env &lt;&lt; "无法打开文件 \"" &lt;&lt; inputFileName
+	 &lt;&lt; "\" 作为 file source\n";
+    exit(1);
+  }
+
+  
+  videoSource = MPEG2TransportStreamFramer::createNew(*env, fileSource);
+
+  
+  *env &lt;&lt; "Beginning to read from file...\n";
+  videoSink-&gt;startPlaying(*videoSource, afterPlaying, videoSink);
+}</pre>
+    <p>
+    </p>
+    <p>
+     完整工程下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6272839">
+      http://download.csdn.net/detail/leixiaohua1020/6272839
+     </a>
+    </p>
+    <pre class="cpp"></pre>
+    <pre></pre>
+    <pre></pre>
+    <pre></pre>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/11696449
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Live555&amp;t=blog" target="_blank">
+    Live555
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=直播&amp;t=blog" target="_blank">
+    直播
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362936" target="_blank">
+    Live555
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

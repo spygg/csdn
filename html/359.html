@@ -1,0 +1,692 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ windows 下使用 MinGW + msys 编译 ffmpeg - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_359">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   windows 下使用 MinGW + msys 编译 ffmpeg
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月16日 19:24:35
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：10284
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    本文参考了网络上的不少文章，但由于版本环境的问题参考文章并不能直接指导编译，本文吸收多方经验，并在自己多次编译实验的基础上写成，欢迎转载，请注名出处。
+    <br/>
+    FFmpeg是在Linux平台下开发的，但它同样可以在其它操作系统环境中编译运行，本文介绍的就是在windows下编译FFmpeg。
+    <br/>
+    一 编译准备
+    <br/>
+    您最好新建一个目录专门用来保存以下下载的文件。
+    <br/>
+    1 下载 MinGW 和 MSYS
+    <br/>
+    MinGW(Minimalist GNU on Windows)：一个可自由使用和自由发布的Windows特定头文件和使用GNU工具集导入库的集合，允许你生成本地的Windows程序而不需要第三方C运行时库。
+    <br/>
+    到：http://sourceforge.net/projects/mingw/ 去下载即可
+    <br/>
+    A 点击“DownLoad mingw-get-inst-...exe”
+    <br/>
+    B 切换到页面：download? Check your browser's security bar, or try a direct link, or try another mirror.
+    <br/>
+    C 点击“direct link”下载类似：mingw-get-inst-20111118.exe 的文件
+    <br/>
+    提示：msys此处就不用再下载了，mingw-get-inst-20111118.exe 中已经包含了msys1.0，后面安装的时候就可以看到该选项。
+    <br/>
+    2 下载 yasm(汇编编译器)
+    <br/>
+    ffmpeg编译的时候里面的汇编代码需要yasm.exe
+    <br/>
+    去官网：http://yasm.tortall.net/Download.html 下载
+    <br/>
+    在Latest Release栏，直接下载：Win32 .exe (for general use on 32-bit Windows)
+    <br/>
+    文件名类似为：yasm-1.2.0-win32.exe
+    <br/>
+    3 下载 ffmpeg
+    <br/>
+    ffmpeg可以到 http://www.ffmpeg.org/releases/ 下载
+    <br/>
+    选择的一个最新版本下载即可，如：ffmpeg-0.8.6.tar.gz
+    <br/>
+    文件名类似为：ffmpeg-0.8.6.tar.gz
+    <br/>
+    当然你也使用网上介绍的使用SVN直接下载源代码的方法。
+    <br/>
+    svn://svn.mplayerhq.hu/ffmpeg/trunk
+    <br/>
+    4 下载 mp3lame(支持mp3，可选项)
+    <br/>
+    为了让编译出来的ffmpeg支持对mp3格式的编解码，您需要先下载lame。
+    <br/>
+    到：http://sourceforge.net/projects/lame/files/ 下载
+    <br/>
+    文件名类似为：lame-3.99.2.tar.gz 的包。
+    <br/>
+    5 下载 x264(支持x264，可选项)
+    <br/>
+    为了让编译出来的ffmpeg支持对x264格式的编解码，您需要先下载x264。
+    <br/>
+    到：http://www.videolan.org/developers/x264.html下载
+    <br/>
+    文件名类似为：last_x264.tar.bz2 的包。
+    <br/>
+    6 下载 Xvid(支持Xvid，可选项)
+    <br/>
+    为了让编译出来的ffmpeg支持对Xvid格式的编解码，您需要先下载Xvid。
+    <br/>
+    到：http://www.xvid.org/ 下载
+    <br/>
+    文件名类似为：xvidcore-1.3.2.tar.gz 的包。
+    <br/>
+    7 下载 faad2(支持faad，可选项)
+    <br/>
+    到：http://www.audiocoding.com/downloads.html 下载：Version 2.7 bootstrapped TAR.GZ Package
+    <br/>
+    文件名类似为：faad2-2.7.tar.gz 的包。
+    <br/>
+    8 下载 faac(支持faac，可选项)
+    <br/>
+    到：http://www.audiocoding.com/downloads.html 下载：Version 1.28 bootstrapped TAR.GZ Package
+    <br/>
+    文件名类似为：faac-1.28.tar.gz 的包。
+    <br/>
+    9 下载 aacenc(支持aac，可选项)
+    <br/>
+    到：http://sourceforge.net/projects/opencore-amr/files/ 下载：vo-aacenc
+    <br/>
+    文件名类似为：vo-aacenc-0.1.1.tar.gz 的包。
+    <br/>
+    10 下载 amr-nb与amr-wb (早期ffmpeg支持3gp，可选项)
+    <br/>
+    到：http://www.penguin.cz/%7Eutx/amr 下载：amrnb-7.0.0.2.tar.bz2与amrwb-7.0.0.4.tar.bz2
+    <br/>
+    文件名类似为：amrnb-7.0.0.2.tar.tar 与amrwb-7.0.0.4.tar.tar 的包。
+    <br/>
+    11 下载 opencore-amr与vo-amrwbenc (支持3gp，可选项)
+    <br/>
+    到：http://sourceforge.net/projects/opencore-amr/files/ 下载：opencore-amr 与 vo-amrwbenc
+    <br/>
+    文件名类似为：opencore-amr-0.1.2.tar.gz 与vo-amrwbenc-0.1.1.tar.gz 的包。
+    <br/>
+    12 下载 SDL(支持SDL，可选项)
+    <br/>
+    SDL下载可以到：http://www.libsdl.org/download-1.2.php
+    <br/>
+    在Source Code栏选择类似：SDL-1.2.14.tar.gz - GPG signed 进行下载，
+    <br/>
+    文件名类似为：SDL-1.2.14.tar.tar，此文件需要编译才能生成lib库。
+    <br/>
+    也可以直接下载 SDL-devel-1.2.14-mingw32.tar.gz (Mingw32)，文件名类似为：SDL-devel-1.2.14-mingw32.tar.tar，此文件带有编译好的lib，在编译ffmpeg时可以直接使用。
+    <br/>
+    13 下载 pthreadGC2.dll
+    <br/>
+    pthreadgc2.dll是功能强大的处理数字化影视作品编辑软件premiere6运行所需的一个DLL文件。这是一个无威胁文件。属于Open Source Software community project的文件。
+    <br/>
+    直接去baidu.com三搜索下载就可以了。
+    <br/>
+    二 编译步骤
+    <br/>
+    1 安装 mingw 和 msys
+    <br/>
+    执行下载文件：mingw-get-inst-20111118.exe，
+    <br/>
+    在第3步选择“Download latest repository catalogues”
+    <br/>
+    选择安装路径：C:\MinGW（我直接采用默认路径，未做修改）
+    <br/>
+    在“Select Components”步骤中选择：
+    <br/>
+    √  C Compiler (默认且一定选择)
+    <br/>
+    √  C++ Compiler
+    <br/>
+    √  MSYS Basic System（选择此项将会安装msys，msys则不需要另外安装）
+    <br/>
+    √  MinGW Developer ToolKit
+    <br/>
+    等待安装完成！（需要等待一定的时间，因为安装过程需要下载文件，可想而知，网速越快，安装越快）
+    <br/>
+    安装完成后，在C:\MinGW目录下可以看到 msys 文件夹，msys也已经安装。
+    <br/>
+    2 配置 msys.bat 批处理文件
+    <br/>
+    为了方便VS200X以及VS2010调用ffmpeg的动态库，可以通过配置让ffmpeg编译时产生windows下调用dll对应的lib，当然，如果你没有这个需要，那么就可以省略以下处理，直接进入步骤3。
+    <br/>
+    进入：C:\MinGW\msys\1.0\文件夹，使用UltraEdit打开msys.bat文件，在文件的最最前面加入如下一行：
+    <br/>
+    call "D:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
+    <br/>
+    添加后效果如下：
+    <br/>
+    call "D:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
+    <br/>
+    @echo off
+    <br/>
+    rem Copyright (C):  2001, 2002, 2003, 2004, 2005  Earnie Boyd
+    <br/>
+    rem   mailto:earnie@users.sf.net
+    <br/>
+    rem This file is part of Minimal SYStem
+    <br/>
+    rem   http://www.mingw.org/msys.shtml
+    <br/>
+    rem
+    <br/>
+    rem File:     msys.bat
+    <br/>
+    rem Revision:     2.4
+    <br/>
+    rem Revision Date:  December 8th, 2005
+    <br/>
+    rem ember to set the "Start in:" field of the shortcut.
+    <br/>
+    rem A value similar to C:\msys\1.0\bin is what the "Start in:" field needs
+    <br/>
+    rem to represent.
+    <br/>
+    其中“D:\Program Files\Microsoft Visual Studio 10.0”为你机器上安装VS200X或VS2010的目录，我的电脑安装的是VS2010，并且安装在了D盘。文件修改后保存即可。
+    <br/>
+    3 系统整合
+    <br/>
+    使用UltraEdit修改C:\MinGW\msys\1.0\etc目下的fstab文件，如果不存在fstab，请复制一份fstab.sample，然后改名为：fstab，再修改其内容为：C:/MinGW /mingw，也即为MinGW的安装路径。
+    <br/>
+    4 配置 yasm
+    <br/>
+    为了减少配置环境变量的麻烦，本处直接把 yasm-1.1.0-win32.exe 文件名修改成：yasm.exe，并放到系统目录下：C:\WINDOWS\system32。
+    <br/>
+    5 编译 mp3lame(可选项)
+    <br/>
+    lame-3.99.2.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，切换到lame目录：D:\ffmpeg\lame-3.99.2
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd lame-3.99.2
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-shared (首选)
+    <br/>
+    或: $./configure --disable-static --enable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    6 编译 x264(可选项)
+    <br/>
+    last_x264.tar.bz2 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，切换到x264目录：D:\ffmpeg\x264-20111124-2245
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd x264-20111124-2245
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --enable-shared --disable-asm
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    7 编译 Xvid(可选项)
+    <br/>
+    xvidcore-1.3.2.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，切换到xvidcore目录：D:\ffmpeg\xvidcore\build\generic
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd xvidcore/build/generic
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --prefix=C:/MinGW/msys/1.0/local
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下。
+    <br/>
+    需要注意的就是：此处编译加上了路径
+    <br/>
+    如果make时出现：cc1.exe: error: unrecognized command line option '-mno-cygwin' 错误，请在./configure后make之前修改xvidcore\build\generic里的 platform.inc文件，直接删除里面的“-mno-cygwin”。
+    <br/>
+    具体可以参考：http://ffmpeg.zeranoe.com/forum/viewtopic.php?f=5&amp;t=111里2楼的回答，如果按他说的：I recommend re running ./bootstrap.sh after you do this.，我发现不太行，一运行bootstrap.sh后，platform.inc文件会被还原，并且./configure时也会还原该文件，所以我选择在./configure后make前修改，可以编译通过，目前没检验Xvid是否可用。
+    <br/>
+    8 编译 faad2(可选项)
+    <br/>
+    faad2-2.7.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到faac2目录：D:\ffmpeg\faad2-2.7
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd faad2-2.7
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./bootstrap
+    <br/>
+    $./configure --disable-static --enable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    9 编译faac(可选项)
+    <br/>
+    faac-1.28.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到faac2目录：D:\ffmpeg\faac-1.28
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd faac-1.28
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./bootstrap
+    <br/>
+    $./configure --disable-static --enable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    10 编译vo-aacenc (可选项)
+    <br/>
+    vo-aacenc-0.1.1.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到vo-aacenc目录：D:\ffmpeg\vo-aacenc-0.1.1
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd vo-aacenc-0.1.1
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    11 编译amr-nb和amr-wb (早期ffmpeg版本，可选项)
+    <br/>
+    在编译amrnb和amrwb之前还需要做点其它的准备工作：
+    <br/>
+    A 先到网上搜索下载wget工具，解压后放到C:\MinGW\bin目录下，此工具是个网络下载工具，用来在编译时自动下载3gpp源码。
+    <br/>
+    B 再先到http://downloads.sourceforge.net/gnuwin32/unzip-5.51-1-bin.zip 下载unzip-5.51-1-bin.zip后进行解压，并把unzip-5.51-1-bin\bin中的unzip.exe拷贝到C:\MinGW\bin目录下，此工具用来在编译时自动解压3gpp源码。
+    <br/>
+    amrnb-7.0.0.2.tar.tar 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到amrnb目录：D:\ffmpeg\amrnb-7.0.0.2
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd amrnb-7.0.0.2
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-static --enable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    amrwb-7.0.0.4.tar.tar 接压到：D:\ffmpeg\ 目录下，双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到amrwb目录：D:\ffmpeg\amrwb-7.0.0.4
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd amrwb-7.0.0.4
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-static --enable-shared
+    <br/>
+    $ make
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    12 编译opencore-amr 和vo-amrwbenc (可选项)
+    <br/>
+    opencore-amr-0.1.2.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。
+    <br/>
+    如果是opencore-amr-0.1.1.tar.gz请注释掉以下Makefile中的几行
+    <br/>
+    文件: ./opencore-amr/amrnb/Makefile
+    <br/>
+    install: libopencore-amrnb.a $(SHLIB)
+    <br/>
+    install -d $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    install -m 644 libopencore-amrnb.a $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    # install $(SHLIB) $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    ifneq ($(shell uname), Darwin)
+    <br/>
+    # ln -sf $(SHLIB) $(DESTDIR)$(PREFIX)/lib/$(SONAME)
+    <br/>
+    # ln -sf $(SONAME) $(DESTDIR)$(PREFIX)/lib/libopencore-amrnb.so
+    <br/>
+    endif
+    <br/>
+    文件: ./opencore-amr/amrwb/Makefile
+    <br/>
+    install: libopencore-amrwb.a $(SHLIB)
+    <br/>
+    install -d $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    install -m 644 libopencore-amrwb.a $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    # install $(SHLIB) $(DESTDIR)$(PREFIX)/lib
+    <br/>
+    ifneq ($(shell uname), Darwin)
+    <br/>
+    # ln -sf $(SHLIB) $(DESTDIR)$(PREFIX)/lib/$(SONAME)
+    <br/>
+    # ln -sf $(SONAME) $(DESTDIR)$(PREFIX)/lib/libopencore-amrwb.so
+    <br/>
+    endif
+    <br/>
+    切换到opencore-amr目录：D:\ffmpeg\ opencore-amr-0.1.2
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd opencore-amr-0.1.2
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-shared
+    <br/>
+    $ make CC=gcc
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    vo-amrwbenc-0.1.1.tar.gz 接压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，已经启动的话就不用再重新启动了。切换到vo-amrwbenc目录：D:\ffmpeg\ vo-amrwbenc-0.1.1
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd vo-amrwbenc-0.1.1
+    <br/>
+    再执行以下命令：
+    <br/>
+    $./configure --disable-shared
+    <br/>
+    $ make CC=gcc
+    <br/>
+    $ make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    13 编译SDL(可选项)
+    <br/>
+    SDL-1.2.14.tar.tar 解压到：D:\ffmpeg\ 目录下, 双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，切换到SDL目录：D:\ffmpeg\SDL-1.2.14，切换方法如下：
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd SDL-1.2.14
+    <br/>
+    再执行以下命令：
+    <br/>
+    ./configure
+    <br/>
+    make
+    <br/>
+    make install
+    <br/>
+    编译结果在：C:\MinGW\msys\1.0\local 目录下
+    <br/>
+    注意：如果是使用编译好的SDL-devel-1.2.14-mingw32.tar.tar，那么就可以省掉上面的编译工作，直接解压SDL-devel-1.2.14-mingw32.tar.tar文件即可。自己编译或直接使用编译好的都需要做下面的修改和拷贝工作。
+    <br/>
+    使用UltraEdit打开C:\MinGW\msys\1.0\local\bin下的 sdl-config文件
+    <br/>
+    把 prefix=/usr 该成： prefix=c:/mingw
+    <br/>
+    其中：c:/mingw 为 mingw的安装路径，请根据你的安装进行修改。为了编译时msys能识别sdl并开启 SDL support yes 进行编译，请把C:\MinGW\msys\1.0\local编译结果bin、include和lib中有关sdl的拷贝一份到C:\MinGW\的对应目录中。
+    <br/>
+    14 拷贝编译结果
+    <br/>
+    C:\MinGW\msys\1.0\local  到 D:\ffmpeg\ffmpeg-0.8.6
+    <br/>
+    bin拷贝到 bin中
+    <br/>
+    include拷贝到 include中
+    <br/>
+    lib拷贝到 lib中
+    <br/>
+    当然该拷贝过程你可以不做，只要在编译的时候把路径指到：C:\MinGW\msys\1.0\local里面。
+    <br/>
+    15 编译 ffmpeg
+    <br/>
+    ffmpeg-0.8.6.tar.bz2 解压到：D:\ffmpeg\ 目录下,双击“C:\MinGW\msys\1.0\msys.bat”，启动“MinGW32”，切换到ffmpeg目录：D:\ffmpeg\ffmpeg-0.8.6，切换方法如下：
+    <br/>
+    $ cd /d
+    <br/>
+    $ cd ffmpeg
+    <br/>
+    $ cd ffmpeg-0.8.6
+    <br/>
+    如果你的“MinGW32”没有关闭，可以直接切换路径到：D:\ffmpeg\ffmpeg-0.8.6。
+    <br/>
+    再执行以下命令：
+    <br/>
+    $ ./configure --enable-shared --disable-static --enable-ffplay
+    <br/>
+    --enable-nonfree --enable-memalign-hack
+    <br/>
+    --enable-libmp3lame
+    <br/>
+    --enable-gpl--enable-libx264
+    <br/>
+    --enable-libxvid
+    <br/>
+    --enable-faad --enable-libfaac
+    <br/>
+    --enable-libvo-aacenc
+    <br/>
+    --enable-version3 --enable-libopencore-amrnb
+    <br/>
+    --enable-libopencore-amrwb --enable-libvo-amrwbenc
+    <br/>
+    --extra-cflags=-Id:/ffmpeg/ffmpeg-0.8.6/include
+    <br/>
+    --extra-ldflags=-Ld:/ffmpeg/ffmpeg-0.8.6/lib
+    <br/>
+    请耐心等待一段时间，以上命令不能直接换行哦并且根据ffmpeg的版本不同有所变化,具体看./configure --help，你知道的。。。
+    <br/>
+    $ make
+    <br/>
+    需要等待很长一段时间，等待编译结束。
+    <br/>
+    为了汇总编译结果，请继续执行以下命令：
+    <br/>
+    $ make install
+    <br/>
+    等待完成，在C:\MinGW\msys\1.0\local中将会生成 bin、include、lib等文件夹，其中包含了ffmpeg.exe、ffplay.exe、ffprobe.exe、dll、lib和头文件等。
+    <br/>
+    16 运行测试
+    <br/>
+    直接双击运行”ffplay.exe”，如果提示没有“pthreadGC2.dll”文件，你可以包“pthreadGC2.dll”直接拷贝到当前目录，也可放到系统目录C:\WINDOWS\system32中。
+    <br/>
+    ffplay f:/xxx.mp4
+    <br/>
+    <br/>
+    <br/>
+    参考:
+    <br/>
+    <a href="http://blog.csdn.net/yangshu168/archive/2010/01/17/5204269.aspx">
+     http://blog.csdn.net/yangshu168/archive/2010/01/17/5204269.aspx
+    </a>
+    <br/>
+    <a href="http://blog.csdn.net/himulakensin/article/details/6693457">
+     http://blog.csdn.net/himulakensin/article/details/6693457
+    </a>
+    <br/>
+    <a href="http://blog.csdn.net/huangxiansheng1980/article/details/5712003">
+     http://blog.csdn.net/huangxiansheng1980/article/details/5712003
+    </a>
+    <p>
+     <br/>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://blog.chinaunix.net/uid-20718335-id-2980793.html">
+      http://blog.chinaunix.net/uid-20718335-id-2980793.html
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     另一篇资料：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6389413">
+      http://download.csdn.net/detail/leixiaohua1020/6389413
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=windows&amp;t=blog" target="_blank">
+    windows
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=MinGW&amp;t=blog" target="_blank">
+    MinGW
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=msys&amp;t=blog" target="_blank">
+    msys
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编译&amp;t=blog" target="_blank">
+    编译
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

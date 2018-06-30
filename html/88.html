@@ -1,0 +1,1620 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：avcodec_open2() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_88">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：avcodec_open2()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月08日 00:14:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：33254
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单分析FFmpeg的avcodec_open2()函数。该函数用于初始化一个视音频编解码器的AVCodecContext。avcodec_open2()的声明位于libavcodec\avcodec.h，如下所示。
+    </p>
+    <pre class="cpp">/**
+ * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
+ * function the context has to be allocated with avcodec_alloc_context3().
+ *
+ * The functions avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),
+ * avcodec_find_decoder() and avcodec_find_encoder() provide an easy way for
+ * retrieving a codec.
+ *
+ * @warning This function is not thread safe!
+ *
+ * @code
+ * avcodec_register_all();
+ * av_dict_set(&amp;opts, "b", "2.5M", 0);
+ * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+ * if (!codec)
+ *     exit(1);
+ *
+ * context = avcodec_alloc_context3(codec);
+ *
+ * if (avcodec_open2(context, codec, opts) &lt; 0)
+ *     exit(1);
+ * @endcode
+ *
+ * @param avctx The context to initialize.
+ * @param codec The codec to open this context for. If a non-NULL codec has been
+ *              previously passed to avcodec_alloc_context3() or
+ *              avcodec_get_context_defaults3() for this context, then this
+ *              parameter MUST be either NULL or equal to the previously passed
+ *              codec.
+ * @param options A dictionary filled with AVCodecContext and codec-private options.
+ *                On return this object will be filled with options that were not found.
+ *
+ * @return zero on success, a negative value on error
+ * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
+ *      av_dict_set(), av_opt_find().
+ */
+int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);</pre>
+    <br/>
+    用中文简单转述一下avcodec_open2()各个参数的含义：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     avctx：需要初始化的AVCodecContext。
+     <br/>
+     codec：输入的AVCodec
+     <br/>
+     options：一些选项。例如使用libx264编码的时候，“preset”，“tune”等都可以通过该参数设置。
+    </blockquote>
+    <p>
+     该函数最典型的例子可以参考：
+    </p>
+    <a href="http://blog.csdn.net/leixiaohua1020/article/details/25430425">
+     最简单的基于FFMPEG的视频编码器（YUV编码为H.264）
+    </a>
+    <br/>
+    <br/>
+    <h2>
+     函数调用关系图
+    </h2>
+    avcodec_open2()函数调用关系非常简单，如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150307171545202"/>
+    </div>
+    <br/>
+    <h2>
+     avcodec_open2()
+    </h2>
+    avcodec_open2()的定义位于libavcodec\utils.c，如下所示。
+    <br/>
+    <pre class="cpp">int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options)
+{
+    int ret = 0;
+    AVDictionary *tmp = NULL;
+    //如果已经打开，直接返回
+    if (avcodec_is_open(avctx))
+        return 0;
+
+    if ((!codec &amp;&amp; !avctx-&gt;codec)) {
+        av_log(avctx, AV_LOG_ERROR, "No codec provided to avcodec_open2()\n");
+        return AVERROR(EINVAL);
+    }
+    if ((codec &amp;&amp; avctx-&gt;codec &amp;&amp; codec != avctx-&gt;codec)) {
+        av_log(avctx, AV_LOG_ERROR, "This AVCodecContext was allocated for %s, "
+                                    "but %s passed to avcodec_open2()\n", avctx-&gt;codec-&gt;name, codec-&gt;name);
+        return AVERROR(EINVAL);
+    }
+    if (!codec)
+        codec = avctx-&gt;codec;
+
+    if (avctx-&gt;extradata_size &lt; 0 || avctx-&gt;extradata_size &gt;= FF_MAX_EXTRADATA_SIZE)
+        return AVERROR(EINVAL);
+
+    if (options)
+        av_dict_copy(&amp;tmp, *options, 0);
+
+    ret = ff_lock_avcodec(avctx);
+    if (ret &lt; 0)
+        return ret;
+    //各种Malloc
+    avctx-&gt;internal = av_mallocz(sizeof(AVCodecInternal));
+    if (!avctx-&gt;internal) {
+        ret = AVERROR(ENOMEM);
+        goto end;
+    }
+
+    avctx-&gt;internal-&gt;pool = av_mallocz(sizeof(*avctx-&gt;internal-&gt;pool));
+    if (!avctx-&gt;internal-&gt;pool) {
+        ret = AVERROR(ENOMEM);
+        goto free_and_end;
+    }
+
+    avctx-&gt;internal-&gt;to_free = av_frame_alloc();
+    if (!avctx-&gt;internal-&gt;to_free) {
+        ret = AVERROR(ENOMEM);
+        goto free_and_end;
+    }
+
+    if (codec-&gt;priv_data_size &gt; 0) {
+        if (!avctx-&gt;priv_data) {
+            avctx-&gt;priv_data = av_mallocz(codec-&gt;priv_data_size);
+            if (!avctx-&gt;priv_data) {
+                ret = AVERROR(ENOMEM);
+                goto end;
+            }
+            if (codec-&gt;priv_class) {
+                *(const AVClass **)avctx-&gt;priv_data = codec-&gt;priv_class;
+                av_opt_set_defaults(avctx-&gt;priv_data);
+            }
+        }
+        if (codec-&gt;priv_class &amp;&amp; (ret = av_opt_set_dict(avctx-&gt;priv_data, &amp;tmp)) &lt; 0)
+            goto free_and_end;
+    } else {
+        avctx-&gt;priv_data = NULL;
+    }
+    //将输入的AVDictionary形式的选项设置到AVCodecContext
+    if ((ret = av_opt_set_dict(avctx, &amp;tmp)) &lt; 0)
+        goto free_and_end;
+
+    if (avctx-&gt;codec_whitelist &amp;&amp; av_match_list(codec-&gt;name, avctx-&gt;codec_whitelist, ',') &lt;= 0) {
+        av_log(avctx, AV_LOG_ERROR, "Codec (%s) not on whitelist\n", codec-&gt;name);
+        ret = AVERROR(EINVAL);
+        goto free_and_end;
+    }
+
+    // only call ff_set_dimensions() for non H.264/VP6F codecs so as not to overwrite previously setup dimensions
+    if (!(avctx-&gt;coded_width &amp;&amp; avctx-&gt;coded_height &amp;&amp; avctx-&gt;width &amp;&amp; avctx-&gt;height &amp;&amp;
+          (avctx-&gt;codec_id == AV_CODEC_ID_H264 || avctx-&gt;codec_id == AV_CODEC_ID_VP6F))) {
+    if (avctx-&gt;coded_width &amp;&amp; avctx-&gt;coded_height)
+        ret = ff_set_dimensions(avctx, avctx-&gt;coded_width, avctx-&gt;coded_height);
+    else if (avctx-&gt;width &amp;&amp; avctx-&gt;height)
+        ret = ff_set_dimensions(avctx, avctx-&gt;width, avctx-&gt;height);
+    if (ret &lt; 0)
+        goto free_and_end;
+    }
+    //检查宽和高
+    if ((avctx-&gt;coded_width || avctx-&gt;coded_height || avctx-&gt;width || avctx-&gt;height)
+        &amp;&amp; (  av_image_check_size(avctx-&gt;coded_width, avctx-&gt;coded_height, 0, avctx) &lt; 0
+           || av_image_check_size(avctx-&gt;width,       avctx-&gt;height,       0, avctx) &lt; 0)) {
+        av_log(avctx, AV_LOG_WARNING, "Ignoring invalid width/height values\n");
+        ff_set_dimensions(avctx, 0, 0);
+    }
+    //检查宽高比
+    if (avctx-&gt;width &gt; 0 &amp;&amp; avctx-&gt;height &gt; 0) {
+        if (av_image_check_sar(avctx-&gt;width, avctx-&gt;height,
+                               avctx-&gt;sample_aspect_ratio) &lt; 0) {
+            av_log(avctx, AV_LOG_WARNING, "ignoring invalid SAR: %u/%u\n",
+                   avctx-&gt;sample_aspect_ratio.num,
+                   avctx-&gt;sample_aspect_ratio.den);
+            avctx-&gt;sample_aspect_ratio = (AVRational){ 0, 1 };
+        }
+    }
+
+    /* if the decoder init function was already called previously,
+     * free the already allocated subtitle_header before overwriting it */
+    if (av_codec_is_decoder(codec))
+        av_freep(&amp;avctx-&gt;subtitle_header);
+
+    if (avctx-&gt;channels &gt; FF_SANE_NB_CHANNELS) {
+        ret = AVERROR(EINVAL);
+        goto free_and_end;
+    }
+
+    avctx-&gt;codec = codec;
+    if ((avctx-&gt;codec_type == AVMEDIA_TYPE_UNKNOWN || avctx-&gt;codec_type == codec-&gt;type) &amp;&amp;
+        avctx-&gt;codec_id == AV_CODEC_ID_NONE) {
+        avctx-&gt;codec_type = codec-&gt;type;
+        avctx-&gt;codec_id   = codec-&gt;id;
+    }
+    if (avctx-&gt;codec_id != codec-&gt;id || (avctx-&gt;codec_type != codec-&gt;type
+                                         &amp;&amp; avctx-&gt;codec_type != AVMEDIA_TYPE_ATTACHMENT)) {
+        av_log(avctx, AV_LOG_ERROR, "Codec type or id mismatches\n");
+        ret = AVERROR(EINVAL);
+        goto free_and_end;
+    }
+    avctx-&gt;frame_number = 0;
+    avctx-&gt;codec_descriptor = avcodec_descriptor_get(avctx-&gt;codec_id);
+    //检查编码器是否出于“实验”阶段
+    if (avctx-&gt;codec-&gt;capabilities &amp; CODEC_CAP_EXPERIMENTAL &amp;&amp;
+        avctx-&gt;strict_std_compliance &gt; FF_COMPLIANCE_EXPERIMENTAL) {
+        const char *codec_string = av_codec_is_encoder(codec) ? "encoder" : "decoder";
+        AVCodec *codec2;
+        av_log(avctx, AV_LOG_ERROR,
+               "The %s '%s' is experimental but experimental codecs are not enabled, "
+               "add '-strict %d' if you want to use it.\n",
+               codec_string, codec-&gt;name, FF_COMPLIANCE_EXPERIMENTAL);
+        codec2 = av_codec_is_encoder(codec) ? avcodec_find_encoder(codec-&gt;id) : avcodec_find_decoder(codec-&gt;id);
+        if (!(codec2-&gt;capabilities &amp; CODEC_CAP_EXPERIMENTAL))
+            av_log(avctx, AV_LOG_ERROR, "Alternatively use the non experimental %s '%s'.\n",
+                codec_string, codec2-&gt;name);
+        ret = AVERROR_EXPERIMENTAL;
+        goto free_and_end;
+    }
+
+    if (avctx-&gt;codec_type == AVMEDIA_TYPE_AUDIO &amp;&amp;
+        (!avctx-&gt;time_base.num || !avctx-&gt;time_base.den)) {
+        avctx-&gt;time_base.num = 1;
+        avctx-&gt;time_base.den = avctx-&gt;sample_rate;
+    }
+
+    if (!HAVE_THREADS)
+        av_log(avctx, AV_LOG_WARNING, "Warning: not compiled with thread support, using thread emulation\n");
+
+    if (CONFIG_FRAME_THREAD_ENCODER) {
+        ff_unlock_avcodec(); //we will instanciate a few encoders thus kick the counter to prevent false detection of a problem
+        ret = ff_frame_thread_encoder_init(avctx, options ? *options : NULL);
+        ff_lock_avcodec(avctx);
+        if (ret &lt; 0)
+            goto free_and_end;
+    }
+
+    if (HAVE_THREADS
+        &amp;&amp; !(avctx-&gt;internal-&gt;frame_thread_encoder &amp;&amp; (avctx-&gt;active_thread_type&amp;FF_THREAD_FRAME))) {
+        ret = ff_thread_init(avctx);
+        if (ret &lt; 0) {
+            goto free_and_end;
+        }
+    }
+    if (!HAVE_THREADS &amp;&amp; !(codec-&gt;capabilities &amp; CODEC_CAP_AUTO_THREADS))
+        avctx-&gt;thread_count = 1;
+
+    if (avctx-&gt;codec-&gt;max_lowres &lt; avctx-&gt;lowres || avctx-&gt;lowres &lt; 0) {
+        av_log(avctx, AV_LOG_ERROR, "The maximum value for lowres supported by the decoder is %d\n",
+               avctx-&gt;codec-&gt;max_lowres);
+        ret = AVERROR(EINVAL);
+        goto free_and_end;
+    }
+
+#if FF_API_VISMV
+    if (avctx-&gt;debug_mv)
+        av_log(avctx, AV_LOG_WARNING, "The 'vismv' option is deprecated, "
+               "see the codecview filter instead.\n");
+#endif
+    //检查输入参数是否符合【编码器】要求
+    if (av_codec_is_encoder(avctx-&gt;codec)) {
+        int i;
+        //如果包含采样率参数（表明是音频），检查采样率是否符合要求
+        if (avctx-&gt;codec-&gt;sample_fmts) {
+        	//遍历编码器支持的所有采样率
+            for (i = 0; avctx-&gt;codec-&gt;sample_fmts[i] != AV_SAMPLE_FMT_NONE; i++) {
+            	//如果设置的采样率==编码器支持的采样率，跳出循环。
+                if (avctx-&gt;sample_fmt == avctx-&gt;codec-&gt;sample_fmts[i])
+                    break;
+                if (avctx-&gt;channels == 1 &amp;&amp;
+                    av_get_planar_sample_fmt(avctx-&gt;sample_fmt) ==
+                    av_get_planar_sample_fmt(avctx-&gt;codec-&gt;sample_fmts[i])) {
+                    avctx-&gt;sample_fmt = avctx-&gt;codec-&gt;sample_fmts[i];
+                    break;
+                }
+            }
+            //再检查一下采样率取值是否正确
+            //注意，此时的i值没有变化
+            if (avctx-&gt;codec-&gt;sample_fmts[i] == AV_SAMPLE_FMT_NONE) {
+                char buf[128];
+                snprintf(buf, sizeof(buf), "%d", avctx-&gt;sample_fmt);
+                av_log(avctx, AV_LOG_ERROR, "Specified sample format %s is invalid or not supported\n",
+                       (char *)av_x_if_null(av_get_sample_fmt_name(avctx-&gt;sample_fmt), buf));
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+        }
+        //检查像素格式
+        if (avctx-&gt;codec-&gt;pix_fmts) {
+            for (i = 0; avctx-&gt;codec-&gt;pix_fmts[i] != AV_PIX_FMT_NONE; i++)
+                if (avctx-&gt;pix_fmt == avctx-&gt;codec-&gt;pix_fmts[i])
+                    break;
+            if (avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_NONE
+                &amp;&amp; !((avctx-&gt;codec_id == AV_CODEC_ID_MJPEG || avctx-&gt;codec_id == AV_CODEC_ID_LJPEG)
+                     &amp;&amp; avctx-&gt;strict_std_compliance &lt;= FF_COMPLIANCE_UNOFFICIAL)) {
+                char buf[128];
+                snprintf(buf, sizeof(buf), "%d", avctx-&gt;pix_fmt);
+                av_log(avctx, AV_LOG_ERROR, "Specified pixel format %s is invalid or not supported\n",
+                       (char *)av_x_if_null(av_get_pix_fmt_name(avctx-&gt;pix_fmt), buf));
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+            if (avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ420P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ411P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ422P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ440P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ444P)
+                avctx-&gt;color_range = AVCOL_RANGE_JPEG;
+        }
+        //检查采样率
+        if (avctx-&gt;codec-&gt;supported_samplerates) {
+            for (i = 0; avctx-&gt;codec-&gt;supported_samplerates[i] != 0; i++)
+                if (avctx-&gt;sample_rate == avctx-&gt;codec-&gt;supported_samplerates[i])
+                    break;
+            if (avctx-&gt;codec-&gt;supported_samplerates[i] == 0) {
+                av_log(avctx, AV_LOG_ERROR, "Specified sample rate %d is not supported\n",
+                       avctx-&gt;sample_rate);
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+        }
+        //检查声道布局
+        if (avctx-&gt;codec-&gt;channel_layouts) {
+            if (!avctx-&gt;channel_layout) {
+                av_log(avctx, AV_LOG_WARNING, "Channel layout not specified\n");
+            } else {
+                for (i = 0; avctx-&gt;codec-&gt;channel_layouts[i] != 0; i++)
+                    if (avctx-&gt;channel_layout == avctx-&gt;codec-&gt;channel_layouts[i])
+                        break;
+                if (avctx-&gt;codec-&gt;channel_layouts[i] == 0) {
+                    char buf[512];
+                    av_get_channel_layout_string(buf, sizeof(buf), -1, avctx-&gt;channel_layout);
+                    av_log(avctx, AV_LOG_ERROR, "Specified channel layout '%s' is not supported\n", buf);
+                    ret = AVERROR(EINVAL);
+                    goto free_and_end;
+                }
+            }
+        }
+        //检查声道数
+        if (avctx-&gt;channel_layout &amp;&amp; avctx-&gt;channels) {
+            int channels = av_get_channel_layout_nb_channels(avctx-&gt;channel_layout);
+            if (channels != avctx-&gt;channels) {
+                char buf[512];
+                av_get_channel_layout_string(buf, sizeof(buf), -1, avctx-&gt;channel_layout);
+                av_log(avctx, AV_LOG_ERROR,
+                       "Channel layout '%s' with %d channels does not match number of specified channels %d\n",
+                       buf, channels, avctx-&gt;channels);
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+        } else if (avctx-&gt;channel_layout) {
+            avctx-&gt;channels = av_get_channel_layout_nb_channels(avctx-&gt;channel_layout);
+        }
+        //检查宽高
+        if(avctx-&gt;codec_type == AVMEDIA_TYPE_VIDEO) {
+            if (avctx-&gt;width &lt;= 0 || avctx-&gt;height &lt;= 0) {
+                av_log(avctx, AV_LOG_ERROR, "dimensions not set\n");
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+        }
+        //检查码率
+        if (   (avctx-&gt;codec_type == AVMEDIA_TYPE_VIDEO || avctx-&gt;codec_type == AVMEDIA_TYPE_AUDIO)
+            &amp;&amp; avctx-&gt;bit_rate&gt;0 &amp;&amp; avctx-&gt;bit_rate&lt;1000) {
+            av_log(avctx, AV_LOG_WARNING, "Bitrate %d is extremely low, maybe you mean %dk\n", avctx-&gt;bit_rate, avctx-&gt;bit_rate);
+        }
+
+        if (!avctx-&gt;rc_initial_buffer_occupancy)
+            avctx-&gt;rc_initial_buffer_occupancy = avctx-&gt;rc_buffer_size * 3 / 4;
+    }
+
+    avctx-&gt;pts_correction_num_faulty_pts =
+    avctx-&gt;pts_correction_num_faulty_dts = 0;
+    avctx-&gt;pts_correction_last_pts =
+    avctx-&gt;pts_correction_last_dts = INT64_MIN;
+    //关键：
+    //一切检查都无误之后，调用编解码器初始化函数
+    if (   avctx-&gt;codec-&gt;init &amp;&amp; (!(avctx-&gt;active_thread_type&amp;FF_THREAD_FRAME)
+        || avctx-&gt;internal-&gt;frame_thread_encoder)) {
+        ret = avctx-&gt;codec-&gt;init(avctx);
+        if (ret &lt; 0) {
+            goto free_and_end;
+        }
+    }
+
+    ret=0;
+
+#if FF_API_AUDIOENC_DELAY
+    if (av_codec_is_encoder(avctx-&gt;codec))
+        avctx-&gt;delay = avctx-&gt;initial_padding;
+#endif
+
+    //【解码器】
+    //解码器的参数大部分都是由系统自动设定而不是由用户设定，因而不怎么需要检查
+    if (av_codec_is_decoder(avctx-&gt;codec)) {
+        if (!avctx-&gt;bit_rate)
+            avctx-&gt;bit_rate = get_bit_rate(avctx);
+        /* validate channel layout from the decoder */
+        if (avctx-&gt;channel_layout) {
+            int channels = av_get_channel_layout_nb_channels(avctx-&gt;channel_layout);
+            if (!avctx-&gt;channels)
+                avctx-&gt;channels = channels;
+            else if (channels != avctx-&gt;channels) {
+                char buf[512];
+                av_get_channel_layout_string(buf, sizeof(buf), -1, avctx-&gt;channel_layout);
+                av_log(avctx, AV_LOG_WARNING,
+                       "Channel layout '%s' with %d channels does not match specified number of channels %d: "
+                       "ignoring specified channel layout\n",
+                       buf, channels, avctx-&gt;channels);
+                avctx-&gt;channel_layout = 0;
+            }
+        }
+
+        if (avctx-&gt;channels &amp;&amp; avctx-&gt;channels &lt; 0 ||
+            avctx-&gt;channels &gt; FF_SANE_NB_CHANNELS) {
+            ret = AVERROR(EINVAL);
+            goto free_and_end;
+        }
+        if (avctx-&gt;sub_charenc) {
+            if (avctx-&gt;codec_type != AVMEDIA_TYPE_SUBTITLE) {
+                av_log(avctx, AV_LOG_ERROR, "Character encoding is only "
+                       "supported with subtitles codecs\n");
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            } else if (avctx-&gt;codec_descriptor-&gt;props &amp; AV_CODEC_PROP_BITMAP_SUB) {
+                av_log(avctx, AV_LOG_WARNING, "Codec '%s' is bitmap-based, "
+                       "subtitles character encoding will be ignored\n",
+                       avctx-&gt;codec_descriptor-&gt;name);
+                avctx-&gt;sub_charenc_mode = FF_SUB_CHARENC_MODE_DO_NOTHING;
+            } else {
+                /* input character encoding is set for a text based subtitle
+                 * codec at this point */
+                if (avctx-&gt;sub_charenc_mode == FF_SUB_CHARENC_MODE_AUTOMATIC)
+                    avctx-&gt;sub_charenc_mode = FF_SUB_CHARENC_MODE_PRE_DECODER;
+
+                if (avctx-&gt;sub_charenc_mode == FF_SUB_CHARENC_MODE_PRE_DECODER) {
+#if CONFIG_ICONV
+                    iconv_t cd = iconv_open("UTF-8", avctx-&gt;sub_charenc);
+                    if (cd == (iconv_t)-1) {
+                        ret = AVERROR(errno);
+                        av_log(avctx, AV_LOG_ERROR, "Unable to open iconv context "
+                               "with input character encoding \"%s\"\n", avctx-&gt;sub_charenc);
+                        goto free_and_end;
+                    }
+                    iconv_close(cd);
+#else
+                    av_log(avctx, AV_LOG_ERROR, "Character encoding subtitles "
+                           "conversion needs a libavcodec built with iconv support "
+                           "for this codec\n");
+                    ret = AVERROR(ENOSYS);
+                    goto free_and_end;
+#endif
+                }
+            }
+        }
+
+#if FF_API_AVCTX_TIMEBASE
+        if (avctx-&gt;framerate.num &gt; 0 &amp;&amp; avctx-&gt;framerate.den &gt; 0)
+            avctx-&gt;time_base = av_inv_q(av_mul_q(avctx-&gt;framerate, (AVRational){avctx-&gt;ticks_per_frame, 1}));
+#endif
+    }
+end:
+    ff_unlock_avcodec();
+    if (options) {
+        av_dict_free(options);
+        *options = tmp;
+    }
+
+    return ret;
+free_and_end:
+    av_dict_free(&amp;tmp);
+    if (codec-&gt;priv_class &amp;&amp; codec-&gt;priv_data_size)
+        av_opt_free(avctx-&gt;priv_data);
+    av_freep(&amp;avctx-&gt;priv_data);
+    if (avctx-&gt;internal) {
+        av_frame_free(&amp;avctx-&gt;internal-&gt;to_free);
+        av_freep(&amp;avctx-&gt;internal-&gt;pool);
+    }
+    av_freep(&amp;avctx-&gt;internal);
+    avctx-&gt;codec = NULL;
+    goto end;
+}
+</pre>
+    <br/>
+    avcodec_open2()的源代码量是非常长的，但是它的调用关系非常简单——它只调用了一个关键的函数，即AVCodec的init()，后文将会对这个函数进行分析。
+    <br/>
+    我们可以简单梳理一下avcodec_open2()所做的工作，如下所列：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）为各种结构体分配内存（通过各种av_malloc()实现）。
+     <br/>
+     （2）将输入的AVDictionary形式的选项设置到AVCodecContext。
+     <br/>
+     （3）其他一些零零碎碎的检查，比如说检查编解码器是否处于“实验”阶段。
+     <br/>
+     （4）如果是编码器，检查输入参数是否符合编码器的要求
+     <br/>
+     （5）调用AVCodec的init()初始化具体的解码器。
+    </blockquote>
+    前几步比较简单，不再分析。在这里我们分析一下第4步和第5步。
+    <br/>
+    <br/>
+    <h2>
+     检查输入参数是否符合编码器要求
+    </h2>
+    在这里简单分析一下第4步，即“检查输入参数是否符合编码器的要求”。这一步中检查了很多的参数，在这里我们随便选一个参数pix_fmts（像素格式）看一下，如下所示。
+    <br/>
+    <pre class="cpp">//检查像素格式
+        if (avctx-&gt;codec-&gt;pix_fmts) {
+            for (i = 0; avctx-&gt;codec-&gt;pix_fmts[i] != AV_PIX_FMT_NONE; i++)
+                if (avctx-&gt;pix_fmt == avctx-&gt;codec-&gt;pix_fmts[i])
+                    break;
+            if (avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_NONE
+                &amp;&amp; !((avctx-&gt;codec_id == AV_CODEC_ID_MJPEG || avctx-&gt;codec_id == AV_CODEC_ID_LJPEG)
+                     &amp;&amp; avctx-&gt;strict_std_compliance &lt;= FF_COMPLIANCE_UNOFFICIAL)) {
+                char buf[128];
+                snprintf(buf, sizeof(buf), "%d", avctx-&gt;pix_fmt);
+                av_log(avctx, AV_LOG_ERROR, "Specified pixel format %s is invalid or not supported\n",
+                       (char *)av_x_if_null(av_get_pix_fmt_name(avctx-&gt;pix_fmt), buf));
+                ret = AVERROR(EINVAL);
+                goto free_and_end;
+            }
+            if (avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ420P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ411P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ422P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ440P ||
+                avctx-&gt;codec-&gt;pix_fmts[i] == AV_PIX_FMT_YUVJ444P)
+                avctx-&gt;color_range = AVCOL_RANGE_JPEG;
+        }</pre>
+    <br/>
+    可以看出，该代码首先进入了一个for()循环，将AVCodecContext中设定的pix_fmt与编码器AVCodec中的pix_fmts数组中的元素逐一比较。
+    <br/>
+    先简单介绍一下AVCodec中的pix_fmts数组。AVCodec中的pix_fmts数组存储了该种编码器支持的像素格式，并且规定以AV_PIX_FMT_NONE（AV_PIX_FMT_NONE取值为-1）为结尾。例如，libx264的pix_fmts数组的定义位于libavcodec\libx264.c，如下所示。
+    <br/>
+    <pre class="cpp">static const enum AVPixelFormat pix_fmts_8bit[] = {
+    AV_PIX_FMT_YUV420P,
+    AV_PIX_FMT_YUVJ420P,
+    AV_PIX_FMT_YUV422P,
+    AV_PIX_FMT_YUVJ422P,
+    AV_PIX_FMT_YUV444P,
+    AV_PIX_FMT_YUVJ444P,
+    AV_PIX_FMT_NV12,
+    AV_PIX_FMT_NV16,
+    AV_PIX_FMT_NONE
+};</pre>
+    <br/>
+    从pix_fmts_8bit的定义可以看出libx264主要支持的是以YUV为主的像素格式。
+    <br/>
+    现在回到“检查输入pix_fmt是否符合编码器的要求”的那段代码。如果for()循环从AVCodec-&gt;pix_fmts数组中找到了符合AVCodecContext-&gt;pix_fmt的像素格式，或者完成了AVCodec-&gt;pix_fmts数组的遍历，都会跳出循环。如果发现AVCodec-&gt;pix_fmts数组中索引为i的元素是AV_PIX_FMT_NONE（即最后一个元素，取值为-1）的时候，就认为没有找到合适的像素格式，并且最终提示错误信息。
+    <br/>
+    <br/>
+    <h2>
+     AVCodec-&gt;init()
+    </h2>
+    avcodec_open2()中最关键的一步就是调用AVCodec的init()方法初始化具体的编码器。AVCodec的init()是一个函数指针，指向具体编解码器中的初始化函数。这里我们以libx264为例，看一下它对应的AVCodec的定义。libx264对应的AVCodec的定义位于libavcodec\libx264.c，如下所示。
+    <br/>
+    <pre class="cpp">AVCodec ff_libx264_encoder = {
+    .name             = "libx264",
+    .long_name        = NULL_IF_CONFIG_SMALL("libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"),
+    .type             = AVMEDIA_TYPE_VIDEO,
+    .id               = AV_CODEC_ID_H264,
+    .priv_data_size   = sizeof(X264Context),
+    .init             = X264_init,
+    .encode2          = X264_frame,
+    .close            = X264_close,
+    .capabilities     = CODEC_CAP_DELAY | CODEC_CAP_AUTO_THREADS,
+    .priv_class       = &amp;x264_class,
+    .defaults         = x264_defaults,
+    .init_static_data = X264_init_static,
+};</pre>
+    <br/>
+    可以看出在ff_libx264_encoder中init()指向X264_init()。X264_init()的定义同样位于libavcodec\libx264.c，如下所示。
+    <br/>
+    <pre class="cpp">static av_cold int X264_init(AVCodecContext *avctx)
+{
+    X264Context *x4 = avctx-&gt;priv_data;
+    int sw,sh;
+
+    if (avctx-&gt;global_quality &gt; 0)
+        av_log(avctx, AV_LOG_WARNING, "-qscale is ignored, -crf is recommended.\n");
+
+    x264_param_default(&amp;x4-&gt;params);
+
+    x4-&gt;params.b_deblocking_filter         = avctx-&gt;flags &amp; CODEC_FLAG_LOOP_FILTER;
+
+    if (x4-&gt;preset || x4-&gt;tune)
+        if (x264_param_default_preset(&amp;x4-&gt;params, x4-&gt;preset, x4-&gt;tune) &lt; 0) {
+            int i;
+            av_log(avctx, AV_LOG_ERROR, "Error setting preset/tune %s/%s.\n", x4-&gt;preset, x4-&gt;tune);
+            av_log(avctx, AV_LOG_INFO, "Possible presets:");
+            for (i = 0; x264_preset_names[i]; i++)
+                av_log(avctx, AV_LOG_INFO, " %s", x264_preset_names[i]);
+            av_log(avctx, AV_LOG_INFO, "\n");
+            av_log(avctx, AV_LOG_INFO, "Possible tunes:");
+            for (i = 0; x264_tune_names[i]; i++)
+                av_log(avctx, AV_LOG_INFO, " %s", x264_tune_names[i]);
+            av_log(avctx, AV_LOG_INFO, "\n");
+            return AVERROR(EINVAL);
+        }
+
+    if (avctx-&gt;level &gt; 0)
+        x4-&gt;params.i_level_idc = avctx-&gt;level;
+
+    x4-&gt;params.pf_log               = X264_log;
+    x4-&gt;params.p_log_private        = avctx;
+    x4-&gt;params.i_log_level          = X264_LOG_DEBUG;
+    x4-&gt;params.i_csp                = convert_pix_fmt(avctx-&gt;pix_fmt);
+
+    OPT_STR("weightp", x4-&gt;wpredp);
+
+    if (avctx-&gt;bit_rate) {
+        x4-&gt;params.rc.i_bitrate   = avctx-&gt;bit_rate / 1000;
+        x4-&gt;params.rc.i_rc_method = X264_RC_ABR;
+    }
+    x4-&gt;params.rc.i_vbv_buffer_size = avctx-&gt;rc_buffer_size / 1000;
+    x4-&gt;params.rc.i_vbv_max_bitrate = avctx-&gt;rc_max_rate    / 1000;
+    x4-&gt;params.rc.b_stat_write      = avctx-&gt;flags &amp; CODEC_FLAG_PASS1;
+    if (avctx-&gt;flags &amp; CODEC_FLAG_PASS2) {
+        x4-&gt;params.rc.b_stat_read = 1;
+    } else {
+        if (x4-&gt;crf &gt;= 0) {
+            x4-&gt;params.rc.i_rc_method   = X264_RC_CRF;
+            x4-&gt;params.rc.f_rf_constant = x4-&gt;crf;
+        } else if (x4-&gt;cqp &gt;= 0) {
+            x4-&gt;params.rc.i_rc_method   = X264_RC_CQP;
+            x4-&gt;params.rc.i_qp_constant = x4-&gt;cqp;
+        }
+
+        if (x4-&gt;crf_max &gt;= 0)
+            x4-&gt;params.rc.f_rf_constant_max = x4-&gt;crf_max;
+    }
+
+    if (avctx-&gt;rc_buffer_size &amp;&amp; avctx-&gt;rc_initial_buffer_occupancy &gt; 0 &amp;&amp;
+        (avctx-&gt;rc_initial_buffer_occupancy &lt;= avctx-&gt;rc_buffer_size)) {
+        x4-&gt;params.rc.f_vbv_buffer_init =
+            (float)avctx-&gt;rc_initial_buffer_occupancy / avctx-&gt;rc_buffer_size;
+    }
+
+    OPT_STR("level", x4-&gt;level);
+
+    if (avctx-&gt;i_quant_factor &gt; 0)
+        x4-&gt;params.rc.f_ip_factor         = 1 / fabs(avctx-&gt;i_quant_factor);
+    if (avctx-&gt;b_quant_factor &gt; 0)
+        x4-&gt;params.rc.f_pb_factor         = avctx-&gt;b_quant_factor;
+    if (avctx-&gt;chromaoffset)
+        x4-&gt;params.analyse.i_chroma_qp_offset = avctx-&gt;chromaoffset;
+
+    if (avctx-&gt;me_method == ME_EPZS)
+        x4-&gt;params.analyse.i_me_method = X264_ME_DIA;
+    else if (avctx-&gt;me_method == ME_HEX)
+        x4-&gt;params.analyse.i_me_method = X264_ME_HEX;
+    else if (avctx-&gt;me_method == ME_UMH)
+        x4-&gt;params.analyse.i_me_method = X264_ME_UMH;
+    else if (avctx-&gt;me_method == ME_FULL)
+        x4-&gt;params.analyse.i_me_method = X264_ME_ESA;
+    else if (avctx-&gt;me_method == ME_TESA)
+        x4-&gt;params.analyse.i_me_method = X264_ME_TESA;
+
+    if (avctx-&gt;gop_size &gt;= 0)
+        x4-&gt;params.i_keyint_max         = avctx-&gt;gop_size;
+    if (avctx-&gt;max_b_frames &gt;= 0)
+        x4-&gt;params.i_bframe             = avctx-&gt;max_b_frames;
+    if (avctx-&gt;scenechange_threshold &gt;= 0)
+        x4-&gt;params.i_scenecut_threshold = avctx-&gt;scenechange_threshold;
+    if (avctx-&gt;qmin &gt;= 0)
+        x4-&gt;params.rc.i_qp_min          = avctx-&gt;qmin;
+    if (avctx-&gt;qmax &gt;= 0)
+        x4-&gt;params.rc.i_qp_max          = avctx-&gt;qmax;
+    if (avctx-&gt;max_qdiff &gt;= 0)
+        x4-&gt;params.rc.i_qp_step         = avctx-&gt;max_qdiff;
+    if (avctx-&gt;qblur &gt;= 0)
+        x4-&gt;params.rc.f_qblur           = avctx-&gt;qblur;     /* temporally blur quants */
+    if (avctx-&gt;qcompress &gt;= 0)
+        x4-&gt;params.rc.f_qcompress       = avctx-&gt;qcompress; /* 0.0 =&gt; cbr, 1.0 =&gt; constant qp */
+    if (avctx-&gt;refs &gt;= 0)
+        x4-&gt;params.i_frame_reference    = avctx-&gt;refs;
+    else if (x4-&gt;level) {
+        int i;
+        int mbn = FF_CEIL_RSHIFT(avctx-&gt;width, 4) * FF_CEIL_RSHIFT(avctx-&gt;height, 4);
+        int level_id = -1;
+        char *tail;
+        int scale = X264_BUILD &lt; 129 ? 384 : 1;
+
+        if (!strcmp(x4-&gt;level, "1b")) {
+            level_id = 9;
+        } else if (strlen(x4-&gt;level) &lt;= 3){
+            level_id = av_strtod(x4-&gt;level, &amp;tail) * 10 + 0.5;
+            if (*tail)
+                level_id = -1;
+        }
+        if (level_id &lt;= 0)
+            av_log(avctx, AV_LOG_WARNING, "Failed to parse level\n");
+
+        for (i = 0; i&lt;x264_levels[i].level_idc; i++)
+            if (x264_levels[i].level_idc == level_id)
+                x4-&gt;params.i_frame_reference = av_clip(x264_levels[i].dpb / mbn / scale, 1, x4-&gt;params.i_frame_reference);
+    }
+
+    if (avctx-&gt;trellis &gt;= 0)
+        x4-&gt;params.analyse.i_trellis    = avctx-&gt;trellis;
+    if (avctx-&gt;me_range &gt;= 0)
+        x4-&gt;params.analyse.i_me_range   = avctx-&gt;me_range;
+    if (avctx-&gt;noise_reduction &gt;= 0)
+        x4-&gt;params.analyse.i_noise_reduction = avctx-&gt;noise_reduction;
+    if (avctx-&gt;me_subpel_quality &gt;= 0)
+        x4-&gt;params.analyse.i_subpel_refine   = avctx-&gt;me_subpel_quality;
+    if (avctx-&gt;b_frame_strategy &gt;= 0)
+        x4-&gt;params.i_bframe_adaptive = avctx-&gt;b_frame_strategy;
+    if (avctx-&gt;keyint_min &gt;= 0)
+        x4-&gt;params.i_keyint_min = avctx-&gt;keyint_min;
+    if (avctx-&gt;coder_type &gt;= 0)
+        x4-&gt;params.b_cabac = avctx-&gt;coder_type == FF_CODER_TYPE_AC;
+    if (avctx-&gt;me_cmp &gt;= 0)
+        x4-&gt;params.analyse.b_chroma_me = avctx-&gt;me_cmp &amp; FF_CMP_CHROMA;
+
+    if (x4-&gt;aq_mode &gt;= 0)
+        x4-&gt;params.rc.i_aq_mode = x4-&gt;aq_mode;
+    if (x4-&gt;aq_strength &gt;= 0)
+        x4-&gt;params.rc.f_aq_strength = x4-&gt;aq_strength;
+    PARSE_X264_OPT("psy-rd", psy_rd);
+    PARSE_X264_OPT("deblock", deblock);
+    PARSE_X264_OPT("partitions", partitions);
+    PARSE_X264_OPT("stats", stats);
+    if (x4-&gt;psy &gt;= 0)
+        x4-&gt;params.analyse.b_psy  = x4-&gt;psy;
+    if (x4-&gt;rc_lookahead &gt;= 0)
+        x4-&gt;params.rc.i_lookahead = x4-&gt;rc_lookahead;
+    if (x4-&gt;weightp &gt;= 0)
+        x4-&gt;params.analyse.i_weighted_pred = x4-&gt;weightp;
+    if (x4-&gt;weightb &gt;= 0)
+        x4-&gt;params.analyse.b_weighted_bipred = x4-&gt;weightb;
+    if (x4-&gt;cplxblur &gt;= 0)
+        x4-&gt;params.rc.f_complexity_blur = x4-&gt;cplxblur;
+
+    if (x4-&gt;ssim &gt;= 0)
+        x4-&gt;params.analyse.b_ssim = x4-&gt;ssim;
+    if (x4-&gt;intra_refresh &gt;= 0)
+        x4-&gt;params.b_intra_refresh = x4-&gt;intra_refresh;
+    if (x4-&gt;bluray_compat &gt;= 0) {
+        x4-&gt;params.b_bluray_compat = x4-&gt;bluray_compat;
+        x4-&gt;params.b_vfr_input = 0;
+    }
+    if (x4-&gt;avcintra_class &gt;= 0)
+#if X264_BUILD &gt;= 142
+        x4-&gt;params.i_avcintra_class = x4-&gt;avcintra_class;
+#else
+        av_log(avctx, AV_LOG_ERROR,
+               "x264 too old for AVC Intra, at least version 142 needed\n");
+#endif
+    if (x4-&gt;b_bias != INT_MIN)
+        x4-&gt;params.i_bframe_bias              = x4-&gt;b_bias;
+    if (x4-&gt;b_pyramid &gt;= 0)
+        x4-&gt;params.i_bframe_pyramid = x4-&gt;b_pyramid;
+    if (x4-&gt;mixed_refs &gt;= 0)
+        x4-&gt;params.analyse.b_mixed_references = x4-&gt;mixed_refs;
+    if (x4-&gt;dct8x8 &gt;= 0)
+        x4-&gt;params.analyse.b_transform_8x8    = x4-&gt;dct8x8;
+    if (x4-&gt;fast_pskip &gt;= 0)
+        x4-&gt;params.analyse.b_fast_pskip       = x4-&gt;fast_pskip;
+    if (x4-&gt;aud &gt;= 0)
+        x4-&gt;params.b_aud                      = x4-&gt;aud;
+    if (x4-&gt;mbtree &gt;= 0)
+        x4-&gt;params.rc.b_mb_tree               = x4-&gt;mbtree;
+    if (x4-&gt;direct_pred &gt;= 0)
+        x4-&gt;params.analyse.i_direct_mv_pred   = x4-&gt;direct_pred;
+
+    if (x4-&gt;slice_max_size &gt;= 0)
+        x4-&gt;params.i_slice_max_size =  x4-&gt;slice_max_size;
+    else {
+        /*
+         * Allow x264 to be instructed through AVCodecContext about the maximum
+         * size of the RTP payload. For example, this enables the production of
+         * payload suitable for the H.264 RTP packetization-mode 0 i.e. single
+         * NAL unit per RTP packet.
+         */
+        if (avctx-&gt;rtp_payload_size)
+            x4-&gt;params.i_slice_max_size = avctx-&gt;rtp_payload_size;
+    }
+
+    if (x4-&gt;fastfirstpass)
+        x264_param_apply_fastfirstpass(&amp;x4-&gt;params);
+
+    /* Allow specifying the x264 profile through AVCodecContext. */
+    if (!x4-&gt;profile)
+        switch (avctx-&gt;profile) {
+        case FF_PROFILE_H264_BASELINE:
+            x4-&gt;profile = av_strdup("baseline");
+            break;
+        case FF_PROFILE_H264_HIGH:
+            x4-&gt;profile = av_strdup("high");
+            break;
+        case FF_PROFILE_H264_HIGH_10:
+            x4-&gt;profile = av_strdup("high10");
+            break;
+        case FF_PROFILE_H264_HIGH_422:
+            x4-&gt;profile = av_strdup("high422");
+            break;
+        case FF_PROFILE_H264_HIGH_444:
+            x4-&gt;profile = av_strdup("high444");
+            break;
+        case FF_PROFILE_H264_MAIN:
+            x4-&gt;profile = av_strdup("main");
+            break;
+        default:
+            break;
+        }
+
+    if (x4-&gt;nal_hrd &gt;= 0)
+        x4-&gt;params.i_nal_hrd = x4-&gt;nal_hrd;
+
+    if (x4-&gt;profile)
+        if (x264_param_apply_profile(&amp;x4-&gt;params, x4-&gt;profile) &lt; 0) {
+            int i;
+            av_log(avctx, AV_LOG_ERROR, "Error setting profile %s.\n", x4-&gt;profile);
+            av_log(avctx, AV_LOG_INFO, "Possible profiles:");
+            for (i = 0; x264_profile_names[i]; i++)
+                av_log(avctx, AV_LOG_INFO, " %s", x264_profile_names[i]);
+            av_log(avctx, AV_LOG_INFO, "\n");
+            return AVERROR(EINVAL);
+        }
+
+    x4-&gt;params.i_width          = avctx-&gt;width;
+    x4-&gt;params.i_height         = avctx-&gt;height;
+    av_reduce(&amp;sw, &amp;sh, avctx-&gt;sample_aspect_ratio.num, avctx-&gt;sample_aspect_ratio.den, 4096);
+    x4-&gt;params.vui.i_sar_width  = sw;
+    x4-&gt;params.vui.i_sar_height = sh;
+    x4-&gt;params.i_timebase_den = avctx-&gt;time_base.den;
+    x4-&gt;params.i_timebase_num = avctx-&gt;time_base.num;
+    x4-&gt;params.i_fps_num = avctx-&gt;time_base.den;
+    x4-&gt;params.i_fps_den = avctx-&gt;time_base.num * avctx-&gt;ticks_per_frame;
+
+    x4-&gt;params.analyse.b_psnr = avctx-&gt;flags &amp; CODEC_FLAG_PSNR;
+
+    x4-&gt;params.i_threads      = avctx-&gt;thread_count;
+    if (avctx-&gt;thread_type)
+        x4-&gt;params.b_sliced_threads = avctx-&gt;thread_type == FF_THREAD_SLICE;
+
+    x4-&gt;params.b_interlaced   = avctx-&gt;flags &amp; CODEC_FLAG_INTERLACED_DCT;
+
+    x4-&gt;params.b_open_gop     = !(avctx-&gt;flags &amp; CODEC_FLAG_CLOSED_GOP);
+
+    x4-&gt;params.i_slice_count  = avctx-&gt;slices;
+
+    x4-&gt;params.vui.b_fullrange = avctx-&gt;pix_fmt == AV_PIX_FMT_YUVJ420P ||
+                                 avctx-&gt;pix_fmt == AV_PIX_FMT_YUVJ422P ||
+                                 avctx-&gt;pix_fmt == AV_PIX_FMT_YUVJ444P ||
+                                 avctx-&gt;color_range == AVCOL_RANGE_JPEG;
+
+    if (avctx-&gt;colorspace != AVCOL_SPC_UNSPECIFIED)
+        x4-&gt;params.vui.i_colmatrix = avctx-&gt;colorspace;
+    if (avctx-&gt;color_primaries != AVCOL_PRI_UNSPECIFIED)
+        x4-&gt;params.vui.i_colorprim = avctx-&gt;color_primaries;
+    if (avctx-&gt;color_trc != AVCOL_TRC_UNSPECIFIED)
+        x4-&gt;params.vui.i_transfer  = avctx-&gt;color_trc;
+
+    if (avctx-&gt;flags &amp; CODEC_FLAG_GLOBAL_HEADER)
+        x4-&gt;params.b_repeat_headers = 0;
+
+    if(x4-&gt;x264opts){
+        const char *p= x4-&gt;x264opts;
+        while(p){
+            char param[256]={0}, val[256]={0};
+            if(sscanf(p, "%255[^:=]=%255[^:]", param, val) == 1){
+                OPT_STR(param, "1");
+            }else
+                OPT_STR(param, val);
+            p= strchr(p, ':');
+            p+=!!p;
+        }
+    }
+
+    if (x4-&gt;x264_params) {
+        AVDictionary *dict    = NULL;
+        AVDictionaryEntry *en = NULL;
+
+        if (!av_dict_parse_string(&amp;dict, x4-&gt;x264_params, "=", ":", 0)) {
+            while ((en = av_dict_get(dict, "", en, AV_DICT_IGNORE_SUFFIX))) {
+                if (x264_param_parse(&amp;x4-&gt;params, en-&gt;key, en-&gt;value) &lt; 0)
+                    av_log(avctx, AV_LOG_WARNING,
+                           "Error parsing option '%s = %s'.\n",
+                            en-&gt;key, en-&gt;value);
+            }
+
+            av_dict_free(&amp;dict);
+        }
+    }
+
+    // update AVCodecContext with x264 parameters
+    avctx-&gt;has_b_frames = x4-&gt;params.i_bframe ?
+        x4-&gt;params.i_bframe_pyramid ? 2 : 1 : 0;
+    if (avctx-&gt;max_b_frames &lt; 0)
+        avctx-&gt;max_b_frames = 0;
+
+    avctx-&gt;bit_rate = x4-&gt;params.rc.i_bitrate*1000;
+
+    x4-&gt;enc = x264_encoder_open(&amp;x4-&gt;params);
+    if (!x4-&gt;enc)
+        return -1;
+
+    avctx-&gt;coded_frame = av_frame_alloc();
+    if (!avctx-&gt;coded_frame)
+        return AVERROR(ENOMEM);
+
+    if (avctx-&gt;flags &amp; CODEC_FLAG_GLOBAL_HEADER) {
+        x264_nal_t *nal;
+        uint8_t *p;
+        int nnal, s, i;
+
+        s = x264_encoder_headers(x4-&gt;enc, &amp;nal, &amp;nnal);
+        avctx-&gt;extradata = p = av_malloc(s);
+
+        for (i = 0; i &lt; nnal; i++) {
+            /* Don't put the SEI in extradata. */
+            if (nal[i].i_type == NAL_SEI) {
+                av_log(avctx, AV_LOG_INFO, "%s\n", nal[i].p_payload+25);
+                x4-&gt;sei_size = nal[i].i_payload;
+                x4-&gt;sei      = av_malloc(x4-&gt;sei_size);
+                memcpy(x4-&gt;sei, nal[i].p_payload, nal[i].i_payload);
+                continue;
+            }
+            memcpy(p, nal[i].p_payload, nal[i].i_payload);
+            p += nal[i].i_payload;
+        }
+        avctx-&gt;extradata_size = p - avctx-&gt;extradata;
+    }
+
+    return 0;
+}
+</pre>
+    <br/>
+    X264_init()的代码以后研究X264的时候再进行细节的分析，在这里简单记录一下它做的两项工作：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）设置X264Context的参数。X264Context主要完成了libx264和FFmpeg对接的功能。可以看出代码主要在设置一个params结构体变量，该变量的类型即是x264中存储参数的结构体x264_param_t。
+     <br/>
+     （2）调用libx264的API进行编码器的初始化工作。例如调用x264_param_default()设置默认参数，调用x264_param_apply_profile()设置profile，调用x264_encoder_open()打开编码器等等。
+    </blockquote>
+    <br/>
+    最后附上X264Context的定义，位于libavcodec\libx264.c，如下所示。
+    <br/>
+    <pre class="cpp">typedef struct X264Context {
+    AVClass        *class;
+    x264_param_t    params;
+    x264_t         *enc;
+    x264_picture_t  pic;
+    uint8_t        *sei;
+    int             sei_size;
+    char *preset;
+    char *tune;
+    char *profile;
+    char *level;
+    int fastfirstpass;
+    char *wpredp;
+    char *x264opts;
+    float crf;
+    float crf_max;
+    int cqp;
+    int aq_mode;
+    float aq_strength;
+    char *psy_rd;
+    int psy;
+    int rc_lookahead;
+    int weightp;
+    int weightb;
+    int ssim;
+    int intra_refresh;
+    int bluray_compat;
+    int b_bias;
+    int b_pyramid;
+    int mixed_refs;
+    int dct8x8;
+    int fast_pskip;
+    int aud;
+    int mbtree;
+    char *deblock;
+    float cplxblur;
+    char *partitions;
+    int direct_pred;
+    int slice_max_size;
+    char *stats;
+    int nal_hrd;
+    int avcintra_class;
+    char *x264_params;
+} X264Context;</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <strong>
+     <span style="color:#660000;">
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </span>
+    </strong>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44117891
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编码器&amp;t=blog" target="_blank">
+    编码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVCodec&amp;t=blog" target="_blank">
+    AVCodec
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=初始化&amp;t=blog" target="_blank">
+    初始化
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

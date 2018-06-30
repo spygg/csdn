@@ -1,0 +1,560 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ XBMC源代码分析 2：Addons（皮肤Skin） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_201">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   XBMC源代码分析 2：Addons（皮肤Skin）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年01月01日 00:28:09
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：8236
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     前文已经对XBMC源代码的整体架构进行了分析：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17454977">
+      XBMC源代码分析 1：整体结构以及编译方法
+     </a>
+     <br/>
+    </p>
+    <p>
+     从这篇文章开始，就要对XBMC源代码进行具体分析了。首先先不分析其C++代码，分析一下和其皮肤相关的代码。
+    </p>
+    <p>
+     XBMC 的和皮肤相关的代码位于 "根目录/addons" 里面。可以从官方网站上下载皮肤文件的压缩包，然后解压到该目录下面即可。皮肤文件夹名称一般是“skin.XXXX”形式的，即以“skin.”开头。
+    </p>
+    <p>
+     XBMC自带的皮肤存储在文件夹“skin.confluence”中。我从网上下载了4个皮肤，解压后，如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224200247968?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     系统默认的皮肤：confluence如图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224200619250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     可以在“skin”选项里面选择皮肤，如图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224200622281?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     皮肤“simplicity”如图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224200625843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     皮肤“SiO2”如图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224200628875?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     可以看出。不同皮肤之间差距非常的大。皮肤囊括了XBMC所有可以看见的界面元素。可以说不修改源代码，只制作皮肤，也可以完全定制出一套非常个性化的系统。
+    </p>
+    <p>
+     下面我们以系统自带的皮肤“confluence”为例，分析一下皮肤的构成。
+    </p>
+    <p>
+     skin.confluence文件夹中，目录结构如图所示：
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224202017546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     每个文件夹的作用：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p>
+      <span style="color:#660000;">
+       720p：界面存放于文件夹里
+      </span>
+     </p>
+     <p>
+      <span style="color:#660000;">
+       background：背景图片
+      </span>
+     </p>
+     <p>
+      <span style="color:#660000;">
+       font：字体
+      </span>
+     </p>
+     <p>
+      <span style="color:#660000;">
+       language：各种语言支持
+      </span>
+     </p>
+     <p>
+      <span style="color:#660000;">
+       media：各种图标
+      </span>
+     </p>
+     <p>
+      <span style="color:#660000;">
+       sound：声音
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     例如，background文件夹内容：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224202804781?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     media文件夹内容：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224202808921?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下面重点研究720p文件夹中的内容。这个文件夹中存储了界面的布局信息。系统会根据这个文件夹中的布局信息（xml形式）设置窗口的大小，并去其他文件夹中查找相关的素材。
+    </p>
+    <p>
+     我们以系统的“设置”页面为例研究一下布局信息。系统的布局页面如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131224204004843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     “设置”页面对应的布局信息文件为Settings.xml。
+    </p>
+    <p>
+     时间所限，就不逐行注释了。语法理解起来还是比较容易的。总结以下几点：
+    </p>
+    <p>
+     1.语法与HTML类似。最外层的&lt;window&gt;相当于&lt;html&gt;。&lt;controls&gt;相当于&lt;body&gt;。&lt;control&gt;类似于&lt;div&gt;，是可以嵌套的。&lt;content&gt;相当于&lt;ul&gt;，&lt;item&gt;相当于&lt;li&gt;。当然，这只是打个比方，方便理解。
+    </p>
+    <p>
+     2.各种组件都是&lt;control&gt;，就是属性“type”不一样。例如“image”，“group”等等。&lt;control&gt;中
+    </p>
+    <p>
+     &lt;left&gt;，&lt;top&gt;，&lt;width&gt;，&lt;height&gt;表示窗口位置；
+    </p>
+    <p>
+     &lt;animation&gt;表示其动画效果；
+    </p>
+    <p>
+     &lt;onleft&gt;2&lt;/onleft&gt;表示遥控器按向左键时如果焦点还在控件里面，并且己经是最左边一个元素时，将焦点切换到ID为2的控件；&lt;onright&gt;，&lt;onup&gt;，&lt;ondown&gt;与此类似。
+    </p>
+    <p>
+    </p>
+    <pre class="html">&lt;!--
+雷霄骅
+leixiaohua1020@126.com
+中国传媒大学/数字电视技术
+--&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;window&gt;
+	&lt;defaultcontrol always="true"&gt;9000&lt;/defaultcontrol&gt;
+	&lt;allowoverlay&gt;no&lt;/allowoverlay&gt;
+	&lt;controls&gt;
+		&lt;include&gt;CommonBackground&lt;/include&gt;
+		&lt;control type="image"&gt;
+			&lt;left&gt;0&lt;/left&gt;
+			&lt;top&gt;100r&lt;/top&gt;
+			&lt;width&gt;1280&lt;/width&gt;
+			&lt;height&gt;100&lt;/height&gt;
+			&lt;texture&gt;floor.png&lt;/texture&gt;
+			&lt;animation effect="slide" start="0,10" end="0,0" time="200" condition="Window.Previous(Home)"&gt;WindowOpen&lt;/animation&gt;
+			&lt;animation effect="slide" start="0,0" end="0,10" time="200" condition="Window.Next(Home)"&gt;WindowClose&lt;/animation&gt;
+		&lt;/control&gt;
+		&lt;control type="group"&gt;
+			&lt;left&gt;90&lt;/left&gt;
+			&lt;top&gt;30&lt;/top&gt;
+			&lt;animation type="WindowOpen" reversible="false"&gt;
+				&lt;effect type="zoom" start="80" end="100" center="640,360" easing="out" tween="back" time="300"/&gt;
+				&lt;effect type="fade" start="0" end="100" time="300"/&gt;
+			&lt;/animation&gt;
+			&lt;animation type="WindowClose" reversible="false"&gt;
+				&lt;effect type="zoom" start="100" end="80" center="640,360" easing="in" tween="back" time="300"/&gt;
+				&lt;effect type="fade" start="100" end="0" time="300"/&gt;
+			&lt;/animation&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;5&lt;/left&gt;
+				&lt;top&gt;5&lt;/top&gt;
+				&lt;width&gt;1090&lt;/width&gt;
+				&lt;height&gt;630&lt;/height&gt;
+				&lt;texture border="15"&gt;ContentPanel.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;5&lt;/left&gt;
+				&lt;top&gt;625&lt;/top&gt;
+				&lt;width&gt;1090&lt;/width&gt;
+				&lt;height&gt;64&lt;/height&gt;
+				&lt;texture border="15"&gt;ContentPanelMirror.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="button"&gt;
+				&lt;description&gt;Close Window button&lt;/description&gt;
+				&lt;left&gt;980&lt;/left&gt;
+				&lt;top&gt;11&lt;/top&gt;
+				&lt;width&gt;64&lt;/width&gt;
+				&lt;height&gt;32&lt;/height&gt;
+				&lt;label&gt;-&lt;/label&gt;
+				&lt;font&gt;-&lt;/font&gt;
+				&lt;onclick&gt;PreviousMenu&lt;/onclick&gt;
+				&lt;texturefocus&gt;DialogCloseButton-focus.png&lt;/texturefocus&gt;
+				&lt;texturenofocus&gt;DialogCloseButton.png&lt;/texturenofocus&gt;
+				&lt;onleft&gt;1&lt;/onleft&gt;
+				&lt;onright&gt;1&lt;/onright&gt;
+				&lt;onup&gt;1&lt;/onup&gt;
+				&lt;ondown&gt;1&lt;/ondown&gt;
+				&lt;visible&gt;system.getbool(input.enablemouse)&lt;/visible&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;description&gt;LOGO&lt;/description&gt;
+				&lt;left&gt;30&lt;/left&gt;
+				&lt;top&gt;15&lt;/top&gt;
+				&lt;width&gt;220&lt;/width&gt;
+				&lt;height&gt;80&lt;/height&gt;
+				&lt;aspectratio&gt;keep&lt;/aspectratio&gt;
+				&lt;texture&gt;Confluence_Logo.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="list" id="9000"&gt;
+				&lt;left&gt;10&lt;/left&gt;
+				&lt;top&gt;82&lt;/top&gt;
+				&lt;width&gt;260&lt;/width&gt;
+				&lt;height&gt;541&lt;/height&gt;
+				&lt;onleft&gt;9000&lt;/onleft&gt;
+				&lt;onright&gt;9001&lt;/onright&gt;
+				&lt;onup&gt;9000&lt;/onup&gt;
+				&lt;ondown&gt;9000&lt;/ondown&gt;
+				&lt;pagecontrol&gt;-&lt;/pagecontrol&gt;
+				&lt;scrolltime&gt;300&lt;/scrolltime&gt;
+				&lt;itemlayout height="54" width="260"&gt;
+					&lt;control type="image"&gt;
+						&lt;left&gt;0&lt;/left&gt;
+						&lt;top&gt;0&lt;/top&gt;
+						&lt;width&gt;260&lt;/width&gt;
+						&lt;height&gt;55&lt;/height&gt;
+						&lt;texture border="5"&gt;MenuItemNF.png&lt;/texture&gt;
+					&lt;/control&gt;
+					&lt;control type="label"&gt;
+						&lt;left&gt;250&lt;/left&gt;
+						&lt;top&gt;0&lt;/top&gt;
+						&lt;width&gt;380&lt;/width&gt;
+						&lt;height&gt;55&lt;/height&gt;
+						&lt;font&gt;font24_title&lt;/font&gt;
+						&lt;textcolor&gt;grey3&lt;/textcolor&gt;
+						&lt;align&gt;right&lt;/align&gt;
+						&lt;aligny&gt;center&lt;/aligny&gt;
+						&lt;label&gt;$INFO[ListItem.Label]&lt;/label&gt;
+					&lt;/control&gt;
+				&lt;/itemlayout&gt;
+				&lt;focusedlayout height="54" width="260"&gt;
+					&lt;control type="image"&gt;
+						&lt;left&gt;0&lt;/left&gt;
+						&lt;top&gt;0&lt;/top&gt;
+						&lt;width&gt;260&lt;/width&gt;
+						&lt;height&gt;55&lt;/height&gt;
+						&lt;texture border="5"&gt;MenuItemFO.png&lt;/texture&gt;
+					&lt;/control&gt;
+					&lt;control type="label"&gt;
+						&lt;left&gt;250&lt;/left&gt;
+						&lt;top&gt;0&lt;/top&gt;
+						&lt;width&gt;380&lt;/width&gt;
+						&lt;height&gt;55&lt;/height&gt;
+						&lt;font&gt;font24_title&lt;/font&gt;
+						&lt;textcolor&gt;white&lt;/textcolor&gt;
+						&lt;align&gt;right&lt;/align&gt;
+						&lt;aligny&gt;center&lt;/aligny&gt;
+						&lt;label&gt;$INFO[ListItem.Label]&lt;/label&gt;
+					&lt;/control&gt;
+				&lt;/focusedlayout&gt;
+				&lt;content&gt;
+					&lt;item id="1"&gt;
+						&lt;label&gt;480&lt;/label&gt;
+						&lt;label2&gt;31400&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(AppearanceSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="2"&gt;
+						&lt;label&gt;157&lt;/label&gt;
+						&lt;label2&gt;31401&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(VideosSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="3"&gt;
+						&lt;label&gt;31502&lt;/label&gt;
+						&lt;label2&gt;31409&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(PVRSettings)&lt;/onclick&gt;
+						&lt;icon&gt;special://skin/backgrounds/tv.jpg&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="4"&gt;
+						&lt;label&gt;2&lt;/label&gt;
+						&lt;label2&gt;31402&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(MusicSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="5"&gt;
+						&lt;label&gt;1&lt;/label&gt;
+						&lt;label2&gt;31403&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(PicturesSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="6"&gt;
+						&lt;label&gt;8&lt;/label&gt;
+						&lt;label2&gt;31404&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(WeatherSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="7"&gt;
+						&lt;label&gt;24001&lt;/label&gt;
+						&lt;label2&gt;31408&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(AddonBrowser)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="8"&gt;
+						&lt;label&gt;14036&lt;/label&gt;
+						&lt;label2&gt;31410&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(ServiceSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+					&lt;item id="9"&gt;
+						&lt;label&gt;13000&lt;/label&gt;
+						&lt;label2&gt;31406&lt;/label2&gt;
+						&lt;onclick&gt;ActivateWindow(SystemSettings)&lt;/onclick&gt;
+						&lt;icon&gt;-&lt;/icon&gt;
+					&lt;/item&gt;
+				&lt;/content&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;268&lt;/left&gt;
+				&lt;top&gt;10&lt;/top&gt;
+				&lt;width&gt;804&lt;/width&gt;
+				&lt;height&gt;50&lt;/height&gt;
+				&lt;texture border="5"&gt;black-back2.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;268&lt;/left&gt;
+				&lt;top&gt;10&lt;/top&gt;
+				&lt;width&gt;804&lt;/width&gt;
+				&lt;height&gt;70&lt;/height&gt;
+				&lt;aspectratio&gt;stretch&lt;/aspectratio&gt;
+				&lt;texture&gt;GlassTitleBar.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="label"&gt;
+				&lt;description&gt;header label&lt;/description&gt;
+				&lt;left&gt;300&lt;/left&gt;
+				&lt;top&gt;20&lt;/top&gt;
+				&lt;width&gt;740&lt;/width&gt;
+				&lt;height&gt;30&lt;/height&gt;
+				&lt;font&gt;font16&lt;/font&gt;
+				&lt;label&gt;$LOCALIZE[31000] $LOCALIZE[5]&lt;/label&gt;
+				&lt;align&gt;left&lt;/align&gt;
+				&lt;aligny&gt;center&lt;/aligny&gt;
+				&lt;textcolor&gt;white&lt;/textcolor&gt;
+				&lt;shadowcolor&gt;black&lt;/shadowcolor&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;270&lt;/left&gt;
+				&lt;top&gt;60&lt;/top&gt;
+				&lt;width&gt;800&lt;/width&gt;
+				&lt;height&gt;450&lt;/height&gt;
+				&lt;texture border="5"&gt;button-nofocus.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;272&lt;/left&gt;
+				&lt;top&gt;62&lt;/top&gt;
+				&lt;width&gt;796&lt;/width&gt;
+				&lt;height&gt;446&lt;/height&gt;
+				&lt;aspectratio&gt;stretch&lt;/aspectratio&gt;
+				&lt;fadetime&gt;600&lt;/fadetime&gt;
+				&lt;texture background="true"&gt;special://skin/backgrounds/settings.jpg&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;272&lt;/left&gt;
+				&lt;top&gt;62&lt;/top&gt;
+				&lt;width&gt;600&lt;/width&gt;
+				&lt;height&gt;340&lt;/height&gt;
+				&lt;aspectratio&gt;stretch&lt;/aspectratio&gt;
+				&lt;texture&gt;GlassOverlay.png&lt;/texture&gt;
+				&lt;colordiffuse&gt;AAFFFFFF&lt;/colordiffuse&gt;
+			&lt;/control&gt;
+			&lt;control type="image"&gt;
+				&lt;left&gt;268&lt;/left&gt;
+				&lt;top&gt;510&lt;/top&gt;
+				&lt;width&gt;804&lt;/width&gt;
+				&lt;height&gt;118&lt;/height&gt;
+				&lt;texture border="5"&gt;black-back2.png&lt;/texture&gt;
+			&lt;/control&gt;
+			&lt;control type="textbox"&gt;
+				&lt;description&gt;Appearance Description&lt;/description&gt;
+				&lt;left&gt;300&lt;/left&gt;
+				&lt;top&gt;520&lt;/top&gt;
+				&lt;width&gt;740&lt;/width&gt;
+				&lt;height&gt;100&lt;/height&gt;
+				&lt;font&gt;font12&lt;/font&gt;
+				&lt;label&gt;$INFO[Container(9000).ListItem.Label2]&lt;/label&gt;
+				&lt;align&gt;left&lt;/align&gt;
+				&lt;textcolor&gt;white&lt;/textcolor&gt;
+				&lt;shadowcolor&gt;black&lt;/shadowcolor&gt;
+			&lt;/control&gt;
+		&lt;/control&gt;
+		&lt;include&gt;CommonNowPlaying&lt;/include&gt;
+		&lt;include&gt;MainWindowMouseButtons&lt;/include&gt;
+		&lt;include&gt;BehindDialogFadeOut&lt;/include&gt;
+		&lt;control type="image"&gt;
+			&lt;description&gt;Section header image&lt;/description&gt;
+			&lt;left&gt;20&lt;/left&gt;
+			&lt;top&gt;3&lt;/top&gt;
+			&lt;width&gt;35&lt;/width&gt;
+			&lt;height&gt;35&lt;/height&gt;
+			&lt;aspectratio&gt;keep&lt;/aspectratio&gt;
+			&lt;texture&gt;icon_system.png&lt;/texture&gt;
+		&lt;/control&gt;
+		&lt;control type="grouplist"&gt;
+			&lt;left&gt;65&lt;/left&gt;
+			&lt;top&gt;5&lt;/top&gt;
+			&lt;width&gt;1000&lt;/width&gt;
+			&lt;height&gt;30&lt;/height&gt;
+			&lt;orientation&gt;horizontal&lt;/orientation&gt;
+			&lt;align&gt;left&lt;/align&gt;
+			&lt;itemgap&gt;5&lt;/itemgap&gt;
+			&lt;control type="label"&gt;
+				&lt;include&gt;WindowTitleCommons&lt;/include&gt;
+				&lt;label&gt;$LOCALIZE[5]&lt;/label&gt;
+			&lt;/control&gt;
+		&lt;/control&gt;
+		&lt;include&gt;Clock&lt;/include&gt;
+	&lt;/controls&gt;
+&lt;/window&gt;</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/17511993
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=布局&amp;t=blog" target="_blank">
+    布局
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=界面&amp;t=blog" target="_blank">
+    界面
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xbmc&amp;t=blog" target="_blank">
+    xbmc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xml&amp;t=blog" target="_blank">
+    xml
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分析&amp;t=blog" target="_blank">
+    分析
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286583" target="_blank">
+    XBMC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

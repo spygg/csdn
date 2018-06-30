@@ -1,0 +1,238 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFMPEG类库打开流媒体的方法（需要传参数的时候） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_269">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFMPEG类库打开流媒体的方法（需要传参数的时候）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月06日 20:07:23
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：33306
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     使用ffmpeg类库进行开发的时候，打开流媒体（或本地文件）的函数是avformat_open_input()。
+    </p>
+    <p>
+     其中打开网络流的话，前面要加上函数avformat_network_init()。
+    </p>
+    <p>
+     一般情况下，只要传入流媒体的url就可以了。但是在打开某些流媒体的时候，可能需要附加一些参数。
+    </p>
+    <p>
+     例如在播放中央人民广播电台的声音信号的时候，其url为“rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==”
+     <br/>
+    </p>
+    <p>
+     如果直接进行打开是不会成功的，我们可以使用ffplay做一下实验：
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==</pre>
+    会出现错误：
+    <p>
+    </p>
+    <p>
+     Invalid data found when processing input
+     <br/>
+    </p>
+    <p>
+     这时候我们需要指定其传输方式为TCP，需要将命令改为如下形式：
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay -rtsp_transport tcp rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==</pre>
+    附加了参数以后，发现就可以正常播放了。
+    <p>
+    </p>
+    <p>
+     此外还可以附加一些参数，比如
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay -rtsp_transport tcp -max_delay 5000000 rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==</pre>
+    <br/>
+    在使用FFMPEG类库进行编程的时候，如何将这些附加的参数传递给avformat_open_input()呢？经过研究后发现，可以通过AVDictionary把参数传给avformat_open_input()。
+    <p>
+    </p>
+    <p>
+     看一下avformat_open_input()的定义：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * Open an input stream and read the header. The codecs are not opened.
+ * The stream must be closed with av_close_input_file().
+ *
+ * @param ps Pointer to user-supplied AVFormatContext (allocated by avformat_alloc_context).
+ *           May be a pointer to NULL, in which case an AVFormatContext is allocated by this
+ *           function and written into ps.
+ *           Note that a user-supplied AVFormatContext will be freed on failure.
+ * @param filename Name of the stream to open.
+ * @param fmt If non-NULL, this parameter forces a specific input format.
+ *            Otherwise the format is autodetected.
+ * @param options  A dictionary filled with AVFormatContext and demuxer-private options.
+ *                 On return this parameter will be destroyed and replaced with a dict containing
+ *                 options that were not found. May be NULL.
+ *
+ * @return 0 on success, a negative AVERROR on failure.
+ *
+ * @note If you want to use custom IO, preallocate the format context and set its pb field.
+ */
+int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options);
+</pre>
+    <br/>
+    可以看出avformat_open_input()的第4个参数是一个AVDictionary类型的参数。这个参数就是传入的附加参数。
+    <p>
+    </p>
+    <p>
+     设置AVDictionary的时候会用到av_dict_set()。
+    </p>
+    <p>
+     下面看看把命令
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay -rtsp_transport tcp -max_delay 5000000 rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==</pre>
+    <p>
+    </p>
+    <p>
+     转化为代码实现的方式：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVFormatContext	*pFormatCtx;
+pFormatCtx = avformat_alloc_context();
+...代码略
+AVDictionary *avdic=NULL;
+char option_key[]="rtsp_transport";
+char option_value[]="tcp";
+av_dict_set(&amp;avdic,option_key,option_value,0);
+char option_key2[]="max_delay";
+char option_value2[]="5000000";
+av_dict_set(&amp;avdic,option_key2,option_value2,0);
+char url[]="rtsp://mms.cnr.cn/cnr003?MzE5MTg0IzEjIzI5NjgwOQ==";
+
+avformat_open_input(&amp;pFormatCtx,url,NULL,&amp;avdic);</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/14215393
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体&amp;t=blog" target="_blank">
+    流媒体
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVDictionary&amp;t=blog" target="_blank">
+    AVDictionary
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=avformat_open_input&amp;t=blog" target="_blank">
+    avformat_open_input
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

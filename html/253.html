@@ -1,0 +1,821 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffdshow 源代码分析 7： libavcodec视频解码器类（TvideoCodecLibavcodec） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_253">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffdshow 源代码分析 7： libavcodec视频解码器类（TvideoCodecLibavcodec）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月12日 00:36:32
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6552
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="color:#990000">
+     </span>
+    </p>
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     ffdshow源代码分析系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12013619" target="_blank">
+      ffdshow 源代码分析 1： 整体结构
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12981725" target="_blank">
+      ffdshow 源代码分析 2： 位图覆盖滤镜（对话框部分Dialog）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13004051" target="_blank">
+      ffdshow 源代码分析 3： 位图覆盖滤镜（设置部分Settings）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13006213" target="_blank">
+      ffdshow 源代码分析 4： 位图覆盖滤镜（滤镜部分Filter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13660583" target="_blank">
+      ffdshow 源代码分析 5： 位图覆盖滤镜（总结）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493329" target="_blank">
+      ffdshow 源代码分析 6： 对解码器的dll的封装（libavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493521" target="_blank">
+      ffdshow 源代码分析 7： libavcodec视频解码器类（TvideoCodecLibavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493743" target="_blank">
+      ffdshow 源代码分析 8： 视频解码器类（TvideoCodecDec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493961" target="_blank">
+      ffdshow 源代码分析 9： 编解码器有关类的总结
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     <span style="color:#9900">
+     </span>
+    </p>
+    <p>
+     <span style="color:#990000">
+     </span>
+    </p>
+    <div style="text-align: center;">
+     <img alt="" src="http://img.blog.csdn.net/20140616103803031"/>
+     <br/>
+    </div>
+    <p>
+     前文已经介绍了ffdshow中对libavcodec封装的类Tlibavcodec：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493329" target="_blank">
+      <span style="font-family:Verdana,Lucida Grande,Arial,Helvetica,sans-serif; color:#3b5998">
+       <span style="">
+        ffdshow 源代码分析 6： 对解码器的dll的封装（libavcodec）
+       </span>
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     在这里我们进一步介绍一下其libavcodec解码器类。注意前一篇文章介绍的类Tlibavcodec仅仅是对libavcodec所在的“ffmpeg.dll”的函数进行封装的类。但Tlibavcodec并不是一个解码器类，其没有继承任何类，还不能为ffdshow所用。本文介绍的TvideoCodecLibavcodec才是libavcodec解码器类，其继承了TvideoCodecDec。
+    </p>
+    <p>
+    </p>
+    <p>
+     先来看一看TvideoCodecLibavcodec的定义吧，位于codecs-&gt; TvideoCodecLibavcodec.h中。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_1">/* 
+ *雷霄骅 
+ *leixiaohua1020@126.com 
+ *中国传媒大学/数字电视技术 
+ */ 
+#ifndef _TVIDEOCODECLIBAVCODEC_H_
+#define _TVIDEOCODECLIBAVCODEC_H_
+
+#include "TvideoCodec.h"
+#include "ffmpeg/Tlibavcodec.h"
+#include "ffmpeg/libavcodec/avcodec.h"
+
+#define MAX_THREADS 8 // FIXME: This is defined in mpegvideo.h.
+
+struct Textradata;
+class TccDecoder;
+//libavcodec解码器（视频）
+struct TlibavcodecExt {
+private:
+    static int get_buffer(AVCodecContext *s, AVFrame *pic);
+    int (*default_get_buffer)(AVCodecContext *s, AVFrame *pic);
+    static void release_buffer(AVCodecContext *s, AVFrame *pic);
+    void (*default_release_buffer)(AVCodecContext *s, AVFrame *pic);
+    static int reget_buffer(AVCodecContext *s, AVFrame *pic);
+    int (*default_reget_buffer)(AVCodecContext *s, AVFrame *pic);
+    static void handle_user_data0(AVCodecContext *c, const uint8_t *buf, int buf_len);
+public:
+    virtual ~TlibavcodecExt() {}
+    void connectTo(AVCodecContext *ctx, Tlibavcodec *libavcodec);
+    virtual void onGetBuffer(AVFrame *pic) {}
+    virtual void onRegetBuffer(AVFrame *pic) {}
+    virtual void onReleaseBuffer(AVFrame *pic) {}
+    virtual void handle_user_data(const uint8_t *buf, int buf_len) {}
+};
+//libavcodec解码，不算是Filter？
+class TvideoCodecLibavcodec : public TvideoCodecDec, public TvideoCodecEnc, public TlibavcodecExt
+{
+    friend class TDXVADecoderVC1;
+    friend class TDXVADecoderH264;
+protected:
+	//各种信息（源自AVCodecContext中）
+    Tlibavcodec *libavcodec;
+    void create(void);
+    AVCodec *avcodec;
+    mutable char_t codecName[100];
+    AVCodecContext *avctx;
+    uint32_t palette[AVPALETTE_COUNT];
+    int palette_size;
+    AVFrame *frame;
+    FOURCC fcc;
+    FILE *statsfile;
+    int cfgcomode;
+    int psnr;
+    bool isAdaptive;
+    int threadcount;
+    bool dont_use_rtStop_from_upper_stream; // and reordering of timpestams is justified.
+    bool theorart;
+    bool codecinited, ownmatrices;
+    REFERENCE_TIME rtStart, rtStop, avgTimePerFrame, segmentTimeStart;
+    REFERENCE_TIME prior_in_rtStart, prior_in_rtStop;
+    REFERENCE_TIME prior_out_rtStart, prior_out_rtStop;
+
+    struct {
+        REFERENCE_TIME rtStart, rtStop;
+        unsigned int srcSize;
+    } b[MAX_THREADS + 1];
+    int inPosB;
+
+    Textradata *extradata;
+    bool sendextradata;
+    unsigned int mb_width, mb_height, mb_count;
+    static void line(unsigned char *dst, unsigned int _x0, unsigned int _y0, unsigned int _x1, unsigned int _y1, stride_t strideY);
+    static void draw_arrow(uint8_t *buf, int sx, int sy, int ex, int ey, stride_t stride, int mulx, int muly, int dstdx, int dstdy);
+    unsigned char *ffbuf;
+    unsigned int ffbuflen;
+    bool wasKey;
+    virtual void handle_user_data(const uint8_t *buf, int buf_len);
+    TccDecoder *ccDecoder;
+    bool autoSkipingLoopFilter;
+    enum AVDiscard initialSkipLoopFilter;
+    int got_picture;
+    bool firstSeek; // firstSeek means start of palyback.
+    bool mpeg2_in_doubt;
+    bool mpeg2_new_sequence;
+    bool bReorderBFrame;
+	//时长（AVCodecContext中）
+    REFERENCE_TIME getDuration();
+    int isReallyMPEG2(const unsigned char *src, size_t srcLen);
+protected:
+    virtual LRESULT beginCompress(int cfgcomode, uint64_t csp, const Trect &amp;r);
+    virtual bool beginDecompress(TffPictBase &amp;pict, FOURCC infcc, const CMediaType &amp;mt, int sourceFlags);
+    virtual HRESULT flushDec(void);
+    AVCodecParserContext *parser;
+public:
+    TvideoCodecLibavcodec(IffdshowBase *Ideci, IdecVideoSink *IsinkD);
+    TvideoCodecLibavcodec(IffdshowBase *Ideci, IencVideoSink *IsinkE);
+    virtual ~TvideoCodecLibavcodec();
+    virtual int getType(void) const {
+        return IDFF_MOVIE_LAVC;
+    }
+    virtual const char_t* getName(void) const;
+    virtual int caps(void) const {
+        return CAPS::VIS_MV | CAPS::VIS_QUANTS;
+    }
+
+    virtual void end(void);
+
+    virtual void getCompressColorspaces(Tcsps &amp;csps, unsigned int outDx, unsigned int outDy);
+    virtual bool supExtradata(void);
+    //获得ExtraData（AVCodecContext中）
+	virtual bool getExtradata(const void* *ptr, size_t *len);
+    virtual HRESULT compress(const TffPict &amp;pict, TencFrameParams ¶ms);
+    virtual HRESULT flushEnc(const TffPict &amp;pict, TencFrameParams ¶ms) {
+        return compress(pict, params);
+    }
+
+    virtual HRESULT decompress(const unsigned char *src, size_t srcLen, IMediaSample *pIn);
+    virtual void onGetBuffer(AVFrame *pic);
+    virtual bool onSeek(REFERENCE_TIME segmentStart);
+    virtual bool onDiscontinuity(void);
+	//画出运动矢量（AVCodecContext中）
+    virtual bool drawMV(unsigned char *dst, unsigned int dx, stride_t stride, unsigned int dy) const;
+    //编码器信息（AVCodecContext中）
+	virtual void getEncoderInfo(char_t *buf, size_t buflen) const;
+    virtual const char* get_current_idct(void);
+    virtual HRESULT BeginFlush();
+    bool isReorderBFrame() {
+        return bReorderBFrame;
+    };
+    virtual void reorderBFrames(REFERENCE_TIME&amp; rtStart, REFERENCE_TIME&amp; rtStop);
+
+    class Th264RandomAccess
+    {
+        friend class TvideoCodecLibavcodec;
+    private:
+        TvideoCodecLibavcodec* parent;
+        int recovery_mode;  // 0:OK, 1:searching 2: found, 3:waiting for frame_num decoded, 4:waiting for POC outputed
+        int recovery_frame_cnt;
+        int recovery_poc;
+        int thread_delay;
+
+    public:
+        Th264RandomAccess(TvideoCodecLibavcodec* Iparent);
+        int search(uint8_t* buf, int buf_size);
+        void onSeek(void);
+        void judgeUsability(int *got_picture_ptr);
+    } h264RandomAccess;
+};
+
+#endif
+</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     这里有一个类TlibavcodecExt，我觉得应该是扩展了Tlibavcodec的一些功能，在这里我们先不管它，直接看看TvideoCodecLibavcodec都包含了什么变量：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px; padding:0px; border:currentColor">
+     <p>
+     </p>
+     <p align="left">
+      <span style="color:#990000">
+       Tlibavcodec *libavcodec：该类封装了libavcodec的各种函数，在前一篇文章中已经做过介绍，在此不再重复叙述了。可以认为该变量是TvideoCodecLibavcodec类的灵魂，所有libavcodec中的函数都是通过该类调用的。
+      </span>
+     </p>
+     <span style="color:#990000">
+      AVCodec *avcodec：FFMPEG中的结构体，解码器
+      <br/>
+      AVCodecContext *avctx：FFMPEG中的结构体，解码器上下文
+      <br/>
+      AVFrame *frame FFMPEG中的结构体，视频帧
+      <br/>
+      mutable char_t codecName[100]：解码器名称
+      <br/>
+      FOURCC fcc：FourCC
+      <br/>
+      Textradata *extradata：附加数据
+     </span>
+    </blockquote>
+    <blockquote style="margin:0px 0px 0px 40px; padding:0px; border:currentColor">
+     <p>
+     </p>
+     <p align="left">
+      <span style="color:#990000">
+       …
+      </span>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <p align="left">
+     再来看一下TvideoCodecLibavcodec都包含什么方法：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px; padding:0px; border:currentColor">
+     <span style="color:#990000">
+      create()：创建解码器的时候调用
+      <br/>
+      getDuration()：获得时长
+      <br/>
+      getExtradata()：获得附加数据
+      <br/>
+      drawMV()：画运动矢量
+      <br/>
+      getEncoderInfo()：获得编码器信息
+      <br/>
+      此外还包括一些有关解码的方法【这个是最关键的】：
+     </span>
+     <p>
+      <span style="color:#990000">
+       beginDecompress()：解码初始化
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000">
+       decompress()：解码
+      </span>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <p align="left">
+     下面我们来详细看看这些函数的实现吧：
+    </p>
+    <p align="left">
+     先来看一下TvideoCodecLibavcodec的构造函数：
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_2">//libavcodec解码器（视频）
+//内容大部分都很熟悉，因为是FFmpeg的API
+TvideoCodecLibavcodec::TvideoCodecLibavcodec(IffdshowBase *Ideci, IdecVideoSink *IsinkD):
+    Tcodec(Ideci), TcodecDec(Ideci, IsinkD),
+    TvideoCodec(Ideci),
+    TvideoCodecDec(Ideci, IsinkD),
+    TvideoCodecEnc(Ideci, NULL),
+    h264RandomAccess(this),
+    bReorderBFrame(true)
+{
+    create();
+}
+</pre>
+    <br/>
+    可见构造函数调用了Create()，我们再来看看Create()：
+    <br/>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_3">void TvideoCodecLibavcodec::create(void)
+{
+    ownmatrices = false;
+    deci-&gt;getLibavcodec(&amp;libavcodec);
+    ok = libavcodec ? libavcodec-&gt;ok : false;
+    avctx = NULL;
+    avcodec = NULL;
+    frame = NULL;
+    quantBytes = 1;
+    statsfile = NULL;
+    threadcount = 0;
+    codecinited = false;
+    extradata = NULL;
+    theorart = false;
+    ffbuf = NULL;
+    ffbuflen = 0;
+    codecName[0] = '\0';
+    ccDecoder = NULL;
+    autoSkipingLoopFilter = false;
+    inPosB = 1;
+    firstSeek = true;
+    mpeg2_new_sequence = true;
+    parser = NULL;
+}
+</pre>
+    <br/>
+    <p>
+    </p>
+    <p align="left">
+     从Create()函数我们可以看出，其完成了各种变量的初始化工作。其中有一行代码：
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_4">deci-&gt;getLibavcodec(&amp;libavcodec);</pre>
+    <br/>
+    <p align="left">
+     完成了Tlibavcodec*libavcodec的初始化工作。
+    </p>
+    <p align="left">
+     再来看几个函数。
+    </p>
+    <p align="left">
+     getDuration()，用于从AVCodecContext中获取时长：
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_5">REFERENCE_TIME TvideoCodecLibavcodec::getDuration()
+{
+    REFERENCE_TIME duration = REF_SECOND_MULT / 100;
+    if (avctx &amp;&amp; avctx-&gt;time_base.num &amp;&amp; avctx-&gt;time_base.den) {
+        duration = REF_SECOND_MULT * avctx-&gt;time_base.num / avctx-&gt;time_base.den;
+        if (codecId == AV_CODEC_ID_H264) {
+            duration *= 2;
+        }
+    }
+    if (duration == 0) {
+        return REF_SECOND_MULT / 100;
+    }
+    return duration;
+}
+</pre>
+    <br/>
+    <p align="left">
+     getExtradata()用于从AVCodecContext中获取附加信息：
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_6">bool TvideoCodecLibavcodec::getExtradata(const void* *ptr, size_t *len)
+{
+    if (!avctx || !len) {
+        return false;
+    }
+    *len = avctx-&gt;extradata_size;
+    if (ptr) {
+        *ptr = avctx-&gt;extradata;
+    }
+    return true;
+}
+</pre>
+    <br/>
+    drawMV()用于从AVFrame中获取运动矢量信息，并画出来（这个函数用于一个名为“可视化”的滤镜里面，用于显示视频的运动矢量信息）。
+    <br/>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_7">//画出运动矢量
+bool TvideoCodecLibavcodec::drawMV(unsigned char *dst, unsigned int dstdx, stride_t stride, unsigned int dstdy) const
+{
+    if (!frame-&gt;motion_val || !frame-&gt;mb_type || !frame-&gt;motion_val[0]) {
+        return false;
+    }
+
+#define IS_8X8(a)  ((a)&amp;MB_TYPE_8x8)
+#define IS_16X8(a) ((a)&amp;MB_TYPE_16x8)
+#define IS_8X16(a) ((a)&amp;MB_TYPE_8x16)
+#define IS_INTERLACED(a) ((a)&amp;MB_TYPE_INTERLACED)
+#define USES_LIST(a, list) ((a) &amp; ((MB_TYPE_P0L0|MB_TYPE_P1L0)&lt;&lt;(2*(list))))
+
+    const int shift = 1 + ((frame-&gt;play_flags &amp; CODEC_FLAG_QPEL) ? 1 : 0);
+    const int mv_sample_log2 = 4 - frame-&gt;motion_subsample_log2;
+    const int mv_stride = (frame-&gt;mb_width &lt;&lt; mv_sample_log2) + (avctx-&gt;codec_id == AV_CODEC_ID_H264 ? 0 : 1);
+    int direction = 0;
+
+    int mulx = (dstdx &lt;&lt; 12) / avctx-&gt;width;
+    int muly = (dstdy &lt;&lt; 12) / avctx-&gt;height;
+	//提取两个方向上的运动矢量信息（根据不同的宏块划分，可以分成几种情况）
+	//在AVCodecContext的motion_val中
+    for (int mb_y = 0; mb_y &lt; frame-&gt;mb_height; mb_y++)
+        for (int mb_x = 0; mb_x &lt; frame-&gt;mb_width; mb_x++) {
+            const int mb_index = mb_x + mb_y * frame-&gt;mb_stride;
+            if (!USES_LIST(frame-&gt;mb_type[mb_index], direction)) {
+                continue;
+            }
+            …此处代码太长，略
+        }
+#undef IS_8X8
+#undef IS_16X8
+#undef IS_8X16
+#undef IS_INTERLACED
+#undef USES_LIST
+    return true;
+}
+</pre>
+    <br/>
+    <p>
+    </p>
+    <p align="left">
+     下面来看几个很重要的函数，这几个函数继承自TvideoCodecDec类。
+    </p>
+    <p align="left">
+     <strong>
+      beginDecompress()用于解码器的初始化
+     </strong>
+     。注：这个函数的代码太长了，因此只选择一点关键的代码。
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_8">//----------------------------- decompression -----------------------------
+bool TvideoCodecLibavcodec::beginDecompress(TffPictBase &amp;pict, FOURCC fcc, const CMediaType &amp;mt, int sourceFlags)
+{
+    palette_size = 0;
+    prior_out_rtStart = REFTIME_INVALID;
+    prior_out_rtStop = 0;
+    rtStart = rtStop = REFTIME_INVALID;
+    prior_in_rtStart = prior_in_rtStop = REFTIME_INVALID;
+    mpeg2_in_doubt = codecId == AV_CODEC_ID_MPEG2VIDEO;
+
+    int using_dxva = 0;
+
+    int numthreads = deci-&gt;getParam2(IDFF_numLAVCdecThreads);
+    int thread_type = 0;
+    if (numthreads &gt; 1 &amp;&amp; sup_threads_dec_frame(codecId)) {
+        thread_type = FF_THREAD_FRAME;
+    } else if (numthreads &gt; 1 &amp;&amp; sup_threads_dec_slice(codecId)) {
+        thread_type = FF_THREAD_SLICE;
+    }
+
+    if (numthreads &gt; 1 &amp;&amp; thread_type != 0) {
+        threadcount = numthreads;
+    } else {
+        threadcount = 1;
+    }
+
+    if (codecId == CODEC_ID_H264_DXVA) {
+        codecId = AV_CODEC_ID_H264;
+        using_dxva = 1;
+    } else if (codecId == CODEC_ID_VC1_DXVA) {
+        codecId = AV_CODEC_ID_VC1;
+        using_dxva = 1;
+    }
+
+    avcodec = libavcodec-&gt;avcodec_find_decoder(codecId);
+    if (!avcodec) {
+        return false;
+    }
+    avctx = libavcodec-&gt;avcodec_alloc_context(avcodec, this);
+    avctx-&gt;thread_type = thread_type;
+    avctx-&gt;thread_count = threadcount;
+    avctx-&gt;h264_using_dxva = using_dxva;
+    if (codecId == AV_CODEC_ID_H264) {
+        // If we do not set this, first B-frames before the IDR pictures are dropped.
+        avctx-&gt;has_b_frames = 1;
+    }
+
+    frame = libavcodec-&gt;avcodec_alloc_frame();
+    avctx-&gt;width = pict.rectFull.dx;
+    avctx-&gt;height = pict.rectFull.dy;
+    intra_matrix = avctx-&gt;intra_matrix = (uint16_t*)calloc(sizeof(uint16_t), 64);
+    inter_matrix = avctx-&gt;inter_matrix = (uint16_t*)calloc(sizeof(uint16_t), 64);
+    ownmatrices = true;
+
+
+    // Fix for new Haali custom media type and fourcc. ffmpeg does not understand it, we have to change it to FOURCC_AVC1
+    if (fcc == FOURCC_CCV1) {
+        fcc = FOURCC_AVC1;
+    }
+
+    avctx-&gt;codec_tag = fcc;
+    avctx-&gt;workaround_bugs = deci-&gt;getParam2(IDFF_workaroundBugs);
+#if 0
+    avctx-&gt;error_concealment = FF_EC_GUESS_MVS | FF_EC_DEBLOCK;
+    avctx-&gt;err_recognition   = AV_EF_CRCCHECK | AV_EF_BITSTREAM | AV_EF_BUFFER | AV_EF_COMPLIANT | AV_EF_AGGRESSIVE;
+#endif
+    if (codecId == AV_CODEC_ID_MJPEG) {
+        avctx-&gt;flags |= CODEC_FLAG_TRUNCATED;
+    }
+    if (mpeg12_codec(codecId) &amp;&amp; deci-&gt;getParam2(IDFF_fastMpeg2)) {
+        avctx-&gt;flags2 = CODEC_FLAG2_FAST;
+    }
+    if (codecId == AV_CODEC_ID_H264)
+        if (int skip = deci-&gt;getParam2(IDFF_fastH264)) {
+            avctx-&gt;skip_loop_filter = skip &amp; 2 ? AVDISCARD_ALL : AVDISCARD_NONREF;
+        }
+    initialSkipLoopFilter = avctx-&gt;skip_loop_filter;
+
+    avctx-&gt;debug_mv = !using_dxva; //(deci-&gt;getParam2(IDFF_isVis) &amp; deci-&gt;getParam2(IDFF_visMV));
+
+    avctx-&gt;idct_algo = limit(deci-&gt;getParam2(IDFF_idct), 0, 6);
+    if (extradata) {
+        delete extradata;
+    }
+extradata = new Textradata(mt, FF_INPUT_BUFFER_PADDING_SIZE);
+此处代码太长，略…
+}
+</pre>
+    <br/>
+    <p>
+     从代码中可以看出这个函数的流程是：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px; padding:0px; border:currentColor">
+     1.avcodec_find_decoder();
+     <br/>
+     2.avcodec_alloc_context();
+     <br/>
+     3.avcodec_alloc_frame();
+     <br/>
+     4.avcodec_open();
+    </blockquote>
+    <p>
+    </p>
+    <p>
+     主要做了libavcodec初始化工作。
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      begin decompress()用于解码器的初始化。
+     </strong>
+     注：这个函数的代码太长了，因此只选择一点关键的代码。
+    </p>
+    <pre class="cpp" code_snippet_id="71557" name="code" snippet_file_name="blog_20131113_9">HRESULT TvideoCodecLibavcodec::decompress(const unsigned char *src, size_t srcLen0, IMediaSample *pIn)
+{
+	代码太长，略…
+    AVPacket avpkt;
+    libavcodec-&gt;av_init_packet(&amp;avpkt);
+    if (palette_size) {
+        uint32_t *pal = (uint32_t *)libavcodec-&gt;av_packet_new_side_data(&amp;avpkt, AV_PKT_DATA_PALETTE, AVPALETTE_SIZE);
+        for (int i = 0; i &lt; palette_size / 4; i++) {
+            pal[i] = 0xFF &lt;&lt; 24 | AV_RL32(palette + i);
+        }
+    }
+
+    while (!src || size &gt; 0) {
+        int used_bytes;
+
+        avctx-&gt;reordered_opaque = rtStart;
+        avctx-&gt;reordered_opaque2 = rtStop;
+        avctx-&gt;reordered_opaque3 = size;
+
+        if (sendextradata &amp;&amp; extradata-&gt;data &amp;&amp; extradata-&gt;size &gt; 0) {
+            avpkt.data = (uint8_t *)extradata-&gt;data;
+            avpkt.size = (int)extradata-&gt;size;
+            used_bytes = libavcodec-&gt;avcodec_decode_video2(avctx, frame, &amp;got_picture, &amp;avpkt);
+            sendextradata = false;
+            if (used_bytes &gt; 0) {
+                used_bytes = 0;
+            }
+            if (mpeg12_codec(codecId)) {
+                avctx-&gt;extradata = NULL;
+                avctx-&gt;extradata_size = 0;
+            }
+        } else {
+            unsigned int neededsize = size + FF_INPUT_BUFFER_PADDING_SIZE;
+
+            if (ffbuflen &lt; neededsize) {
+                ffbuf = (unsigned char*)realloc(ffbuf, ffbuflen = neededsize);
+            }
+
+            if (src) {
+                memcpy(ffbuf, src, size);
+                memset(ffbuf + size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+            }
+            if (parser) {
+                uint8_t *outBuf = NULL;
+                int out_size = 0;
+                used_bytes = libavcodec-&gt;av_parser_parse2(parser, avctx, &amp;outBuf, &amp;out_size, src ? ffbuf : NULL, size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
+                if (prior_in_rtStart == REFTIME_INVALID) {
+                    prior_in_rtStart = rtStart;
+                    prior_in_rtStop = rtStop;
+                }
+                if (out_size &gt; 0 || !src) {
+                    mpeg2_in_doubt = false;
+                    avpkt.data = out_size &gt; 0 ? outBuf : NULL;
+                    avpkt.size = out_size;
+                    if (out_size &gt; used_bytes) {
+                        avctx-&gt;reordered_opaque = prior_in_rtStart;
+                        avctx-&gt;reordered_opaque2 = prior_in_rtStop;
+                    } else {
+                        avctx-&gt;reordered_opaque = rtStart;
+                        avctx-&gt;reordered_opaque2 = rtStop;
+                    }
+                    prior_in_rtStart = rtStart;
+                    prior_in_rtStop = rtStop;
+                    avctx-&gt;reordered_opaque3 = out_size;
+                    if (h264RandomAccess.search(avpkt.data, avpkt.size)) {
+                        libavcodec-&gt;avcodec_decode_video2(avctx, frame, &amp;got_picture, &amp;avpkt);
+                        h264RandomAccess.judgeUsability(&amp;got_picture);
+                    } else {
+                        got_picture = 0;
+                    }
+                } else {
+                    got_picture = 0;
+                }
+            } else {
+                avpkt.data = src ? ffbuf : NULL;
+                avpkt.size = size;
+                if (codecId == AV_CODEC_ID_H264) {
+                    if (h264RandomAccess.search(avpkt.data, avpkt.size)) {
+                        used_bytes = libavcodec-&gt;avcodec_decode_video2(avctx, frame, &amp;got_picture, &amp;avpkt);
+                        if (used_bytes &lt; 0) {
+                            return S_OK;
+                        }
+                        h264RandomAccess.judgeUsability(&amp;got_picture);
+                    } else {
+                        got_picture = 0;
+                        return S_OK;
+                    }
+                } else {
+                    used_bytes = libavcodec-&gt;avcodec_decode_video2(avctx, frame, &amp;got_picture, &amp;avpkt);
+                }
+            }
+        }
+	代码太长，略…
+}
+</pre>
+    <br/>
+    <p>
+     从代码中可以看出这个函数的流程是：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px; padding:0px; border:currentColor">
+     1.AVPacket avpkt;
+     <br/>
+     2.av_init_packet();
+     <br/>
+     3.avcodec_decode_video2();
+    </blockquote>
+    <p>
+    </p>
+    <p>
+     和ffmpeg的解码流程相差不大。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/15493521
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffdshow&amp;t=blog" target="_blank">
+    ffdshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=libavcodec&amp;t=blog" target="_blank">
+    libavcodec
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码器&amp;t=blog" target="_blank">
+    解码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638191" target="_blank">
+    ffdshow
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

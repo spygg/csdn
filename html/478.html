@@ -1,0 +1,283 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ STL的Vector介绍 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_478">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   STL的Vector介绍
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月24日 12:30:59
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：1982
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     Vector在使用的时候比数组要方便得多，自从学会使用后，我基本上使用Vector代替了数组，编程效率提高了很多。在此进行简单的介绍。
+    </p>
+    <p>
+     vector 是同一种类型的对象的集合,每个对象都有一个对应的整数索引值。
+    </p>
+    和 string 对象一样,标准库将负责管理与存储元素相关的内存。我们把 vector称为容器,是因为它可以包含其他对象。一个容器中的所有对象都必须是同一种类型的。
+    <br/>
+    vector 是一个类模板(class template)。使用模板可以编写一个类定义或函数定义,而用于多个不同的数据类型。因此,我们可以定义保存 string 对象的 vector,或保存 int 值的 vector,又或是保存自定义的类类型对象(如Sales_items 对象)的 vector。vector 不是一种数据类型,而只是一个类模板,可用来定义任意多种数据类型。vector 类型的每一种都指定了其保存元素的类型。
+    <br/>
+    vector之所以被认为是一个容器，是因为它能够像容器一样存放各种类型的对象，简单地说，vector是一个能够存放任意类型的动态数组，能够增加和压缩数据。
+    <br/>
+    为了可以使用vector，必须在你的头文件中包含下面的代码：
+    <br/>
+    <pre class="cpp">#include &lt;vector&gt;</pre>
+    vector属于std命名域的，因此需要通过命名限定，如下完成你的代码：
+    <br/>
+    <pre class="cpp">using std::vector;
+vector&lt;int&gt; vInts;</pre>
+    或者连在一起，使用全名：
+    <br/>
+    std::vector&lt;int&gt; vInts;
+    <br/>
+    建议在代码量不大，并且使用的命名空间不多的情况下，使用全局的命名域方式：using namespace std;
+    <br/>
+    函数
+    <br/>
+    表述
+    <br/>
+    c.assign(beg,end) c.assign(n,elem)
+    <br/>
+    将（beg; end）区间中的数据赋值给c。将n个elem的拷贝赋值给c。
+    <br/>
+    传回索引idx所指的数据，如果idx越界，抛出out_of_range。
+    <br/>
+    c.back()
+    <br/>
+    传回最后一个数据，不检查这个数据是否存在。
+    <br/>
+    c.begin()
+    <br/>
+    传回迭代器中的第一个数据地址。
+    <br/>
+    c.capacity()
+    <br/>
+    返回容器中数据个数。
+    <br/>
+    <pre class="cpp">c.clear()</pre>
+    移除容器中所有数据。
+    <br/>
+    <pre class="cpp">c.empty()</pre>
+    判断容器是否为空。
+    <br/>
+    c.end() //指向迭代器中末端元素的下一个，指向一个不存在元素。
+    <br/>
+    c.erase(pos)//　删除pos位置的数据，传回下一个数据的位置。
+    <br/>
+    c.erase(beg,end)
+    <br/>
+    删除[beg,end）区间的数据，传回下一个数据的位置。
+    <br/>
+    c.front()
+    <br/>
+    传回第一个数据。
+    <br/>
+    get_allocator
+    <br/>
+    使用构造函数返回一个拷贝。
+    <br/>
+    c.insert(pos,elem)//在pos位置插入一个elem拷贝，传回新数据位置
+    <br/>
+    c.insert(pos,n,elem)//在pos位置插入n个elem数据，无返回值
+    <br/>
+    c.insert(pos,beg,end)//在pos位置插入在[beg,end）区间的数据。无返回值
+    <br/>
+    c.max_size()
+    <br/>
+    返回容器中最大数据的数量。
+    <br/>
+    <pre class="cpp">c.pop_back()</pre>
+    删除最后一个数据。
+    <br/>
+    <pre class="cpp">c.push_back(elem)</pre>
+    在尾部加入一个数据。
+    <br/>
+    c.rbegin()
+    <br/>
+    传回一个逆向队列的第一个数据。
+    <br/>
+    c.rend()
+    <br/>
+    传回一个逆向队列的最后一个数据的下一个位置。
+    <br/>
+    c.resize(num)
+    <br/>
+    重新指定队列的长度。
+    <br/>
+    c.reserve()
+    <br/>
+    保留适当的容量。
+    <br/>
+    <pre class="cpp">c.size()</pre>
+    返回容器中实际数据的个数。
+    <br/>
+    c1.swap(c2)//将c1和c2元素互换
+    <br/>
+    swap(c1,c2)//同上操作。
+    <br/>
+    vector&lt;Elem&gt; //创建一个空的vector
+    <br/>
+    vector&lt;Elem&gt; c1(c2)//复制一个vector
+    <br/>
+    vector &lt;Elem&gt; c(n)//创建一个vector，含有n个数据，数据均已缺省构造产生
+    <br/>
+    vector &lt;Elem&gt; c(n,elem)//创建一个含有n个elem拷贝的vector
+    <br/>
+    vector &lt;Elem&gt; c(beg,end)//创建一个以（beg;end）为区间的vector
+    <br/>
+    c.~ vector &lt;Elem&gt;()//销毁所有数据，释放内存
+    <br/>
+    operator[]
+    <br/>
+    返回容器中指定位置的一个引用。
+    <br/>
+    创建一个vector
+    <br/>
+    vector容器提供了多种创建方法，下面介绍几种常用的。
+    <br/>
+    创建一个Widget类型的空的vector对象：
+    <br/>
+    vector&lt;Widget&gt; vWidgets;
+    <br/>
+    创建一个包含500个Widget类型数据的vector：
+    <br/>
+    vector&lt;Widget&gt; vWidgets(500);
+    <br/>
+    创建一个包含500个Widget类型数据的vector，并且都初始化为0：
+    <br/>
+    vector&lt;Widget&gt; vWidgets(500,Widget(0));
+    <br/>
+    创建一个Widget的拷贝：
+    <br/>
+    vector&lt;Widget&gt; vWidgetsFromAnother(vWidgets);
+    <br/>
+    向vector添加一个数据
+    <br/>
+    vector添加数据的缺省方法是push_back（）。push_back（）函数表示将数据添加到vector的尾部，并按需要来分配内存。例如：向vector&lt;Widget&gt;；中添加10个数据，需要如下编写代码：
+    <br/>
+    for(int i= 0;i&lt;10; i++) {
+    <br/>
+    vWidgets.push_back(Widget(i));
+    <br/>
+    }
+    <br/>
+    获取vector中指定位置的数据
+    <br/>
+    vector里面的数据是动态分配的，使用push_back()的一系列分配空间常常决定于文件或一些数据源。如果想知道vector是否为空，可以使用empty（），空返回true，否则返回false。获取vector的大小，可以使用size（）。例如，如果想获取一个vector v的大小，但不知道它是否为空，或者已经包含了数据，如果为空时想设置为 -1，你可以使用下面的代码实现：
+    <br/>
+    int nSize = v.empty() ? -1 : static_cast&lt;int&gt;(v.size());[3]
+    <br/>
+    访问vector中的数据
+    <br/>
+    使用两种方法来访问vector。
+    <br/>
+    <pre class="cpp">1、 vector::at()
+2、 vector::operator[]</pre>
+    operator[]主要是为了与C语言进行兼容。它可以像C语言数组一样操作。但at（）是我们的首选，因为at（）进行了边界检查，如果访问超过了vector的范围，将抛出一个例外。由于operator[]容易造成一些错误，所以我们很少用它.
+    <br/>
+    删除vector中的数据
+    <br/>
+    vector能够非常容易地添加数据，也能很方便地取出数据，同样vector提供了erase（），pop_back（），clear（）来删除数据，当删除数据时，应该知道要删除尾部的数据，或者是删除所有数据，还是个别的数据。
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=stl&amp;t=blog" target="_blank">
+    stl
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=vector&amp;t=blog" target="_blank">
+    vector
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

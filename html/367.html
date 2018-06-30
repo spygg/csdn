@@ -1,0 +1,235 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ HEVC学习 —— HM的使用 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_367">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   HEVC学习 —— HM的使用
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月15日 23:00:24
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7714
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      从今天开始，会陆续发表HEVC学习过程中的一些总结，主要目的是与大家一起交流学习，由于水平有限，恳请大家能够不吝赐教。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      由于这是第一次写博客，而且学习也是个循序渐进的过程，第一篇文章就简单介绍下如何使用HEVC的官方标准测试模型HM吧。其实如果之前学习过H.264的话，肯定也是用过JM的，HM的使用方法与JM基本上是相同的，只是配置文件的内容有所不同罢了。好了，不多说，马上进入正题。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      首先自然是先把这个测试模型下载下来，链接地址如下：
+      <a href="https://hevc.hhi.fraunhofer.de/svn/svn_HEVCSoftware/tags/" style="color:rgb(255,153,0);text-decoration:none;">
+       <span style="color:#ff6666;">
+        https://hevc.hhi.fraunhofer.de/svn/svn_HEVCSoftware/tags/
+       </span>
+      </a>
+      ，这个网址下有各个版本的HM，到目前为止，最新版本是HM 9.0，可以根据自己的实际需求进行选择。这里需要注意的是，下载时需要使用SVN，如windows下的TortoiseSVN 。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      其次，最好附带下载HM的reference software manual即参考软件手册，这个手册的主要内容包括HM的下载地址和使用方法，更重要的是，里面包含了对配置文件各个参数的详细解释，可以说是使用HM的必备手册。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      最后，就是真正地编译HM工程了。从运行环境来讲，既可以在linux系统下使用makefile对HM进行编译，也可以在windows系统下使用IDE如VS对HM进行编译。我个人是用VS2008作为开发环境，因此，这里也只介绍使用VS编译HM。关于linux下如何进行，请参看前面提到的参看软件手册吧
+      <img alt="微笑" src="http://static.blog.csdn.net/xheditor/xheditor_emot/default/smile.gif" style="border:;"/>
+      。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      打开下载下来的HM文件夹，工程存放在build目录下，工程名为HM_VC9(对VS2008而言)。右击“Solution 'HM_VC9'(7 projects)”-&gt;“build solution”。正常的话，等待片刻所有工程都能得到正确的编译，并最终在HM文件夹下生成bin目录，在目录xxx\bin\vc9\Win32\Debug下，最终会生成两个可执行文件，TAppEncoder.exe和TAppDecoder.exe，分别问编码和解码的可执行文件，到了这一步，表明你之前的步骤都是正确的。接下来就能进入到编解码器的使用当中来了。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      先说编码器的使用：右击“TAppEncoder”-&gt;“Set as Startup Project”, 接着，再次右击“TAppEncoder”-&gt;“Properties”-&gt;“Configuration Properties”-&gt;“Debugging”，在弹出的右窗口中有这么两行需要关注：“Command Arguments“和“Working Directory”。前者用于输入运行时的命令参数，后者用于指定工程的工作目录。先说工作目录，将其设置为xxx\bin\vc9\Win32\Debug，即上一步中编译生成的可执行文件的绝对路径。接下来，为了方便起见，我们可以把需要使用到的配置文件、yuv测试序列复制到该目录下。与JM有所不同的是，我们需要至少使用两个配置文件，即在HM文件夹的cfg目录中的某一个配置文件如encoder_intra_main.cfg，以及per-sequence目录下的某一个配置文件如BasketballDrill.cfg。前者主要用于配置编码器的各种编码参数，后者主要用于指定输入yuv测试文件，分辨率，待编码帧数等等。在完成了上述步骤之后，我们就可以在“Command Arguments”一栏填入-c encoder_intra_main.cfg -c BasketballDrill.cfg，表明这个编码器使用这两个配置文件所指定的参数进行编码。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      此外，值得一提的是，使用配置文件不是必须的，我们也可以使用纯命令行的输入方式对编码器的各个参数进行指定，具体使用方法，请参考软件手册。在一些特定情况下如只需修改其中的少数参数值，这种纯命令行方式还是比较方便的，但是，这种做法容易漏掉一些参数值的设置（尽管它们有默认值），而且对于经常修改多个参数来说，远不如直接修改配置文件来得方便和准确。因此，个人推荐使用上一种方法进行设置。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      在进行如上配置后，正常情况下编码器就能将你指定的yuv测试文件编码为二进制码流文件了。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      再说解码器的使用：在到填入“Command Arguments”之前，跟编码器是完全一样的，这里就不再重复了，输入的命令如下-b xxx.bin -o deco.yuv，-b指定输入的二进制码流，即编码输出码流文件，-o指定输出的yuv文件。设置完毕之后，运行解码器，应该能够解码出deco.yuv文件来了。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      至此，简单的HM使用介绍完毕，欢迎大家对该文考虑不周和错误的地方进行补充和指定。
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      <br/>
+     </span>
+    </p>
+    <p style="line-height:26px;padding-top:0px;padding-bottom:0px;font-family:Arial;font-size:14px;margin-top:0px;margin-bottom:0px;">
+     <span style="font-size:18px;">
+      原文地址：
+      <a href="http://blog.csdn.net/hevc_cjl/article/details/8169182">
+       http://blog.csdn.net/hevc_cjl/article/details/8169182
+      </a>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=hevc&amp;t=blog" target="_blank">
+    hevc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=hm&amp;t=blog" target="_blank">
+    hm
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=cfg&amp;t=blog" target="_blank">
+    cfg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=yuv&amp;t=blog" target="_blank">
+    yuv
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/5974711" target="_blank">
+    HM
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638135" target="_blank">
+    视频编码
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

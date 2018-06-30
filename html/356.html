@@ -1,0 +1,265 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ JavaBean 与 EJB 的区别 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_356">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   JavaBean 与 EJB 的区别
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月16日 23:13:04
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：2301
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     JavaBean在一般情况下指的是实体类，在大部分情况下和POJO是同义词，基本构成就是一些字段和与之对应的
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     setter、getter方法，如果一个JavaBean需要在不同的JVM的进程中进行传递，还需要实现Serializable接口；
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     EJB = Enterprise Java Bean，它和JavaBean有本质的区别，最好不要将他们混淆起来，就像不要将Java和
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     Javascript混淆起来一样。EJB有3中类型：Session, Entity和Message-driven。EJB2.x使用起来很复杂,
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     这些缺点在EJB3.0已经不存在了。
+    </span>
+    <a href="http://blog.csdn.net/pathuang68/archive/2009/04/19/4091645.aspx" style="color:rgb(16,138,198);line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;">
+     http://blog.csdn.net/pathuang68/archive/2009/04/19/4091645.aspx
+    </a>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     这里有怎样开发EJB的详细教程，说到JavaBean和EJB的区别，我们可以这么说，他们几乎没有什么是相同的，如果非要说有什么区别的话，那就是：
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     1. JavaBean的使用可以不需要容器，EJB的运行一般需要EJB容器(即应用服务器，如JBoss/Weblogic/Websphere...等等)
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     2. EJB可以使用JavaBean，尤其是Entity EJB的时候，但几乎没有看到JavaBean可以使用EJB的。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     说说 WebService在 开发中的运用。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     1. WebService由于采用http协议，而且使用和web服务相同的端口(如80)，因此它可以不受防火墙的限制
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     2. WebService由于采用了XML做传输载体，因此它对所有的编程语言来说都是中性的，也就是说，不同的编程语言可以通过WebService进行通讯
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     3. 也正因为WebService采用XML做传输载体，由于XML中存在很多标记(就像HTML中的 &lt;html&gt;之类的东西)，因此通信效率相对比较低。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     4. 以前Webservice的通信，在网络上传输的时候不是很安全，现在这些都已经解决，如MS的WSE，当然也可以自己写代码来保证安全。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     5. Webservice出现之初，由于采用XML进行传输，因此传输二进制文件如图片就存在问题，解决办法是首先将图片文件进行诸如Base64之类的编码，传输到接收端后，再有接收端进行反编码，从而得到二进制文件。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     DCOM 与COM的区别
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     1. COM不支持分布式通讯，而DCOM(Distributed COM)支持
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     2. COM的运行不需要容器，而DCOM需要，如MTS
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     3. COM可以通过工具转换成DCOM
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     4. COM和DCOM有点过时，但目前仍有很多应用在使用他们
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     JavaEE方面我都会做开发。但不太理解如何利用。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     JavaBean（SSH） VS EJB
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     这个问题我觉得改成SSH vs. EJB可能更合适一点。SSH = Spring + Struts + Hibernate，他们组合起来可以实现和EJB类似的功能。但一般情况下SSH应用与小型项目，EJB通常用于较正式的、大型的项目。比如想象中国移动这样的公司可能会用Weblogic或者Webshpere，即使用EJB，而不会采用SSH，其中一个很重要的原因是SSH都是开源框架，没有专门的技术服务支持，当然还有一些其他原因。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     EJB Vs WebService。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     1. 他们的通信方式不同。EJB采用的是IIOP的机制，Webservice用的就是http
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     2. EJB仅限于Java应用之间的通信，Webservice的通信可以跨语言
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     3. EJB通信的效率要比Webservice要高
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     4. EJB也可以部署成Webservice
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     JavaBean Vs COM
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     两者之间没有太大的可比性。COM的原理是非常复杂的(如果感兴趣，可以去研究一下MSDN相关技术文档)，JavaBean如前面所说是非常简单的。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     EJB Vs DCOM
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+     这两个东西的确比较类似，它们运行都需要容器EJB需要诸如Weblogic，Webshpere以及JBoss这样的EJB容器，DCOM的容器则是MTS，他们都可以进行分布式计算。不过DCOM目前已经逐渐被COM+代替，不过而开发和部署人员来说DCOM和COM+的过渡是相当平滑的。
+    </span>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <br style="line-height:25.18px;font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;"/>
+    <p>
+     <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+      DCOM/COM+是Microsoft的技术，EJB是SUN的技术，EJB被支持的基础更广泛一些，著名的厂家如IBM，Oracle等等如支持EJB，这主要是因为EJB得益于Java是开源的缘故。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Helvetica, Tahoma, Arial, sans-serif;font-size:14px;line-height:25.18px;">
+      <br/>
+     </span>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://aguang520.iteye.com/blog/904161">
+      http://aguang520.iteye.com/blog/904161
+     </a>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=JavaBean&amp;t=blog" target="_blank">
+    JavaBean
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=EJB&amp;t=blog" target="_blank">
+    EJB
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=区别&amp;t=blog" target="_blank">
+    区别
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=COM&amp;t=blog" target="_blank">
+    COM
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

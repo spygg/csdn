@@ -1,0 +1,410 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于FFmpeg的移动端例子附件：IOS自带播放器 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_29">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于FFmpeg的移动端例子附件：IOS自带播放器
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年08月01日 17:03:47
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：16967
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     最简单的基于FFmpeg的移动端例子系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47008825">
+      最简单的基于FFmpeg的移动端例子：Android HelloWorld
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47010637">
+      最简单的基于FFmpeg的移动端例子：Android 视频解码器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47011021">
+      最简单的基于FFmpeg的移动端例子：Android 视频解码器-单个库版
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47056051">
+      最简单的基于FFmpeg的移动端例子：Android 推流器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47056365">
+      最简单的基于FFmpeg的移动端例子：Android 视频转码器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47056733">
+      最简单的基于FFmpeg的移动端例子附件：Android 自带播放器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47059553">
+      最简单的基于FFmpeg的移动端例子附件：SDL Android HelloWorld
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47071547">
+      最简单的基于FFmpeg的移动端例子：IOS HelloWorld
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47072257">
+      最简单的基于FFmpeg的移动端例子：IOS 视频解码器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47072519">
+      最简单的基于FFmpeg的移动端例子：IOS 推流器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47072673">
+      最简单的基于FFmpeg的移动端例子：IOS 视频转码器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47072861">
+      最简单的基于FFmpeg的移动端例子附件：IOS自带播放器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/47191283">
+      最简单的基于FFmpeg的移动端例子：Windows Phone HelloWorld
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     前几篇文章记录的都是IOS下基于FFmpeg的多媒体程序。本文记录一个IOS下自带的视频播放器。相比于移植FFmpeg来说，IOS自带的多媒体框架播放视频要简单很多——只需要调用几个接口就可以了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150801182746681"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     源代码
+    </h2>
+    项目的源代码位于ViewController.m文件中，内容如下所示。
+    <br/>
+    <pre class="objc">/**
+ * 最简单的IOS视频播放器
+ * Simplest IOS Player
+ *
+ * 雷霄骅 Lei Xiaohua
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ * 本程序是IOS上最简单的视频播放器。
+ * This software is the simplest Video Player on IOS.
+ *
+ */
+
+#import "ViewController.h"
+#import &lt;MediaPlayer/MediaPlayer.h&gt;
+
+@interface ViewController ()
+
+@property (nonatomic,strong) MPMoviePlayerController *moviePlayer;//视频播放控制器
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    [self.moviePlayer play];
+    
+    [self addNotification];
+    
+}
+
+-(void)dealloc{
+    //移除所有通知监控
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+-(MPMoviePlayerController *)moviePlayer{
+    if (!_moviePlayer) {
+        NSString *urlStr=[[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:@"resource.bundle/war3end.mp4"];
+        NSURL *url=[NSURL fileURLWithPath:urlStr];
+        _moviePlayer=[[MPMoviePlayerController alloc]initWithContentURL:url];
+        _moviePlayer.view.frame=self.view.bounds;
+        _moviePlayer.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        [self.view addSubview:_moviePlayer.view];
+    }
+    return _moviePlayer;
+}
+
+-(void)addNotification{
+    NSNotificationCenter *notificationCenter=[NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(mediaPlayerPlaybackStateChange:) name:MPMoviePlayerPlaybackStateDidChangeNotification object:self.moviePlayer];
+    [notificationCenter addObserver:self selector:@selector(mediaPlayerPlaybackFinished:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
+    
+}
+
+-(void)mediaPlayerPlaybackStateChange:(NSNotification *)notification{
+    switch (self.moviePlayer.playbackState) {
+        case MPMoviePlaybackStatePlaying:
+            NSLog(@"正在播放...");
+            break;
+        case MPMoviePlaybackStatePaused:
+            NSLog(@"暂停播放.");
+            break;
+        case MPMoviePlaybackStateStopped:
+            NSLog(@"停止播放.");
+            break;
+        default:
+            NSLog(@"播放状态:%li",self.moviePlayer.playbackState);
+            break;
+    }
+}
+
+-(void)mediaPlayerPlaybackFinished:(NSNotification *)notification{
+    NSLog(@"播放完成.%li",self.moviePlayer.playbackState);
+}
+
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+</pre>
+    <pre class="objc"></pre>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     运行结果
+    </h2>
+    App在手机上运行后的结果如下图所示。程序运行后，会自动播放resource.bundle中的war3end.mp4文件。
+    <br/>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150726221637984"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     下载
+    </h2>
+    <br/>
+    <strong>
+     simplest ffmpeg mobile
+     <br/>
+     <br/>
+     项目主页
+    </strong>
+    <br/>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_ffmpeg_mobile">
+      https://github.com/leixiaohua1020/simplest_ffmpeg_mobile
+     </a>
+    </p>
+    开源中国：
+    <a href="https://git.oschina.net/leixiaohua1020/simplest_ffmpeg_mobile">
+     https://git.oschina.net/leixiaohua1020/simplest_ffmpeg_mobile
+    </a>
+    <br/>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestffmpegmobile/">
+      https://sourceforge.net/projects/simplestffmpegmobile/
+     </a>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     CSDN工程下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/8924391">
+      http://download.csdn.net/detail/leixiaohua1020/8924391
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    本解决方案包含了使用FFmpeg在移动端处理多媒体的各种例子：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     [Android]
+     <br/>
+     simplest_android_player: 基于安卓接口的视频播放器
+     <br/>
+     simplest_ffmpeg_android_helloworld: 安卓平台下基于FFmpeg的HelloWorld程序
+     <br/>
+     simplest_ffmpeg_android_decoder: 安卓平台下最简单的基于FFmpeg的视频解码器
+     <br/>
+     simplest_ffmpeg_android_decoder_onelib: 安卓平台下最简单的基于FFmpeg的视频解码器-单库版
+     <br/>
+     simplest_ffmpeg_android_streamer: 安卓平台下最简单的基于FFmpeg的推流器
+     <br/>
+     simplest_ffmpeg_android_transcoder: 安卓平台下移植的FFmpeg命令行工具
+     <br/>
+     simplest_sdl_android_helloworld: 移植SDL到安卓平台的最简单程序
+     <br/>
+     [IOS]
+     <br/>
+     <span style="color:#ff0000;">
+      simplest_ios_player: 基于IOS接口的视频播放器
+     </span>
+     <br/>
+     simplest_ffmpeg_ios_helloworld: IOS平台下基于FFmpeg的HelloWorld程序
+     <br/>
+     simplest_ffmpeg_ios_decoder: IOS平台下最简单的基于FFmpeg的视频解码器
+     <br/>
+     simplest_ffmpeg_ios_streamer: IOS平台下最简单的基于FFmpeg的推流器
+     <br/>
+     simplest_ffmpeg_ios_transcoder: IOS平台下移植的ffmpeg.c命令行工具
+     <br/>
+     simplest_sdl_ios_helloworld: 移植SDL到IOS平台的最简单程序
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/47072861
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=IOS&amp;t=blog" target="_blank">
+    IOS
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码&amp;t=blog" target="_blank">
+    解码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/5680667" target="_blank">
+    IOS多媒体
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

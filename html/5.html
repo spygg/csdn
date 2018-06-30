@@ -1,0 +1,2315 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ [总结]视频质量评价技术零基础学习方法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_5">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   [总结]视频质量评价技术零基础学习方法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="c-gray">
+    置顶
+   </span>
+   <span class="time">
+    2014年04月21日 00:26:25
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：34292
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      前段时间略忙，因此一直计划要总结的很多东西都没来得及写，这两天趁着空闲时间写上一篇。以后等时间充裕了再补充一些内容。本文总结一下学习视频质量评价技术的方法。视频质量评价是我研究生阶段主要的工作，包括发表的论文，毕业设计，进行的实验等等。在这一方面在国内做的研究并不是很多，因此我打算总结一下学习的经验，方便看过本文的人了解视频质量评价技术。
+     </span>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       0.
+      </span>
+      <span style="color:#333333;">
+       背景
+      </span>
+     </strong>
+    </h1>
+    <p>
+     <span style="color:#333333;">
+      首先应该了解一下质量评价都是干什么用的。这个其实本身也困扰了我一段时间。进入实验室之后，我也没有向师哥师姐咨询过这个问题。后来自己摸索了一段时间，大致知道视频质量评价应用的方面。
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       0.1.
+      </span>
+      <span style="color:#333333;">
+       视频编码器（编码标准）性能评测
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      编码器（或者是编码标准）性能评测是视频质量评价使用最为广泛的一项应用。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      视频编码器的作用是将输入的像素数据编码为输出的码流数据，最终的意义在于压缩视频的数据量。视频编码过程是一个有损压缩的过程，输出的视频码率（比特率）越低，视频的质量越低。虽然大体的趋势是一样的，即编码的视频的质量和视频的码率成正比的关系，但是不同的编码器之间的性能还是有区别的（即使采用相同的视频编码标准，比如同样是基于
+     </span>
+     <span style="color:#333333;">
+      H.264
+     </span>
+     <span style="color:#333333;">
+      标准的编码器，不同编码器之间性能也有区别）。一个优秀的视频编码器和其他视频编码器相比，就是能在相同的码率下，编码获得质量更高的视频。或者在编码获得相同质量的视频的前提下，使用更小的码率。可以通过视频质量评价的客观算法，对比得出视频编码器孰优孰劣。例如这方面的研究可以参考文章：
+     </span>
+    </p>
+    <p>
+     <span style="color:#3333ff;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/11914233">
+       MSU出品的 H.264编码器比较（2011.5）（包含VP8以及XviD）
+      </a>
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12373947">
+      MSU 出品的 H.264 编码器比较 （2012.5）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      除了对比视频编码器之外，也可以对比视频编码标准的性能。视频编码标准之间的差距一般来说相对比较大，越晚提出的编码标准，性能一般越强。例如可以参考文章：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12237177">
+      <span style="color:#3333ff;">
+       视频编码方案之间的比较（HEVC，H.264，MPEG2等）
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      详细的介绍可以查看第
+     </span>
+     <span style="color:#333333;">
+      5
+     </span>
+     <span style="color:#333333;">
+      章的内容。
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       0.2.
+      </span>
+      <span style="color:#333333;">
+       视频质量监测
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      视频质量监测是视频质量评价另一种使用比较广泛的应用。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      该方面主要用于实时监测分析视频流。例如监测
+     </span>
+     <span style="color:#333333;">
+      CMMB
+     </span>
+     <span style="color:#333333;">
+      ，数字电视，
+     </span>
+     <span style="color:#333333;">
+      IPTV
+     </span>
+     <span style="color:#333333;">
+      ，互联网视频等这些信号的质量。当这些信号出现异常的时候，可以反馈给服务提供商，使之及时采取相应的措施，修复视频传输过程中出现的问题。例如这方面的研究可以参考文章：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12844957">
+      <span style="color:#3333ff;">
+       IPTV的QoE评价方法
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      详细的介绍可以查看第
+     </span>
+     <span style="color:#333333;">
+      5
+     </span>
+     <span style="color:#333333;">
+      章的内容。
+     </span>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       1.
+      </span>
+      <span style="color:#333333;">
+       视频质量评价分类
+      </span>
+     </strong>
+    </h1>
+    <p>
+     <span style="color:#333333;">
+      通常，人们将数字视频质量评估的方法分为两大类：视频主观质量评价
+     </span>
+     <span style="color:#333333;">
+      (SubjectiveQuality Assessment
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      SQA)
+     </span>
+     <span style="color:#333333;">
+      和视频客观质量评价
+     </span>
+     <span style="color:#333333;">
+      (ObjectiveQuality Assessment
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      OQA)
+     </span>
+     <span style="color:#333333;">
+      。直接让观测者对视频质量做出直观判断的主观质量评估方法是最为准确的评估方法，但该方法相对复杂且其结果易受多种因素影响，因此，在实际应用中通常使用客观的、易于实现的视频客观质量评估方法。根据对原始视频的依赖程度，客观质量评估法又可以分为三种类型：全参考
+     </span>
+     <span style="color:#333333;">
+      (FullReference
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      FR)
+     </span>
+     <span style="color:#333333;">
+      ，部分参考
+     </span>
+     <span style="color:#333333;">
+      (ReducedReference
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      RR)
+     </span>
+     <span style="color:#333333;">
+      和无参考
+     </span>
+     <span style="color:#333333;">
+      (No Reference
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      NR)
+     </span>
+     <span style="color:#333333;">
+      。视频质量评价的分类如下图所示。
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140523235145906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       1.1.
+      </span>
+      <span style="color:#333333;">
+       视频主观质量评价
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      视频主观质量评估就是选择一批非专家类型的受测者，让他们在一个特定的受控环境中，连续观看一系列的测试序列大约
+     </span>
+     <span style="color:#333333;">
+      10
+     </span>
+     <span style="color:#333333;">
+      至
+     </span>
+     <span style="color:#333333;">
+      30
+     </span>
+     <span style="color:#333333;">
+      分钟，然后采用不同方法让他们对视频序列的质量进行评分，最后求得平均判分
+     </span>
+     <span style="color:#333333;">
+      (MeanOpinion Score
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      MOS)
+     </span>
+     <span style="color:#333333;">
+      ，并对所得数据进行分析。测试环境中的受控因素包括：观看距离、观测环境、测试序列的选择、序列的显示时间间隔等。根据不同的测试环境、测试目的，有不同的主观评价方法，可参考下文：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11730313">
+      <span style="color:#3333ff;">
+       视频主观质量评价方法
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      主观评价一般需要专业的实验环境，以及大量的受测人员，因此成本比较大。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      主观评价相关标准：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14126165">
+      <span style="color:#3333ff;">
+       ITU-R BT.1788建议书对多媒体应用中视频质量的主观评估方法
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      主观质量评价实验软件：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/24926225">
+      <span style="color:#3333ff;">
+       MSU Perceptual VideoQuality tool
+      </span>
+     </a>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       1.2.
+      </span>
+      <span style="color:#333333;">
+       视频客观质量评价
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      由于视频主观质量评估过于复杂且其结果易受多种因素影响，因此，在实际应用中需要一种客观的、易于实现的视频客观质量评估方法。因为受测者对视频质量的主观感受最为真实和准确，所以在相同的视频系统和相同的测试序列条件下，要求客观评估的结果应与主观评估的结果具有好的一致性或相关性。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      对于一个视频客观质量评估方法来说，关键的是找出一个或几个最合适的视频质量量度来衡量视频质量的好坏。根据失真视频与其相应的原始参考视频的比较程度，视频客观质量评估方法分为三大类：
+      <strong>
+       全参考方法
+      </strong>
+     </span>
+     <strong>
+      <span style="color:#333333;">
+       (Full Reference)
+      </span>
+      <span style="color:#333333;">
+       、部分参考方法
+      </span>
+      <span style="color:#333333;">
+       (Reduced Reference)
+      </span>
+      <span style="color:#333333;">
+       、无参考方法
+      </span>
+      <span style="color:#333333;">
+       (No Reference)
+      </span>
+     </strong>
+     <span style="color:#333333;">
+      。三种方法如下图所示。
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001454671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      由图可以看出，全参考方法只适用于已知原始视频的编码器端，可以用它来定量测量编码器的输出视频质量，它主要用于编码器的设计和对不同编码器的性能进行评估和优化。部分参考方法需要部分原始视频或者需要通过传输额外的一些信息。特别是无参考方法，在判断视频质量时不需要来自原始参考视频的任何信息，仅仅通过对失真视频空域和频域的处理分析来提取失真视频的特征，从而得到视频质量。适用于带宽有限，传输成本较高，不可能提供原始参考视频序列的无线和
+     </span>
+     <span style="color:#333333;">
+      IP
+     </span>
+     <span style="color:#333333;">
+      视频业务，可以用来实时或非实时的监控传输信道的服务质量
+     </span>
+     <span style="color:#333333;">
+      (QoS)
+     </span>
+     <span style="color:#333333;">
+      和视频系统的性能，并通过质量反馈来调节编解码器或信道的参数，保证有良好的恢复视频质量。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      在这里主要介绍全参考质量评价模型，这种模型已经十分成熟。几种全参考视频质量评价模型可参考下文：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11729289">
+      <span style="color:#3333ff;">
+       全参考客观视频质量评价方法（MSE， PSNR，SSIM）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11694369">
+      <span style="color:#3333ff;">
+       全参考视频质量评价方法（PSNR，SSIM）以及相关数据库
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      全参考视频质量评价的计算工具有下列两个：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11729223">
+      <span style="color:#3333ff;">
+       开源视频质量评价工具： Evalvid
+      </span>
+     </a>
+     <span style="color:#333333;">
+      。该工具是开源的，基于命令行的，适用于批处理。
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11729257">
+      <span style="color:#3333ff;">
+       视频质量评价工具：MSU Video Quality Measurement Tool
+      </span>
+     </a>
+     <span style="color:#333333;">
+      。该工具是商业的，图形界面的，界面相对比较友好，但不适用于大批量的处理。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      下面列举几张图片，说明全参考视频质量评价模型的客观值和主观感受之间的关系。测试序列选自
+     </span>
+     <span style="color:#333333;">
+      VQEG
+     </span>
+     <span style="color:#333333;">
+      数据库，内容为一个松鼠拿着松子走路，时长为
+     </span>
+     <span style="color:#333333;">
+      10
+     </span>
+     <span style="color:#333333;">
+      秒，时间复杂度和空间复杂度相对比较低。使用
+     </span>
+     <span style="color:#333333;">
+      x264
+     </span>
+     <span style="color:#333333;">
+      编码为不同的码率后分别计算了
+     </span>
+     <span style="color:#333333;">
+      PSNR
+     </span>
+     <span style="color:#333333;">
+      和
+     </span>
+     <span style="color:#333333;">
+      SSIM
+     </span>
+     <span style="color:#333333;">
+      。截图所示为视频序列的第
+     </span>
+     <span style="color:#333333;">
+      50
+     </span>
+     <span style="color:#333333;">
+      帧。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      注：
+     </span>
+     <span style="color:#333333;">
+      PSNR
+     </span>
+     <span style="color:#333333;">
+      取值
+     </span>
+     <span style="color:#333333;">
+      20-40
+     </span>
+     <span style="color:#333333;">
+      ，值越大，视频质量越好。
+     </span>
+     <span style="color:#333333;">
+      SSIM
+     </span>
+     <span style="color:#333333;">
+      取值
+     </span>
+     <span style="color:#333333;">
+      0-1
+     </span>
+     <span style="color:#333333;">
+      ，值越大，视频质量越好。
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001212046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      原视频（像素格式：
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ；分辨率：
+     </span>
+     <span style="color:#333333;">
+      640x360
+     </span>
+     <span style="color:#333333;">
+      ）
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001230562?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      144 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      0.025
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=29.622
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.81
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001249281?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      288 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      0.050
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=32.89
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.906
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001302828?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      432 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      0.075
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=34.98
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.941
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001325078?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      576 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =0.100
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=36.59
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.958
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001340312?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      864 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =0.150
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=38.823
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.974
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001345421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p align="center">
+     <span style="color:#333333;">
+      码率
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      1 152 Kbps
+     </span>
+     <span style="color:#333333;">
+      （每像素比特数
+     </span>
+     <span style="color:#333333;">
+      =
+     </span>
+     <span style="color:#333333;">
+      0.200
+     </span>
+     <span style="color:#333333;">
+      ）；
+     </span>
+     <span style="color:#333333;">
+      PSNR=40.586
+     </span>
+     <span style="color:#333333;">
+      ；
+     </span>
+     <span style="color:#333333;">
+      SSIM=0.982
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      整个序列一共
+     </span>
+     <span style="color:#333333;">
+      250
+     </span>
+     <span style="color:#333333;">
+      帧，所有帧的
+     </span>
+     <span style="color:#333333;">
+      PSNR
+     </span>
+     <span style="color:#333333;">
+      如下图所示：
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001525578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      所有帧的
+     </span>
+     <span style="color:#333333;">
+      SSIM
+     </span>
+     <span style="color:#333333;">
+      如下图所示：
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001544312?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       2.
+      </span>
+      <span style="color:#333333;">
+       质量评价涉及到的其它知识
+      </span>
+     </strong>
+    </h1>
+    <p>
+     <span style="color:#333333;">
+      视频质量评价技术中，涉及到以下几方面的知识。
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       2.1.
+      </span>
+      <span style="color:#333333;">
+       视频数据的处理
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      视频质量评价研究的过程中，需要对视频数据进行编码，解码，像素格式转换等操作，以适应各种计算工具的需要。在此简单总结一下常用的工具和命令。除了视频编码所需的特定的编码器（例如
+     </span>
+     <span style="color:#333333;">
+      JM
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      x264
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      xvid
+     </span>
+     <span style="color:#333333;">
+      等等）之外，需要以下几个工具：
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      ：视频处理。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      主页地址：
+      <a href="http://ffmpeg.org">
+       http://ffmpeg.org
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      YUV Player Deluxe
+     </span>
+     <span style="color:#333333;">
+      ：看
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      文件用。注意如果把
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      文件的宽和高信息写到文件名中，形如“
+     </span>
+     <span style="color:#333333;">
+      xxx_[width]x[height].yuv
+     </span>
+     <span style="color:#333333;">
+      ”，例如“
+     </span>
+     <span style="color:#333333;">
+      src01_640x360.yuv
+     </span>
+     <span style="color:#333333;">
+      ”，则该播放器会自动以
+     </span>
+     <span style="color:#333333;">
+      640x360
+     </span>
+     <span style="color:#333333;">
+      分辨率打开该
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      文件，还是很智能的。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      主页地址：
+      <a href="http://www.yuvplayer.com/">
+       http://www.yuvplayer.com/
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      视频播放器：看压缩码流文件用。像终极解码，暴风影音，
+     </span>
+     <span style="color:#333333;">
+      QQ
+     </span>
+     <span style="color:#333333;">
+      影音这些都可以。
+     </span>
+    </p>
+    <h3>
+     <strong>
+      <span style="color:#333333;">
+       2.1.1
+      </span>
+      <span style="color:#333333;">
+       编码
+      </span>
+     </strong>
+    </h3>
+    <p>
+     <span style="color:#333333;">
+      一般情况下可以使用
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      。绝大多数的视频编码器都被
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      支持，因此使用起来比较方便。而且对于不同的编码器，
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      都使用统一的命令行格式，命令行参数相对比较容易记忆。当然特殊情况下还是需要独立的编码器，比如说用于学术研究的
+     </span>
+     <span style="color:#333333;">
+      JM
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      HM
+     </span>
+     <span style="color:#333333;">
+      这样的软件，或者是比较新的编码器。下面举几个例子。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      下面两条命令是使用
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      调用相应的库进行编码的命令。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      调用
+     </span>
+     <span style="color:#333333;">
+      x264
+     </span>
+     <span style="color:#333333;">
+      编码
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      视频序列（码率
+     </span>
+     <span style="color:#333333;">
+      800kbps
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -s 640x360 -i src01_640x360.yuv -b:v 800k -vcodec libx264 src01_640x360_800k.h264</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      调用
+     </span>
+     <span style="color:#333333;">
+      xvid
+     </span>
+     <span style="color:#333333;">
+      编码
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      视频序列（码率
+     </span>
+     <span style="color:#333333;">
+      800kbps
+     </span>
+     <span style="color:#333333;">
+      ，封装为
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -s 640x360 -i src01_640x360.yuv -b:v 800k -vcodec libxvid src01_640x360_800k.avi</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      可以看出上面两个命令参数格式基本上是一致的。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      下面两条命令是使用独立的编码器进行编码的命令。功能上和上两条命令是一样的。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      使用
+     </span>
+     <span style="color:#333333;">
+      x264
+     </span>
+     <span style="color:#333333;">
+      编码
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      视频序列（码率为
+     </span>
+     <span style="color:#333333;">
+      800kbps
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">x264 --bitrate 800 --input-res 640x360 -o src01_640x360_800k.h264 src01_640x360.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      使用
+     </span>
+     <span style="color:#333333;">
+      xvid
+     </span>
+     <span style="color:#333333;">
+      编码
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      视频序列（码率
+     </span>
+     <span style="color:#333333;">
+      800kbps
+     </span>
+     <span style="color:#333333;">
+      ，封装为
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">xvid_encraw -i src01_640x360.yuv -w 640 -h 360 -csp i420 -bitrate 800 -o src01_640x360.avi</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      可以看出上面两个命令行的参数格式差别还是比较大的，相对难记忆一些。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      专用于学术研究的软件模型如
+     </span>
+     <span style="color:#333333;">
+      JM
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      HM
+     </span>
+     <span style="color:#333333;">
+      这些一般是不被
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      支持的，只能独立运行。如下面的例子。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      使用
+     </span>
+     <span style="color:#333333;">
+      HM
+     </span>
+     <span style="color:#333333;">
+      （
+     </span>
+     <span style="color:#333333;">
+      HEVC
+     </span>
+     <span style="color:#333333;">
+      ）编码
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      视频序列：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">tappencoder -c encoder_lowdelay_P_main.cfg -i src01_640x360.yuv -wdt 640 -hgt 360 -b src01_640x360_800k.hm10</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      注：这里需要注意的是
+     </span>
+     <span style="color:#333333;">
+      tappencoder
+     </span>
+     <span style="color:#333333;">
+      后面附加的参数如
+     </span>
+     <span style="color:#333333;">
+      -i
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      -wdt
+     </span>
+     <span style="color:#333333;">
+      这些参数可以覆盖掉原先写在配置文件
+     </span>
+     <span style="color:#333333;">
+      xx.cfg
+     </span>
+     <span style="color:#333333;">
+      中的参数。
+     </span>
+    </p>
+    <h3>
+     <strong>
+      <span style="color:#333333;">
+       2.1.2
+      </span>
+      <span style="color:#333333;">
+       解码
+      </span>
+     </strong>
+    </h3>
+    <p>
+     <span style="color:#333333;">
+      一般情况下都可以使用
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      。和编码器一样，绝大多数的视频解码器都被
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      支持，因此使用起来比较方便。少数情况下也可以使用独立的解码器。下面举几个例子。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      下面两条命令是使用
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      进行解码的命令。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      解码
+     </span>
+     <span style="color:#333333;">
+      H.264
+     </span>
+     <span style="color:#333333;">
+      码流为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -i src01_640x360_800k.h264 src01_640x360_800k.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      解码
+     </span>
+     <span style="color:#333333;">
+      MPEG-4
+     </span>
+     <span style="color:#333333;">
+      码流（
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      封装）为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -i src01_640x360_800k.avi src01_640x360_800k.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      可以看出上面两个命令参数格式基本上是一致的。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      专用于学术研究的软件模型一般是不被
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      支持的，只能独立运行。如下面的例子。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      使用
+     </span>
+     <span style="color:#333333;">
+      HM
+     </span>
+     <span style="color:#333333;">
+      （
+     </span>
+     <span style="color:#333333;">
+      HEVC
+     </span>
+     <span style="color:#333333;">
+      ）解码
+     </span>
+     <span style="color:#333333;">
+      HEVC
+     </span>
+     <span style="color:#333333;">
+      码流为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">tappdecoder -b src01_640x360.hm10 -o src01_640x360.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <h3>
+     <strong>
+      <span style="color:#333333;">
+       2.1.3
+      </span>
+      <span style="color:#333333;">
+       像素格式转换
+      </span>
+     </strong>
+    </h3>
+    <p>
+     <span style="color:#333333;">
+      推荐使用
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      。
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      中的
+     </span>
+     <span style="color:#333333;">
+      libswscale
+     </span>
+     <span style="color:#333333;">
+      对像素格式转换的支持很好，使用起来很方便。下面举几个例子。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      封装过的像素数据（
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      ）转换为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -i src01.avi src01.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      封装过的像素数据（
+     </span>
+     <span style="color:#333333;">
+      BMP
+     </span>
+     <span style="color:#333333;">
+      ）转换为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -i src01.bmp src01.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      封装过的像素数据（
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      ）转换为
+     </span>
+     <span style="color:#333333;">
+      YUV422P
+     </span>
+     <span style="color:#333333;">
+      。在这里需要注意，如果不指定
+     </span>
+     <span style="color:#333333;">
+      -pix_fmt
+     </span>
+     <span style="color:#333333;">
+      的话，
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      默认将
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      数据转换为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      格式的。如果需要其它
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      格式的数据的花，一定要指定
+     </span>
+     <span style="color:#333333;">
+      -pix_fmt
+     </span>
+     <span style="color:#333333;">
+      。
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -i src01.avi -pix_fmt yuv422p src01_422.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      注：查看
+     </span>
+     <span style="color:#333333;">
+      FFmpeg
+     </span>
+     <span style="color:#333333;">
+      支持的所有的格式，可以使用命令：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -pix_fmts</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      格式之间互相转换，例如
+     </span>
+     <span style="color:#333333;">
+      YUV422P
+     </span>
+     <span style="color:#333333;">
+      转换为
+     </span>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      ，同时将图像分辨率从
+     </span>
+     <span style="color:#333333;">
+      1920x1080
+     </span>
+     <span style="color:#333333;">
+      下变换为
+     </span>
+     <span style="color:#333333;">
+      1280x720
+     </span>
+     <span style="color:#333333;">
+      。在这里需要注意，
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      是纯像素数据，并不包含画面的宽高，取样格式等信息，因此转换的时候需要自己指定。
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -s 1920x1080 -pix_fmt yuv422p -i src01_1920x1080_422.yuv -s 1280x720 -pix_fmt yuv420p src01_1280x720.yuv</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      YUV422P
+     </span>
+     <span style="color:#333333;">
+      转换为封装过的像素数据（
+     </span>
+     <span style="color:#333333;">
+      BMP
+     </span>
+     <span style="color:#333333;">
+      ）。同理，
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      需要指定宽高，取样格式。
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -s 1920x1080 -pix_fmt yuv422p -i src01_1920x1080.yuv src01_1920x1080.bmp</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      YUV420P
+     </span>
+     <span style="color:#333333;">
+      转换为
+     </span>
+     <span style="color:#333333;">
+      YUV422P
+     </span>
+     <span style="color:#333333;">
+      并且进行封装（
+     </span>
+     <span style="color:#333333;">
+      AVI
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffmpeg -s 1920x1080 -i src01_1920x1080.yuv -vcodec rawvideo -pix_fmt yuv422p src01_1920x1080.avi</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      注：像素数据之间转换的时候，有一个问题需要注意。就是
+     </span>
+     <span style="color:#333333;">
+      YUV
+     </span>
+     <span style="color:#333333;">
+      和
+     </span>
+     <span style="color:#333333;">
+      RGB
+     </span>
+     <span style="color:#333333;">
+      相互转换的过程中，像素取值范围的问题。有两种取值范围：
+     </span>
+     <span style="color:#333333;">
+      0-255
+     </span>
+     <span style="color:#333333;">
+      或
+     </span>
+     <span style="color:#333333;">
+      16-235
+     </span>
+     <span style="color:#333333;">
+      。对于精确度要求非常高的实验，需要研究一下这方面的设置。
+     </span>
+    </p>
+    <h3>
+     <strong>
+      <span style="color:#333333;">
+       2.1.4
+      </span>
+      <span style="color:#333333;">
+       批处理
+      </span>
+     </strong>
+    </h3>
+    <p>
+     <span style="color:#333333;">
+      当需要批量进行视频的编码，解码，像素转换，计算
+     </span>
+     <span style="color:#333333;">
+      PSNR
+     </span>
+     <span style="color:#333333;">
+      等等工作的时候，通常可以将所有的命令一行一行地写入到一个记事本中，保存后将记事本的后缀“
+     </span>
+     <span style="color:#333333;">
+      .txt
+     </span>
+     <span style="color:#333333;">
+      ”改为“
+     </span>
+     <span style="color:#333333;">
+      .bat
+     </span>
+     <span style="color:#333333;">
+      ”，双击运行之后即可批量执行所有的命令。
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       2.2.
+      </span>
+      <span style="color:#333333;">
+       实验结果的处理
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      视频质量评价研究过程中经常需要进行数据处理，除了使用
+     </span>
+     <span style="color:#333333;">
+      Excel
+     </span>
+     <span style="color:#333333;">
+      之外，使用最多的就是
+     </span>
+     <span style="color:#333333;">
+      Matlab
+     </span>
+     <span style="color:#333333;">
+      中的拟合工具了，包含曲线拟合工具
+     </span>
+     <span style="color:#333333;">
+      cftool
+     </span>
+     <span style="color:#333333;">
+      以及曲面拟合工具
+     </span>
+     <span style="color:#333333;">
+      sftool
+     </span>
+     <span style="color:#333333;">
+      。在
+     </span>
+     <span style="color:#333333;">
+      Matlab
+     </span>
+     <span style="color:#333333;">
+      主界面命令行中输入“
+     </span>
+     <span style="color:#333333;">
+      cftool
+     </span>
+     <span style="color:#333333;">
+      ”或者“
+     </span>
+     <span style="color:#333333;">
+      sftool
+     </span>
+     <span style="color:#333333;">
+      ”就可以打开相应的工具。
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      这两个工具都是图形界面的，使用起来比较方便。曲线拟合工具
+     </span>
+     <span style="color:#333333;">
+      cftool
+     </span>
+     <span style="color:#333333;">
+      使用可参考：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11898137">
+      <span style="color:#3333ff;">
+       Matlab的曲线拟合工具箱cftool使用简介
+      </span>
+     </a>
+     <u>
+     </u>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       2.3.
+      </span>
+      <span style="color:#333333;">
+       视频序列复杂度
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      视频编码和序列的复杂度是息息相关的。序列的复杂度分为时间复杂度和空间复杂度。视频画面细节越多，空间复杂度越大；视频内容运动越剧烈，时间复杂度越大。视频复杂度越大，在同等画质的前提下，编码需要越多的数据量。可以根据序列的时间复杂度和空间复杂度筛选合适的测试序列。时间复杂度和空间复杂度可以参考：
+     </span>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/9056443">
+      <span style="color:#3333ff;">
+       视频特性TI（时间信息）和SI（空间信息）的计算工具：TIandSI
+       <br/>
+       <br/>
+      </span>
+     </a>
+     <u>
+     </u>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       3.
+      </span>
+      <span style="color:#333333;">
+       质量评价做的比较好的机构
+      </span>
+     </strong>
+    </h1>
+    <h2>
+     <strong>
+      3.1 .
+      <span style="color:#000000;">
+       VQEG
+      </span>
+      <span style="color:#000000;">
+       （视频质量专家组）
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      ITU.T
+     </span>
+     <span style="color:#333333;">
+      和
+     </span>
+     <span style="color:#333333;">
+      ITU-R
+     </span>
+     <span style="color:#333333;">
+      的研究小组联合在一起，在
+     </span>
+     <span style="color:#333333;">
+      1997
+     </span>
+     <span style="color:#333333;">
+      年成立了视频质量专家组
+     </span>
+     <span style="color:#333333;">
+      (VideoQuality Experts Group
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      VQEG)
+     </span>
+     <span style="color:#333333;">
+      ，专门从事视频质量评估的研究和相关标准的制定。属于视频质量评价方面的国际组织。
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001638765?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      中文简介：
+     </span>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11729745">
+      <span style="color:#336699;">
+       http://blog.csdn.net/leixiaohua1020/article/details/11729745
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      首页：
+     </span>
+     <a href="http://www.its.bldrdoc.gov/vqeg/vqeg-home.aspx">
+      <span style="color:#336699;">
+       http://www.its.bldrdoc.gov/vqeg/vqeg-home.aspx
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       3.2 .MSU Video Group
+      </span>
+      <span style="color:#333333;">
+       （
+      </span>
+      <span style="color:#333333;">
+       MSU
+      </span>
+      <span style="color:#333333;">
+       视频组）
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      莫斯科大学视频组。出了很多视频质量评价方面的报告，以及这方面的软件。
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="color:#333333;">
+      <img alt="" src="https://img-blog.csdn.net/20140421001646234?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      出品的工具
+     </span>
+     <span style="color:#333333;">
+      MSU VQMT
+     </span>
+     <span style="color:#333333;">
+      （视频质量评价工具）：
+     </span>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11729257">
+      <span style="color:#336699;">
+       http://blog.csdn.net/leixiaohua1020/article/details/11729257
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      首页：
+     </span>
+     <a href="http://www.compression.ru/video/index.htm">
+      <span style="color:#336699;">
+       http://www.compression.ru/video/index.htm
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+     </span>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       4.
+      </span>
+      <span style="color:#333333;">
+       视频质量评价资源
+      </span>
+     </strong>
+    </h1>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       4.1.
+      </span>
+      <span style="color:#333333;">
+       视频测试序列库
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      CDVL
+     </span>
+     <span style="color:#333333;">
+      （
+     </span>
+     <span style="color:#333333;">
+      TheConsumer Digital Video Library
+     </span>
+     <span style="color:#333333;">
+      ）：
+     </span>
+     <a href="http://www.cdvl.org/">
+      http://www.cdvl.org/
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      包含了大量的未压缩的原始视频序列，以及一些受损序列。一般情况下这个网站上的视频序列就够用了。
+     </span>
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       4.2 .
+      </span>
+      <span style="color:#333333;">
+       图像测试序列库
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <span style="color:#333333;">
+      这些库不但包含了图像，而且包含了主观质量评价的结果。
+     </span>
+    </p>
+    <p>
+     <a href="http://www.ponomarenko.info/tid2008.htm">
+      TID2008 database
+     </a>
+    </p>
+    <p>
+     <a href="http://vision.okstate.edu/csiq">
+      CSIQ database
+     </a>
+    </p>
+    <p>
+     <a href="http://live.ece.utexas.edu/research/Quality/">
+      LIVE database
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+      注：该网站可以作为参考
+     </span>
+     <a href="http://sse.tongji.edu.cn/linzhang/IQA/IQA.htm">
+      <span style="color:#336699;">
+       http://sse.tongji.edu.cn/linzhang/IQA/IQA.htm
+      </span>
+     </a>
+    </p>
+    <p>
+     <span style="color:#333333;">
+     </span>
+    </p>
+    <h1>
+     <strong>
+      <span style="color:#333333;">
+       5.
+      </span>
+      <span style="color:#333333;">
+       质量评价的已有的研究
+      </span>
+     </strong>
+    </h1>
+    <p>
+     在此列出一些自己看过并且感觉比较有价值的论文，已经记录为中文。
+    </p>
+    <h2>
+     <strong>
+      <span style="color:#333333;">
+       5.1.
+      </span>
+      <span style="color:#333333;">
+       编码器（编码标准）性能评测
+      </span>
+     </strong>
+    </h2>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/19014955">
+      <span style="color:#3333ff;">
+       HEVC，VP9，x264性能对比
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12851975">
+      <span style="color:#3333ff;">
+       限制码率的视频编码标准比较（包括MPEG-2，H.263， MPEG-4，以及 H.264）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12851745">
+      <span style="color:#3333ff;">
+       视频编码国家标准AVS与H.264的比较（节选）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12373947">
+      MSU 出品的 H.264 编码器比较 （2012.5）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12237177">
+      <span style="color:#3333ff;">
+       视频编码方案之间的比较（HEVC，H.264，MPEG2等）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11914233">
+      MSU 出品的 H.264 编码器比较 （2011.5）（包含VP8以及XviD）
+     </a>
+    </p>
+    <p>
+    </p>
+    <h2>
+     <span style="color:#333333;">
+      5.2.
+     </span>
+     <span style="color:#333333;">
+      学术研究
+     </span>
+    </h2>
+    <h3>
+     <strong>
+      5.2.1.压缩编码与视频质量
+     </strong>
+    </h3>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14521249">
+      <span style="color:#3333ff;">
+       流媒体视频质量评价（单刺激连续质量评价方法）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14535611">
+      <span style="color:#3333ff;">
+       一种H.264高清视频的无参考视频质量评价算法（基于QP和跳过宏块数）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14452335">
+      <span style="color:#3333ff;">
+       HDTV（1920x1080）码率和视频质量关系的研究 1 （前期准备）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14521069">
+      <span style="color:#3333ff;">
+       HDTV（1920x1080）码率和视频质量关系的研究 2 （实验结果）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12846533">
+      <span style="color:#3333ff;">
+       H.264无参考视频质量评价方法（使用了基于遗传编程方法的符号回归）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12847395">
+      <span style="color:#3333ff;">
+       基于HEVC的UHD（超高清 4K）视频的主观质量评价
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12883747">
+      <span style="color:#3333ff;">
+       H.264视频质量评价方法（基于视频内容）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12858773">
+      <span style="color:#3333ff;">
+       基于HEVC的UHD（超高清4K）视频质量评价
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12856087">
+      <span style="color:#3333ff;">
+       视频质量，分辨率以及码率之间的关系
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12872803">
+      <span style="color:#3333ff;">
+       视频质量，分辨率，码率之间的关系 2
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12871691">
+      <span style="color:#3333ff;">
+       H.264视频质量评价算法（基于偏最小二乘法回归）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12857451">
+      <span style="color:#3333ff;">
+       基于运动特征的视频质量评价方法（基于H.264）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12844957">
+      <span style="color:#3333ff;">
+       IPTV的QoE评价方法
+      </span>
+     </a>
+    </p>
+    <p>
+    </p>
+    <h3>
+     <strong>
+      5.2.2其他因素（除了压缩编码之外的因素）与视频质量
+     </strong>
+    </h3>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14524659">
+      <span style="color:#3333ff;">
+       Web服务中延时对QoE（体验质量）的影响
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14522037">
+      <span style="color:#3333ff;">
+       网络中延迟对主观感受的影响
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14452171">
+      <span style="color:#3333ff;">
+       基于RTMP的实时流媒体的QoE分析
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12853497">
+      <span style="color:#3333ff;">
+       图像大小，分辨率与人眼主观感受之间的关系（与压缩编码无关）
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12685917">
+      <span style="color:#3333ff;">
+       视频帧率对人眼主观感受的影响
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12854021">
+      <span style="color:#3333ff;">
+       视频帧率对人眼主观感受的影响 2
+      </span>
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12851153">
+      <span style="color:#3333ff;">
+       视频帧率和分辨率对QoE的影响
+      </span>
+     </a>
+    </p>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/16359465
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=学习&amp;t=blog" target="_blank">
+    学习
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频质量&amp;t=blog" target="_blank">
+    视频质量
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编码&amp;t=blog" target="_blank">
+    编码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

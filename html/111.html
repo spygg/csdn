@@ -1,0 +1,418 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于libVLC的例子：最简单的基于libVLC的视频播放器 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_111">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于libVLC的例子：最简单的基于libVLC的视频播放器
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年01月08日 22:33:00
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：58855
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     最简单的基于libVLC的例子文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42363079">
+      最简单的基于libVLC的例子：最简单的基于libVLC的视频播放器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42363593">
+      最简单的基于libVLC的例子：最简单的基于libVLC的视频播放器（图形界面版）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42363701">
+      最简单的基于libVLC的例子：最简单的基于libVLC的推流器
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     本文记录使用libVLC的开发的最简单的视频播放器示例。VLC Media Player是一款优秀的播放器，但是由于它的源代码编译的难度比较大，一直没有深入研究过它的开发方面的技术。此前触到了一些VLC开发方面的东西，因此总结了一下libVLC的开发示例程序。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103151603594?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h2>
+     如何获取VLC的SDK
+    </h2>
+    VLC开发所需的库文件可以有2种获取方法：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1.
+     <span style="white-space:pre;">
+     </span>
+     自行编译
+     <br/>
+     2.
+     <span style="white-space:pre;">
+     </span>
+     直接从安装目录里面拷贝出来
+    </blockquote>
+    <br/>
+    <br/>
+    第一种方法难度要大一些。尤其是在Windows下编译VLC是个比较麻烦的事情。一般情况下可以选择第二种方法获取VLC开发所需的文件。
+    <br/>
+    开发VLC所需的文件的位置：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1.
+     <span style="white-space:pre;">
+     </span>
+     动态链接库*.dll：安装目录下的libvlc.dll，libvlccore.dll以及plugins目录下的所有文件。
+     <br/>
+     PS：VLC支持非常多的plugin。因此plugins目录的体积确实是非常大的。
+     <br/>
+     2.
+     <span style="white-space:pre;">
+     </span>
+     静态链接库*.lib：安装目录/sdk/lib
+     <br/>
+     3.
+     <span style="white-space:pre;">
+     </span>
+     头文件*.h：安装目录/sdk/include
+    </blockquote>
+    <br/>
+    新建一个VC工程后，把上述三类文件分别拷贝至新工程目录下，并且配置它们的路径之后，就可以使用libVLC进行开发了。
+    <br/>
+    <br/>
+    <h2>
+     最简单的基于libVLC的视频播放器
+    </h2>
+    <p>
+     使用libVLC开发一个播放器十分的容易。最简单的基于libVLC的视频播放器的流程图如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103151643531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    流程图中包含了3个结构体：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     libvlc_instance_t：代表一个libVLC的实例。
+     <br/>
+     libvlc_media_t：代表一个可以播放的媒体。
+     <br/>
+     libvlc_media_player_t：代表一个VLC媒体播放器（一个视频播放器播放一个视频）。注意VLC并不仅仅用于媒体播放。
+    </blockquote>
+    创建或者以上3个结构体通过以下6个函数：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     libvlc_new()：创建libvlc_instance_t。
+     <br/>
+     libvlc_media_new_path()：创建libvlc_media_t。
+     <br/>
+     libvlc_media_player_new_from_media()：创建libvlc_media_player_t。
+     <br/>
+     libvlc_media_player_release()：释放libvlc_media_player_t
+     <br/>
+     libvlc_media_release()：释放libvlc_media_t。
+     <br/>
+     libvlc_release()：释放libvlc_instance_t。
+    </blockquote>
+    可以已通过下面的函数控制媒体的播放或者暂停，这些函数都需要使用libvlc_media_player_t作为参数。这里处于简化的目的，只使用了播放和停止函数：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     libvlc_media_player_play()：播放。
+     <br/>
+     libvlc_media_player_pause()：暂停。
+     <br/>
+     libvlc_media_player_stop()：停止。
+    </blockquote>
+    除了上述3个函数之外，还包括libvlc_media_player_set_position()等函数，这里不再一一记录。
+    <br/>
+    <br/>
+    <h2>
+     几点注意事项
+    </h2>
+    <h3>
+     libvlc_media_t的创建
+    </h3>
+    创建libvlc_media_t有两种方法：libvlc_media_new_path()和libvlc_media_new_location()。简单描述一下这两个函数的区别：libvlc_media_new_location()用于打开协议，而libvlc_media_new_path()用于打开文件。因而传递给libvlc_media_new_path()的就是普通的文件路径（绝对路径例如D:\xxx.flv，或者相对路径例如xxx.flv），而传递给libvlc_media_new_location()的就是协议地址（例如“udp://….”，“http://”）。但是这里有一点需要注意，在VLC中“文件”也属于一种广义上的“协议”。因此使用libvlc_media_new_location()也可以打开文件，但是必须在文件路径前面加上“文件协议”的标记“file:///”。例如打开“F:\movie\cuc_ieschool.flv”下的视频，实际使用的代码如下所示。
+    <br/>
+    <pre class="cpp">libvlc_media_new_location (inst, "file:///F:\\movie\\cuc_ieschool.flv");</pre>
+    此外，VLC还支持很多“神奇”的协议，比如输入“screen://”协议就可以进行屏幕录制，代码如下。
+    <br/>
+    <pre class="cpp">libvlc_media_new_location (inst, "screen://");</pre>
+    <br/>
+    <h3>
+     把libVLC的弹出窗口嵌入到程序中
+    </h3>
+    在这里我只实践过Windows下把libVLC的弹出窗口嵌入到程序中。将窗口或者控件的句柄传递给libvlc_media_player_set_hwnd()函数即可。
+    <br/>
+    这里有一点需要注意，如果把libVLC弹出窗口嵌入到程序中的话，“全屏”功能就不能使用了。
+    <br/>
+    <br/>
+    <h3>
+     关于libVLC加载的问题
+    </h3>
+    在libVLC中可以通过libvlc_media_player_get_length()，libvlc_video_get_width()，libvlc_video_get_height()等函数获取到视频的时长，宽，高等信息。但是有一个很奇怪的现象：如果在调用完libvlc_media_player_play()之后立即调用上述3个函数的话，返回的值都是0，只有“等待”一段时间（例如调用sleep()）后再调用上述函数，才能得到正确的数值。对于这种现象，我觉得可能是libVLC加载完成之后，才能通过上述几个函数获得正确的值（自己推测的，还没有深究）。
+    <br/>
+    <br/>
+    <h2>
+     代码
+    </h2>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * 最简单的基于libVLC的播放器
+ * Simplest libVLC Player
+ *
+ * 雷霄骅 Lei Xiaohua
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ * 本程序是一个最简单的基于libVLC的视频播放器。
+ * 适合初学者学习libVLC。
+ *
+ * This example is the simplest Video Player based on libVLC.
+ * Suitable for the beginner of libVLC.
+ */
+#include &lt;Windows.h&gt;
+#include "vlc/vlc.h"
+
+int main(int argc, char* argv[])
+ {
+     libvlc_instance_t * inst;
+     libvlc_media_player_t *mp;
+     libvlc_media_t *m;
+     
+	 libvlc_time_t length;
+	 int width;
+	 int height;
+	 int wait_time=5000;
+
+	 //libvlc_time_t length;
+
+     /* Load the VLC engine */
+     inst = libvlc_new (0, NULL);
+  
+     //Create a new item
+	 //Method 1:
+     //m = libvlc_media_new_location (inst, "file:///F:\\movie\\cuc_ieschool.flv");
+	 //Screen Capture
+	 //m = libvlc_media_new_location (inst, "screen://");
+	 //Method 2:
+     m = libvlc_media_new_path (inst, "cuc_ieschool.flv");
+        
+     /* Create a media player playing environement */
+     mp = libvlc_media_player_new_from_media (m);
+
+	 
+     /* No need to keep the media now */
+     libvlc_media_release (m);
+ 
+     // play the media_player
+     libvlc_media_player_play (mp);
+
+	 //wait until the tracks are created
+	 _sleep (wait_time);
+	 length = libvlc_media_player_get_length(mp);
+	 width = libvlc_video_get_width(mp);
+	 height = libvlc_video_get_height(mp);
+	 printf("Stream Duration: %ds\n",length/1000);
+	 printf("Resolution: %d x %d\n",width,height);
+	 //Let it play 
+     _sleep (length-wait_time); 
+    
+     // Stop playing
+     libvlc_media_player_stop (mp);
+ 
+     // Free the media_player
+     libvlc_media_player_release (mp);
+ 
+     libvlc_release (inst);
+ 
+     return 0;
+ }</pre>
+    <p>
+    </p>
+    <br/>
+    <h2>
+     运行结果
+    </h2>
+    <p>
+     程序运行后，会弹出一个窗口播放“cuc_ieschool.flv”文件。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     下载
+    </h2>
+    <p>
+     <strong>
+      Simplest libVLC Example
+     </strong>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      项目主页
+     </strong>
+    </p>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestlibvlcexample/">
+      https://sourceforge.net/projects/simplestlibvlcexample/
+     </a>
+    </p>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_libvlc_example">
+      https://github.com/leixiaohua1020/simplest_libvlc_example
+     </a>
+    </p>
+    <p>
+     开源中国：
+     <a href="http://git.oschina.net/leixiaohua1020/simplest_libvlc_example">
+      http://git.oschina.net/leixiaohua1020/simplest_libvlc_example
+     </a>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     CDSN下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/8342413">
+      http://download.csdn.net/detail/leixiaohua1020/8342413
+     </a>
+    </p>
+    <br/>
+    本工程是包含了一些基于libVLC的示例程序。一共包含了如下几个子程序。
+    <br/>
+    playerGUI: 最简单的基于libVLC的播放器-图形界面版。
+    <br/>
+    <span style="color:#ff0000;">
+     simplest_libvlc_example: 最简单的基于libVLC的播放器。
+    </span>
+    <br/>
+    simplest_libvlc_streamer: 最简单的基于libVLC的推流器。
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/42363079
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=libvlc&amp;t=blog" target="_blank">
+    libvlc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=vlc&amp;t=blog" target="_blank">
+    vlc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开发&amp;t=blog" target="_blank">
+    开发
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2619507" target="_blank">
+    VLC
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1843731" target="_blank">
+    我的开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

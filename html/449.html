@@ -1,0 +1,405 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ OpenCV：概述、结构和内容 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_449">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   OpenCV：概述、结构和内容
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月02日 12:32:25
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6523
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       1、OpenCV的定义：
+       <br/>
+       OpenCV的英文全称是Open Source Computer Vision Library。它是一个
+       <span>
+        开源的计算机视觉库
+       </span>
+       ，它由一系列 C 函数和少量 C++ 类构成，实现了图像处理和计算机视觉方面的很多通用算法。
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       2、OpenCV的特点：
+       <br/>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （1）OpenCV采用C/C++语言编写，可以运行在Linux/Windows/Mac等操作系统上。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （2）OpenCV提供了Python、Ruby、MATLAB以及其他语言的接口。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （3）
+        <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+         它采用优化的C代码编写，能够充分利用多核处理器的优势
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+         （4）
+         <span style="font-family:Tahoma, 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;line-height:19px;font-size:13px;">
+          具有良好的可移植性
+         </span>
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        3、OpenCV的设计目标：
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        执行速度尽量快，主要关注
+        <strong>
+         <span>
+          实时应用
+         </span>
+        </strong>
+        。如果是希望在Intel平台上得到更快的处理速度，可以购买Intel的高性能多媒体函数库IPP(Integrated
+ Performance Primitives)。IPP库包含许多从底层优化的函数，这些函数涵盖多个应用领域。如果系统已经安装了IPP库，OpenCV会在运行时自动使用相应的IPP库。
+       </span>
+       <br/>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        【注】：OpenCV使用优化了的C和C++代码实现，因此它对IPP不存在任何的依赖。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        4、OpenCV的应用领域
+        <br/>
+       </span>
+      </span>
+     </span>
+     <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+      (1)人机互动
+     </span>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        (2)物体识别 
+         (3)图象分割    (4)人脸识别       (5)动作识别   (6)运动跟踪      (7)机器人       (8)运动分析     (9)机器视觉      (10)结构分析
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        5、OpenCV的结构和内容
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+    </p>
+    <span style="font-family:'宋体';color:#333333;">
+    </span>
+    <p>
+    </p>
+    <span style="font-size:14px;line-height:28px;">
+    </span>
+    <p>
+     OpenCV主体分为五个模块，其中四个模块如下图所示。
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131002123017500?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+    </p>
+    <p>
+     OpenCV的CV模块包含基本的图像处理函数和高级的计算机视觉算法。ML是机器学习库，包含一些基于统计的分类和聚类工具。HighGUI包含图像和视频输入/输出的函数。CXCore包含OpenCV的一些基本数据结构和相关函数。
+     <br/>
+     <span style="font-size:14px;color:#333333;">
+      【具体内容如下】：
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （1） cxcore
+        <br/>
+        基础结构：CvPoint,CvSize,CvScalar等
+        <br/>
+        数组操作：cvCreateImage,cvCreateMat等
+        <br/>
+        动态结构：CvMemStorage,CvMemBlock等
+        <br/>
+        绘图函数：cvLine,cvRectangle等
+        <br/>
+        数据保存和运行时类型信息：CvFileStorage,cvOpenFileStorage等
+        <br/>
+        错误处理和系统函数:cvGetErrStatus,cvAlloc,cvFree等
+        <br/>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （2） cv
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        图像处理：cvSobel，cvCanny等
+        <br/>
+        结构分析：ContourArea等
+        <br/>
+        运动分析与目标跟踪：cvMeanShift等
+        <br/>
+        模式识别：CvHaarFeature
+        <br/>
+        摄像头定标与三维重建：cvCalibrateCamer2
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （3）Machine Learning(ML)
+        <br/>
+        包含许多聚类、分类和数据分析函数。如Bayes分类器，K近邻算法，支持向量机，决策树，神经网络等等。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （4）HighGUI
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        图像界面函数：
+       </span>
+      </span>
+     </span>
+     <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+      cvNamedWindow
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+      读图像和保存图像：cvLoadImage，cvSaveImage
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        读视频和写视频：CvCreateFileCapture等
+        <br/>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （5）cvcam
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        摄像机接口，在Opencv1.0以后的版本中已经被移除
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        （6）cvaux
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial, '宋体', sans-serif;font-size:12px;">
+      <span style="line-height:24px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:24px;">
+        该模块中一般存放一些即将被淘汰的算法和函数（如基于嵌入式隐马尔科夫的人脸识别算法），还包含一些实验性的算法和函数（前景检测，背景剔除等）
+        <br/>
+       </span>
+      </span>
+     </span>
+    </p>
+    原文地址：
+    <a href="http://blog.csdn.net/xiaofeilong321/article/details/8841125">
+     http://blog.csdn.net/xiaofeilong321/article/details/8841125
+    </a>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=OpenCV&amp;t=blog" target="_blank">
+    OpenCV
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=概述&amp;t=blog" target="_blank">
+    概述
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=结构&amp;t=blog" target="_blank">
+    结构
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=内容&amp;t=blog" target="_blank">
+    内容
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362937" target="_blank">
+    OpenCV
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

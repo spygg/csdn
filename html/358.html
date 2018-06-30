@@ -1,0 +1,220 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MFC的图片按钮 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_358">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   MFC的图片按钮
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月16日 19:31:28
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7378
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    利用CBitmapButton类实现位图按钮的两种方法 利用CBitmapButton类实现位图按钮的两种方法：
+    <br/>
+    方法一：
+    <br/>
+    1、在资源编辑的时候选中按钮的 Owner draw 属性，不需要选择 Bitmap 属性.
+    <br/>
+    按钮右键--&gt;Styles--&gt;Owner draw
+    <br/>
+    <br/>
+    2、在程序中定义一个CBitmapButton成员变量。
+    <br/>
+    注意：不能使用ClassWizard为按钮映射一个CButton变量，然后改为CBitmapButton，
+    <br/>
+    这么做并不能将按钮直接映射为CBitmapButton类的对象，反而会出现初始化错误
+    <br/>
+    <br/>
+    3、使用CBitmapButton::LoadBitmaps装载各种状态的图片,
+    <br/>
+    使用CBitmapButton::SubclassDlgItem关联到想要的按钮，
+    <br/>
+    使用CBitmapButton::SizeToContent函数使按钮适合图片大小。
+    <br/>
+    注意Loadbitmaps一定要在关联到按钮之前进行！
+    <br/>
+    <br/>
+    附：添加资源Bitmap的方法：Insert菜单--&gt;Resource --&gt;Resource type:Bitmap--&gt;Import,
+    <br/>
+    之后选择所需的图片就可以了
+    <br/>
+    <br/>
+    方法一的例子：
+    <br/>
+    首先，选中按钮的owner Draw属性，在资源中加载两副*.bmp格式的位图，
+    <br/>
+    然后在对话框类中加入：
+    <br/>
+    <p>
+    </p>
+    <pre class="cpp">CBitmapButton m_btnX1;//必须放在函数外面才能正常实现
+BOOL CXXXXXXX::OnInitDialog()
+{
+CDialog::OnInitDialog();
+m_btnX1.LoadBitmaps(IDB_XXXX_UP,IDB_XXXX_DOWN);//这里是两副位图，鼠标按下和弹起，
+                                               //  也可以只加一个ID资源；
+m_btnX1.SubclassDlgItem(IDC_DASEN_X1,this);
+m_btnX1.SizeToContent();
+}</pre>
+    <br/>
+    <p>
+    </p>
+    方法二：使用CBitmapButton::AutoLoad函数关联到想要的按钮
+    <br/>
+    需要注意：
+    <br/>
+    A、使用CBitmapButton::AutoLoad函数之前不能使用CBitmapButton::LoadBitmaps装载
+    <br/>
+    各种状态的图片，否则会出错。
+    <br/>
+    B、AutoLoad函数完成关联和改变按钮大小的功能。类似于上面CBitmapButton::SubclassDlgItem
+    <br/>
+    和CBitmapButton::SizeToContent函数的功能。
+    <br/>
+    C、CBitmapButton::AutoLoad使用的位图是默认资源ID的，即它会自动装载相关资源位图。
+    <br/>
+    位图的资源ID格式为：
+    <br/>
+    "按钮Caption+U"、"按钮Caption+D"、"按钮Caption+F"、"按钮Caption+X"，
+    <br/>
+    分别代表Up、Down、Focus、Disable状态。
+    <br/>
+    如资源编辑时，希望关联的按钮的Caption为Test，
+    <br/>
+    那么其默认装载的位图资源的ID为："TestU"/"TestD"/"TestF"/"TestX"，
+    <br/>
+    注意分号""也是其ID的一部分。
+    <br/>
+    方法二例子：
+    <br/>
+    首先，选中Caption为："myBitmapButton"按钮的owner Draw属性
+    <br/>
+    其次，添加两个位图资源，并修改其ID分别为："myBitmapButtonU"和"myBitmapButtonD"，这里只添加两个位图
+    <br/>
+    然后在对话框类中加入：
+    <br/>
+    <pre class="cpp"> CBitmapButton m_btnX1;//必须放在函数外面才能正常实现
+ BOOL CXXXXXXX::OnInitDialog()
+ {
+ CDialog::OnInitDialog();
+ 
+ m_btnX1.AutoLoad(IDC_BUTTON1,this);//ID为IDC_BUTTON1的按钮的Caption为：myBitmapButton
+ }</pre>
+    <br/>
+    <p>
+     至此两种方法就都结束了。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://yq1518602434.blog.163.com/blog/static/202937084201252011141376/">
+      http://yq1518602434.blog.163.com/blog/static/202937084201252011141376/
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mfc&amp;t=blog" target="_blank">
+    mfc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图片&amp;t=blog" target="_blank">
+    图片
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=按钮&amp;t=blog" target="_blank">
+    按钮
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=bitmap&amp;t=blog" target="_blank">
+    bitmap
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,608 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffdshow 源代码分析 8： 视频解码器类（TvideoCodecDec） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_252">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffdshow 源代码分析 8： 视频解码器类（TvideoCodecDec）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月13日 00:06:50
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：5597
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p align="left">
+     <span style="color:#990000;">
+     </span>
+    </p>
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     ffdshow源代码分析系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12013619">
+      ffdshow 源代码分析 1： 整体结构
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12981725">
+      ffdshow 源代码分析 2： 位图覆盖滤镜（对话框部分Dialog）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13004051">
+      ffdshow 源代码分析 3： 位图覆盖滤镜（设置部分Settings）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13006213">
+      ffdshow 源代码分析 4： 位图覆盖滤镜（滤镜部分Filter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13660583">
+      ffdshow 源代码分析 5： 位图覆盖滤镜（总结）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493329">
+      ffdshow 源代码分析 6： 对解码器的dll的封装（libavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493521">
+      ffdshow 源代码分析 7： libavcodec视频解码器类（TvideoCodecLibavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493743">
+      ffdshow 源代码分析 8： 视频解码器类（TvideoCodecDec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493961">
+      ffdshow 源代码分析 9： 编解码器有关类的总结
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     <span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#990000;">
+     </span>
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140616103824187"/>
+    </div>
+    <p align="left">
+     前面两篇文章介绍了ffdshow中libavcodec的封装类Tlibavcodec，以及libavcodec的解码器类TvideoCodecLibavcodec：
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493329">
+      ffdshow 源代码分析 6： 对解码器的dll的封装（libavcodec）
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493521">
+      ffdshow 源代码分析 7： 解码器类（TvideoCodecLibavcodec）
+     </a>
+    </p>
+    <p align="left">
+     其中libavcodec的解码器类TvideoCodecLibavcodec通过调用Tlibavcodec中的方法实现了libavcodec的dll中方法的调用；而它继承了TvideoCodecDec，本文正是要分析它继承的这个类。
+    </p>
+    <p>
+    </p>
+    <p>
+     TvideoCodecDec是所有视频解码器共有的父类。可以看一下它的继承关系：
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131111235459359?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p align="left">
+     可见，除了TvideoCodecLibavcodec继承了TvideoCodecDec之外，还有好几个类继承了TvideoCodecDec，比如说：TvideoCodecLibmpeg2，TvideoCodecXviD4等等…。突然来了兴趣，我们可以看一下其他的解码器类的定义是什么样的。
+    </p>
+    <p align="left">
+     TvideoCodecLibmpeg2定义如下：
+    </p>
+    <pre class="cpp">/* 
+ *雷霄骅 
+ *leixiaohua1020@126.com 
+ *中国传媒大学/数字电视技术 
+ */ 
+#ifndef _TVIDEOCODECLIBMPEG2_H_
+#define _TVIDEOCODECLIBMPEG2_H_
+
+#include "TvideoCodec.h"
+#include "libmpeg2/include/mpeg2.h"
+
+class Tdll;
+struct Textradata;
+class TccDecoder;
+//libmpeg2解码器
+class TvideoCodecLibmpeg2 : public TvideoCodecDec
+{
+private:
+    Tdll *dll;
+    uint32_t (*mpeg2_set_accel)(uint32_t accel);
+    mpeg2dec_t* (*mpeg2_init)(void);
+    const mpeg2_info_t* (*mpeg2_info)(mpeg2dec_t *mpeg2dec);
+    mpeg2_state_t (*mpeg2_parse)(mpeg2dec_t *mpeg2dec);
+    void (*mpeg2_buffer)(mpeg2dec_t *mpeg2dec, const uint8_t *start, const uint8_t *end);
+    void (*mpeg2_close)(mpeg2dec_t *mpeg2dec);
+    void (*mpeg2_reset)(mpeg2dec_t *mpeg2dec, int full_reset);
+    void (*mpeg2_set_rtStart)(mpeg2dec_t *mpeg2dec, int64_t rtStart);
+    int (*mpeg2_guess_aspect)(const mpeg2_sequence_t * sequence, unsigned int * pixel_width, unsigned int * pixel_height);
+
+    mpeg2dec_t *mpeg2dec;
+    const mpeg2_info_t *info;
+    bool wait4Iframe;
+    int sequenceFlag;
+    REFERENCE_TIME avgTimePerFrame;
+    TffPict oldpict;
+    Textradata *extradata;
+    TccDecoder *ccDecoder;
+    Tbuffer *buffer;
+    uint32_t oldflags;
+    bool m_fFilm;
+    int SetDeinterlaceMethod(void);
+
+    void init(void);
+    HRESULT decompressI(const unsigned char *src, size_t srcLen, IMediaSample *pIn);
+
+protected:
+    virtual bool beginDecompress(TffPictBase &amp;pict, FOURCC infcc, const CMediaType &amp;mt, int sourceFlags);
+
+public:
+    TvideoCodecLibmpeg2(IffdshowBase *Ideci, IdecVideoSink *Isink);
+    virtual ~TvideoCodecLibmpeg2();
+
+    static const char_t *dllname;
+    virtual int getType(void) const {
+        return IDFF_MOVIE_LIBMPEG2;
+    }
+    virtual int caps(void) const {
+        return CAPS::VIS_QUANTS;
+    }
+
+    virtual void end(void);
+    virtual HRESULT decompress(const unsigned char *src, size_t srcLen, IMediaSample *pIn);
+    virtual bool onSeek(REFERENCE_TIME segmentStart);
+    virtual HRESULT BeginFlush();
+};
+
+#endif
+</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     TvideoCodecXviD4定义如下：
+    </p>
+    <pre class="cpp">/* 
+ *雷霄骅 
+ *leixiaohua1020@126.com 
+ *中国传媒大学/数字电视技术 
+ */ 
+#ifndef _TVIDEOCODECXVID4_H_
+#define _TVIDEOCODECXVID4_H_
+
+#include "TvideoCodec.h"
+
+class Tdll;
+struct Textradata;
+//xvid解码器
+class TvideoCodecXviD4 : public TvideoCodecDec
+{
+private:
+    void create(void);
+    Tdll *dll;
+public:
+    TvideoCodecXviD4(IffdshowBase *Ideci, IdecVideoSink *IsinkD);
+    virtual ~TvideoCodecXviD4();
+    int (*xvid_global)(void *handle, int opt, void *param1, void *param2);
+    int (*xvid_decore)(void *handle, int opt, void *param1, void *param2);
+    int (*xvid_plugin_single)(void *handle, int opt, void *param1, void *param2);
+    int (*xvid_plugin_lumimasking)(void *handle, int opt, void *param1, void *param2);
+    static const char_t *dllname;
+private:
+    void *enchandle, *dechandle;
+    int psnr;
+    TffPict pict;
+    Tbuffer pictbuf;
+    static int me_hq(int rd3), me_(int me3);
+    Textradata *extradata;
+    REFERENCE_TIME rtStart, rtStop;
+protected:
+    virtual bool beginDecompress(TffPictBase &amp;pict, FOURCC infcc, const CMediaType &amp;mt, int sourceFlags);
+    virtual HRESULT flushDec(void);
+public:
+    virtual int getType(void) const {
+        return IDFF_MOVIE_XVID4;
+    }
+    virtual int caps(void) const {
+        return CAPS::VIS_QUANTS;
+    }
+
+    virtual HRESULT decompress(const unsigned char *src, size_t srcLen, IMediaSample *pIn);
+};
+
+#endif
+</pre>
+    <br/>
+    <p>
+     从以上这2种解码器类的定义，我们可以看出一些规律，比如说：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     1.  都有Tdll *dll这个变量，用于加载视频解码器的dll
+     <br/>
+     2.  都有beginDecompress()函数，用于初始化解码器
+     <br/>
+     3.  都有decompress()函数，用于解码
+    </blockquote>
+    <p>
+    </p>
+    <p>
+    </p>
+    <p>
+     好了，闲话不说，回归正题，来看一下这些解码器共有的父类：TvideoCodecDec
+    </p>
+    <pre class="cpp">//具体 视频 解码器的父类，存一些公共信息
+class TvideoCodecDec : virtual public TvideoCodec, virtual public TcodecDec
+{
+protected:
+    bool isdvdproc;
+    comptrQ&lt;IffdshowDecVideo&gt; deciV;
+    IdecVideoSink *sinkD;
+    TvideoCodecDec(IffdshowBase *Ideci, IdecVideoSink *Isink);
+    Rational guessMPEG2sar(const Trect &amp;r, const Rational &amp;sar2, const Rational &amp;containerSar);
+
+    class TtelecineManager
+    {
+    private:
+        TvideoCodecDec* parent;
+        int segment_count;
+        int pos_in_group;
+        struct {
+            int fieldtype;
+            int repeat_pict;
+            REFERENCE_TIME rtStart;
+        } group[2]; // store information about 2 recent frames.
+        REFERENCE_TIME group_rtStart;
+        bool film;
+        int cfg_softTelecine;
+    public:
+        TtelecineManager(TvideoCodecDec* Iparent);
+        void get_timestamps(TffPict &amp;pict);
+        void get_fieldtype(TffPict &amp;pict);
+        void new_frame(int top_field_first, int repeat_pict, const REFERENCE_TIME &amp;rtStart, const REFERENCE_TIME &amp;rtStop);
+        void onSeek(void);
+    } telecineManager;
+
+public:
+    static TvideoCodecDec* initDec(IffdshowBase *deci, IdecVideoSink *Isink, AVCodecID codecId, FOURCC fcc, const CMediaType &amp;mt);
+
+    virtual ~TvideoCodecDec();
+
+    virtual int caps(void) const {
+        return CAPS::NONE;
+    }
+    virtual bool testMediaType(FOURCC fcc, const CMediaType &amp;mt) {
+        return true;
+    }
+    virtual void forceOutputColorspace(const BITMAPINFOHEADER *hdr, int *ilace, TcspInfos &amp;forcedCsps) {
+        *ilace = 0; //cspInfos of forced output colorspace, empty when entering function
+    }
+    enum {SOURCE_REORDER = 1};
+    virtual bool beginDecompress(TffPictBase &amp;pict, FOURCC infcc, const CMediaType &amp;mt, int sourceFlags) = 0;
+    virtual HRESULT decompress(const unsigned char *src, size_t srcLen, IMediaSample *pIn) = 0;
+    virtual bool onDiscontinuity(void) {
+        return false;
+    }
+    virtual HRESULT onEndOfStream(void) {
+        return S_OK;
+    }
+
+    unsigned int quantsDx, quantsStride, quantsDy, quantBytes, quantType;
+    //QP表
+	void *quants;
+    uint16_t *intra_matrix, *inter_matrix;
+	//计算平均QP
+    float calcMeanQuant(void);
+	//画运动矢量
+    virtual bool drawMV(unsigned char *dst, unsigned int dx, stride_t stride, unsigned int dy) const {
+        return false;
+    }
+    virtual const char* get_current_idct(void) {
+        return NULL;
+    }
+    virtual int useDXVA(void) {
+        return 0;
+    };
+
+    virtual void setOutputPin(IPin * /*pPin*/) {}
+};
+</pre>
+    <br/>
+    <p align="left">
+     TvideoCodecDec这个类中，还定义了一个类TtelecineManager。这种在类里面再定义一个类的方式还是不太多见的。TtelecineManager这个类的作用还没有研究，先不管它。
+    </p>
+    <p>
+     可以看出，TvideoCodecDec类的定义并不复杂，最主要的变量有如下几个，这几个变量都是子类中会用到的：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     comptrQ&lt;IffdshowDecVideo&gt;deciV：重要性不言而喻，回头介绍
+     <br/>
+     IdecVideoSink *sinkD：重要性不言而喻，回头介绍
+     <br/>
+     void *quants：QP表（为什么要存在这里还没搞清）
+     <br/>
+    </blockquote>
+    TvideoCodecDec类定义了几个函数：
+    <br/>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     initDec()：初始化解码器（重要）
+     <br/>
+     calcMeanQuant()：计算平均QP（为什么要在这里计算还没搞清）
+    </blockquote>
+    <p>
+    </p>
+    <p>
+     TvideoCodecDec类还定义了一些纯虚函数，作为接口，这些函数的实现都在TvideoCodecDec的子类中完成【这几个函数是最重要的】：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     beginDecompress();
+     <br/>
+     decompress();
+    </blockquote>
+    <p>
+    </p>
+    <p>
+     TvideoCodecDec类中最重要的函数只有一个，就是initDec()，作用主要是初始化解码器。其他的很多函数大多只是定义了一个名称，并没有实现，因为都是打算在具体各种解码器类中再进行实现的。
+    </p>
+    <p>
+     看一下initDec()的代码：
+    </p>
+    <pre class="cpp">TvideoCodecDec* TvideoCodecDec::initDec(IffdshowBase *deci, IdecVideoSink *sink, AVCodecID codecId, FOURCC fcc, const CMediaType &amp;mt)
+{
+    // DXVA mode is a preset setting
+    switch (codecId) {
+        case AV_CODEC_ID_H264:
+            if (deci-&gt;getParam2(IDFF_filterMode) &amp; IDFF_FILTERMODE_VIDEODXVA) {
+                if (deci-&gt;getParam2(IDFF_dec_DXVA_H264)) {
+                    codecId = CODEC_ID_H264_DXVA;
+                } else {
+                    return NULL;
+                }
+            }
+            break;
+        case AV_CODEC_ID_VC1:
+        case CODEC_ID_WMV9_LIB:
+            if (deci-&gt;getParam2(IDFF_filterMode) &amp; IDFF_FILTERMODE_VIDEODXVA) {
+                if (deci-&gt;getParam2(IDFF_dec_DXVA_VC1)) {
+                    codecId = CODEC_ID_VC1_DXVA;
+                } else {
+                    return NULL;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    TvideoCodecDec *movie = NULL;
+
+    if (is_quicksync_codec(codecId)) {
+        movie = new TvideoCodecQuickSync(deci, sink, codecId);
+    } else if (lavc_codec(codecId)) {
+        movie = new TvideoCodecLibavcodec(deci, sink);
+    } else if (raw_codec(codecId)) {
+        movie = new TvideoCodecUncompressed(deci, sink);
+    } else if (wmv9_codec(codecId)) {
+        movie = new TvideoCodecWmv9(deci, sink);
+    } else if (codecId == CODEC_ID_XVID4) {
+        movie = new TvideoCodecXviD4(deci, sink);
+    } else if (codecId == CODEC_ID_LIBMPEG2) {
+        movie = new TvideoCodecLibmpeg2(deci, sink);
+    } else if (codecId == CODEC_ID_AVISYNTH) {
+        movie = new TvideoCodecAvisynth(deci, sink);
+    } else if (codecId == CODEC_ID_H264_DXVA || codecId == CODEC_ID_VC1_DXVA) {
+        movie = new TvideoCodecLibavcodecDxva(deci, sink, codecId);
+    } else {
+        return NULL;
+    }
+    if (!movie) {
+        return NULL;
+    }
+    if (movie-&gt;ok &amp;&amp; movie-&gt;testMediaType(fcc, mt)) {
+        movie-&gt;codecId = codecId;
+        return movie;
+    } else if (is_quicksync_codec(codecId)) {
+        // QuickSync decoder init failed, revert to internal decoder.
+        switch (codecId) {
+            case CODEC_ID_H264_QUICK_SYNC:
+                codecId = AV_CODEC_ID_H264;
+                break;
+            case CODEC_ID_MPEG2_QUICK_SYNC:
+                codecId = CODEC_ID_LIBMPEG2;
+                break;
+            case CODEC_ID_VC1_QUICK_SYNC:
+                codecId = CODEC_ID_WMV9_LIB;
+                break;
+            default:
+                ASSERT(FALSE); // this shouldn't happen!
+        }
+
+        delete movie;
+
+        // Call this function again with the new codecId.
+        return initDec(deci, sink, codecId, fcc, mt);
+    } else {
+        delete movie;
+        return NULL;
+    }
+}
+</pre>
+    <br/>
+    <p align="left">
+     这个函数的功能还是比较好理解的，根据CodecID的不同，创建不同的解码器（从TvideoCodecLibavcodec，TvideoCodecXviD4，TvideoCodecLibmpeg2这些里面选择）。
+    </p>
+    <p align="left">
+     <br/>
+    </p>
+    <p align="left">
+     虽然不知道用途是什么，但是我们可以顺便看一下计算平均QP的函数，就是把quants1指向的QP表里面的数据求了一个平均值：
+    </p>
+    <pre class="cpp">//计算平均QP
+float TvideoCodecDec::calcMeanQuant(void)
+{
+    if (!quants || !quantsDx || !quantsDy) {
+        return 0;
+    }
+    unsigned int sum = 0, num = quantsDx * quantsDy;
+    unsigned char *quants1 = (unsigned char*)quants;
+    for (unsigned int y = 0; y &lt; quantsDy; y++)
+        for (unsigned int x = 0; x &lt; quantsDx; x++) {
+            sum += quants1[(y * quantsStride + x) * quantBytes];
+        }
+    return float(sum) / num;
+}
+</pre>
+    <br/>
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/15493743
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffdshow&amp;t=blog" target="_blank">
+    ffdshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码器&amp;t=blog" target="_blank">
+    解码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xvid&amp;t=blog" target="_blank">
+    xvid
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=libmpeg2&amp;t=blog" target="_blank">
+    libmpeg2
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638191" target="_blank">
+    ffdshow
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

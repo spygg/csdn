@@ -1,0 +1,158 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 单字节字符集，多字节字符集，Unicode - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_373">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   单字节字符集，多字节字符集，Unicode
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月15日 18:51:04
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：5300
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="color:rgb(51,51,51);">
+     我们在这里介绍一下字符类型。这里有3种编码模式对应3种字符类型。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     <strong>
+      第一种编码类型是单子节字符集
+     </strong>
+     （single-byte   character   set   or   SBCS）。在这种编码模式下，所有的字符都只用一个字节表示。ASCII是SBCS。一个字节表示的0用来标志SBCS字符串的结束。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     <strong>
+      第二种编码模式是多字节字符集
+     </strong>
+     （multi-byte   character   set   or   MBCS）。一个MBCS编码包含一些一个字节长的字符，而另一些字符大于一个字节的长度。用在Windows里的MBCS包含两种字符类型，单字节字符（single-byte   characters）和双字节字符（double-byte   characters）。由于Windows里使用的多字节字符绝大部分是两个字节长，所以MBCS常被用DBCS（double-byte   character   set   or  
+ DBCS）代替。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     在DBCS编码模式中，一些特定的值被保留用来表明他们是双字节字符的一部分。例如，在Shift-JIS编码中（一个常用的日文编码模式），0x81-0x9f之间和   0xe0-oxfc之间的值表示"这是一个双字节字符，下一个子节是这个字符的一部分。"这样的值被称作"leadingbytes",他们都大于0x7f。跟随在一个leading   byte子节后面的字节被称作"trail  byte"。在DBCS中，trail  byte可以是任意非0值。像SBCS一样，DBCS字符串的结束标志也是一个单字节表示的0。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     <strong>
+      第三种编码模式是Unicode
+     </strong>
+     。Unicode是一种所有的字符都使用两个字节编码的编码模式。Unicode字符有时也被称作
+     <em>
+      宽字符（Wide Character）
+     </em>
+     ，因为它比单子节字符宽（使用了更多的存储空间）。注意，Unicode不能被看作MBCS。MBCS的独特之处在于它的字符使用不同长度的字节编码。Unicode字符串使用
+     <span>
+      两个字节表示的
+     </span>
+     <span>
+      0
+     </span>
+     <span>
+      作为它的结束标志
+     </span>
+     。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     单字节字符包含拉丁文字母表，accented   characters及ASCII标准和DOS操作系统定义的图形字符。双字节字符被用来表示东亚及中东的语言。Unicode被用在COM及Windows  NT操作系统内部。
+    </p>
+    <p style="color:rgb(51,51,51);">
+     你一定已经很熟悉单字节字符。当你使用char时，你处理的是单字节字符。双字节字符也用char类型来进行操作（这是我们将会看到的关于双子节字符的很多奇怪的地方之一）。Unicode字符用wchar_t来表示。Unicode字符和字符串常量用前缀L来表示。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=单字节字符集&amp;t=blog" target="_blank">
+    单字节字符集
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=多字节字符集&amp;t=blog" target="_blank">
+    多字节字符集
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Unicode&amp;t=blog" target="_blank">
+    Unicode
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,218 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 开源DirectShow分析器和解码器： LAV Filter - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_508">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   开源DirectShow分析器和解码器： LAV Filter
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月21日 10:43:44
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7669
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="font-size:12px;">
+      LAV Filter
+      <span style="font-family:Arial, '宋体';color:#444444;line-height:22.39px;text-indent:28px;">
+       是一款开源的DirectShow视频分离和解码软件，他的分离器LAVSplitter封装了FFMPEG中的libavformat，解码器LAVAudio和LAVVideo则封装了FFMPEG中的libavcodec。它支持十分广泛的视音频格式。
+      </span>
+     </span>
+    </p>
+    支持状况：
+    <br/>
+    封装格式：
+    <br/>
+    MKV/WebM, AVI, MP4/MOV, MPEG-TS/PS (including basic EVO support), FLV, OGG, 以及其他ffmpeg支持的格式！
+    <br/>
+    <br/>
+    视频编码：
+    <br/>
+    H264, VC-1, MPEG-2, MPEG4-ASP (Divx/Xvid), VP8, MJPEG 等。
+    <br/>
+    <br/>
+    音频编码：
+    <br/>
+    AAC, AC3, DTS(-HD), TrueHD, MP3/MP2, Vorbis, LPCM 等。
+    <br/>
+    <br/>
+    字幕：
+    <br/>
+    VOB, DVB Subs, PGS, SRT, SSA/ASS, Text
+    <br/>
+    <br/>
+    蓝光：
+    <br/>
+    支持打开蓝光播放列表 (.mpls), 或者 index.bdmv 文件
+    <br/>
+    <span style="font-size:12px;">
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      蓝光
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      支持
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      仍处于早期
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      阶段
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      ，
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      仍有许多
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      改进和新
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      功能计划
+     </span>
+     <span style="font-family:arial;color:#333333;line-height:22px;">
+      ！
+     </span>
+    </span>
+    <br/>
+    <br/>
+    反馈：
+    <br/>
+    如果有问题请反馈至Google Code：
+    <a href="http://code.google.com/p/lavfilters/issues/list">
+     http://code.google.com/p/lavfilters/issues/list
+    </a>
+    <br/>
+    <br/>
+    下载：
+    <br/>
+    源代码位于GitHub或Google Code：
+    <br/>
+    <a href="https://github.com/Nevcairiel/LAVFilters">
+     https://github.com/Nevcairiel/LAVFilters
+    </a>
+    <br/>
+    <a href="http://code.google.com/p/lavfilters/">
+     http://code.google.com/p/lavfilters/
+    </a>
+    <br/>
+    <br/>
+    这里有一个为了更适用于 LAV Filters而稍微修改过的ffmpeg：
+    <br/>
+    <p>
+     <a href="http://git.1f0.de/gitweb?p=ffmpeg.git;a=summary">
+      http://git.1f0.de/gitweb?p=ffmpeg.git;a=summary
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     英文原帖：
+     <a href="http://forum.doom9.org/showthread.php?t=156191">
+      http://forum.doom9.org/showthread.php?t=156191
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=lavfilter&amp;t=blog" target="_blank">
+    lavfilter
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源&amp;t=blog" target="_blank">
+    开源
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=directshow&amp;t=blog" target="_blank">
+    directshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=介绍&amp;t=blog" target="_blank">
+    介绍
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2628695" target="_blank">
+    LAV Filter
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

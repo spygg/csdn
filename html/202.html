@@ -1,0 +1,313 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ XBMC源代码分析 1：整体结构以及编译方法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_202">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   XBMC源代码分析 1：整体结构以及编译方法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年12月31日 00:17:37
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：17850
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     XBMC（全称是XBOX Media Center）是一个开源的媒体中心软件。XBMC最初为Xbox而开发，可以运行在Linux、OSX、Windows、Android4.0系统。我自己下载了一个然后体验了一下，感觉确实不错，和Windows自带的媒体中心差不多。
+    </p>
+    <p>
+     XBMC项目首页：
+     <a href="http://xbmc.org/">
+      http://xbmc.org/
+     </a>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221203519140"/>
+     <br/>
+    </p>
+    <p>
+     XBMC差不多是我接触到的开源多媒体项目中体积最大的了。但是它的编译方法却出乎意料的简单。我按照它的Wiki上面说的步骤去做，非常顺利的完成了编译，没有遇到任何错误，赞一个。
+    </p>
+    <p>
+     <strong>
+      下面简述一下它的编译方法。
+     </strong>
+    </p>
+    <p>
+     <strong>
+      前提条件
+     </strong>
+     ：
+    </p>
+    <p>
+     1.Visual C++ 2010
+    </p>
+    <p>
+     2.Microsoft DirectX SDK （August 2009 或更晚的版本）
+    </p>
+    <p>
+     3.Git
+    </p>
+    <p>
+     4.JRE
+    </p>
+    <p>
+     <strong>
+      编译
+     </strong>
+     ：
+    </p>
+    <p>
+     注意：需要下载很多东西，所以需要联网
+     <br/>
+    </p>
+    <p>
+     1.使用Git下载源代码。Git地址：git://github.com/xbmc/xbmc.git
+    </p>
+    <p>
+     2.运行DownloadBuildDeps.bat （所在目录 project\BuildDependencies）：下载编译项目所需要的依赖项
+    </p>
+    <p>
+     3.运行DownloadMingwBuildEnv.bat （所在目录 project\BuildDependencies） ：下载编译ffmpeg库所需要的依赖项
+    </p>
+    <p>
+     4.运行buildmingwlibs.bat （所在目录 project\Win32BuildSetup）： 编译ffmpeg库
+     <br/>
+     <br/>
+     5.以下二选一。一般情况下选第二个就可以了。
+    </p>
+    <p>
+     （1）BuildSetup.bat （所在目录 project\Win32BuildSetup）：只有需要直接编译一个打包文件的时候，才推荐使用该批处理。
+    </p>
+    <p>
+     （2）extract_git_rev.bat ： 如果是为了调试，并且使用 VC++ 2010 进行编译，推荐使用该批处理。
+     <br/>
+    </p>
+    <p>
+     6.打开project\VS2010Express\XBMC for Windows.sln，就可以编译了。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      下面对XBMC源代码进行一个整体分析：
+     </strong>
+    </p>
+    <p>
+     源代码的目录结构如下图所示。我把其中比较主要的文件夹下面标记了一条红线。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223185850031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     这几个主要文件夹的作用如下（其他文件夹就不再细说了）：
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p>
+      <span style="color:#990000;">
+       addons：附加元件。比如说XBMC的皮肤文件，屏幕保护文件，可视化效果文件等等。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       docs：文档。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       language：语言文件。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       project：项目工程文件。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       xbmc：源代码
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       lib：调用的各个库。比如说libavcodec。
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <p>
+     XBMC项目解决方案的目录如下图所示。可以看出项目工程数量是极其巨大的。
+    </p>
+    <p>
+     其中名字为“XBMC”的工程是主程序。
+    </p>
+    <p>
+     ImageLib_XXX是图片处理的工程。
+    </p>
+    <p>
+     libXBMC_XXX是完成XBMC各种功能的工程。
+    </p>
+    <p>
+     visXXX是各种可视化效果的工程。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223191046859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     我们来看一下“XBMC”工程的目录。该工程下源文件的数量也是十分庞大的。不同功能的类被放到了不同的文件夹中，显得还是比较井然有续的：
+    </p>
+    <p>
+     其中“core”文件夹中存放核心的类
+    </p>
+    <p>
+     “addon”文件夹中存放和addon相关的类
+    </p>
+    <p>
+     “music”文件夹中存放和音乐功能相关的类
+    </p>
+    <p>
+     “video”文件夹中存放和影视功能相关的类
+    </p>
+    <p>
+     “settings”文件夹中存放和设置功能相关的类
+    </p>
+    <p>
+     此处不一一例举
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131223191053421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/17454977
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=XBMC&amp;t=blog" target="_blank">
+    XBMC
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=媒体中心&amp;t=blog" target="_blank">
+    媒体中心
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=多媒体&amp;t=blog" target="_blank">
+    多媒体
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286583" target="_blank">
+    XBMC
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1652801" target="_blank">
+    开源项目
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

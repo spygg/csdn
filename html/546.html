@@ -1,0 +1,247 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ RTMP流媒体播放过程 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_546">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   RTMP流媒体播放过程
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月15日 11:19:49
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：50495
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     本文描述了从打开一个RTMP流媒体到视音频数据开始播放的全过程。
+    </p>
+    <p>
+     注意：RTMP中的逻辑结构
+    </p>
+    <p>
+     RTMP协议规定，播放一个流媒体有两个前提步骤：第一步，建立一个网络连接（NetConnection）；第二步，建立一个网络流（NetStream）。其中，网络连接代表服务器端应用程序和客户端之间基础的连通关系。网络流代表了发送多媒体数据的通道。服务器和客户端之间只能建立一个网络连接，但是基于该连接可以创建很多网络流。他们的关系如图所示：
+    </p>
+    <p align="center">
+     <img alt="" height="210" src="https://img-blog.csdn.net/20130915111501437?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="908"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     1 简要介绍
+    </p>
+    <p>
+     播放一个RTMP协议的流媒体需要经过以下几个步骤：握手，建立连接，建立流，播放。RTMP连接都是以握手作为开始的。建立连接阶段用于建立客户端与服务器之间的“网络连接”；建立流阶段用于建立客户端与服务器之间的“网络流”；播放阶段用于传输视音频数据。
+    </p>
+    <p>
+     2 握手（HandShake）
+    </p>
+    <p align="left">
+     一个RTMP连接以握手开始，双方分别发送大小固定的三个数据块
+    </p>
+    <p align="left">
+     a)        握手开始于客户端发送C0、C1块。服务器收到C0或C1后发送S0和S1。
+    </p>
+    <p align="left">
+     b)        当客户端收齐S0和S1后，开始发送C2。当服务器收齐C0和C1后，开始发送S2。
+    </p>
+    <p align="left">
+     c)        当客户端和服务器分别收到S2和C2后，握手完成。
+    </p>
+    <p align="left">
+     <br/>
+    </p>
+    <p align="center">
+     <img alt="" height="474" src="https://img-blog.csdn.net/20130915111408781?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="604"/>
+    </p>
+    <p align="center">
+     握手
+    </p>
+    <p align="left">
+    </p>
+    <p>
+    </p>
+    <p>
+     3建立网络连接（NetConnection）
+    </p>
+    <p align="left">
+     a)        客户端发送命令消息中的“连接”(connect)到服务器，请求与一个服务应用实例建立连接。
+    </p>
+    <p align="left">
+     b)        服务器接收到连接命令消息后，发送确认窗口大小(Window Acknowledgement Size)协议消息到客户端，同时连接到连接命令中提到的应用程序。
+    </p>
+    <p align="left">
+     c)        服务器发送设置带宽()协议消息到客户端。
+    </p>
+    <p align="left">
+     d)        客户端处理设置带宽协议消息后，发送确认窗口大小(Window Acknowledgement Size)协议消息到服务器端。
+    </p>
+    <p align="left">
+     e)        服务器发送用户控制消息中的“流开始”(Stream Begin)消息到客户端。
+    </p>
+    <p align="left">
+     f)         服务器发送命令消息中的“结果”(_result)，通知客户端连接的状态。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20130915111423578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p align="center">
+     建立连接
+    </p>
+    <p>
+     4建立网络流（NetStream）
+    </p>
+    <p>
+     a)      客户端发送命令消息中的“创建流”（createStream）命令到服务器端。
+    </p>
+    <p>
+     b)      服务器端接收到“创建流”命令后，发送命令消息中的“结果”(_result)，通知客户端流的状态。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20130915111350062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p align="center">
+     建立流
+    </p>
+    <p>
+    </p>
+    <p>
+     5 播放（Play）
+    </p>
+    <p align="left">
+     a)        客户端发送命令消息中的“播放”（play）命令到服务器。
+    </p>
+    <p align="left">
+     b)        接收到播放命令后，服务器发送设置块大小（ChunkSize）协议消息。
+    </p>
+    <p align="left">
+     c)        服务器发送用户控制消息中的“streambegin”，告知客户端流ID。
+    </p>
+    <p align="left">
+     d)        播放命令成功的话，服务器发送命令消息中的“响应状态” NetStream.Play.Start &amp; NetStream.Play.reset，告知客户端“播放”命令执行成功。
+    </p>
+    <p align="left">
+     e)        在此之后服务器发送客户端要播放的音频和视频数据。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20130915111446703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p align="center">
+     播放流
+    </p>
+    <p align="center" style="text-align:left;">
+     <br/>
+    </p>
+    <p align="center" style="text-align:left;">
+     RTMP协议规范（中文翻译）：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6563059">
+      http://download.csdn.net/detail/leixiaohua1020/6563059
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/11704355
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放&amp;t=blog" target="_blank">
+    播放
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RTMP&amp;t=blog" target="_blank">
+    RTMP
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=协议&amp;t=blog" target="_blank">
+    协议
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank">
+    libRTMP
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

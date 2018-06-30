@@ -1,0 +1,507 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ RTMPdump 使用说明 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_271">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   RTMPdump 使用说明
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月06日 16:24:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：30562
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    RTMPDump v2.4
+    <span style="white-space:pre;">
+    </span>
+    2012-07-24
+    <span style="white-space:pre;">
+    </span>
+    RTMPDUMP(1)
+    <br/>
+    <br/>
+    <strong>
+     名称
+    </strong>
+    <br/>
+    rtmpdump - (RTMP流媒体客户端)RTMP streaming media client
+    <br/>
+    <br/>
+    <strong>
+     使用参数
+    </strong>
+    <br/>
+    rtmpdump -r url [-n hostname] [-c port] [-l protocol] [-S host:port] [-a app] [-t tcUrl] [-p pageUrl] [-s swfUrl] [-f flashVer] [-u auth] [-C conndata] [-y playpath] [-Y] [-v] [-R] [-d subscription] [-e] [-k skip] [-A start] [-B stop] [-b buffer] [-m timeout]
+ [-T key] [-j JSON] [-w swfHash] [-x swfSize] [-W swfUrl] [-X swfAge] [-o output] [-#] [-q] [-V] [-z]
+    <br/>
+    rtmpdump -h
+    <br/>
+    <br/>
+    <strong>
+     说明
+    </strong>
+    <br/>
+    rtmpdump 是一个可以通过RTMP协议下载流媒体的工具.
+    <br/>
+    rtmpdump 通过给定的URL建立连接到指定的RTMP服务器. 这URL应该如下：
+    <br/>
+    rtmp[t][e]://hostname[:port][/app[/playpath]]
+    <br/>
+    支持一般以及加密的RTMP会话
+    <br/>
+    <br/>
+    <strong>
+     选项
+     <br/>
+     <br/>
+     网络参数
+    </strong>
+    <br/>
+    这些选项定义了如何连接到服务器
+    <br/>
+    <br/>
+    <br/>
+    --rtmp
+    <span style="white-space:pre;">
+    </span>
+    -r url
+    <br/>
+    连接到服务器的url
+    <br/>
+    --host
+    <span style="white-space:pre;">
+    </span>
+    -n hostname
+    <br/>
+    覆盖 RTMP URL的主机地址.
+    <br/>
+    --port
+    <span style="white-space:pre;">
+    </span>
+    -c port
+    <br/>
+    覆盖 RTMP URL的端口号.
+    <br/>
+    --protocol
+    <span style="white-space:pre;">
+    </span>
+    -l number
+    <br/>
+    覆盖 RTMP URL的协议.
+    <br/>
+    0 = rtmp
+    <br/>
+    1 = rtmpt
+    <br/>
+    2 = rtmpe
+    <br/>
+    3 = rtmpte
+    <br/>
+    4 = rtmps
+    <br/>
+    5 = rtmpts
+    <br/>
+    --socks
+    <span style="white-space:pre;">
+    </span>
+    -S host:port
+    <br/>
+    使用指定 SOCKS4 代理.
+    <br/>
+    <br/>
+    <br/>
+    <strong>
+     连接参数
+    </strong>
+    <br/>
+    这些选项定义了RTMP请求连接的数据包内容，如果不提供正确的值，服务器将拒绝连接尝试
+    <br/>
+    <br/>
+    --app
+    <span style="white-space:pre;">
+    </span>
+    -a app
+    <br/>
+    连接到RTMP的应用名，覆盖RTMP URL中的app。有时rtmpdump URL 无法正确自动解析app名称。这时必须使用该选项。
+    <br/>
+    --tcUrl
+    <span style="white-space:pre;">
+    </span>
+    -t url
+    <br/>
+    目标流的URL。默认格式 rtmp[e]://host[:port]/app/playpath.
+    <br/>
+    --pageUrl
+    <span style="white-space:pre;">
+    </span>
+    -p url
+    <br/>
+    媒体嵌入网页的URL，默认情况下没有被发送的价值
+    <br/>
+    --swfUrl
+    <span style="white-space:pre;">
+    </span>
+    -s url
+    <br/>
+    该媒体swf播放器的URL. 默认情况下没有被发送的价值.
+    <br/>
+    --flashVer
+    <span style="white-space:pre;">
+    </span>
+    -f version
+    <br/>
+    swf播放器使用的Flash版本. 默认是"LNX 10,0,32,18".
+    <br/>
+    --auth
+    <span style="white-space:pre;">
+    </span>
+    -u string
+    <br/>
+    增加到connect的验证字符串，使用此选项将增加一个bool值TRUE，然后是指定的字符串，此选项仅用于一些特定的服务器，已经过时了，更一般情况，--conn选项应该被代替使用
+    <br/>
+    --conn
+    <span style="white-space:pre;">
+    </span>
+    -C type:data
+    <br/>
+    任意AMF数据追加到connect，类型说明，
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    B 布尔型
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    N 数字
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    S 字符串
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    O 对象
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    Z 空
+    <br/>
+    对于布尔型必须是0或1作为FALSE或TRUE，
+    <br/>
+    对于对象数据必须以0或1分别作为结束和开始的标制，子对象中数据项前加前缀类型N，并指定值名称，例如：
+    <br/>
+    -C B:1 -C S:authMe -C O:1 -C NN:code:1.23 -C NS:flag:ok -C O:0
+    <br/>
+    <br/>
+    <strong>
+     会话选项
+    </strong>
+    <br/>
+    这些选项在连接成功后生效
+    <br/>
+    <br/>
+    --playpath
+    <span style="white-space:pre;">
+    </span>
+    -y path
+    <br/>
+    覆盖RTMP URL解析的playpath，rtmpdump有时不能正确解析，通过该选项明确
+    <br/>
+    --playlist -Y
+    <br/>
+    在play命令之前发生set_playlist命令。否则播放列表将会值包含playpath
+    <br/>
+    --live -v
+    <br/>
+    指定媒体是实时流。在实时流中没有恢复和搜索。
+    <br/>
+    --subscribe
+    <span style="white-space:pre;">
+    </span>
+    -d stream
+    <br/>
+    订阅的实时流名称。默认 playpath.
+    <br/>
+    --realtime -R
+    <br/>
+    实时下载时试图使用暂停和恢复命令("the BUFX hack")，服务器可以调到后面再使用恢复命令，恢复和搜索在实时流中还是可以实现的
+    <br/>
+    --resume -e
+    <br/>
+    恢复一个不完整的rtmp流下载
+    <br/>
+    --skip
+    <span style="white-space:pre;">
+    </span>
+    -k num
+    <br/>
+    恢复时寻找最后一个关键帧跳过的关键帧数。如果经常尝试恢复失败，这可能有用，默认0。
+    <br/>
+    --start
+    <span style="white-space:pre;">
+    </span>
+    -A num
+    <br/>
+    开始到流的秒数，实时流无效
+    <br/>
+    --stop
+    <span style="white-space:pre;">
+    </span>
+    -B num
+    <br/>
+    该流停止秒数
+    <br/>
+    --buffer
+    <span style="white-space:pre;">
+    </span>
+    -b num
+    <br/>
+    设置缓冲时间，单位毫秒. The default is 36000000.
+    <br/>
+    --timeout
+    <span style="white-space:pre;">
+    </span>
+    -m num
+    <br/>
+    num秒后没有收到任何数据会话超时，默认值120。
+    <br/>
+    <br/>
+    <strong>
+     安全参数
+    </strong>
+    <br/>
+    这些选项处理额外的身份验证，来自服务器的请求
+    <br/>
+    --token
+    <span style="white-space:pre;">
+    </span>
+    -T key
+    <br/>
+    输入安全令牌响应，如果服务器需要使用安全令牌验证
+    <br/>
+    --jtv
+    <span style="white-space:pre;">
+    </span>
+    -j JSON
+    <br/>
+    JSON令牌用于传统Justin.tv服务器 ，调用NetStream.Authenticate.UsherToken
+    <br/>
+    --swfhash
+    <span style="white-space:pre;">
+    </span>
+    -w hexstring
+    <br/>
+    swf文件的SHA256 hash 数值. 如果服务器使用swf验证，该选项会被用到, 看下面 --swfVfy 选项. 该哈希值是32字节，并且必须以十六进制表示. 始终与 --swfsize 选项一起使用.
+    <br/>
+    --swfsize
+    <span style="white-space:pre;">
+    </span>
+    -x num
+    <br/>
+    解压后SWF文件大小. 服务器swf验证时可能需要此选项，看下面--swfVfy 选项.始终与  --swfhash 选项一起使用.
+    <br/>
+    --swfVfy
+    <span style="white-space:pre;">
+    </span>
+    -W url
+    <br/>
+    swf播放器的URL，此选项将替换所以三个--swfUrl, --swfhash, and --swfsize选项。使用此选项时，swf播放器将从指定URL检索，并自动计算哈希和大小。此外信息缓存在一个swfinfo文件在用户主目录，所以它在每次rtmpdump运行时，并不需要检索和重新计算。swfinfo记录URL，生成时间，修改SWF文件时间，它的大小，它的哈希，默认情况下，缓冲信息用于30天，然后重新检测。
+    <br/>
+    --swfAge
+    <span style="white-space:pre;">
+    </span>
+    -X days
+    <br/>
+    指定使用缓存的swf信息天数，然后重新检查，使用0为经常检查，如果检查显示swf具有相同的修改时间戳，它不会被再次检索
+    <br/>
+    <br/>
+    <strong>
+     杂项
+    </strong>
+    <br/>
+    --flv
+    <span style="white-space:pre;">
+    </span>
+    -o output
+    <br/>
+    指定输出文件名，如果这个名字是-或被省略，流写入到stdout
+    <br/>
+    --hashes -#
+    <br/>
+    显示流进度，一个哈希标记没1%进度，而不是字节计数器
+    <br/>
+    --quiet -q
+    <br/>
+    制止所以命令的输出
+    <br/>
+    --verbose -V
+    <br/>
+    详细输出.
+    <br/>
+    --debug -z
+    <br/>
+    debug输出等级，最详细可输出所有分组数据
+    <br/>
+    --help -h
+    <br/>
+    打印命令选项摘要
+    <br/>
+    <br/>
+    <strong>
+     退出状态
+    </strong>
+    <br/>
+    0
+    <br/>
+    程序成功运行
+    <br/>
+    1
+    <br/>
+    不可知错误
+    <br/>
+    2
+    <br/>
+    不完全转移，可能会得到进一步恢复
+    <br/>
+    <br/>
+    <br/>
+    作者
+    <br/>
+    Andrej Stepanchuk, Howard Chu, The Flvstreamer Team
+    <br/>
+    <p>
+     &lt;http://rtmpdump.mplayerhq.hu&gt;
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     英文原文：
+     <a href="http://rtmpdump.mplayerhq.hu/rtmpdump.1.html">
+      http://rtmpdump.mplayerhq.hu/rtmpdump.1.html
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     中文原文：
+     <a href="http://blog.163.com/zhujiatc@126/blog/static/18346382013713114012167/">
+      http://blog.163.com/zhujiatc@126/blog/static/18346382013713114012167/
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     RTMPdump Windows版本下载：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6512579">
+      http://download.csdn.net/detail/leixiaohua1020/6512579
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RTMPdump&amp;t=blog" target="_blank">
+    RTMPdump
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=rtmp&amp;t=blog" target="_blank">
+    rtmp
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=socket&amp;t=blog" target="_blank">
+    socket
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体&amp;t=blog" target="_blank">
+    流媒体
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=使用说明&amp;t=blog" target="_blank">
+    使用说明
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank">
+    libRTMP
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

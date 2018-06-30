@@ -1,0 +1,772 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Struts2 + Spring + Hibernate 通用 Service 和 DAO - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_407">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   Struts2 + Spring + Hibernate 通用 Service 和 DAO
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月11日 19:32:06
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6943
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     我在 Struts2 + Spring + Hibernate  项目开发中总结出了一个Service 和 DAO ，可以用于处理任何的pojo（bean）。使用这两个Service 和 DAO 可以极大地提高开发的效率，不必再分别针对不同的pojo编写对应的Service 和 DAO。内容如下：
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      <strong>
+       DAO：
+      </strong>
+     </span>
+    </p>
+    <p>
+     接口：BaseDao.java
+    </p>
+    <p>
+    </p>
+    <pre class="java">package dao;
+
+import java.util.List;
+
+
+/**
+ * @author 雷霄骅
+ * 对Object的DAO操作
+ * 提供了通用的一些方法
+ */
+
+public interface BaseDao {
+	public void save(Object object);
+	public void delete(Object object);
+	public void update(Object object);
+	public Object ReadSingle(String targetName,String propertyName,Object value);
+	public List&lt;Object&gt; ReadByProperty(String targetName,String propertyName,Object value);
+	public List&lt;Object&gt; ReadAll(String targetName);
+	public List&lt;Object&gt; ReadAllByOrder(String targetName,String propertyName,String order);
+	public Object get(int id);
+	public List&lt;Object&gt; ReadByPropertyList(String targetName,List&lt;String&gt; propertyName, List&lt;Object&gt; value);
+	public Integer ReadCount(String targetName);
+	public List&lt;Object&gt; ReadLimitedByOrder(String targetName, String propertyName,int num, String order);
+}
+</pre>
+    <br/>
+    实现：BaseDaoImpl.java
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="java">package dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+
+
+
+/**
+ * @author 雷霄骅
+ * HibernateTemplate提供非常多的常用方法来完成基本的操作，比如通常的增加、删除、修改、查询等操作，
+ * Spring 2.0更增加对命名SQL查询的支持，也增加对分页的支持。大部分情况下，就可完成大多数DAO对象的CRUD操作。
+ */
+public class BaseDaoImpl extends HibernateDaoSupport implements BaseDao{
+
+	@Override
+	public void save(Object object) {
+		getHibernateTemplate().save(object);
+		//System.out.println("save "+object.toString());
+	}
+
+	@Override
+	public void delete(Object object) {
+		getHibernateTemplate().delete(object);
+	}
+
+	@Override
+	public void update(Object object) {
+		getHibernateTemplate().update(object);
+		//改用saveOrUpdate，在评价的时候，第一次创建的时候Save，其他时候Update
+		//getHibernateTemplate().saveOrUpdate(object);
+		//System.out.println("update "+object.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object ReadSingle(final String targetName,final String propertyName, final Object value) {
+		// TODO Auto-generated method stub
+		return (Object) getHibernateTemplate().execute(new HibernateCallback() {
+			/*doInHibernate()。session的创建和销毁，一切都在程序内部完成。*/
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				String hql = "from "+targetName+" as "+targetName+" where "+targetName+"." + propertyName + "=:value";
+				Query query = session.createQuery(hql);
+				query.setParameter("value", value);
+				return query.uniqueResult();
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List&lt;Object&gt; ReadAll(String targetName) {
+		// TODO Auto-generated method stub
+		String hql="from "+targetName;
+		return getHibernateTemplate().find(hql);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List&lt;Object&gt; ReadByProperty(final String targetName, final String propertyName,
+			final Object value) {
+		// TODO Auto-generated method stub
+		return (List&lt;Object&gt;) getHibernateTemplate().execute(new HibernateCallback() {
+			/*doInHibernate()。session的创建和销毁，一切都在程序内部完成。*/
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				String hql = "from "+targetName+" as "+targetName+" where "+targetName+"." + propertyName + "=:value";
+				Query query = session.createQuery(hql);
+				query.setParameter("value", value);
+				return query.list();
+			}
+		});
+	}
+	//比ReadByProperty简单很多
+	@Override
+	public Object get(int id) {
+		// TODO Auto-generated method stub
+		return getHibernateTemplate().get(Object.class, id);
+	}
+
+	@Override
+	public List&lt;Object&gt; ReadByPropertyList(final String targetName,
+			final List&lt;String&gt; propertyName, final List&lt;Object&gt; value) {
+		// TODO Auto-generated method stub
+		return (List&lt;Object&gt;) getHibernateTemplate().execute(new HibernateCallback() {
+			/*doInHibernate()。session的创建和销毁，一切都在程序内部完成。*/
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				String hql = "from "+targetName+" as "+targetName;
+				
+				//-------------------------------
+				for(int i=0;i&lt;propertyName.size();i++){
+				    String propertynametemp= propertyName.get(i);
+				    Object propertyvaluetemp= value.get(i);
+					if(propertynametemp!=null){
+				     if(i==0){    
+				      hql=hql+" where "+targetName+"." + propertynametemp + "=" + propertyvaluetemp +" ";    
+				     }else{   
+				    	 hql=hql+" and "+targetName+"." +propertynametemp + "=" + propertyvaluetemp +" ";
+				     }
+					}
+				}
+				//-------------------------------
+					Query query = session.createQuery(hql);
+				//当返回的数据不是一条的时候，不用uniqueresult()，而用list()
+				return query.list();
+			}
+		});
+	}
+//这里在Hibernate2.0之前版本list.get(0)返回的是Integer类型. 
+//但是在Hibernate3.0以后版本list.get(0)返回的是Long类型. 
+//所以在这里不可以由Long型强转成Integer类型. 
+//Integer属于不可更改类型，而且Long和Integer没有任何继承关系，当然不能这样转换。
+	@Override
+	public Integer ReadCount(final String targetName) {
+		// TODO Auto-generated method stub
+		return (Integer) getHibernateTemplate().execute(new HibernateCallback() {
+			/*doInHibernate()。session的创建和销毁，一切都在程序内部完成。*/
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				String hql = "select count(*) from "+targetName;
+				//System.out.println(hql);
+				//注:java.lang.Number是Integer,Long的父类.
+				return ((Number)session.createQuery(hql).iterate().next()).intValue();
+			}
+		});
+	}
+
+	@Override
+	public List&lt;Object&gt; ReadLimitedByOrder(final String targetName,
+			final String propertyName, final int num, final String order) {
+		// TODO Auto-generated method stub
+		return (List&lt;Object&gt;) getHibernateTemplate().execute(new HibernateCallback() {
+			/*doInHibernate()。session的创建和销毁，一切都在程序内部完成。*/
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				String hql ="from "+targetName+" as "+targetName+ " order by "+targetName+"." + propertyName+ " " + order;
+				Query query = session.createQuery(hql);
+				query.setMaxResults(num);
+				//当返回的数据不是一条的时候，不用uniqueresult()，而用list()
+				return query.list();
+			}
+		});
+	}
+
+	@Override
+	public List&lt;Object&gt; ReadAllByOrder(String targetName, String propertyName,
+			String order) {
+		// TODO Auto-generated method stub
+		String hql="from "+targetName+" as "+targetName+ " order by "+targetName+"." + propertyName+ " " + order;
+		return getHibernateTemplate().find(hql);
+	}
+	
+
+
+}
+</pre>
+    <br/>
+    <span style="font-size:18px;">
+     <strong>
+      Service：
+     </strong>
+    </span>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      接口：BaseService.java
+     </span>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <pre class="java">package service;
+
+import java.util.List;
+
+/**
+ * @author 雷霄骅
+ * 对Object的Service
+ * 提供了一些通用的方法
+ */
+public interface BaseService {
+	 public void save(Object object);
+	 public void update(Object object);
+	 public void delete(Object object);
+	 public Object ReadByID(String targetName,int id);
+	 @SuppressWarnings("rawtypes")
+	 public List ReadAll(String targetName);
+	 public List ReadAllByOrder(String targetName,String propertyName,String order);
+	 @SuppressWarnings("rawtypes")
+	 public List ReadByProperty(String targetName,String propertyName,Object propertyValue);
+	 public List ReadByPropertyList(String targetName,List&lt;String&gt; propertyName,List&lt;Object&gt; propertyValue);
+	 public List ReadLimitedByOrder(String targetName,String propertyName,int num,String order);
+	 public Object ReadSingle(String targetName,String propertyName,Object propertyValue);
+	 public int ReadCount(String targetName);
+	
+}
+</pre>
+    <br/>
+    <span style="font-size:14px;">
+     实现：BaseServiceImpl.java
+    </span>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <pre class="java">package service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.BaseDao;
+/**
+ * @author 雷霄骅
+ * 对Object的Service
+ * 提供了一些通用的方法
+ */
+public class BaseServiceImpl implements BaseService {
+	
+	private BaseDao baseDao;
+	@Override
+	public void save(Object object) {
+		// TODO Auto-generated method stub
+		baseDao.save(object);
+	}
+
+	@Override
+	public void update(Object object) {
+		// TODO Auto-generated method stub
+		baseDao.update(object);
+	}
+
+	@Override
+	public void delete(Object object) {
+		// TODO Auto-generated method stub
+		baseDao.delete(object);
+	}
+
+	@Override
+	public Object ReadByID(String targetName,int id) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadSingle(targetName,"id", id);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List ReadAll(String targetName) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadAll(targetName);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List ReadAllByOrder(String targetName,String propertyName,String order) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadAllByOrder(targetName,propertyName,order);
+	}
+
+	public BaseDao getBaseDao() {
+		return baseDao;
+	}
+
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+
+	@Override
+	public List ReadByProperty(String targetName, String propertyName,
+			Object propertyValue) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadByProperty(targetName, propertyName, propertyValue);
+	}
+
+	@Override
+	public Object ReadSingle(String targetName, String propertyName,
+			Object propertyValue) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadSingle(targetName, propertyName, propertyValue);
+	}
+
+	@Override
+	public int ReadCount(String targetName) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadCount(targetName);
+	}
+
+	@Override
+	public List ReadLimitedByOrder(String targetName, String propertyName,
+			int num, String order) {
+		return baseDao.ReadLimitedByOrder(targetName,propertyName,num,order);
+	}
+
+	@Override
+	public List ReadByPropertyList(String targetName,
+			List&lt;String&gt; propertyName, List&lt;Object&gt; propertyValue) {
+		// TODO Auto-generated method stub
+		return baseDao.ReadByPropertyList(targetName,propertyName,propertyValue);
+	}
+
+}
+</pre>
+    <br/>
+    这样，在Action层调用方法的时候，可以直接调用BaseService相应的方法完成操作。
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      举一个例子：
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      有这么一个名字叫Blog的pojo：
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <pre class="java">package bean;
+
+import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+/**
+ * Blog entity. @author MyEclipse Persistence Tools
+ */
+@Entity
+@Table(name = "blog", catalog = "vqe")
+public class Blog implements java.io.Serializable {
+
+	// Fields
+
+	private Integer id;
+	private Admin admin;
+	private String title;
+	private Timestamp modifytime;
+	private String content;
+
+	// Constructors
+
+	/** default constructor */
+	public Blog() {
+	}
+
+	/** full constructor */
+	public Blog(Admin admin, String title, Timestamp modifytime, String content) {
+		this.admin = admin;
+		this.title = title;
+		this.modifytime = modifytime;
+		this.content = content;
+	}
+
+	// Property accessors
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "adminid")
+	public Admin getAdmin() {
+		return this.admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	@Column(name = "title", length = 200)
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Column(name = "modifytime", length = 19)
+	public Timestamp getModifytime() {
+		return this.modifytime;
+	}
+
+	public void setModifytime(Timestamp modifytime) {
+		this.modifytime = modifytime;
+	}
+
+	@Column(name = "content", length = 10000)
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+}</pre>
+    <br/>
+    该类代表博客的一篇文章。
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      在Action层只需调用BaeService对应的方法就能完成相应的操作。换句话说，只要把pojo的类的名字当一个字符串传递给ReadByID这种的函数，就可以实现相应的功能。
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="java">//根据ID读取：
+Blog blog=(Blog) baseService.ReadByID("Blog", blogid);
+//添加：
+baseService.save(blog);
+//修改：
+baseService.update(blog);
+//删除：
+baseService.delete(blog);
+//读取所有（根据时间降序）
+List&lt;Blog&gt; resultblog=baseService.ReadAllByOrder("Blog","modifytime","desc");
+//读取num条（根据时间降序）
+List&lt;Blog&gt; resultblog=baseService.ReadLimitedByOrder("Blog","modifytime",num,"desc");</pre>
+    <br/>
+    完整的实现Blog（博客）的增删改查的Action示例：
+    <br/>
+    <pre class="java">package action;
+
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import service.BaseService;
+
+
+import bean.Admin;
+import bean.Blog;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+/**
+ * @author 雷霄骅
+ * Action
+ */
+public class BlogAct extends ActionSupport {
+	private int blogid;
+	private int num;
+	private Blog blog;
+	private List&lt;Blog&gt; resultblog;
+	private BaseService baseService;
+
+	public int getBlogid() {
+		return blogid;
+	}
+
+	public void setBlogid(int blogid) {
+		this.blogid = blogid;
+	}
+
+	public Blog getBlog() {
+		return blog;
+	}
+
+	public void setBlog(Blog blog) {
+		this.blog = blog;
+	}
+
+	public BaseService getBaseService() {
+		return baseService;
+	}
+
+	public void setBaseService(BaseService baseService) {
+		this.baseService = baseService;
+	}
+
+	public List&lt;Blog&gt; getResultblog() {
+		return resultblog;
+	}
+
+	public void setResultblog(List&lt;Blog&gt; resultblog) {
+		this.resultblog = resultblog;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public String Add(){
+		try{
+			//--------------------------------
+			ActionContext context = ActionContext.getContext();
+			Map sessionMap = context.getSession();
+			Admin admin=(Admin)sessionMap.get("admin");
+			//--------------------------------
+			blog.setModifytime( new Timestamp(new Date().getTime()));
+			blog.setAdmin(admin);
+			baseService.save(blog);
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String Delete(){
+		try{
+			blog=(Blog) baseService.ReadByID("Blog", blogid);
+			baseService.delete(blog);
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String Read(){
+		try{
+			blog=(Blog) baseService.ReadByID("Blog", blogid);
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String Update(){
+		try{
+			//--------------------------------
+			ActionContext context = ActionContext.getContext();
+			Map sessionMap = context.getSession();
+			Admin admin=(Admin)sessionMap.get("admin");
+			//--------------------------------
+			blog.setModifytime( new Timestamp(new Date().getTime()));
+			blog.setAdmin(admin);
+			baseService.update(blog);
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String ReadAll(){
+		try{
+			resultblog=baseService.ReadAllByOrder("Blog","modifytime","desc");
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String ReadLimitedByOrder(){
+		try{
+			resultblog=baseService.ReadLimitedByOrder("Blog","modifytime",num,"desc");
+			return SUCCESS;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return ERROR;
+		}
+	}
+}
+</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12622291
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=hibernate&amp;t=blog" target="_blank">
+    hibernate
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=struts2&amp;t=blog" target="_blank">
+    struts2
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=spring&amp;t=blog" target="_blank">
+    spring
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=entity&amp;t=blog" target="_blank">
+    entity
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=dao&amp;t=blog" target="_blank">
+    dao
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

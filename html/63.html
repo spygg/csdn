@@ -1,0 +1,3724 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ x264源代码简单分析：x264命令行工具（x264.exe） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_63">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   x264源代码简单分析：x264命令行工具（x264.exe）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年05月08日 18:30:23
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：11985
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     H.264源代码分析文章列表：
+    </p>
+    <p>
+     【编码 - x264】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45536607" rel="nofollow" target="_blank">
+      x264源代码简单分析：概述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45583217" rel="nofollow" target="_blank">
+      x264源代码简单分析：x264命令行工具（x264.exe）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45644367" rel="nofollow" target="_blank">
+      x264源代码简单分析：编码器主干部分-1
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45719905" rel="nofollow" target="_blank">
+      x264源代码简单分析：编码器主干部分-2
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45790195" rel="nofollow" target="_blank">
+      x264源代码简单分析：x264_slice_write()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45870269" rel="nofollow" target="_blank">
+      x264源代码简单分析：滤波（Filter）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45917757" rel="nofollow" target="_blank">
+      x264源代码简单分析：宏块分析（Analysis）部分-帧内宏块（Intra）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45936267" rel="nofollow" target="_blank">
+      x264源代码简单分析：宏块分析（Analysis）部分-帧间宏块（Inter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45938927" rel="nofollow" target="_blank">
+      x264源代码简单分析：宏块编码（Encode）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45944811" rel="nofollow" target="_blank">
+      x264源代码简单分析：熵编码（Entropy Encoding）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45960409" rel="nofollow" target="_blank">
+      FFmpeg与libx264接口源代码简单分析
+     </a>
+    </p>
+    <p>
+     【解码 - libavcodec H.264 解码器】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：概述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45001033" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：解析器（Parser）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45042755" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：解码器主干部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45114453" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：熵解码（EntropyDecoding）部分
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45143075" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：宏块解码（Decode）部分-帧内宏块（Intra）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45195291" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：宏块解码（Decode）部分-帧间宏块（Inter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/45224579" rel="nofollow" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：环路滤波（Loop Filter）部分
+     </a>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单分析x264项目中的命令行工具（x264.exe）的源代码。该命令行工具可以调用libx264将YUV格式像素数据编码为H.264码流。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用关系图
+    </h2>
+    <p>
+     X264命令行工具的源代码在x264中的位置如下图所示。
+    </p>
+    <p style="text-align: center;">
+     <a href="http://img.my.csdn.net/uploads/201505/06/1430897637_6272.jpg" rel="nofollow" target="_blank">
+      <img alt="" src="https://img-blog.csdn.net/20150508175003437"/>
+     </a>
+     <br/>
+    </p>
+    <div style="text-align: center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1807927" rel="nofollow" target="_blank">
+      单击查看更清晰的图片
+     </a>
+    </div>
+    <br/>
+    X264命令行工具的源代码的调用关系如下图所示。
+    <br/>
+    <div style="text-align: center;">
+     <a href="http://img.my.csdn.net/uploads/201505/08/1431078768_4360.jpg" rel="nofollow" target="_blank">
+      <img alt="" src="https://img-blog.csdn.net/20150508174931625"/>
+     </a>
+    </div>
+    <div style="text-align: center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1808029" rel="nofollow" target="_blank">
+      单击查看更清晰的图片
+     </a>
+    </div>
+    <br/>
+    从图中可以看出，X264命令行工具调用了libx264的几个API完成了H.264编码工作。使用libx264的API进行编码可以参考《
+    <a href="http://blog.csdn.net/leixiaohua1020/article/details/42078645" rel="nofollow" target="_blank">
+     最简单的视频编码器：基于libx264（编码YUV为H.264）
+    </a>
+    》，这个流程中最关键的API包括：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     x264_param_default()：设置参数集结构体x264_param_t的缺省值。
+     <br/>
+     x264_encoder_open()：打开编码器。
+     <br/>
+     x264_encoder_headers()：输出SPS，PPS，SEI等信息。
+     <br/>
+     x264_encoder_encode()：编码输出一帧图像。
+     <br/>
+     x264_encoder_close()：关闭编码器。
+    </blockquote>
+    <p>
+     在X264命令行工具中，main()首先调用parse()解析输入的命令行参数，然后调用encode()进行编码。parse()首先调用x264_param_default()为存储参数的结构体x264_param_t赋默认值；然后在一个大循环中调用getopt_long()逐个解析输入的参数，并作相应的处理；最后调用select_input()和select_output()解析输入文件格式（例如yuv，y4m…）和输出文件格式（例如raw，flv，MP4…）。encode()首先调用x264_encoder_open()打开H.264编码器，然后调用x264_encoder_headers()输出H.264码流的头信息（例如SPS、PPS、SEI），接着进入一个循环并且调用encode_frame()逐帧编码视频，最后调用x264_encoder_close()关闭解码器。其中encode_frame()中又调用了x264_encoder_encode()完成了具体的编码工作。下文将会对上述流程展开分析。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     main()
+    </h2>
+    main()是x264控制台程序的入口函数，定义如下所示。
+    <br/>
+    <pre class="cpp" name="code">//主函数
+int main( int argc, char **argv )
+{
+	//参数集
+    x264_param_t param;
+    cli_opt_t opt = {0};
+    int ret = 0;
+
+    FAIL_IF_ERROR( x264_threading_init(), "unable to initialize threading\n" )
+
+#ifdef _WIN32
+    FAIL_IF_ERROR( !get_argv_utf8( &amp;argc, &amp;argv ), "unable to convert command line to UTF-8\n" )
+
+    GetConsoleTitleW( org_console_title, CONSOLE_TITLE_SIZE );
+    _setmode( _fileno( stdin ),  _O_BINARY );
+    _setmode( _fileno( stdout ), _O_BINARY );
+    _setmode( _fileno( stderr ), _O_BINARY );
+#endif
+
+    /* Parse command line */
+    //解析命令行输入
+    if( parse( argc, argv, ¶m, &amp;opt ) &lt; 0 )
+        ret = -1;
+
+#ifdef _WIN32
+    /* Restore title; it can be changed by input modules */
+    SetConsoleTitleW( org_console_title );
+#endif
+
+    /* Control-C handler */
+    signal( SIGINT, sigint_handler );
+    //编码
+    if( !ret )
+        ret = encode( ¶m, &amp;opt );
+
+    /* clean up handles */
+    if( filter.free )
+        filter.free( opt.hin );
+    else if( opt.hin )
+        cli_input.close_file( opt.hin );
+    if( opt.hout )
+        cli_output.close_file( opt.hout, 0, 0 );
+    if( opt.tcfile_out )
+        fclose( opt.tcfile_out );
+    if( opt.qpfile )
+        fclose( opt.qpfile );
+
+#ifdef _WIN32
+    SetConsoleTitleW( org_console_title );
+    free( argv );
+#endif
+
+    return ret;
+}
+</pre>
+    <br/>
+    可以看出main()的定义很简单，它主要调用了两个函数：parse()和encode()。main()首先调用parse()解析输入的命令行参数，然后调用encode()进行编码。下面分别分析这两个函数。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     parse()
+    </h2>
+    parse()用于解析命令行输入的参数（存储于argv[]中）。它的定义如下所示。
+    <br/>
+    <pre class="cpp" name="code">//解析命令行输入
+static int parse( int argc, char **argv, x264_param_t *param, cli_opt_t *opt )
+{
+    char *input_filename = NULL;
+    const char *demuxer = demuxer_names[0];
+    char *output_filename = NULL;
+    const char *muxer = muxer_names[0];
+    char *tcfile_name = NULL;
+    x264_param_t defaults;
+    char *profile = NULL;
+    char *vid_filters = NULL;
+    int b_thread_input = 0;
+    int b_turbo = 1;
+    int b_user_ref = 0;
+    int b_user_fps = 0;
+    int b_user_interlaced = 0;
+    cli_input_opt_t input_opt;
+    cli_output_opt_t output_opt;
+    char *preset = NULL;
+    char *tune = NULL;
+    //初始化参数默认值
+    x264_param_default( &amp;defaults );
+    cli_log_level = defaults.i_log_level;
+
+    memset( &amp;input_opt, 0, sizeof(cli_input_opt_t) );
+    memset( &amp;output_opt, 0, sizeof(cli_output_opt_t) );
+    input_opt.bit_depth = 8;
+    input_opt.input_range = input_opt.output_range = param-&gt;vui.b_fullrange = RANGE_AUTO;
+    int output_csp = defaults.i_csp;
+    opt-&gt;b_progress = 1;
+
+    /* Presets are applied before all other options. */
+    for( optind = 0;; )
+    {
+        int c = getopt_long( argc, argv, short_options, long_options, NULL );
+        if( c == -1 )
+            break;
+        if( c == OPT_PRESET )
+            preset = optarg;
+        if( c == OPT_TUNE )
+            tune = optarg;
+        else if( c == '?' )
+            return -1;
+    }
+
+    if( preset &amp;&amp; !strcasecmp( preset, "placebo" ) )
+        b_turbo = 0;
+    //设置preset，tune
+    if( x264_param_default_preset( param, preset, tune ) &lt; 0 )
+        return -1;
+
+    /* Parse command line options */
+    //解析命令行选项
+    for( optind = 0;; )
+    {
+        int b_error = 0;
+        int long_options_index = -1;
+
+        int c = getopt_long( argc, argv, short_options, long_options, &amp;long_options_index );
+
+        if( c == -1 )
+        {
+            break;
+        }
+        //不同的选项做不同的处理
+        switch( c )
+        {
+            case 'h':
+                help( &amp;defaults, 0 );//"-h"帮助菜单
+                exit(0);
+            case OPT_LONGHELP:
+                help( &amp;defaults, 1 );
+                exit(0);
+            case OPT_FULLHELP:
+                help( &amp;defaults, 2 );
+                exit(0);
+            case 'V':
+                print_version_info();//打印版本信息
+                exit(0);
+            case OPT_FRAMES:
+                param-&gt;i_frame_total = X264_MAX( atoi( optarg ), 0 );
+                break;
+            case OPT_SEEK:
+                opt-&gt;i_seek = X264_MAX( atoi( optarg ), 0 );
+                break;
+            case 'o':
+                output_filename = optarg;//输出文件路径
+                break;
+            case OPT_MUXER:
+                FAIL_IF_ERROR( parse_enum_name( optarg, muxer_names, &amp;muxer ), "Unknown muxer `%s'\n", optarg )
+                break;
+            case OPT_DEMUXER:
+                FAIL_IF_ERROR( parse_enum_name( optarg, demuxer_names, &amp;demuxer ), "Unknown demuxer `%s'\n", optarg )
+                break;
+            case OPT_INDEX:
+                input_opt.index_file = optarg;
+                break;
+            case OPT_QPFILE:
+                opt-&gt;qpfile = x264_fopen( optarg, "rb" );
+                FAIL_IF_ERROR( !opt-&gt;qpfile, "can't open qpfile `%s'\n", optarg )
+                if( !x264_is_regular_file( opt-&gt;qpfile ) )
+                {
+                    x264_cli_log( "x264", X264_LOG_ERROR, "qpfile incompatible with non-regular file `%s'\n", optarg );
+                    fclose( opt-&gt;qpfile );
+                    return -1;
+                }
+                break;
+            case OPT_THREAD_INPUT:
+                b_thread_input = 1;
+                break;
+            case OPT_QUIET:
+                cli_log_level = param-&gt;i_log_level = X264_LOG_NONE;//设置log级别
+                break;
+            case 'v':
+                cli_log_level = param-&gt;i_log_level = X264_LOG_DEBUG;//设置log级别
+                break;
+            case OPT_LOG_LEVEL:
+                if( !parse_enum_value( optarg, log_level_names, &amp;cli_log_level ) )
+                    cli_log_level += X264_LOG_NONE;
+                else
+                    cli_log_level = atoi( optarg );
+                param-&gt;i_log_level = cli_log_level;//设置log级别
+                break;
+            case OPT_NOPROGRESS:
+                opt-&gt;b_progress = 0;
+                break;
+            case OPT_TUNE:
+            case OPT_PRESET:
+                break;
+            case OPT_PROFILE:
+                profile = optarg;
+                break;
+            case OPT_SLOWFIRSTPASS:
+                b_turbo = 0;
+                break;
+            case 'r':
+                b_user_ref = 1;
+                goto generic_option;
+            case OPT_FPS:
+                b_user_fps = 1;
+                param-&gt;b_vfr_input = 0;
+                goto generic_option;
+            case OPT_INTERLACED:
+                b_user_interlaced = 1;
+                goto generic_option;
+            case OPT_TCFILE_IN:
+                tcfile_name = optarg;
+                break;
+            case OPT_TCFILE_OUT:
+                opt-&gt;tcfile_out = x264_fopen( optarg, "wb" );
+                FAIL_IF_ERROR( !opt-&gt;tcfile_out, "can't open `%s'\n", optarg )
+                break;
+            case OPT_TIMEBASE:
+                input_opt.timebase = optarg;
+                break;
+            case OPT_PULLDOWN:
+                FAIL_IF_ERROR( parse_enum_value( optarg, pulldown_names, &amp;opt-&gt;i_pulldown ), "Unknown pulldown `%s'\n", optarg )
+                break;
+            case OPT_VIDEO_FILTER:
+                vid_filters = optarg;
+                break;
+            case OPT_INPUT_FMT:
+                input_opt.format = optarg;//输入文件格式
+                break;
+            case OPT_INPUT_RES:
+                input_opt.resolution = optarg;//输入分辨率
+                break;
+            case OPT_INPUT_CSP:
+                input_opt.colorspace = optarg;//输入色域
+                break;
+            case OPT_INPUT_DEPTH:
+                input_opt.bit_depth = atoi( optarg );//输入颜色位深
+                break;
+            case OPT_DTS_COMPRESSION:
+                output_opt.use_dts_compress = 1;
+                break;
+            case OPT_OUTPUT_CSP:
+                FAIL_IF_ERROR( parse_enum_value( optarg, output_csp_names, &amp;output_csp ), "Unknown output csp `%s'\n", optarg )
+                // correct the parsed value to the libx264 csp value
+#if X264_CHROMA_FORMAT
+                static const uint8_t output_csp_fix[] = { X264_CHROMA_FORMAT, X264_CSP_RGB };
+#else
+                static const uint8_t output_csp_fix[] = { X264_CSP_I420, X264_CSP_I422, X264_CSP_I444, X264_CSP_RGB };
+#endif
+                param-&gt;i_csp = output_csp = output_csp_fix[output_csp];
+                break;
+            case OPT_INPUT_RANGE:
+                FAIL_IF_ERROR( parse_enum_value( optarg, range_names, &amp;input_opt.input_range ), "Unknown input range `%s'\n", optarg )
+                input_opt.input_range += RANGE_AUTO;
+                break;
+            case OPT_RANGE:
+                FAIL_IF_ERROR( parse_enum_value( optarg, range_names, ¶m-&gt;vui.b_fullrange ), "Unknown range `%s'\n", optarg );
+                input_opt.output_range = param-&gt;vui.b_fullrange += RANGE_AUTO;
+                break;
+            default:
+generic_option:
+            {
+                if( long_options_index &lt; 0 )
+                {
+                    for( int i = 0; long_options[i].name; i++ )
+                        if( long_options[i].val == c )
+                        {
+                            long_options_index = i;
+                            break;
+                        }
+                    if( long_options_index &lt; 0 )
+                    {
+                        /* getopt_long already printed an error message */
+                        return -1;
+                    }
+                }
+                //解析以字符串方式输入的参数
+                //即选项名称和选项值都是字符串
+                b_error |= x264_param_parse( param, long_options[long_options_index].name, optarg );
+            }
+        }
+
+        if( b_error )
+        {
+            const char *name = long_options_index &gt; 0 ? long_options[long_options_index].name : argv[optind-2];
+            x264_cli_log( "x264", X264_LOG_ERROR, "invalid argument: %s = %s\n", name, optarg );
+            return -1;
+        }
+    }
+
+    /* If first pass mode is used, apply faster settings. */
+    if( b_turbo )
+        x264_param_apply_fastfirstpass( param );
+
+    /* Apply profile restrictions. */
+    //设置profile
+    if( x264_param_apply_profile( param, profile ) &lt; 0 )
+        return -1;
+
+    /* Get the file name */
+    FAIL_IF_ERROR( optind &gt; argc - 1 || !output_filename, "No %s file. Run x264 --help for a list of options.\n",
+                   optind &gt; argc - 1 ? "input" : "output" )
+    //根据文件名的后缀确定输出的文件格式（raw H264，flv，mp4...）
+    if( select_output( muxer, output_filename, param ) )
+        return -1;
+    FAIL_IF_ERROR( cli_output.open_file( output_filename, &amp;opt-&gt;hout, &amp;output_opt ), "could not open output file `%s'\n", output_filename )
+    //输入文件路径
+    input_filename = argv[optind++];
+    video_info_t info = {0};
+    char demuxername[5];
+
+    /* set info flags to be overwritten by demuxer as necessary. */
+    //设置info结构体
+    info.csp        = param-&gt;i_csp;
+    info.fps_num    = param-&gt;i_fps_num;
+    info.fps_den    = param-&gt;i_fps_den;
+    info.fullrange  = input_opt.input_range == RANGE_PC;
+    info.interlaced = param-&gt;b_interlaced;
+    if( param-&gt;vui.i_sar_width &gt; 0 &amp;&amp; param-&gt;vui.i_sar_height &gt; 0 )
+    {
+        info.sar_width  = param-&gt;vui.i_sar_width;
+        info.sar_height = param-&gt;vui.i_sar_height;
+    }
+    info.tff        = param-&gt;b_tff;
+    info.vfr        = param-&gt;b_vfr_input;
+
+    input_opt.seek = opt-&gt;i_seek;
+    input_opt.progress = opt-&gt;b_progress;
+    input_opt.output_csp = output_csp;
+    //设置输入文件的格式（yuv，y4m...）
+    if( select_input( demuxer, demuxername, input_filename, &amp;opt-&gt;hin, &amp;info, &amp;input_opt ) )
+        return -1;
+
+    FAIL_IF_ERROR( !opt-&gt;hin &amp;&amp; cli_input.open_file( input_filename, &amp;opt-&gt;hin, &amp;info, &amp;input_opt ),
+                   "could not open input file `%s'\n", input_filename )
+
+    x264_reduce_fraction( &amp;info.sar_width, &amp;info.sar_height );
+    x264_reduce_fraction( &amp;info.fps_num, &amp;info.fps_den );
+    x264_cli_log( demuxername, X264_LOG_INFO, "%dx%d%c %u:%u @ %u/%u fps (%cfr)\n", info.width,
+                  info.height, info.interlaced ? 'i' : 'p', info.sar_width, info.sar_height,
+                  info.fps_num, info.fps_den, info.vfr ? 'v' : 'c' );
+
+    if( tcfile_name )
+    {
+        FAIL_IF_ERROR( b_user_fps, "--fps + --tcfile-in is incompatible.\n" )
+        FAIL_IF_ERROR( timecode_input.open_file( tcfile_name, &amp;opt-&gt;hin, &amp;info, &amp;input_opt ), "timecode input failed\n" )
+        cli_input = timecode_input;
+    }
+    else FAIL_IF_ERROR( !info.vfr &amp;&amp; input_opt.timebase, "--timebase is incompatible with cfr input\n" )
+
+    /* init threaded input while the information about the input video is unaltered by filtering */
+#if HAVE_THREAD
+    if( info.thread_safe &amp;&amp; (b_thread_input || param-&gt;i_threads &gt; 1
+        || (param-&gt;i_threads == X264_THREADS_AUTO &amp;&amp; x264_cpu_num_processors() &gt; 1)) )
+    {
+        if( thread_input.open_file( NULL, &amp;opt-&gt;hin, &amp;info, NULL ) )
+        {
+            fprintf( stderr, "x264 [error]: threaded input failed\n" );
+            return -1;
+        }
+        cli_input = thread_input;
+    }
+#endif
+
+    /* override detected values by those specified by the user */
+    if( param-&gt;vui.i_sar_width &gt; 0 &amp;&amp; param-&gt;vui.i_sar_height &gt; 0 )
+    {
+        info.sar_width  = param-&gt;vui.i_sar_width;
+        info.sar_height = param-&gt;vui.i_sar_height;
+    }
+    if( b_user_fps )
+    {
+        info.fps_num = param-&gt;i_fps_num;
+        info.fps_den = param-&gt;i_fps_den;
+    }
+    if( !info.vfr )
+    {
+        info.timebase_num = info.fps_den;
+        info.timebase_den = info.fps_num;
+    }
+    if( !tcfile_name &amp;&amp; input_opt.timebase )
+    {
+        uint64_t i_user_timebase_num;
+        uint64_t i_user_timebase_den;
+        int ret = sscanf( input_opt.timebase, "%"SCNu64"/%"SCNu64, &amp;i_user_timebase_num, &amp;i_user_timebase_den );
+        FAIL_IF_ERROR( !ret, "invalid argument: timebase = %s\n", input_opt.timebase )
+        else if( ret == 1 )
+        {
+            i_user_timebase_num = info.timebase_num;
+            i_user_timebase_den = strtoul( input_opt.timebase, NULL, 10 );
+        }
+        FAIL_IF_ERROR( i_user_timebase_num &gt; UINT32_MAX || i_user_timebase_den &gt; UINT32_MAX,
+                       "timebase you specified exceeds H.264 maximum\n" )
+        opt-&gt;timebase_convert_multiplier = ((double)i_user_timebase_den / info.timebase_den)
+                                         * ((double)info.timebase_num / i_user_timebase_num);
+        info.timebase_num = i_user_timebase_num;
+        info.timebase_den = i_user_timebase_den;
+        info.vfr = 1;
+    }
+    if( b_user_interlaced )
+    {
+        info.interlaced = param-&gt;b_interlaced;
+        info.tff = param-&gt;b_tff;
+    }
+    if( input_opt.input_range != RANGE_AUTO )
+        info.fullrange = input_opt.input_range;
+
+    //初始化滤镜filter
+    //filter可以认为是一种“扩展”了的输入源
+    if( init_vid_filters( vid_filters, &amp;opt-&gt;hin, &amp;info, param, output_csp ) )
+        return -1;
+
+    /* set param flags from the post-filtered video */
+    param-&gt;b_vfr_input = info.vfr;
+    param-&gt;i_fps_num = info.fps_num;
+    param-&gt;i_fps_den = info.fps_den;
+    param-&gt;i_timebase_num = info.timebase_num;
+    param-&gt;i_timebase_den = info.timebase_den;
+    param-&gt;vui.i_sar_width  = info.sar_width;
+    param-&gt;vui.i_sar_height = info.sar_height;
+
+    info.num_frames = X264_MAX( info.num_frames - opt-&gt;i_seek, 0 );
+    if( (!info.num_frames || param-&gt;i_frame_total &lt; info.num_frames)
+        &amp;&amp; param-&gt;i_frame_total &gt; 0 )
+        info.num_frames = param-&gt;i_frame_total;
+    param-&gt;i_frame_total = info.num_frames;
+
+    if( !b_user_interlaced &amp;&amp; info.interlaced )
+    {
+#if HAVE_INTERLACED
+        x264_cli_log( "x264", X264_LOG_WARNING, "input appears to be interlaced, enabling %cff interlaced mode.\n"
+                      "                If you want otherwise, use --no-interlaced or --%cff\n",
+                      info.tff ? 't' : 'b', info.tff ? 'b' : 't' );
+        param-&gt;b_interlaced = 1;
+        param-&gt;b_tff = !!info.tff;
+#else
+        x264_cli_log( "x264", X264_LOG_WARNING, "input appears to be interlaced, but not compiled with interlaced support\n" );
+#endif
+    }
+    /* if the user never specified the output range and the input is now rgb, default it to pc */
+    int csp = param-&gt;i_csp &amp; X264_CSP_MASK;
+    if( csp &gt;= X264_CSP_BGR &amp;&amp; csp &lt;= X264_CSP_RGB )
+    {
+        if( input_opt.output_range == RANGE_AUTO )
+            param-&gt;vui.b_fullrange = RANGE_PC;
+        /* otherwise fail if they specified tv */
+        FAIL_IF_ERROR( !param-&gt;vui.b_fullrange, "RGB must be PC range" )
+    }
+
+    /* Automatically reduce reference frame count to match the user's target level
+     * if the user didn't explicitly set a reference frame count. */
+    if( !b_user_ref )
+    {
+        int mbs = (((param-&gt;i_width)+15)&gt;&gt;4) * (((param-&gt;i_height)+15)&gt;&gt;4);
+        for( int i = 0; x264_levels[i].level_idc != 0; i++ )
+            if( param-&gt;i_level_idc == x264_levels[i].level_idc )
+            {
+                while( mbs * param-&gt;i_frame_reference &gt; x264_levels[i].dpb &amp;&amp; param-&gt;i_frame_reference &gt; 1 )
+                    param-&gt;i_frame_reference--;
+                break;
+            }
+    }
+
+
+    return 0;
+}
+</pre>
+    <br/>
+    下面简单梳理parse()的流程：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     （1）调用x264_param_default()为存储参数的结构体x264_param_t赋默认值
+     <br/>
+     （2）调用x264_param_default_preset()为x264_param_t赋值
+     <br/>
+     （3）在一个大循环中调用getopt_long()逐个解析输入的参数，并作相应的处理。举几个例子：
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      a)“-h”：调用help()打开帮助菜单。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      b)“-V”调用print_version_info()打印版本信息。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      c)对于长选项，调用x264_param_parse()进行处理。
+     </blockquote>
+     （4）调用select_input()解析输出文件格式（例如raw，flv，MP4…）
+     <br/>
+     （5）调用select_output()解析输入文件格式（例如yuv，y4m…）
+    </blockquote>
+    <p>
+     下文按照顺序记录parse()中涉及到的函数：
+    </p>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     x264_param_default()
+     <br/>
+     x264_param_default_preset()
+     <br/>
+     help()
+     <br/>
+     print_version_info()
+     <br/>
+     x264_param_parse()
+     <br/>
+     select_input()
+     <br/>
+     select_output()
+    </blockquote>
+    <br/>
+    <h3>
+     x264_param_default()
+    </h3>
+    x264_param_default()是一个x264的API。该函数用于设置x264中x264_param_t结构体的默认值。函数的声明如下所示。
+    <br/>
+    <pre class="cpp" name="code">/* x264_param_default:
+ *      fill x264_param_t with default values and do CPU detection */
+void    x264_param_default( x264_param_t * );</pre>
+    x264_param_default()的定义如下所示。
+    <br/>
+    <pre class="cpp" name="code">/****************************************************************************
+ * x264_param_default:
+ ****************************************************************************/
+//初始化参数默认值
+void x264_param_default( x264_param_t *param )
+{
+    /* */
+    memset( param, 0, sizeof( x264_param_t ) );
+
+    /* CPU autodetect */
+    param-&gt;cpu = x264_cpu_detect();
+    param-&gt;i_threads = X264_THREADS_AUTO;
+    param-&gt;i_lookahead_threads = X264_THREADS_AUTO;
+    param-&gt;b_deterministic = 1;
+    param-&gt;i_sync_lookahead = X264_SYNC_LOOKAHEAD_AUTO;
+
+    /* Video properties */
+    param-&gt;i_csp           = X264_CHROMA_FORMAT ? X264_CHROMA_FORMAT : X264_CSP_I420;
+    param-&gt;i_width         = 0;
+    param-&gt;i_height        = 0;
+    param-&gt;vui.i_sar_width = 0;
+    param-&gt;vui.i_sar_height= 0;
+    param-&gt;vui.i_overscan  = 0;  /* undef */
+    param-&gt;vui.i_vidformat = 5;  /* undef */
+    param-&gt;vui.b_fullrange = -1; /* default depends on input */
+    param-&gt;vui.i_colorprim = 2;  /* undef */
+    param-&gt;vui.i_transfer  = 2;  /* undef */
+    param-&gt;vui.i_colmatrix = -1; /* default depends on input */
+    param-&gt;vui.i_chroma_loc= 0;  /* left center */
+    param-&gt;i_fps_num       = 25;
+    param-&gt;i_fps_den       = 1;
+    param-&gt;i_level_idc     = -1;
+    param-&gt;i_slice_max_size = 0;
+    param-&gt;i_slice_max_mbs = 0;
+    param-&gt;i_slice_count = 0;
+
+    /* Encoder parameters */
+    //编码参数--最常见
+    param-&gt;i_frame_reference = 3;
+    param-&gt;i_keyint_max = 250;
+    param-&gt;i_keyint_min = X264_KEYINT_MIN_AUTO;
+    param-&gt;i_bframe = 3;
+    param-&gt;i_scenecut_threshold = 40;
+    param-&gt;i_bframe_adaptive = X264_B_ADAPT_FAST;
+    param-&gt;i_bframe_bias = 0;
+    param-&gt;i_bframe_pyramid = X264_B_PYRAMID_NORMAL;
+    param-&gt;b_interlaced = 0;
+    param-&gt;b_constrained_intra = 0;
+
+    param-&gt;b_deblocking_filter = 1;
+    param-&gt;i_deblocking_filter_alphac0 = 0;
+    param-&gt;i_deblocking_filter_beta = 0;
+
+    param-&gt;b_cabac = 1;
+    param-&gt;i_cabac_init_idc = 0;
+    //码率控制模块 Rate Control
+    param-&gt;rc.i_rc_method = X264_RC_CRF;
+    param-&gt;rc.i_bitrate = 0;
+    param-&gt;rc.f_rate_tolerance = 1.0;
+    param-&gt;rc.i_vbv_max_bitrate = 0;
+    param-&gt;rc.i_vbv_buffer_size = 0;
+    param-&gt;rc.f_vbv_buffer_init = 0.9;
+    param-&gt;rc.i_qp_constant = 23 + QP_BD_OFFSET;
+    param-&gt;rc.f_rf_constant = 23;
+    param-&gt;rc.i_qp_min = 0;
+    param-&gt;rc.i_qp_max = QP_MAX;
+    param-&gt;rc.i_qp_step = 4;
+    param-&gt;rc.f_ip_factor = 1.4;
+    param-&gt;rc.f_pb_factor = 1.3;
+    param-&gt;rc.i_aq_mode = X264_AQ_VARIANCE;
+    param-&gt;rc.f_aq_strength = 1.0;
+    param-&gt;rc.i_lookahead = 40;
+
+    param-&gt;rc.b_stat_write = 0;
+    param-&gt;rc.psz_stat_out = "x264_2pass.log";
+    param-&gt;rc.b_stat_read = 0;
+    param-&gt;rc.psz_stat_in = "x264_2pass.log";
+    param-&gt;rc.f_qcompress = 0.6;
+    param-&gt;rc.f_qblur = 0.5;
+    param-&gt;rc.f_complexity_blur = 20;
+    param-&gt;rc.i_zones = 0;
+    param-&gt;rc.b_mb_tree = 1;
+
+    /* Log */
+    //日志模块
+    param-&gt;pf_log = x264_log_default;
+    param-&gt;p_log_private = NULL;
+    param-&gt;i_log_level = X264_LOG_INFO;
+
+    /* */
+    //分析模块 Analysis
+    param-&gt;analyse.intra = X264_ANALYSE_I4x4 | X264_ANALYSE_I8x8;
+    param-&gt;analyse.inter = X264_ANALYSE_I4x4 | X264_ANALYSE_I8x8
+                         | X264_ANALYSE_PSUB16x16 | X264_ANALYSE_BSUB16x16;
+    param-&gt;analyse.i_direct_mv_pred = X264_DIRECT_PRED_SPATIAL;
+    param-&gt;analyse.i_me_method = X264_ME_HEX;
+    param-&gt;analyse.f_psy_rd = 1.0;
+    param-&gt;analyse.b_psy = 1;
+    param-&gt;analyse.f_psy_trellis = 0;
+    param-&gt;analyse.i_me_range = 16;
+    param-&gt;analyse.i_subpel_refine = 7;
+    param-&gt;analyse.b_mixed_references = 1;
+    param-&gt;analyse.b_chroma_me = 1;
+    param-&gt;analyse.i_mv_range_thread = -1;
+    param-&gt;analyse.i_mv_range = -1; // set from level_idc
+    param-&gt;analyse.i_chroma_qp_offset = 0;
+    param-&gt;analyse.b_fast_pskip = 1;
+    param-&gt;analyse.b_weighted_bipred = 1;
+    param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_SMART;
+    param-&gt;analyse.b_dct_decimate = 1;
+    param-&gt;analyse.b_transform_8x8 = 1;
+    param-&gt;analyse.i_trellis = 1;
+    param-&gt;analyse.i_luma_deadzone[0] = 21;
+    param-&gt;analyse.i_luma_deadzone[1] = 11;
+    param-&gt;analyse.b_psnr = 0;
+    param-&gt;analyse.b_ssim = 0;
+
+    param-&gt;i_cqm_preset = X264_CQM_FLAT;
+    memset( param-&gt;cqm_4iy, 16, sizeof( param-&gt;cqm_4iy ) );
+    memset( param-&gt;cqm_4py, 16, sizeof( param-&gt;cqm_4py ) );
+    memset( param-&gt;cqm_4ic, 16, sizeof( param-&gt;cqm_4ic ) );
+    memset( param-&gt;cqm_4pc, 16, sizeof( param-&gt;cqm_4pc ) );
+    memset( param-&gt;cqm_8iy, 16, sizeof( param-&gt;cqm_8iy ) );
+    memset( param-&gt;cqm_8py, 16, sizeof( param-&gt;cqm_8py ) );
+    memset( param-&gt;cqm_8ic, 16, sizeof( param-&gt;cqm_8ic ) );
+    memset( param-&gt;cqm_8pc, 16, sizeof( param-&gt;cqm_8pc ) );
+
+    param-&gt;b_repeat_headers = 1;
+    param-&gt;b_annexb = 1;
+    param-&gt;b_aud = 0;
+    param-&gt;b_vfr_input = 1;
+    param-&gt;i_nal_hrd = X264_NAL_HRD_NONE;
+    param-&gt;b_tff = 1;
+    param-&gt;b_pic_struct = 0;
+    param-&gt;b_fake_interlaced = 0;
+    param-&gt;i_frame_packing = -1;
+    param-&gt;b_opencl = 0;
+    param-&gt;i_opencl_device = 0;
+    param-&gt;opencl_device_id = NULL;
+    param-&gt;psz_clbin_file = NULL;
+}
+</pre>
+    <br/>
+    从源代码可以看出，x264_param_default()对输入的存储参数的结构体x264_param_t的成员变量进行了赋值工作。
+    <br/>
+    <br/>
+    <h3>
+     x264_param_default_preset()
+    </h3>
+    x264_param_default_preset()是一个libx264的API，用于设置x264的preset和tune。该函数的声明如下所示。
+    <br/>
+    <pre class="cpp" name="code">/*      Multiple tunings can be used if separated by a delimiter in ",./-+",
+ *      however multiple psy tunings cannot be used.
+ *      film, animation, grain, stillimage, psnr, and ssim are psy tunings.
+ *
+ *      returns 0 on success, negative on failure (e.g. invalid preset/tune name). */
+int     x264_param_default_preset( x264_param_t *, const char *preset, const char *tune );</pre>
+    x264_param_default_preset()的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_6_9167640">//设置preset，tune
+int x264_param_default_preset( x264_param_t *param, const char *preset, const char *tune )
+{
+    x264_param_default( param );
+
+    //设置preset
+    if( preset &amp;&amp; x264_param_apply_preset( param, preset ) &lt; 0 )
+        return -1;
+
+    //设置tune
+    if( tune &amp;&amp; x264_param_apply_tune( param, tune ) &lt; 0 )
+        return -1;
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码可以看出，x264_param_default_preset()调用x264_param_apply_preset()设置preset，调用x264_param_apply_tune()设置tune。记录一下这两个函数。
+    <br/>
+    <br/>
+    <strong>
+     x264_param_apply_preset()
+    </strong>
+    <br/>
+    x264_param_apply_preset()用于设置preset。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_7_8356700">//设置preset
+static int x264_param_apply_preset( x264_param_t *param, const char *preset )
+{
+    char *end;
+    int i = strtol( preset, &amp;end, 10 );
+    if( *end == 0 &amp;&amp; i &gt;= 0 &amp;&amp; i &lt; sizeof(x264_preset_names)/sizeof(*x264_preset_names)-1 )
+        preset = x264_preset_names[i];
+
+    //几种不同的preset设置不同的参数
+    if( !strcasecmp( preset, "ultrafast" ) )
+    {
+        param-&gt;i_frame_reference = 1;
+        param-&gt;i_scenecut_threshold = 0;
+        param-&gt;b_deblocking_filter = 0;//不使用去块滤波
+        param-&gt;b_cabac = 0;//不使用CABAC
+        param-&gt;i_bframe = 0;//不使用B帧
+        param-&gt;analyse.intra = 0;
+        param-&gt;analyse.inter = 0;
+        param-&gt;analyse.b_transform_8x8 = 0;//不使用8x8DCT
+        param-&gt;analyse.i_me_method = X264_ME_DIA;//运动搜索方法使用“Diamond”
+        param-&gt;analyse.i_subpel_refine = 0;
+        param-&gt;rc.i_aq_mode = 0;
+        param-&gt;analyse.b_mixed_references = 0;
+        param-&gt;analyse.i_trellis = 0;
+        param-&gt;i_bframe_adaptive = X264_B_ADAPT_NONE;
+        param-&gt;rc.b_mb_tree = 0;
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_NONE;//不使用加权
+        param-&gt;analyse.b_weighted_bipred = 0;
+        param-&gt;rc.i_lookahead = 0;
+    }
+    else if( !strcasecmp( preset, "superfast" ) )
+    {
+        param-&gt;analyse.inter = X264_ANALYSE_I8x8|X264_ANALYSE_I4x4;
+        param-&gt;analyse.i_me_method = X264_ME_DIA;//钻石模板
+        param-&gt;analyse.i_subpel_refine = 1;//亚像素运动估计质量为1
+        param-&gt;i_frame_reference = 1;
+        param-&gt;analyse.b_mixed_references = 0;
+        param-&gt;analyse.i_trellis = 0;
+        param-&gt;rc.b_mb_tree = 0;
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_SIMPLE;
+        param-&gt;rc.i_lookahead = 0;
+    }
+    else if( !strcasecmp( preset, "veryfast" ) )
+    {
+        param-&gt;analyse.i_me_method = X264_ME_HEX;//六边形模板
+        param-&gt;analyse.i_subpel_refine = 2;
+        param-&gt;i_frame_reference = 1;
+        param-&gt;analyse.b_mixed_references = 0;
+        param-&gt;analyse.i_trellis = 0;
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_SIMPLE;
+        param-&gt;rc.i_lookahead = 10;
+    }
+    else if( !strcasecmp( preset, "faster" ) )
+    {
+        param-&gt;analyse.b_mixed_references = 0;
+        param-&gt;i_frame_reference = 2;
+        param-&gt;analyse.i_subpel_refine = 4;
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_SIMPLE;
+        param-&gt;rc.i_lookahead = 20;
+    }
+    else if( !strcasecmp( preset, "fast" ) )
+    {
+        param-&gt;i_frame_reference = 2;
+        param-&gt;analyse.i_subpel_refine = 6;
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_SIMPLE;
+        param-&gt;rc.i_lookahead = 30;
+    }
+    else if( !strcasecmp( preset, "medium" ) )
+    {
+        /* Default is medium */
+    }
+    else if( !strcasecmp( preset, "slow" ) )
+    {
+        param-&gt;analyse.i_me_method = X264_ME_UMH;//UMH相对复杂
+        param-&gt;analyse.i_subpel_refine = 8;//亚像素运动估计质量为8
+        param-&gt;i_frame_reference = 5;
+        param-&gt;i_bframe_adaptive = X264_B_ADAPT_TRELLIS;
+        param-&gt;analyse.i_direct_mv_pred = X264_DIRECT_PRED_AUTO;
+        param-&gt;rc.i_lookahead = 50;
+    }
+    else if( !strcasecmp( preset, "slower" ) )
+    {
+        param-&gt;analyse.i_me_method = X264_ME_UMH;
+        param-&gt;analyse.i_subpel_refine = 9;
+        param-&gt;i_frame_reference = 8;
+        param-&gt;i_bframe_adaptive = X264_B_ADAPT_TRELLIS;
+        param-&gt;analyse.i_direct_mv_pred = X264_DIRECT_PRED_AUTO;
+        param-&gt;analyse.inter |= X264_ANALYSE_PSUB8x8;
+        param-&gt;analyse.i_trellis = 2;
+        param-&gt;rc.i_lookahead = 60;
+    }
+    else if( !strcasecmp( preset, "veryslow" ) )
+    {
+        param-&gt;analyse.i_me_method = X264_ME_UMH;
+        param-&gt;analyse.i_subpel_refine = 10;
+        param-&gt;analyse.i_me_range = 24;
+        param-&gt;i_frame_reference = 16;
+        param-&gt;i_bframe_adaptive = X264_B_ADAPT_TRELLIS;
+        param-&gt;analyse.i_direct_mv_pred = X264_DIRECT_PRED_AUTO;
+        param-&gt;analyse.inter |= X264_ANALYSE_PSUB8x8;
+        param-&gt;analyse.i_trellis = 2;
+        param-&gt;i_bframe = 8;
+        param-&gt;rc.i_lookahead = 60;
+    }
+    else if( !strcasecmp( preset, "placebo" ) )
+    {
+        param-&gt;analyse.i_me_method = X264_ME_TESA;//TESA很慢
+        param-&gt;analyse.i_subpel_refine = 11;
+        param-&gt;analyse.i_me_range = 24;
+        param-&gt;i_frame_reference = 16;
+        param-&gt;i_bframe_adaptive = X264_B_ADAPT_TRELLIS;
+        param-&gt;analyse.i_direct_mv_pred = X264_DIRECT_PRED_AUTO;
+        param-&gt;analyse.inter |= X264_ANALYSE_PSUB8x8;
+        param-&gt;analyse.b_fast_pskip = 0;
+        param-&gt;analyse.i_trellis = 2;
+        param-&gt;i_bframe = 16;
+        param-&gt;rc.i_lookahead = 60;
+    }
+    else
+    {
+        x264_log( NULL, X264_LOG_ERROR, "invalid preset '%s'\n", preset );
+        return -1;
+    }
+    return 0;
+}
+</pre>
+    <br/>
+    可以看出x264_param_apply_preset()通过strcasecmp()比较字符串的方法得到输入的preset类型；然后根据preset类型，设定 x264_param_t中相应的参数。
+    <br/>
+    <br/>
+    <strong>
+     x264_param_apply_tune()
+    </strong>
+    <br/>
+    x264_param_apply_tune()用于设置tune。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_8_6291241">//设置tune
+static int x264_param_apply_tune( x264_param_t *param, const char *tune )
+{
+    char *tmp = x264_malloc( strlen( tune ) + 1 );
+    if( !tmp )
+        return -1;
+    tmp = strcpy( tmp, tune );
+    //分解一个字符串为一个字符串数组。第2个参数为分隔符
+    char *s = strtok( tmp, ",./-+" );
+    int psy_tuning_used = 0;
+
+    //设置
+    //这里是循环的，可以设置多次
+    while( s )
+    {
+        if( !strncasecmp( s, "film", 4 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;i_deblocking_filter_alphac0 = -1;
+            param-&gt;i_deblocking_filter_beta = -1;
+            param-&gt;analyse.f_psy_trellis = 0.15;
+        }
+        else if( !strncasecmp( s, "animation", 9 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;i_frame_reference = param-&gt;i_frame_reference &gt; 1 ? param-&gt;i_frame_reference*2 : 1;
+            param-&gt;i_deblocking_filter_alphac0 = 1;
+            param-&gt;i_deblocking_filter_beta = 1;
+            param-&gt;analyse.f_psy_rd = 0.4;
+            param-&gt;rc.f_aq_strength = 0.6;
+            param-&gt;i_bframe += 2;
+        }
+        else if( !strncasecmp( s, "grain", 5 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;i_deblocking_filter_alphac0 = -2;
+            param-&gt;i_deblocking_filter_beta = -2;
+            param-&gt;analyse.f_psy_trellis = 0.25;
+            param-&gt;analyse.b_dct_decimate = 0;
+            param-&gt;rc.f_pb_factor = 1.1;
+            param-&gt;rc.f_ip_factor = 1.1;
+            param-&gt;rc.f_aq_strength = 0.5;
+            param-&gt;analyse.i_luma_deadzone[0] = 6;
+            param-&gt;analyse.i_luma_deadzone[1] = 6;
+            param-&gt;rc.f_qcompress = 0.8;
+        }
+        else if( !strncasecmp( s, "stillimage", 10 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;i_deblocking_filter_alphac0 = -3;
+            param-&gt;i_deblocking_filter_beta = -3;
+            param-&gt;analyse.f_psy_rd = 2.0;
+            param-&gt;analyse.f_psy_trellis = 0.7;
+            param-&gt;rc.f_aq_strength = 1.2;
+        }
+        else if( !strncasecmp( s, "psnr", 4 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;rc.i_aq_mode = X264_AQ_NONE;
+            param-&gt;analyse.b_psy = 0;
+        }
+        else if( !strncasecmp( s, "ssim", 4 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;rc.i_aq_mode = X264_AQ_AUTOVARIANCE;
+            param-&gt;analyse.b_psy = 0;
+        }
+        else if( !strncasecmp( s, "fastdecode", 10 ) )
+        {
+            param-&gt;b_deblocking_filter = 0;
+            param-&gt;b_cabac = 0;
+            param-&gt;analyse.b_weighted_bipred = 0;
+            param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_NONE;
+        }
+        else if( !strncasecmp( s, "zerolatency", 11 ) )
+        {
+        	//zerolatency速度快
+            param-&gt;rc.i_lookahead = 0;
+            param-&gt;i_sync_lookahead = 0;
+            param-&gt;i_bframe = 0;//不使用B帧
+            param-&gt;b_sliced_threads = 1;
+            param-&gt;b_vfr_input = 0;
+            param-&gt;rc.b_mb_tree = 0;
+        }
+        else if( !strncasecmp( s, "touhou", 6 ) )
+        {
+            if( psy_tuning_used++ ) goto psy_failure;
+            param-&gt;i_frame_reference = param-&gt;i_frame_reference &gt; 1 ? param-&gt;i_frame_reference*2 : 1;
+            param-&gt;i_deblocking_filter_alphac0 = -1;
+            param-&gt;i_deblocking_filter_beta = -1;
+            param-&gt;analyse.f_psy_trellis = 0.2;
+            param-&gt;rc.f_aq_strength = 1.3;
+            if( param-&gt;analyse.inter &amp; X264_ANALYSE_PSUB16x16 )
+                param-&gt;analyse.inter |= X264_ANALYSE_PSUB8x8;
+        }
+        else
+        {
+            x264_log( NULL, X264_LOG_ERROR, "invalid tune '%s'\n", s );
+            x264_free( tmp );
+            return -1;
+        }
+        if( 0 )
+        {
+    psy_failure:
+            x264_log( NULL, X264_LOG_WARNING, "only 1 psy tuning can be used: ignoring tune %s\n", s );
+        }
+        s = strtok( NULL, ",./-+" );
+    }
+    x264_free( tmp );
+    return 0;
+}
+</pre>
+    <br/>
+    可以看出x264_param_apply_tune()首先通过strtok()得到存储tune[]数组；然后通过strncasecmp()比较字符串的方法判断当前的tune类型；最后根据tune类型，设定 x264_param_t中相应的参数。
+    <br/>
+    <br/>
+    <h3>
+     help()
+    </h3>
+    help()用于打印帮助菜单。在x264命令行程序中添加“-h”参数后会调用该函数。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_9_5022952">//帮助菜单
+//longhelp标识是否展开更长的帮助菜单
+static void help( x264_param_t *defaults, int longhelp )
+{
+    char buf[50];
+    //H0(),H1(),H2()都是printf()
+    //H1(),H2()只有“长帮助菜单”的情况下才会调用printf()
+#define H0 printf
+#define H1 if(longhelp&gt;=1) printf
+#define H2 if(longhelp==2) printf
+    H0( "x264 core:%d%s\n"
+        "Syntax: x264 [options] -o outfile infile\n"
+        "\n"
+        "Infile can be raw (in which case resolution is required),\n"
+        "  or YUV4MPEG (*.y4m),\n"
+        "  or Avisynth if compiled with support (%s).\n"
+        "  or libav* formats if compiled with lavf support (%s) or ffms support (%s).\n"
+        "Outfile type is selected by filename:\n"
+        " .264 -&gt; Raw bytestream\n"
+        " .mkv -&gt; Matroska\n"
+        " .flv -&gt; Flash Video\n"
+        " .mp4 -&gt; MP4 if compiled with GPAC or L-SMASH support (%s)\n"
+        "Output bit depth: %d (configured at compile time)\n"
+        "\n"
+        "Options:\n"
+        "\n"
+        "  -h, --help                  List basic options\n"
+        "      --longhelp              List more options\n"
+        "      --fullhelp              List all options\n"
+        "\n",
+        X264_BUILD, X264_VERSION,
+#if HAVE_AVS
+        "yes",
+#else
+        "no",
+#endif
+#if HAVE_LAVF
+        "yes",
+#else
+        "no",
+#endif
+#if HAVE_FFMS
+        "yes",
+#else
+        "no",
+#endif
+#if HAVE_GPAC
+        "gpac",
+#elif HAVE_LSMASH
+        "lsmash",
+#else
+        "no",
+#endif
+        x264_bit_depth
+      );
+    H0( "Example usage:\n" );
+    H0( "\n" );
+    H0( "      Constant quality mode:\n" );
+    H0( "            x264 --crf 24 -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "\n" );
+    H0( "      Two-pass with a bitrate of 1000kbps:\n" );
+    H0( "            x264 --pass 1 --bitrate 1000 -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "            x264 --pass 2 --bitrate 1000 -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "\n" );
+    H0( "      Lossless:\n" );
+    H0( "            x264 --qp 0 -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "\n" );
+    H0( "      Maximum PSNR at the cost of speed and visual quality:\n" );
+    H0( "            x264 --preset placebo --tune psnr -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "\n" );
+    H0( "      Constant bitrate at 1000kbps with a 2 second-buffer:\n");
+    H0( "            x264 --vbv-bufsize 2000 --bitrate 1000 -o &lt;output&gt; &lt;input&gt;\n" );
+    H0( "\n" );
+    H0( "Presets:\n" );
+    H0( "\n" );
+    H0( "      --profile &lt;string&gt;      Force the limits of an H.264 profile\n"
+        "                                  Overrides all settings.\n" );
+    H2(
+#if X264_CHROMA_FORMAT &lt;= X264_CSP_I420
+#if BIT_DEPTH==8
+        "                                  - baseline:\n"
+        "                                    --no-8x8dct --bframes 0 --no-cabac\n"
+        "                                    --cqm flat --weightp 0\n"
+        "                                    No interlaced.\n"
+        "                                    No lossless.\n"
+        "                                  - main:\n"
+        "                                    --no-8x8dct --cqm flat\n"
+        "                                    No lossless.\n"
+        "                                  - high:\n"
+        "                                    No lossless.\n"
+#endif
+        "                                  - high10:\n"
+        "                                    No lossless.\n"
+        "                                    Support for bit depth 8-10.\n"
+#endif
+#if X264_CHROMA_FORMAT &lt;= X264_CSP_I422
+        "                                  - high422:\n"
+        "                                    No lossless.\n"
+        "                                    Support for bit depth 8-10.\n"
+        "                                    Support for 4:2:0/4:2:2 chroma subsampling.\n"
+#endif
+        "                                  - high444:\n"
+        "                                    Support for bit depth 8-10.\n"
+        "                                    Support for 4:2:0/4:2:2/4:4:4 chroma subsampling.\n" );
+        else H0(
+        "                                  - "
+#if X264_CHROMA_FORMAT &lt;= X264_CSP_I420
+#if BIT_DEPTH==8
+        "baseline,main,high,"
+#endif
+        "high10,"
+#endif
+#if X264_CHROMA_FORMAT &lt;= X264_CSP_I422
+        "high422,"
+#endif
+        "high444\n"
+               );
+    H0( "      --preset &lt;string&gt;       Use a preset to select encoding settings [medium]\n"
+        "                                  Overridden by user settings.\n" );
+    H2( "                                  - ultrafast:\n"
+        "                                    --no-8x8dct --aq-mode 0 --b-adapt 0\n"
+        "                                    --bframes 0 --no-cabac --no-deblock\n"
+        "                                    --no-mbtree --me dia --no-mixed-refs\n"
+        "                                    --partitions none --rc-lookahead 0 --ref 1\n"
+        "                                    --scenecut 0 --subme 0 --trellis 0\n"
+        "                                    --no-weightb --weightp 0\n"
+        "                                  - superfast:\n"
+        "                                    --no-mbtree --me dia --no-mixed-refs\n"
+        "                                    --partitions i8x8,i4x4 --rc-lookahead 0\n"
+        "                                    --ref 1 --subme 1 --trellis 0 --weightp 1\n"
+        "                                  - veryfast:\n"
+        "                                    --no-mixed-refs --rc-lookahead 10\n"
+        "                                    --ref 1 --subme 2 --trellis 0 --weightp 1\n"
+        "                                  - faster:\n"
+        "                                    --no-mixed-refs --rc-lookahead 20\n"
+        "                                    --ref 2 --subme 4 --weightp 1\n"
+        "                                  - fast:\n"
+        "                                    --rc-lookahead 30 --ref 2 --subme 6\n"
+        "                                    --weightp 1\n"
+        "                                  - medium:\n"
+        "                                    Default settings apply.\n"
+        "                                  - slow:\n"
+        "                                    --b-adapt 2 --direct auto --me umh\n"
+        "                                    --rc-lookahead 50 --ref 5 --subme 8\n"
+        "                                  - slower:\n"
+        "                                    --b-adapt 2 --direct auto --me umh\n"
+        "                                    --partitions all --rc-lookahead 60\n"
+        "                                    --ref 8 --subme 9 --trellis 2\n"
+        "                                  - veryslow:\n"
+        "                                    --b-adapt 2 --bframes 8 --direct auto\n"
+        "                                    --me umh --merange 24 --partitions all\n"
+        "                                    --ref 16 --subme 10 --trellis 2\n"
+        "                                    --rc-lookahead 60\n"
+        "                                  - placebo:\n"
+        "                                    --bframes 16 --b-adapt 2 --direct auto\n"
+        "                                    --slow-firstpass --no-fast-pskip\n"
+        "                                    --me tesa --merange 24 --partitions all\n"
+        "                                    --rc-lookahead 60 --ref 16 --subme 11\n"
+        "                                    --trellis 2\n" );
+    else H0( "                                  - ultrafast,superfast,veryfast,faster,fast\n"
+             "                                  - medium,slow,slower,veryslow,placebo\n" );
+    H0( "      --tune &lt;string&gt;         Tune the settings for a particular type of source\n"
+        "                              or situation\n"
+        "                                  Overridden by user settings.\n"
+        "                                  Multiple tunings are separated by commas.\n"
+        "                                  Only one psy tuning can be used at a time.\n" );
+    H2( "                                  - film (psy tuning):\n"
+        "                                    --deblock -1:-1 --psy-rd &lt;unset&gt;:0.15\n"
+        "                                  - animation (psy tuning):\n"
+        "                                    --bframes {+2} --deblock 1:1\n"
+        "                                    --psy-rd 0.4:&lt;unset&gt; --aq-strength 0.6\n"
+        "                                    --ref {Double if &gt;1 else 1}\n"
+        "                                  - grain (psy tuning):\n"
+        "                                    --aq-strength 0.5 --no-dct-decimate\n"
+        "                                    --deadzone-inter 6 --deadzone-intra 6\n"
+        "                                    --deblock -2:-2 --ipratio 1.1 \n"
+        "                                    --pbratio 1.1 --psy-rd &lt;unset&gt;:0.25\n"
+        "                                    --qcomp 0.8\n"
+        "                                  - stillimage (psy tuning):\n"
+        "                                    --aq-strength 1.2 --deblock -3:-3\n"
+        "                                    --psy-rd 2.0:0.7\n"
+        "                                  - psnr (psy tuning):\n"
+        "                                    --aq-mode 0 --no-psy\n"
+        "                                  - ssim (psy tuning):\n"
+        "                                    --aq-mode 2 --no-psy\n"
+        "                                  - fastdecode:\n"
+        "                                    --no-cabac --no-deblock --no-weightb\n"
+        "                                    --weightp 0\n"
+        "                                  - zerolatency:\n"
+        "                                    --bframes 0 --force-cfr --no-mbtree\n"
+        "                                    --sync-lookahead 0 --sliced-threads\n"
+        "                                    --rc-lookahead 0\n" );
+    else H0( "                                  - psy tunings: film,animation,grain,\n"
+             "                                                 stillimage,psnr,ssim\n"
+             "                                  - other tunings: fastdecode,zerolatency\n" );
+    H2( "      --slow-firstpass        Don't force these faster settings with --pass 1:\n"
+        "                                  --no-8x8dct --me dia --partitions none\n"
+        "                                  --ref 1 --subme {2 if &gt;2 else unchanged}\n"
+        "                                  --trellis 0 --fast-pskip\n" );
+    else H1( "      --slow-firstpass        Don't force faster settings with --pass 1\n" );
+    H0( "\n" );
+    H0( "Frame-type options:\n" );
+    H0( "\n" );
+    H0( "  -I, --keyint &lt;integer or \"infinite\"&gt; Maximum GOP size [%d]\n", defaults-&gt;i_keyint_max );
+    H2( "  -i, --min-keyint &lt;integer&gt;  Minimum GOP size [auto]\n" );
+    H2( "      --no-scenecut           Disable adaptive I-frame decision\n" );
+    H2( "      --scenecut &lt;integer&gt;    How aggressively to insert extra I-frames [%d]\n", defaults-&gt;i_scenecut_threshold );
+    H2( "      --intra-refresh         Use Periodic Intra Refresh instead of IDR frames\n" );
+    H1( "  -b, --bframes &lt;integer&gt;     Number of B-frames between I and P [%d]\n", defaults-&gt;i_bframe );
+    H1( "      --b-adapt &lt;integer&gt;     Adaptive B-frame decision method [%d]\n"
+        "                                  Higher values may lower threading efficiency.\n"
+        "                                  - 0: Disabled\n"
+        "                                  - 1: Fast\n"
+        "                                  - 2: Optimal (slow with high --bframes)\n", defaults-&gt;i_bframe_adaptive );
+    H2( "      --b-bias &lt;integer&gt;      Influences how often B-frames are used [%d]\n", defaults-&gt;i_bframe_bias );
+    H1( "      --b-pyramid &lt;string&gt;    Keep some B-frames as references [%s]\n"
+        "                                  - none: Disabled\n"
+        "                                  - strict: Strictly hierarchical pyramid\n"
+        "                                  - normal: Non-strict (not Blu-ray compatible)\n",
+        strtable_lookup( x264_b_pyramid_names, defaults-&gt;i_bframe_pyramid ) );
+    H1( "      --open-gop              Use recovery points to close GOPs\n"
+        "                              Only available with b-frames\n" );
+    H1( "      --no-cabac              Disable CABAC\n" );
+    H1( "  -r, --ref &lt;integer&gt;         Number of reference frames [%d]\n", defaults-&gt;i_frame_reference );
+    H1( "      --no-deblock            Disable loop filter\n" );
+    H1( "  -f, --deblock &lt;alpha:beta&gt;  Loop filter parameters [%d:%d]\n",
+                                       defaults-&gt;i_deblocking_filter_alphac0, defaults-&gt;i_deblocking_filter_beta );
+    H2( "      --slices &lt;integer&gt;      Number of slices per frame; forces rectangular\n"
+        "                              slices and is overridden by other slicing options\n" );
+    else H1( "      --slices &lt;integer&gt;      Number of slices per frame\n" );
+    H2( "      --slices-max &lt;integer&gt;  Absolute maximum slices per frame; overrides\n"
+        "                              slice-max-size/slice-max-mbs when necessary\n" );
+    H2( "      --slice-max-size &lt;integer&gt; Limit the size of each slice in bytes\n");
+    H2( "      --slice-max-mbs &lt;integer&gt; Limit the size of each slice in macroblocks (max)\n");
+    H2( "      --slice-min-mbs &lt;integer&gt; Limit the size of each slice in macroblocks (min)\n");
+    H0( "      --tff                   Enable interlaced mode (top field first)\n" );
+    H0( "      --bff                   Enable interlaced mode (bottom field first)\n" );
+    H2( "      --constrained-intra     Enable constrained intra prediction.\n" );
+    H0( "      --pulldown &lt;string&gt;     Use soft pulldown to change frame rate\n"
+        "                                  - none, 22, 32, 64, double, triple, euro (requires cfr input)\n" );
+    H2( "      --fake-interlaced       Flag stream as interlaced but encode progressive.\n"
+        "                              Makes it possible to encode 25p and 30p Blu-Ray\n"
+        "                              streams. Ignored in interlaced mode.\n" );
+    H2( "      --frame-packing &lt;integer&gt; For stereoscopic videos define frame arrangement\n"
+        "                                  - 0: checkerboard - pixels are alternatively from L and R\n"
+        "                                  - 1: column alternation - L and R are interlaced by column\n"
+        "                                  - 2: row alternation - L and R are interlaced by row\n"
+        "                                  - 3: side by side - L is on the left, R on the right\n"
+        "                                  - 4: top bottom - L is on top, R on bottom\n"
+        "                                  - 5: frame alternation - one view per frame\n" );
+    H0( "\n" );
+    H0( "Ratecontrol:\n" );
+    H0( "\n" );
+    H1( "  -q, --qp &lt;integer&gt;          Force constant QP (0-%d, 0=lossless)\n", QP_MAX );
+    H0( "  -B, --bitrate &lt;integer&gt;     Set bitrate (kbit/s)\n" );
+    H0( "      --crf &lt;float&gt;           Quality-based VBR (%d-51) [%.1f]\n", 51 - QP_MAX_SPEC, defaults-&gt;rc.f_rf_constant );
+    H1( "      --rc-lookahead &lt;integer&gt; Number of frames for frametype lookahead [%d]\n", defaults-&gt;rc.i_lookahead );
+    H0( "      --vbv-maxrate &lt;integer&gt; Max local bitrate (kbit/s) [%d]\n", defaults-&gt;rc.i_vbv_max_bitrate );
+    H0( "      --vbv-bufsize &lt;integer&gt; Set size of the VBV buffer (kbit) [%d]\n", defaults-&gt;rc.i_vbv_buffer_size );
+    H2( "      --vbv-init &lt;float&gt;      Initial VBV buffer occupancy [%.1f]\n", defaults-&gt;rc.f_vbv_buffer_init );
+    H2( "      --crf-max &lt;float&gt;       With CRF+VBV, limit RF to this value\n"
+        "                                  May cause VBV underflows!\n" );
+    H2( "      --qpmin &lt;integer&gt;       Set min QP [%d]\n", defaults-&gt;rc.i_qp_min );
+    H2( "      --qpmax &lt;integer&gt;       Set max QP [%d]\n", defaults-&gt;rc.i_qp_max );
+    H2( "      --qpstep &lt;integer&gt;      Set max QP step [%d]\n", defaults-&gt;rc.i_qp_step );
+    H2( "      --ratetol &lt;float&gt;       Tolerance of ABR ratecontrol and VBV [%.1f]\n", defaults-&gt;rc.f_rate_tolerance );
+    H2( "      --ipratio &lt;float&gt;       QP factor between I and P [%.2f]\n", defaults-&gt;rc.f_ip_factor );
+    H2( "      --pbratio &lt;float&gt;       QP factor between P and B [%.2f]\n", defaults-&gt;rc.f_pb_factor );
+    H2( "      --chroma-qp-offset &lt;integer&gt;  QP difference between chroma and luma [%d]\n", defaults-&gt;analyse.i_chroma_qp_offset );
+    H2( "      --aq-mode &lt;integer&gt;     AQ method [%d]\n"
+        "                                  - 0: Disabled\n"
+        "                                  - 1: Variance AQ (complexity mask)\n"
+        "                                  - 2: Auto-variance AQ (experimental)\n", defaults-&gt;rc.i_aq_mode );
+    H1( "      --aq-strength &lt;float&gt;   Reduces blocking and blurring in flat and\n"
+        "                              textured areas. [%.1f]\n", defaults-&gt;rc.f_aq_strength );
+    H1( "\n" );
+    H0( "  -p, --pass &lt;integer&gt;        Enable multipass ratecontrol\n"
+        "                                  - 1: First pass, creates stats file\n"
+        "                                  - 2: Last pass, does not overwrite stats file\n" );
+    H2( "                                  - 3: Nth pass, overwrites stats file\n" );
+    H1( "      --stats &lt;string&gt;        Filename for 2 pass stats [\"%s\"]\n", defaults-&gt;rc.psz_stat_out );
+    H2( "      --no-mbtree             Disable mb-tree ratecontrol.\n");
+    H2( "      --qcomp &lt;float&gt;         QP curve compression [%.2f]\n", defaults-&gt;rc.f_qcompress );
+    H2( "      --cplxblur &lt;float&gt;      Reduce fluctuations in QP (before curve compression) [%.1f]\n", defaults-&gt;rc.f_complexity_blur );
+    H2( "      --qblur &lt;float&gt;         Reduce fluctuations in QP (after curve compression) [%.1f]\n", defaults-&gt;rc.f_qblur );
+    H2( "      --zones &lt;zone0&gt;/&lt;zone1&gt;/...  Tweak the bitrate of regions of the video\n" );
+    H2( "                              Each zone is of the form\n"
+        "                                  &lt;start frame&gt;,&lt;end frame&gt;,&lt;option&gt;\n"
+        "                                  where &lt;option&gt; is either\n"
+        "                                      q=&lt;integer&gt; (force QP)\n"
+        "                                  or  b=&lt;float&gt; (bitrate multiplier)\n" );
+    H2( "      --qpfile &lt;string&gt;       Force frametypes and QPs for some or all frames\n"
+        "                              Format of each line: framenumber frametype QP\n"
+        "                              QP is optional (none lets x264 choose). Frametypes: I,i,K,P,B,b.\n"
+        "                                  K=&lt;I or i&gt; depending on open-gop setting\n"
+        "                              QPs are restricted by qpmin/qpmax.\n" );
+    H1( "\n" );
+    H1( "Analysis:\n" );
+    H1( "\n" );
+    H1( "  -A, --partitions &lt;string&gt;   Partitions to consider [\"p8x8,b8x8,i8x8,i4x4\"]\n"
+        "                                  - p8x8, p4x4, b8x8, i8x8, i4x4\n"
+        "                                  - none, all\n"
+        "                                  (p4x4 requires p8x8. i8x8 requires --8x8dct.)\n" );
+    H1( "      --direct &lt;string&gt;       Direct MV prediction mode [\"%s\"]\n"
+        "                                  - none, spatial, temporal, auto\n",
+                                       strtable_lookup( x264_direct_pred_names, defaults-&gt;analyse.i_direct_mv_pred ) );
+    H2( "      --no-weightb            Disable weighted prediction for B-frames\n" );
+    H1( "      --weightp &lt;integer&gt;     Weighted prediction for P-frames [%d]\n"
+        "                                  - 0: Disabled\n"
+        "                                  - 1: Weighted refs\n"
+        "                                  - 2: Weighted refs + Duplicates\n", defaults-&gt;analyse.i_weighted_pred );
+    H1( "      --me &lt;string&gt;           Integer pixel motion estimation method [\"%s\"]\n",
+                                       strtable_lookup( x264_motion_est_names, defaults-&gt;analyse.i_me_method ) );
+    H2( "                                  - dia: diamond search, radius 1 (fast)\n"
+        "                                  - hex: hexagonal search, radius 2\n"
+        "                                  - umh: uneven multi-hexagon search\n"
+        "                                  - esa: exhaustive search\n"
+        "                                  - tesa: hadamard exhaustive search (slow)\n" );
+    else H1( "                                  - dia, hex, umh\n" );
+    H2( "      --merange &lt;integer&gt;     Maximum motion vector search range [%d]\n", defaults-&gt;analyse.i_me_range );
+    H2( "      --mvrange &lt;integer&gt;     Maximum motion vector length [-1 (auto)]\n" );
+    H2( "      --mvrange-thread &lt;int&gt;  Minimum buffer between threads [-1 (auto)]\n" );
+    H1( "  -m, --subme &lt;integer&gt;       Subpixel motion estimation and mode decision [%d]\n", defaults-&gt;analyse.i_subpel_refine );
+    H2( "                                  - 0: fullpel only (not recommended)\n"
+        "                                  - 1: SAD mode decision, one qpel iteration\n"
+        "                                  - 2: SATD mode decision\n"
+        "                                  - 3-5: Progressively more qpel\n"
+        "                                  - 6: RD mode decision for I/P-frames\n"
+        "                                  - 7: RD mode decision for all frames\n"
+        "                                  - 8: RD refinement for I/P-frames\n"
+        "                                  - 9: RD refinement for all frames\n"
+        "                                  - 10: QP-RD - requires trellis=2, aq-mode&gt;0\n"
+        "                                  - 11: Full RD: disable all early terminations\n" );
+    else H1( "                                  decision quality: 1=fast, 11=best\n" );
+    H1( "      --psy-rd &lt;float:float&gt;  Strength of psychovisual optimization [\"%.1f:%.1f\"]\n"
+        "                                  #1: RD (requires subme&gt;=6)\n"
+        "                                  #2: Trellis (requires trellis, experimental)\n",
+                                       defaults-&gt;analyse.f_psy_rd, defaults-&gt;analyse.f_psy_trellis );
+    H2( "      --no-psy                Disable all visual optimizations that worsen\n"
+        "                              both PSNR and SSIM.\n" );
+    H2( "      --no-mixed-refs         Don't decide references on a per partition basis\n" );
+    H2( "      --no-chroma-me          Ignore chroma in motion estimation\n" );
+    H1( "      --no-8x8dct             Disable adaptive spatial transform size\n" );
+    H1( "  -t, --trellis &lt;integer&gt;     Trellis RD quantization. [%d]\n"
+        "                                  - 0: disabled\n"
+        "                                  - 1: enabled only on the final encode of a MB\n"
+        "                                  - 2: enabled on all mode decisions\n", defaults-&gt;analyse.i_trellis );
+    H2( "      --no-fast-pskip         Disables early SKIP detection on P-frames\n" );
+    H2( "      --no-dct-decimate       Disables coefficient thresholding on P-frames\n" );
+    H1( "      --nr &lt;integer&gt;          Noise reduction [%d]\n", defaults-&gt;analyse.i_noise_reduction );
+    H2( "\n" );
+    H2( "      --deadzone-inter &lt;int&gt;  Set the size of the inter luma quantization deadzone [%d]\n", defaults-&gt;analyse.i_luma_deadzone[0] );
+    H2( "      --deadzone-intra &lt;int&gt;  Set the size of the intra luma quantization deadzone [%d]\n", defaults-&gt;analyse.i_luma_deadzone[1] );
+    H2( "                                  Deadzones should be in the range 0 - 32.\n" );
+    H2( "      --cqm &lt;string&gt;          Preset quant matrices [\"flat\"]\n"
+        "                                  - jvt, flat\n" );
+    H1( "      --cqmfile &lt;string&gt;      Read custom quant matrices from a JM-compatible file\n" );
+    H2( "                                  Overrides any other --cqm* options.\n" );
+    H2( "      --cqm4 &lt;list&gt;           Set all 4x4 quant matrices\n"
+        "                                  Takes a comma-separated list of 16 integers.\n" );
+    H2( "      --cqm8 &lt;list&gt;           Set all 8x8 quant matrices\n"
+        "                                  Takes a comma-separated list of 64 integers.\n" );
+    H2( "      --cqm4i, --cqm4p, --cqm8i, --cqm8p &lt;list&gt;\n"
+        "                              Set both luma and chroma quant matrices\n" );
+    H2( "      --cqm4iy, --cqm4ic, --cqm4py, --cqm4pc &lt;list&gt;\n"
+        "                              Set individual quant matrices\n" );
+    H2( "\n" );
+    H2( "Video Usability Info (Annex E):\n" );
+    H2( "The VUI settings are not used by the encoder but are merely suggestions to\n" );
+    H2( "the playback equipment. See doc/vui.txt for details. Use at your own risk.\n" );
+    H2( "\n" );
+    H2( "      --overscan &lt;string&gt;     Specify crop overscan setting [\"%s\"]\n"
+        "                                  - undef, show, crop\n",
+                                       strtable_lookup( x264_overscan_names, defaults-&gt;vui.i_overscan ) );
+    H2( "      --videoformat &lt;string&gt;  Specify video format [\"%s\"]\n"
+        "                                  - component, pal, ntsc, secam, mac, undef\n",
+                                       strtable_lookup( x264_vidformat_names, defaults-&gt;vui.i_vidformat ) );
+    H2( "      --range &lt;string&gt;        Specify color range [\"%s\"]\n"
+        "                                  - %s\n", range_names[0], stringify_names( buf, range_names ) );
+    H2( "      --colorprim &lt;string&gt;    Specify color primaries [\"%s\"]\n"
+        "                                  - undef, bt709, bt470m, bt470bg, smpte170m,\n"
+        "                                    smpte240m, film, bt2020\n",
+                                       strtable_lookup( x264_colorprim_names, defaults-&gt;vui.i_colorprim ) );
+    H2( "      --transfer &lt;string&gt;     Specify transfer characteristics [\"%s\"]\n"
+        "                                  - undef, bt709, bt470m, bt470bg, smpte170m,\n"
+        "                                    smpte240m, linear, log100, log316,\n"
+        "                                    iec61966-2-4, bt1361e, iec61966-2-1,\n"
+        "                                    bt2020-10, bt2020-12\n",
+                                       strtable_lookup( x264_transfer_names, defaults-&gt;vui.i_transfer ) );
+    H2( "      --colormatrix &lt;string&gt;  Specify color matrix setting [\"%s\"]\n"
+        "                                  - undef, bt709, fcc, bt470bg, smpte170m,\n"
+        "                                    smpte240m, GBR, YCgCo, bt2020nc, bt2020c\n",
+                                       strtable_lookup( x264_colmatrix_names, defaults-&gt;vui.i_colmatrix ) );
+    H2( "      --chromaloc &lt;integer&gt;   Specify chroma sample location (0 to 5) [%d]\n",
+                                       defaults-&gt;vui.i_chroma_loc );
+
+    H2( "      --nal-hrd &lt;string&gt;      Signal HRD information (requires vbv-bufsize)\n"
+        "                                  - none, vbr, cbr (cbr not allowed in .mp4)\n" );
+    H2( "      --filler                Force hard-CBR and generate filler (implied by\n"
+        "                              --nal-hrd cbr)\n" );
+    H2( "      --pic-struct            Force pic_struct in Picture Timing SEI\n" );
+    H2( "      --crop-rect &lt;string&gt;    Add 'left,top,right,bottom' to the bitstream-level\n"
+        "                              cropping rectangle\n" );
+
+    H0( "\n" );
+    H0( "Input/Output:\n" );
+    H0( "\n" );
+    H0( "  -o, --output &lt;string&gt;       Specify output file\n" );
+    H1( "      --muxer &lt;string&gt;        Specify output container format [\"%s\"]\n"
+        "                                  - %s\n", muxer_names[0], stringify_names( buf, muxer_names ) );
+    H1( "      --demuxer &lt;string&gt;      Specify input container format [\"%s\"]\n"
+        "                                  - %s\n", demuxer_names[0], stringify_names( buf, demuxer_names ) );
+    H1( "      --input-fmt &lt;string&gt;    Specify input file format (requires lavf support)\n" );
+    H1( "      --input-csp &lt;string&gt;    Specify input colorspace format for raw input\n" );
+    print_csp_names( longhelp );
+    H1( "      --output-csp &lt;string&gt;   Specify output colorspace [\"%s\"]\n"
+        "                                  - %s\n", output_csp_names[0], stringify_names( buf, output_csp_names ) );
+    H1( "      --input-depth &lt;integer&gt; Specify input bit depth for raw input\n" );
+    H1( "      --input-range &lt;string&gt;  Specify input color range [\"%s\"]\n"
+        "                                  - %s\n", range_names[0], stringify_names( buf, range_names ) );
+    H1( "      --input-res &lt;intxint&gt;   Specify input resolution (width x height)\n" );
+    H1( "      --index &lt;string&gt;        Filename for input index file\n" );
+    H0( "      --sar width:height      Specify Sample Aspect Ratio\n" );
+    H0( "      --fps &lt;float|rational&gt;  Specify framerate\n" );
+    H0( "      --seek &lt;integer&gt;        First frame to encode\n" );
+    H0( "      --frames &lt;integer&gt;      Maximum number of frames to encode\n" );
+    H0( "      --level &lt;string&gt;        Specify level (as defined by Annex A)\n" );
+    H1( "      --bluray-compat         Enable compatibility hacks for Blu-ray support\n" );
+    H1( "      --avcintra-class &lt;integer&gt; Use compatibility hacks for AVC-Intra class\n"
+        "                                  - 50, 100, 200\n" );
+    H1( "      --stitchable            Don't optimize headers based on video content\n"
+        "                              Ensures ability to recombine a segmented encode\n" );
+    H1( "\n" );
+    H1( "  -v, --verbose               Print stats for each frame\n" );
+    H1( "      --no-progress           Don't show the progress indicator while encoding\n" );
+    H0( "      --quiet                 Quiet Mode\n" );
+    H1( "      --log-level &lt;string&gt;    Specify the maximum level of logging [\"%s\"]\n"
+        "                                  - %s\n", strtable_lookup( log_level_names, cli_log_level - X264_LOG_NONE ),
+                                       stringify_names( buf, log_level_names ) );
+    H1( "      --psnr                  Enable PSNR computation\n" );
+    H1( "      --ssim                  Enable SSIM computation\n" );
+    H1( "      --threads &lt;integer&gt;     Force a specific number of threads\n" );
+    H2( "      --lookahead-threads &lt;integer&gt; Force a specific number of lookahead threads\n" );
+    H2( "      --sliced-threads        Low-latency but lower-efficiency threading\n" );
+    H2( "      --thread-input          Run Avisynth in its own thread\n" );
+    H2( "      --sync-lookahead &lt;integer&gt; Number of buffer frames for threaded lookahead\n" );
+    H2( "      --non-deterministic     Slightly improve quality of SMP, at the cost of repeatability\n" );
+    H2( "      --cpu-independent       Ensure exact reproducibility across different cpus,\n"
+        "                                  as opposed to letting them select different algorithms\n" );
+    H2( "      --asm &lt;integer&gt;         Override CPU detection\n" );
+    H2( "      --no-asm                Disable all CPU optimizations\n" );
+    H2( "      --opencl                Enable use of OpenCL\n" );
+    H2( "      --opencl-clbin &lt;string&gt; Specify path of compiled OpenCL kernel cache\n" );
+    H2( "      --opencl-device &lt;integer&gt; Specify OpenCL device ordinal\n" );
+    H2( "      --dump-yuv &lt;string&gt;     Save reconstructed frames\n" );
+    H2( "      --sps-id &lt;integer&gt;      Set SPS and PPS id numbers [%d]\n", defaults-&gt;i_sps_id );
+    H2( "      --aud                   Use access unit delimiters\n" );
+    H2( "      --force-cfr             Force constant framerate timestamp generation\n" );
+    H2( "      --tcfile-in &lt;string&gt;    Force timestamp generation with timecode file\n" );
+    H2( "      --tcfile-out &lt;string&gt;   Output timecode v2 file from input timestamps\n" );
+    H2( "      --timebase &lt;int/int&gt;    Specify timebase numerator and denominator\n"
+        "                 &lt;integer&gt;    Specify timebase numerator for input timecode file\n"
+        "                              or specify timebase denominator for other input\n" );
+    H2( "      --dts-compress          Eliminate initial delay with container DTS hack\n" );
+    H0( "\n" );
+    H0( "Filtering:\n" );
+    H0( "\n" );
+    H0( "      --vf, --video-filter &lt;filter0&gt;/&lt;filter1&gt;/... Apply video filtering to the input file\n" );
+    H0( "\n" );
+    H0( "      Filter options may be specified in &lt;filter&gt;:&lt;option&gt;=&lt;value&gt; format.\n" );
+    H0( "\n" );
+    H0( "      Available filters:\n" );
+    x264_register_vid_filters();
+    x264_vid_filter_help( longhelp );
+    H0( "\n" );
+}
+</pre>
+    <br/>
+    help()中主要有3个宏定义：H0()，H1()和H2()。这三个宏定义实质上都是printf()。它们之间的区别在于：H0()无论如何都会调用print()；H1()在longhelp大于等于1的时候才会调用print()；而H2()在longhelp等于2时候才会调用print()。
+    <br/>
+    <br/>
+    <h3>
+     print_version_info()
+    </h3>
+    print_version_info()用于打印x264的版本信息。在x264命令行程序中添加“-V”参数后会调用该函数。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_10_5117083">//打印版本信息
+static void print_version_info( void )
+{
+#ifdef X264_POINTVER
+    printf( "x264 "X264_POINTVER"\n" );
+#else
+    printf( "x264 0.%d.X\n", X264_BUILD );
+#endif
+#if HAVE_SWSCALE
+    printf( "(libswscale %d.%d.%d)\n", LIBSWSCALE_VERSION_MAJOR, LIBSWSCALE_VERSION_MINOR, LIBSWSCALE_VERSION_MICRO );
+#endif
+#if HAVE_LAVF
+    printf( "(libavformat %d.%d.%d)\n", LIBAVFORMAT_VERSION_MAJOR, LIBAVFORMAT_VERSION_MINOR, LIBAVFORMAT_VERSION_MICRO );
+#endif
+#if HAVE_FFMS
+    printf( "(ffmpegsource %d.%d.%d.%d)\n", FFMS_VERSION &gt;&gt; 24, (FFMS_VERSION &amp; 0xff0000) &gt;&gt; 16, (FFMS_VERSION &amp; 0xff00) &gt;&gt; 8, FFMS_VERSION &amp; 0xff );
+#endif
+    printf( "built on " __DATE__ ", " );
+#ifdef __INTEL_COMPILER
+    printf( "intel: %.2f (%d)\n", __INTEL_COMPILER / 100.f, __INTEL_COMPILER_BUILD_DATE );
+#elif defined(__GNUC__)
+    printf( "gcc: " __VERSION__ "\n" );
+#elif defined(_MSC_FULL_VER)
+    printf( "msvc: %.2f (%u)\n", _MSC_VER / 100.f, _MSC_FULL_VER );
+#else
+    printf( "using an unknown compiler\n" );
+#endif
+    printf( "configuration: --bit-depth=%d --chroma-format=%s\n", x264_bit_depth, X264_CHROMA_FORMAT ? (output_csp_names[0]+1) : "all" );
+    printf( "x264 license: " );
+#if HAVE_GPL
+    printf( "GPL version 2 or later\n" );
+#else
+    printf( "Non-GPL commercial\n" );
+#endif
+#if HAVE_SWSCALE
+    const char *license = swscale_license();
+    printf( "libswscale%s%s license: %s\n", HAVE_LAVF ? "/libavformat" : "", HAVE_FFMS ? "/ffmpegsource" : "" , license );
+    if( !strcmp( license, "nonfree and unredistributable" ) ||
+       (!HAVE_GPL &amp;&amp; (!strcmp( license, "GPL version 2 or later" )
+                  ||  !strcmp( license, "GPL version 3 or later" ))))
+        printf( "WARNING: This binary is unredistributable!\n" );
+#endif
+}
+</pre>
+    <br/>
+    该函数定义比较浅显易懂，不再详细记录。
+    <br/>
+    <br/>
+    <h3>
+     x264_param_parse()
+    </h3>
+    x264_param_parse()是一个x264的API。该函数以字符串键值对的方式设置x264_param_t结构体的一个成员变量。该函数的声明如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_11_9638297">/* x264_param_parse:
+ *  set one parameter by name.
+ *  returns 0 on success, or returns one of the following errors.
+ *  note: BAD_VALUE occurs only if it can't even parse the value,
+ *  numerical range is not checked until x264_encoder_open() or
+ *  x264_encoder_reconfig().
+ *  value=NULL means "true" for boolean options, but is a BAD_VALUE for non-booleans. */
+int x264_param_parse( x264_param_t *, const char *name, const char *value );</pre>
+    x264_param_parse()的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_12_3145756">//解析以字符串方式输入的参数
+//即选项名称和选项值都是字符串
+//实质就是通过strcmp()方法
+int x264_param_parse( x264_param_t *p, const char *name, const char *value )
+{
+    char *name_buf = NULL;
+    int b_error = 0;
+    int name_was_bool;
+    int value_was_null = !value;
+    int i;
+
+    if( !name )
+        return X264_PARAM_BAD_NAME;
+    if( !value )
+        value = "true";
+
+    if( value[0] == '=' )
+        value++;
+
+    if( strchr( name, '_' ) ) // s/_/-/g
+    {
+        char *c;
+        name_buf = strdup(name);
+        while( (c = strchr( name_buf, '_' )) )
+            *c = '-';
+        name = name_buf;
+    }
+
+    if( (!strncmp( name, "no-", 3 ) &amp;&amp; (i = 3)) ||
+        (!strncmp( name, "no", 2 ) &amp;&amp; (i = 2)) )
+    {
+        name += i;
+        value = atobool(value) ? "false" : "true";
+    }
+    name_was_bool = 0;
+
+#define OPT(STR) else if( !strcmp( name, STR ) )
+#define OPT2(STR0, STR1) else if( !strcmp( name, STR0 ) || !strcmp( name, STR1 ) )
+    if(0);
+    //OPT()实际上就是strcmp()
+    OPT("asm")
+    {
+        p-&gt;cpu = isdigit(value[0]) ? atoi(value) :
+                 !strcasecmp(value, "auto") || atobool(value) ? x264_cpu_detect() : 0;
+        if( b_error )
+        {
+            char *buf = strdup(value);
+            char *tok, UNUSED *saveptr=NULL, *init;
+            b_error = 0;
+            p-&gt;cpu = 0;
+            for( init=buf; (tok=strtok_r(init, ",", &amp;saveptr)); init=NULL )
+            {
+                for( i=0; x264_cpu_names[i].flags &amp;&amp; strcasecmp(tok, x264_cpu_names[i].name); i++ );
+                p-&gt;cpu |= x264_cpu_names[i].flags;
+                if( !x264_cpu_names[i].flags )
+                    b_error = 1;
+            }
+            free( buf );
+            if( (p-&gt;cpu&amp;X264_CPU_SSSE3) &amp;&amp; !(p-&gt;cpu&amp;X264_CPU_SSE2_IS_SLOW) )
+                p-&gt;cpu |= X264_CPU_SSE2_IS_FAST;
+        }
+    }
+    OPT("threads")
+    {
+        if( !strcasecmp(value, "auto") )
+            p-&gt;i_threads = X264_THREADS_AUTO;
+        else
+            p-&gt;i_threads = atoi(value);
+    }
+    OPT("lookahead-threads")
+    {
+        if( !strcasecmp(value, "auto") )
+            p-&gt;i_lookahead_threads = X264_THREADS_AUTO;
+        else
+            p-&gt;i_lookahead_threads = atoi(value);
+    }
+    OPT("sliced-threads")
+        p-&gt;b_sliced_threads = atobool(value);
+    OPT("sync-lookahead")
+    {
+        if( !strcasecmp(value, "auto") )
+            p-&gt;i_sync_lookahead = X264_SYNC_LOOKAHEAD_AUTO;
+        else
+            p-&gt;i_sync_lookahead = atoi(value);
+    }
+    OPT2("deterministic", "n-deterministic")
+        p-&gt;b_deterministic = atobool(value);
+    OPT("cpu-independent")
+        p-&gt;b_cpu_independent = atobool(value);
+    OPT2("level", "level-idc")
+    {
+        if( !strcmp(value, "1b") )
+            p-&gt;i_level_idc = 9;
+        else if( atof(value) &lt; 6 )
+            p-&gt;i_level_idc = (int)(10*atof(value)+.5);
+        else
+            p-&gt;i_level_idc = atoi(value);
+    }
+    OPT("bluray-compat")
+        p-&gt;b_bluray_compat = atobool(value);
+    OPT("avcintra-class")
+        p-&gt;i_avcintra_class = atoi(value);
+    OPT("sar")
+    {
+        b_error = ( 2 != sscanf( value, "%d:%d", &amp;p-&gt;vui.i_sar_width, &amp;p-&gt;vui.i_sar_height ) &amp;&amp;
+                    2 != sscanf( value, "%d/%d", &amp;p-&gt;vui.i_sar_width, &amp;p-&gt;vui.i_sar_height ) );
+    }
+    OPT("overscan")
+        b_error |= parse_enum( value, x264_overscan_names, &amp;p-&gt;vui.i_overscan );
+    OPT("videoformat")
+        b_error |= parse_enum( value, x264_vidformat_names, &amp;p-&gt;vui.i_vidformat );
+    OPT("fullrange")
+        b_error |= parse_enum( value, x264_fullrange_names, &amp;p-&gt;vui.b_fullrange );
+    OPT("colorprim")
+        b_error |= parse_enum( value, x264_colorprim_names, &amp;p-&gt;vui.i_colorprim );
+    OPT("transfer")
+        b_error |= parse_enum( value, x264_transfer_names, &amp;p-&gt;vui.i_transfer );
+    OPT("colormatrix")
+        b_error |= parse_enum( value, x264_colmatrix_names, &amp;p-&gt;vui.i_colmatrix );
+    OPT("chromaloc")
+    {
+        p-&gt;vui.i_chroma_loc = atoi(value);
+        b_error = ( p-&gt;vui.i_chroma_loc &lt; 0 || p-&gt;vui.i_chroma_loc &gt; 5 );
+    }
+    OPT("fps")
+    {
+        if( sscanf( value, "%u/%u", &amp;p-&gt;i_fps_num, &amp;p-&gt;i_fps_den ) == 2 )
+            ;
+        else
+        {
+            float fps = atof(value);
+            if( fps &gt; 0 &amp;&amp; fps &lt;= INT_MAX/1000 )
+            {
+                p-&gt;i_fps_num = (int)(fps * 1000 + .5);
+                p-&gt;i_fps_den = 1000;
+            }
+            else
+            {
+                p-&gt;i_fps_num = atoi(value);
+                p-&gt;i_fps_den = 1;
+            }
+        }
+    }
+    OPT2("ref", "frameref")
+        p-&gt;i_frame_reference = atoi(value);
+    OPT("dpb-size")
+        p-&gt;i_dpb_size = atoi(value);
+    OPT("keyint")
+    {
+        if( strstr( value, "infinite" ) )
+            p-&gt;i_keyint_max = X264_KEYINT_MAX_INFINITE;
+        else
+            p-&gt;i_keyint_max = atoi(value);
+    }
+    OPT2("min-keyint", "keyint-min")
+    {
+        p-&gt;i_keyint_min = atoi(value);
+        if( p-&gt;i_keyint_max &lt; p-&gt;i_keyint_min )
+            p-&gt;i_keyint_max = p-&gt;i_keyint_min;
+    }
+    OPT("scenecut")
+    {
+        p-&gt;i_scenecut_threshold = atobool(value);
+        if( b_error || p-&gt;i_scenecut_threshold )
+        {
+            b_error = 0;
+            p-&gt;i_scenecut_threshold = atoi(value);
+        }
+    }
+    OPT("intra-refresh")
+        p-&gt;b_intra_refresh = atobool(value);
+    OPT("bframes")
+        p-&gt;i_bframe = atoi(value);
+    OPT("b-adapt")
+    {
+        p-&gt;i_bframe_adaptive = atobool(value);
+        if( b_error )
+        {
+            b_error = 0;
+            p-&gt;i_bframe_adaptive = atoi(value);
+        }
+    }
+    OPT("b-bias")
+        p-&gt;i_bframe_bias = atoi(value);
+    OPT("b-pyramid")
+    {
+        b_error |= parse_enum( value, x264_b_pyramid_names, &amp;p-&gt;i_bframe_pyramid );
+        if( b_error )
+        {
+            b_error = 0;
+            p-&gt;i_bframe_pyramid = atoi(value);
+        }
+    }
+    OPT("open-gop")
+        p-&gt;b_open_gop = atobool(value);
+    OPT("nf")
+        p-&gt;b_deblocking_filter = !atobool(value);
+    OPT2("filter", "deblock")
+    {
+        if( 2 == sscanf( value, "%d:%d", &amp;p-&gt;i_deblocking_filter_alphac0, &amp;p-&gt;i_deblocking_filter_beta ) ||
+            2 == sscanf( value, "%d,%d", &amp;p-&gt;i_deblocking_filter_alphac0, &amp;p-&gt;i_deblocking_filter_beta ) )
+        {
+            p-&gt;b_deblocking_filter = 1;
+        }
+        else if( sscanf( value, "%d", &amp;p-&gt;i_deblocking_filter_alphac0 ) )
+        {
+            p-&gt;b_deblocking_filter = 1;
+            p-&gt;i_deblocking_filter_beta = p-&gt;i_deblocking_filter_alphac0;
+        }
+        else
+            p-&gt;b_deblocking_filter = atobool(value);
+    }
+    OPT("slice-max-size")
+        p-&gt;i_slice_max_size = atoi(value);
+    OPT("slice-max-mbs")
+        p-&gt;i_slice_max_mbs = atoi(value);
+    OPT("slice-min-mbs")
+        p-&gt;i_slice_min_mbs = atoi(value);
+    OPT("slices")
+        p-&gt;i_slice_count = atoi(value);
+    OPT("slices-max")
+        p-&gt;i_slice_count_max = atoi(value);
+    OPT("cabac")
+        p-&gt;b_cabac = atobool(value);
+    OPT("cabac-idc")
+        p-&gt;i_cabac_init_idc = atoi(value);
+    OPT("interlaced")
+        p-&gt;b_interlaced = atobool(value);
+    OPT("tff")
+        p-&gt;b_interlaced = p-&gt;b_tff = atobool(value);
+    OPT("bff")
+    {
+        p-&gt;b_interlaced = atobool(value);
+        p-&gt;b_tff = !p-&gt;b_interlaced;
+    }
+    OPT("constrained-intra")
+        p-&gt;b_constrained_intra = atobool(value);
+    OPT("cqm")
+    {
+        if( strstr( value, "flat" ) )
+            p-&gt;i_cqm_preset = X264_CQM_FLAT;
+        else if( strstr( value, "jvt" ) )
+            p-&gt;i_cqm_preset = X264_CQM_JVT;
+        else
+            p-&gt;psz_cqm_file = strdup(value);
+    }
+    OPT("cqmfile")
+        p-&gt;psz_cqm_file = strdup(value);
+    OPT("cqm4")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4iy, 16 );
+        b_error |= parse_cqm( value, p-&gt;cqm_4py, 16 );
+        b_error |= parse_cqm( value, p-&gt;cqm_4ic, 16 );
+        b_error |= parse_cqm( value, p-&gt;cqm_4pc, 16 );
+    }
+    OPT("cqm8")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_8iy, 64 );
+        b_error |= parse_cqm( value, p-&gt;cqm_8py, 64 );
+        b_error |= parse_cqm( value, p-&gt;cqm_8ic, 64 );
+        b_error |= parse_cqm( value, p-&gt;cqm_8pc, 64 );
+    }
+    OPT("cqm4i")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4iy, 16 );
+        b_error |= parse_cqm( value, p-&gt;cqm_4ic, 16 );
+    }
+    OPT("cqm4p")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4py, 16 );
+        b_error |= parse_cqm( value, p-&gt;cqm_4pc, 16 );
+    }
+    OPT("cqm4iy")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4iy, 16 );
+    }
+    OPT("cqm4ic")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4ic, 16 );
+    }
+    OPT("cqm4py")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4py, 16 );
+    }
+    OPT("cqm4pc")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_4pc, 16 );
+    }
+    OPT("cqm8i")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_8iy, 64 );
+        b_error |= parse_cqm( value, p-&gt;cqm_8ic, 64 );
+    }
+    OPT("cqm8p")
+    {
+        p-&gt;i_cqm_preset = X264_CQM_CUSTOM;
+        b_error |= parse_cqm( value, p-&gt;cqm_8py, 64 );
+        b_error |= parse_cqm( value, p-&gt;cqm_8pc, 64 );
+    }
+    OPT("log")
+        p-&gt;i_log_level = atoi(value);
+    OPT("dump-yuv")
+        p-&gt;psz_dump_yuv = strdup(value);
+    OPT2("analyse", "partitions")
+    {
+        p-&gt;analyse.inter = 0;
+        if( strstr( value, "none" ) )  p-&gt;analyse.inter =  0;
+        if( strstr( value, "all" ) )   p-&gt;analyse.inter = ~0;
+
+        if( strstr( value, "i4x4" ) )  p-&gt;analyse.inter |= X264_ANALYSE_I4x4;
+        if( strstr( value, "i8x8" ) )  p-&gt;analyse.inter |= X264_ANALYSE_I8x8;
+        if( strstr( value, "p8x8" ) )  p-&gt;analyse.inter |= X264_ANALYSE_PSUB16x16;
+        if( strstr( value, "p4x4" ) )  p-&gt;analyse.inter |= X264_ANALYSE_PSUB8x8;
+        if( strstr( value, "b8x8" ) )  p-&gt;analyse.inter |= X264_ANALYSE_BSUB16x16;
+    }
+    OPT("8x8dct")
+        p-&gt;analyse.b_transform_8x8 = atobool(value);
+    OPT2("weightb", "weight-b")
+        p-&gt;analyse.b_weighted_bipred = atobool(value);
+    OPT("weightp")
+        p-&gt;analyse.i_weighted_pred = atoi(value);
+    OPT2("direct", "direct-pred")
+        b_error |= parse_enum( value, x264_direct_pred_names, &amp;p-&gt;analyse.i_direct_mv_pred );
+    OPT("chroma-qp-offset")
+        p-&gt;analyse.i_chroma_qp_offset = atoi(value);
+    OPT("me")
+        b_error |= parse_enum( value, x264_motion_est_names, &amp;p-&gt;analyse.i_me_method );
+    OPT2("merange", "me-range")
+        p-&gt;analyse.i_me_range = atoi(value);
+    OPT2("mvrange", "mv-range")
+        p-&gt;analyse.i_mv_range = atoi(value);
+    OPT2("mvrange-thread", "mv-range-thread")
+        p-&gt;analyse.i_mv_range_thread = atoi(value);
+    OPT2("subme", "subq")
+        p-&gt;analyse.i_subpel_refine = atoi(value);
+    OPT("psy-rd")
+    {
+        if( 2 == sscanf( value, "%f:%f", &amp;p-&gt;analyse.f_psy_rd, &amp;p-&gt;analyse.f_psy_trellis ) ||
+            2 == sscanf( value, "%f,%f", &amp;p-&gt;analyse.f_psy_rd, &amp;p-&gt;analyse.f_psy_trellis ) ||
+            2 == sscanf( value, "%f|%f", &amp;p-&gt;analyse.f_psy_rd, &amp;p-&gt;analyse.f_psy_trellis ))
+        { }
+        else if( sscanf( value, "%f", &amp;p-&gt;analyse.f_psy_rd ) )
+        {
+            p-&gt;analyse.f_psy_trellis = 0;
+        }
+        else
+        {
+            p-&gt;analyse.f_psy_rd = 0;
+            p-&gt;analyse.f_psy_trellis = 0;
+        }
+    }
+    OPT("psy")
+        p-&gt;analyse.b_psy = atobool(value);
+    OPT("chroma-me")
+        p-&gt;analyse.b_chroma_me = atobool(value);
+    OPT("mixed-refs")
+        p-&gt;analyse.b_mixed_references = atobool(value);
+    OPT("trellis")
+        p-&gt;analyse.i_trellis = atoi(value);
+    OPT("fast-pskip")
+        p-&gt;analyse.b_fast_pskip = atobool(value);
+    OPT("dct-decimate")
+        p-&gt;analyse.b_dct_decimate = atobool(value);
+    OPT("deadzone-inter")
+        p-&gt;analyse.i_luma_deadzone[0] = atoi(value);
+    OPT("deadzone-intra")
+        p-&gt;analyse.i_luma_deadzone[1] = atoi(value);
+    OPT("nr")
+        p-&gt;analyse.i_noise_reduction = atoi(value);
+    OPT("bitrate")
+    {
+        p-&gt;rc.i_bitrate = atoi(value);
+        p-&gt;rc.i_rc_method = X264_RC_ABR;
+    }
+    OPT2("qp", "qp_constant")
+    {
+        p-&gt;rc.i_qp_constant = atoi(value);
+        p-&gt;rc.i_rc_method = X264_RC_CQP;
+    }
+    OPT("crf")
+    {
+        p-&gt;rc.f_rf_constant = atof(value);
+        p-&gt;rc.i_rc_method = X264_RC_CRF;
+    }
+    OPT("crf-max")
+        p-&gt;rc.f_rf_constant_max = atof(value);
+    OPT("rc-lookahead")
+        p-&gt;rc.i_lookahead = atoi(value);
+    OPT2("qpmin", "qp-min")
+        p-&gt;rc.i_qp_min = atoi(value);
+    OPT2("qpmax", "qp-max")
+        p-&gt;rc.i_qp_max = atoi(value);
+    OPT2("qpstep", "qp-step")
+        p-&gt;rc.i_qp_step = atoi(value);
+    OPT("ratetol")
+        p-&gt;rc.f_rate_tolerance = !strncmp("inf", value, 3) ? 1e9 : atof(value);
+    OPT("vbv-maxrate")
+        p-&gt;rc.i_vbv_max_bitrate = atoi(value);
+    OPT("vbv-bufsize")
+        p-&gt;rc.i_vbv_buffer_size = atoi(value);
+    OPT("vbv-init")
+        p-&gt;rc.f_vbv_buffer_init = atof(value);
+    OPT2("ipratio", "ip-factor")
+        p-&gt;rc.f_ip_factor = atof(value);
+    OPT2("pbratio", "pb-factor")
+        p-&gt;rc.f_pb_factor = atof(value);
+    OPT("aq-mode")
+        p-&gt;rc.i_aq_mode = atoi(value);
+    OPT("aq-strength")
+        p-&gt;rc.f_aq_strength = atof(value);
+    OPT("pass")
+    {
+        int pass = x264_clip3( atoi(value), 0, 3 );
+        p-&gt;rc.b_stat_write = pass &amp; 1;
+        p-&gt;rc.b_stat_read = pass &amp; 2;
+    }
+    OPT("stats")
+    {
+        p-&gt;rc.psz_stat_in = strdup(value);
+        p-&gt;rc.psz_stat_out = strdup(value);
+    }
+    OPT("qcomp")
+        p-&gt;rc.f_qcompress = atof(value);
+    OPT("mbtree")
+        p-&gt;rc.b_mb_tree = atobool(value);
+    OPT("qblur")
+        p-&gt;rc.f_qblur = atof(value);
+    OPT2("cplxblur", "cplx-blur")
+        p-&gt;rc.f_complexity_blur = atof(value);
+    OPT("zones")
+        p-&gt;rc.psz_zones = strdup(value);
+    OPT("crop-rect")
+        b_error |= sscanf( value, "%u,%u,%u,%u", &amp;p-&gt;crop_rect.i_left, &amp;p-&gt;crop_rect.i_top,
+                                                 &amp;p-&gt;crop_rect.i_right, &amp;p-&gt;crop_rect.i_bottom ) != 4;
+    OPT("psnr")
+        p-&gt;analyse.b_psnr = atobool(value);
+    OPT("ssim")
+        p-&gt;analyse.b_ssim = atobool(value);
+    OPT("aud")
+        p-&gt;b_aud = atobool(value);
+    OPT("sps-id")
+        p-&gt;i_sps_id = atoi(value);
+    OPT("global-header")
+        p-&gt;b_repeat_headers = !atobool(value);
+    OPT("repeat-headers")
+        p-&gt;b_repeat_headers = atobool(value);
+    OPT("annexb")
+        p-&gt;b_annexb = atobool(value);
+    OPT("force-cfr")
+        p-&gt;b_vfr_input = !atobool(value);
+    OPT("nal-hrd")
+        b_error |= parse_enum( value, x264_nal_hrd_names, &amp;p-&gt;i_nal_hrd );
+    OPT("filler")
+        p-&gt;rc.b_filler = atobool(value);
+    OPT("pic-struct")
+        p-&gt;b_pic_struct = atobool(value);
+    OPT("fake-interlaced")
+        p-&gt;b_fake_interlaced = atobool(value);
+    OPT("frame-packing")
+        p-&gt;i_frame_packing = atoi(value);
+    OPT("stitchable")
+        p-&gt;b_stitchable = atobool(value);
+    OPT("opencl")
+        p-&gt;b_opencl = atobool( value );
+    OPT("opencl-clbin")
+        p-&gt;psz_clbin_file = strdup( value );
+    OPT("opencl-device")
+        p-&gt;i_opencl_device = atoi( value );
+    else
+        return X264_PARAM_BAD_NAME;
+#undef OPT
+#undef OPT2
+#undef atobool
+#undef atoi
+#undef atof
+
+    if( name_buf )
+        free( name_buf );
+
+    b_error |= value_was_null &amp;&amp; !name_was_bool;
+    return b_error ? X264_PARAM_BAD_VALUE : 0;
+}
+</pre>
+    <br/>
+    x264_param_parse()中判断参数的宏OPT()和OPT2()实质上就是strcmp()。由此可见该函数的流程首先是调用strcmp()判断当前输入参数的名称name，然后再调用atoi()，atof()，或者atobool()等将当前输入参数值value转换成相应类型的值并赋值给对应的参数。
+    <br/>
+    <br/>
+    <h3>
+     x264_param_apply_profile()
+    </h3>
+    x264_param_apply_profile()是一个x264的API。该函数用于设置x264的profile，它的声明如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_13_797672">/*      (can be NULL, in which case the function will do nothing)
+ *
+ *      Does NOT guarantee that the given profile will be used: if the restrictions
+ *      of "High" are applied to settings that are already Baseline-compatible, the
+ *      stream will remain baseline.  In short, it does not increase settings, only
+ *      decrease them.
+ *
+ *      returns 0 on success, negative on failure (e.g. invalid profile name). */
+int     x264_param_apply_profile( x264_param_t *, const char *profile );</pre>
+    x264_param_apply_profile()的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_14_1829894">//设置profile
+int x264_param_apply_profile( x264_param_t *param, const char *profile )
+{
+    if( !profile )
+        return 0;
+    //字符串到整型
+    int p = profile_string_to_int( profile );
+    //检查profile设置是否正确
+    if( p &lt; 0 )
+    {
+        x264_log( NULL, X264_LOG_ERROR, "invalid profile: %s\n", profile );
+        return -1;
+    }
+    if( p &lt; PROFILE_HIGH444_PREDICTIVE &amp;&amp; ((param-&gt;rc.i_rc_method == X264_RC_CQP &amp;&amp; param-&gt;rc.i_qp_constant &lt;= 0) ||
+        (param-&gt;rc.i_rc_method == X264_RC_CRF &amp;&amp; (int)(param-&gt;rc.f_rf_constant + QP_BD_OFFSET) &lt;= 0)) )
+    {
+        x264_log( NULL, X264_LOG_ERROR, "%s profile doesn't support lossless\n", profile );
+        return -1;
+    }
+    if( p &lt; PROFILE_HIGH444_PREDICTIVE &amp;&amp; (param-&gt;i_csp &amp; X264_CSP_MASK) &gt;= X264_CSP_I444 )
+    {
+        x264_log( NULL, X264_LOG_ERROR, "%s profile doesn't support 4:4:4\n", profile );
+        return -1;
+    }
+    if( p &lt; PROFILE_HIGH422 &amp;&amp; (param-&gt;i_csp &amp; X264_CSP_MASK) &gt;= X264_CSP_I422 )
+    {
+        x264_log( NULL, X264_LOG_ERROR, "%s profile doesn't support 4:2:2\n", profile );
+        return -1;
+    }
+    if( p &lt; PROFILE_HIGH10 &amp;&amp; BIT_DEPTH &gt; 8 )
+    {
+        x264_log( NULL, X264_LOG_ERROR, "%s profile doesn't support a bit depth of %d\n", profile, BIT_DEPTH );
+        return -1;
+    }
+    //根据不同的Profile做设置
+    //Baseline基本型
+    if( p == PROFILE_BASELINE )
+    {
+    	//不支持DCT8x8
+        param-&gt;analyse.b_transform_8x8 = 0;
+        //不使用CABAC
+        param-&gt;b_cabac = 0;
+        param-&gt;i_cqm_preset = X264_CQM_FLAT;
+        param-&gt;psz_cqm_file = NULL;
+        //没有B帧
+        param-&gt;i_bframe = 0;
+        //没有加权
+        param-&gt;analyse.i_weighted_pred = X264_WEIGHTP_NONE;
+        //不支持隔行扫描
+        if( param-&gt;b_interlaced )
+        {
+            x264_log( NULL, X264_LOG_ERROR, "baseline profile doesn't support interlacing\n" );
+            return -1;
+        }
+        if( param-&gt;b_fake_interlaced )
+        {
+            x264_log( NULL, X264_LOG_ERROR, "baseline profile doesn't support fake interlacing\n" );
+            return -1;
+        }
+    }
+    //Main主型
+    else if( p == PROFILE_MAIN )
+    {
+    	//不支持DCT8x8
+        param-&gt;analyse.b_transform_8x8 = 0;
+        param-&gt;i_cqm_preset = X264_CQM_FLAT;
+        param-&gt;psz_cqm_file = NULL;
+    }
+    return 0;
+}
+</pre>
+    <br/>
+    从定义可以看出，x264_param_apply_profile()首先调用了一个函数profile_string_to_int()将输入的profile字符串转换为int类型的profile；然后会检查该profile的设置是否合理；最后会根据profile对x264_param_t中的参数进行相应的设置。
+    <br/>
+    该函数中调用的profile_string_to_int()的定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_15_7529962">static int profile_string_to_int( const char *str )
+{
+    if( !strcasecmp( str, "baseline" ) )
+        return PROFILE_BASELINE;
+    if( !strcasecmp( str, "main" ) )
+        return PROFILE_MAIN;
+    if( !strcasecmp( str, "high" ) )
+        return PROFILE_HIGH;
+    if( !strcasecmp( str, "high10" ) )
+        return PROFILE_HIGH10;
+    if( !strcasecmp( str, "high422" ) )
+        return PROFILE_HIGH422;
+    if( !strcasecmp( str, "high444" ) )
+        return PROFILE_HIGH444_PREDICTIVE;
+    return -1;
+}</pre>
+    从定义可以看出profile_string_to_int()根据输入的字符串str返回不同的整型变量。
+    <br/>
+    <br/>
+    <h3>
+     select_output()
+    </h3>
+    select_output()用于设定输出的文件格式。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_16_5181878">//根据文件名的后缀确定输出的文件格式（raw H264，flv，mp4...）
+static int select_output( const char *muxer, char *filename, x264_param_t *param )
+{
+    //从文件路径字符串中解析出扩展名，存入ext
+    //解析的方式就是反向搜索字符“.”
+    const char *ext = get_filename_extension( filename );
+
+    //strcasecmp(char *s1, char *s2)用于忽略大小写比较字符串.
+    //参数s1和s2字符串相等则返回0。s1大于s2则返回大于0 的值，s1 小于s2 则返回小于0的值。
+
+    if( !strcmp( filename, "-" ) || strcasecmp( muxer, "auto" ) )
+        ext = muxer;
+    //后缀为“mp4”
+    if( !strcasecmp( ext, "mp4" ) )
+    {
+#if HAVE_GPAC || HAVE_LSMASH
+        cli_output = mp4_output;
+        param-&gt;b_annexb = 0;
+        param-&gt;b_repeat_headers = 0;
+        if( param-&gt;i_nal_hrd == X264_NAL_HRD_CBR )
+        {
+            x264_cli_log( "x264", X264_LOG_WARNING, "cbr nal-hrd is not compatible with mp4\n" );
+            param-&gt;i_nal_hrd = X264_NAL_HRD_VBR;
+        }
+#else
+        x264_cli_log( "x264", X264_LOG_ERROR, "not compiled with MP4 output support\n" );
+        return -1;
+#endif
+    }
+    else if( !strcasecmp( ext, "mkv" ) )
+    {
+    	//设定cli_output_t
+        cli_output = mkv_output;
+        //不加起始码0x00000001
+        param-&gt;b_annexb = 0;
+        //不再每个Keyframe前面加SPS和PPS
+        param-&gt;b_repeat_headers = 0;
+    }
+    else if( !strcasecmp( ext, "flv" ) )
+    {
+        cli_output = flv_output;
+        param-&gt;b_annexb = 0;
+        param-&gt;b_repeat_headers = 0;
+    }
+    else
+        cli_output = raw_output;//不符合上述后缀，则输出裸流
+    return 0;
+}
+</pre>
+    <br/>
+    从函数定义可以看出，select_output()首先调用get_filename_extension()从输入文件路径的字符串中提取出了扩展名，然后根据不同的扩展名设定不同的输出格式。其中get_filename_extension()是一个提取扩展名的函数，定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_17_4229234">//根据“.”确定文件后缀
+static inline char *get_filename_extension( char *filename )
+{
+    char *ext = filename + strlen( filename );
+    while( *ext != '.' &amp;&amp; ext &gt; filename )
+        ext--;
+    ext += *ext == '.';
+    return ext;
+}</pre>
+    可以看出get_filename_extension()从字符串的末尾开始向前搜索点符号“.”，并且将“.”后面的内容作为提取出来的扩展名。
+    <br/>
+    <br/>
+    <h3>
+     select_input()
+    </h3>
+    select_input()用于设定输入的文件格式。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_18_8293099">//设置输入文件的格式（yuv，y4m...）
+static int select_input( const char *demuxer, char *used_demuxer, char *filename,
+                         hnd_t *p_handle, video_info_t *info, cli_input_opt_t *opt )
+{
+    int b_auto = !strcasecmp( demuxer, "auto" );
+    //从文件路径字符串中解析出扩展名，存入ext
+    //解析的方式就是反向搜索字符“.”
+    const char *ext = b_auto ? get_filename_extension( filename ) : "";
+    int b_regular = strcmp( filename, "-" );
+    if( !b_regular &amp;&amp; b_auto )
+        ext = "raw";
+    b_regular = b_regular &amp;&amp; x264_is_regular_file_path( filename );
+    if( b_regular )
+    {
+        FILE *f = x264_fopen( filename, "r" );
+        if( f )
+        {
+            b_regular = x264_is_regular_file( f );
+            fclose( f );
+        }
+    }
+    const char *module = b_auto ? ext : demuxer;
+
+    //strcasecmp(char *s1, char *s2)用于忽略大小写比较字符串.
+    //参数s1和s2字符串相等则返回0。s1大于s2则返回大于0 的值，s1 小于s2 则返回小于0的值。
+
+    if( !strcasecmp( module, "avs" ) || !strcasecmp( ext, "d2v" ) || !strcasecmp( ext, "dga" ) )
+    {
+#if HAVE_AVS
+        cli_input = avs_input;
+        module = "avs";
+#else
+        x264_cli_log( "x264", X264_LOG_ERROR, "not compiled with AVS input support\n" );
+        return -1;
+#endif
+    }
+    else if( !strcasecmp( module, "y4m" ) )
+        cli_input = y4m_input;
+    else if( !strcasecmp( module, "raw" ) || !strcasecmp( ext, "yuv" ) )
+        cli_input = raw_input;
+    else
+    {
+#if HAVE_FFMS
+        if( b_regular &amp;&amp; (b_auto || !strcasecmp( demuxer, "ffms" )) &amp;&amp;
+            !ffms_input.open_file( filename, p_handle, info, opt ) )
+        {
+            module = "ffms";
+            b_auto = 0;
+            cli_input = ffms_input;
+        }
+#endif
+#if HAVE_LAVF
+        if( (b_auto || !strcasecmp( demuxer, "lavf" )) &amp;&amp;
+            !lavf_input.open_file( filename, p_handle, info, opt ) )
+        {
+            module = "lavf";
+            b_auto = 0;
+            cli_input = lavf_input;
+        }
+#endif
+#if HAVE_AVS
+        if( b_regular &amp;&amp; (b_auto || !strcasecmp( demuxer, "avs" )) &amp;&amp;
+            !avs_input.open_file( filename, p_handle, info, opt ) )
+        {
+            module = "avs";
+            b_auto = 0;
+            cli_input = avs_input;
+        }
+#endif
+        if( b_auto &amp;&amp; !raw_input.open_file( filename, p_handle, info, opt ) )
+        {
+            module = "raw";
+            b_auto = 0;
+            cli_input = raw_input;
+        }
+
+        FAIL_IF_ERROR( !(*p_handle), "could not open input file `%s' via any method!\n", filename )
+    }
+    strcpy( used_demuxer, module );
+
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码中可以看出，select_input()首先调用get_filename_extension()获取输入文件名的扩展名；然后根据扩展名设置不同的输入格式。
+    <br/>
+    <br/>
+    至此x264命令行程序main()函数调用的parse()函数就分析完毕了。下面分析main()函数调用的另一个函数encode()。
+    <br/>
+    <br/>
+    <br/>
+    <h2>
+     encode()
+    </h2>
+    encode()编码YUV为H.264码流，该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_19_895486">//编码（在内部有一个循环用于一帧一帧编码）
+static int encode( x264_param_t *param, cli_opt_t *opt )
+{
+    x264_t *h = NULL;
+    x264_picture_t pic;
+    cli_pic_t cli_pic;
+    const cli_pulldown_t *pulldown = NULL; // shut up gcc
+
+    int     i_frame = 0;
+    int     i_frame_output = 0;
+    int64_t i_end, i_previous = 0, i_start = 0;
+    int64_t i_file = 0;
+    int     i_frame_size;
+    int64_t last_dts = 0;
+    int64_t prev_dts = 0;
+    int64_t first_dts = 0;
+#   define  MAX_PTS_WARNING 3 /* arbitrary */
+    int     pts_warning_cnt = 0;
+    int64_t largest_pts = -1;
+    int64_t second_largest_pts = -1;
+    int64_t ticks_per_frame;
+    double  duration;
+    double  pulldown_pts = 0;
+    int     retval = 0;
+
+    opt-&gt;b_progress &amp;= param-&gt;i_log_level &lt; X264_LOG_DEBUG;
+
+    /* set up pulldown */
+    if( opt-&gt;i_pulldown &amp;&amp; !param-&gt;b_vfr_input )
+    {
+        param-&gt;b_pulldown = 1;
+        param-&gt;b_pic_struct = 1;
+        pulldown = &amp;pulldown_values[opt-&gt;i_pulldown];
+        param-&gt;i_timebase_num = param-&gt;i_fps_den;
+        FAIL_IF_ERROR2( fmod( param-&gt;i_fps_num * pulldown-&gt;fps_factor, 1 ),
+                        "unsupported framerate for chosen pulldown\n" )
+        param-&gt;i_timebase_den = param-&gt;i_fps_num * pulldown-&gt;fps_factor;
+    }
+    //打开编码器
+    h = x264_encoder_open( param );
+    FAIL_IF_ERROR2( !h, "x264_encoder_open failed\n" );
+    //获得参数
+    x264_encoder_parameters( h, param );
+    //一些不是裸流的封转格式（FLV，MP4等）需要一些参数，例如宽高等等
+    //cli_output_t是代表输出媒体文件的结构体
+    FAIL_IF_ERROR2( cli_output.set_param( opt-&gt;hout, param ), "can't set outfile param\n" );
+    //计时
+    i_start = x264_mdate();
+
+    /* ticks/frame = ticks/second / frames/second */
+    ticks_per_frame = (int64_t)param-&gt;i_timebase_den * param-&gt;i_fps_den / param-&gt;i_timebase_num / param-&gt;i_fps_num;
+    FAIL_IF_ERROR2( ticks_per_frame &lt; 1 &amp;&amp; !param-&gt;b_vfr_input, "ticks_per_frame invalid: %"PRId64"\n", ticks_per_frame )
+    ticks_per_frame = X264_MAX( ticks_per_frame, 1 );
+
+    //如果不是在每个keyframe前面都增加SPS/PPS/SEI的话，就在整个码流前面加SPS/PPS/SEI
+    //Header指的就是SPS/PPS/SEI
+    if( !param-&gt;b_repeat_headers )
+    {
+        // Write SPS/PPS/SEI
+        x264_nal_t *headers;
+        int i_nal;
+        //获得文件头（SPS、PPS、SEI）
+        FAIL_IF_ERROR2( x264_encoder_headers( h, &amp;headers, &amp;i_nal ) &lt; 0, "x264_encoder_headers failed\n" )
+        //把文件头写入输出文件
+        FAIL_IF_ERROR2( (i_file = cli_output.write_headers( opt-&gt;hout, headers )) &lt; 0, "error writing headers to output file\n" );
+    }
+
+    if( opt-&gt;tcfile_out )
+        fprintf( opt-&gt;tcfile_out, "# timecode format v2\n" );
+
+    /* Encode frames */
+    //循环进行编码
+    for( ; !b_ctrl_c &amp;&amp; (i_frame &lt; param-&gt;i_frame_total || !param-&gt;i_frame_total); i_frame++ )
+    {
+    	//从输入源中获取1帧YUV数据，存于cli_pic
+    	//cli_vid_filter_t可以认为是x264一种“扩展”后的输入源，可以在像素域对图像进行拉伸裁剪等工作。
+    	//原本代表输入源的结构体是cli_input_t
+        if( filter.get_frame( opt-&gt;hin, &amp;cli_pic, i_frame + opt-&gt;i_seek ) )
+            break;
+        //初始化x264_picture_t结构体pic
+        x264_picture_init( &amp;pic );
+        //cli_pic到pic
+        convert_cli_to_lib_pic( &amp;pic, &amp;cli_pic );
+
+        if( !param-&gt;b_vfr_input )
+            pic.i_pts = i_frame;
+
+        if( opt-&gt;i_pulldown &amp;&amp; !param-&gt;b_vfr_input )
+        {
+            pic.i_pic_struct = pulldown-&gt;pattern[ i_frame % pulldown-&gt;mod ];
+            pic.i_pts = (int64_t)( pulldown_pts + 0.5 );
+            pulldown_pts += pulldown_frame_duration[pic.i_pic_struct];
+        }
+        else if( opt-&gt;timebase_convert_multiplier )
+            pic.i_pts = (int64_t)( pic.i_pts * opt-&gt;timebase_convert_multiplier + 0.5 );
+
+        if( pic.i_pts &lt;= largest_pts )
+        {
+            if( cli_log_level &gt;= X264_LOG_DEBUG || pts_warning_cnt &lt; MAX_PTS_WARNING )
+                x264_cli_log( "x264", X264_LOG_WARNING, "non-strictly-monotonic pts at frame %d (%"PRId64" &lt;= %"PRId64")\n",
+                             i_frame, pic.i_pts, largest_pts );
+            else if( pts_warning_cnt == MAX_PTS_WARNING )
+                x264_cli_log( "x264", X264_LOG_WARNING, "too many nonmonotonic pts warnings, suppressing further ones\n" );
+            pts_warning_cnt++;
+            pic.i_pts = largest_pts + ticks_per_frame;
+        }
+
+        second_largest_pts = largest_pts;
+        largest_pts = pic.i_pts;
+        if( opt-&gt;tcfile_out )
+            fprintf( opt-&gt;tcfile_out, "%.6f\n", pic.i_pts * ((double)param-&gt;i_timebase_num / param-&gt;i_timebase_den) * 1e3 );
+
+        if( opt-&gt;qpfile )
+            parse_qpfile( opt, &amp;pic, i_frame + opt-&gt;i_seek );
+
+        prev_dts = last_dts;
+        //编码pic中存储的1帧YUV数据
+        i_frame_size = encode_frame( h, opt-&gt;hout, &amp;pic, &amp;last_dts );
+        if( i_frame_size &lt; 0 )
+        {
+            b_ctrl_c = 1; /* lie to exit the loop */
+            retval = -1;
+        }
+        else if( i_frame_size )
+        {
+            i_file += i_frame_size;
+            i_frame_output++;
+            if( i_frame_output == 1 )
+                first_dts = prev_dts = last_dts;
+        }
+        //释放处理完的YUV数据
+        if( filter.release_frame( opt-&gt;hin, &amp;cli_pic, i_frame + opt-&gt;i_seek ) )
+            break;
+
+        /* update status line (up to 1000 times per input file) */
+        if( opt-&gt;b_progress &amp;&amp; i_frame_output )
+            i_previous = print_status( i_start, i_previous, i_frame_output, param-&gt;i_frame_total, i_file, param, 2 * last_dts - prev_dts - first_dts );
+    }
+    /* Flush delayed frames */
+    //输出编码器中剩余的帧
+    //x264_encoder_delayed_frames()返回剩余的帧的个数
+    while( !b_ctrl_c &amp;&amp; x264_encoder_delayed_frames( h ) )
+    {
+        prev_dts = last_dts;
+        //编码
+        //注意第3个参数为NULL
+        i_frame_size = encode_frame( h, opt-&gt;hout, NULL, &amp;last_dts );
+        if( i_frame_size &lt; 0 )
+        {
+            b_ctrl_c = 1; /* lie to exit the loop */
+            retval = -1;
+        }
+        else if( i_frame_size )
+        {
+            i_file += i_frame_size;
+            i_frame_output++;
+            if( i_frame_output == 1 )
+                first_dts = prev_dts = last_dts;
+        }
+        //输出一些统计信息
+        if( opt-&gt;b_progress &amp;&amp; i_frame_output )
+            i_previous = print_status( i_start, i_previous, i_frame_output, param-&gt;i_frame_total, i_file, param, 2 * last_dts - prev_dts - first_dts );
+    }
+fail:
+    if( pts_warning_cnt &gt;= MAX_PTS_WARNING &amp;&amp; cli_log_level &lt; X264_LOG_DEBUG )
+        x264_cli_log( "x264", X264_LOG_WARNING, "%d suppressed nonmonotonic pts warnings\n", pts_warning_cnt-MAX_PTS_WARNING );
+
+    /* duration algorithm fails when only 1 frame is output */
+    if( i_frame_output == 1 )
+        duration = (double)param-&gt;i_fps_den / param-&gt;i_fps_num;
+    else if( b_ctrl_c )
+        duration = (double)(2 * last_dts - prev_dts - first_dts) * param-&gt;i_timebase_num / param-&gt;i_timebase_den;
+    else
+        duration = (double)(2 * largest_pts - second_largest_pts) * param-&gt;i_timebase_num / param-&gt;i_timebase_den;
+    //计时
+    i_end = x264_mdate();
+    /* Erase progress indicator before printing encoding stats. */
+    if( opt-&gt;b_progress )
+        fprintf( stderr, "                                                                               \r" );
+    //关闭编码器
+    if( h )
+        x264_encoder_close( h );
+    fprintf( stderr, "\n" );
+
+    if( b_ctrl_c )
+        fprintf( stderr, "aborted at input frame %d, output frame %d\n", opt-&gt;i_seek + i_frame, i_frame_output );
+    //关闭输出文件
+    cli_output.close_file( opt-&gt;hout, largest_pts, second_largest_pts );
+    opt-&gt;hout = NULL;
+
+    if( i_frame_output &gt; 0 )
+    {
+        double fps = (double)i_frame_output * (double)1000000 /
+                     (double)( i_end - i_start );
+
+        fprintf( stderr, "encoded %d frames, %.2f fps, %.2f kb/s\n", i_frame_output, fps,
+                 (double) i_file * 8 / ( 1000 * duration ) );
+    }
+
+    return retval;
+}
+</pre>
+    <br/>
+    从源代码可以梳理出来encode()的流程：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     （1）调用x264_encoder_open()打开H.264编码器。
+     <br/>
+     （2）调用x264_encoder_parameters()获得当前的参数集x264_param_t，用于后续步骤中的一些配置。
+     <br/>
+     （3）调用输出格式（H.264裸流、FLV、mp4等）对应cli_output_t结构体的set_param()方法，为输出格式的封装器设定参数。其中参数源自于上一步骤得到的x264_param_t。
+     <br/>
+     （4）如果不是在每个keyframe前面都增加SPS/PPS/SEI的话，就调用x264_encoder_headers()在整个码流前面加SPS/PPS/SEI。
+     <br/>
+     （5）进入一个循环中进行一帧一帧的将YUV编码为H.264：
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      a)调用输入格式（YUV、Y4M等）对应的cli_vid_filter_t结构体get_frame()方法，获取一帧YUV数据。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      b)调用encode_frame()编码该帧YUV数据为H.264数据，并且输出出来。该函数内部调用x264_encoder_encode()完成编码工作，调用输出格式对应cli_output_t结构体的write_frame()完成了输出工作。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      c)调用输入格式（YUV、Y4M等）对应的cli_vid_filter_t结构体release_frame()方法，释放刚才获取的YUV数据。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      d)调用print_status()输出一些统计信息。
+     </blockquote>
+     （6）编码即将结束的时候，进入另一个循环，输出编码器中缓存的视频帧：
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      a)不再传递新的YUV数据，直接调用encode_frame()，将编码器中缓存的剩余几帧数据编码输出出来。
+     </blockquote>
+     <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+      b)调用print_status()输出一些统计信息。
+     </blockquote>
+     （7）调用x264_encoder_close()关闭H.264编码器。
+    </blockquote>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+    </blockquote>
+    <br/>
+    encode()的流程中涉及到libx264的几个关键的API，在这里暂时不做详细分析（后续文章中再进行补充）：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     x264_encoder_open()：打开H.264编码器。
+     <br/>
+     x264_encoder_headers()：输出SPS/PPS/SEI。
+     <br/>
+     x264_encoder_encode()：编码一帧数据。
+     <br/>
+     x264_encoder_close()：关闭H.264编码器。
+    </blockquote>
+    <br/>
+    此外上述流程中涉及到两个比较简单的函数：encode_frame()和print_status()。其中encode_frame()用于编码一帧数据，而print_status()用于输出一帧数据编码后的统计信息。下文记录一下这两个函数的定义。
+    <br/>
+    <br/>
+    <h3>
+     encode_frame()
+    </h3>
+    encode_frame()的定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_20_6562535">//编码1帧
+static int encode_frame( x264_t *h, hnd_t hout, x264_picture_t *pic, int64_t *last_dts )
+{
+    x264_picture_t pic_out;
+    x264_nal_t *nal;
+    int i_nal;
+    int i_frame_size = 0;
+    //编码API
+    //编码x264_picture_t为x264_nal_t
+    i_frame_size = x264_encoder_encode( h, &amp;nal, &amp;i_nal, pic, &amp;pic_out );
+
+    FAIL_IF_ERROR( i_frame_size &lt; 0, "x264_encoder_encode failed\n" );
+
+    if( i_frame_size )
+    {
+    	//通过cli_output_t中的方法输出
+    	//输出raw H.264流的话，等同于直接fwrite()
+    	//其他封装格式，则还需进行一定的封装
+        i_frame_size = cli_output.write_frame( hout, nal[0].p_payload, i_frame_size, &amp;pic_out );
+        *last_dts = pic_out.i_dts;
+    }
+
+    return i_frame_size;
+}
+</pre>
+    <br/>
+    从源代码可以看出，encode_frame()内部调用x264_encoder_encode()完成编码工作，调用输出格式对应cli_output_t结构体的write_frame()完成了输出工作。其中有关cli_output_t结构体的知识将在后文中记录。
+    <br/>
+    <br/>
+    <h3>
+     print_status()
+    </h3>
+    print_status()的定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_21_3592004">//打印一些和时间有关的统计信息
+static int64_t print_status( int64_t i_start, int64_t i_previous, int i_frame, int i_frame_total, int64_t i_file, x264_param_t *param, int64_t last_ts )
+{
+    char buf[200];
+    int64_t i_time = x264_mdate();
+    if( i_previous &amp;&amp; i_time - i_previous &lt; UPDATE_INTERVAL )
+        return i_previous;
+    int64_t i_elapsed = i_time - i_start;
+    double fps = i_elapsed &gt; 0 ? i_frame * 1000000. / i_elapsed : 0;
+    double bitrate;
+    if( last_ts )
+        bitrate = (double) i_file * 8 / ( (double) last_ts * 1000 * param-&gt;i_timebase_num / param-&gt;i_timebase_den );
+    else
+        bitrate = (double) i_file * 8 / ( (double) 1000 * param-&gt;i_fps_den / param-&gt;i_fps_num );
+    if( i_frame_total )
+    {
+    	//形成输出的字符串
+        int eta = i_elapsed * (i_frame_total - i_frame) / ((int64_t)i_frame * 1000000);
+        sprintf( buf, "x264 [%.1f%%] %d/%d frames, %.2f fps, %.2f kb/s, eta %d:%02d:%02d",
+                 100. * i_frame / i_frame_total, i_frame, i_frame_total, fps, bitrate,
+                 eta/3600, (eta/60)%60, eta%60 );
+    }
+    else
+        sprintf( buf, "x264 %d frames: %.2f fps, %.2f kb/s", i_frame, fps, bitrate );
+    //输出到stderr
+    fprintf( stderr, "%s  \r", buf+5 );
+    //设置到标题栏？
+    x264_cli_set_console_title( buf );
+    fflush( stderr ); // needed in windows
+    return i_time;
+}
+</pre>
+    <br/>
+    print_status()的代码不再详细记录，它的输出效果如下图中红框中的文字。
+    <br/>
+    <div style="text-align: center;">
+     <img alt="" src="https://img-blog.csdn.net/20150508182010247?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     X264控制台程序中和输入输出相关的结构体
+    </h2>
+    在x264控制台程序中有3个和输入输出相关的结构体：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     cli_output_t：输出格式对应的结构体。输出格式一般为H.264裸流、FLV、MP4等。
+     <br/>
+     cli_input_t：输入格式对应的结构体。输入格式一般为纯YUV像素数据，Y4M格式数据等。
+     <br/>
+     cli_vid_filter_t：输入格式滤镜结构体。滤镜可以对输入数据做一些简单的处理，例如拉伸、裁剪等等（当然滤镜也可以不作任何处理，直接读取输入数据）。
+    </blockquote>
+    在x264的编码过程中，调用cli_vid_filter_t结构体的get_frame()读取YUV数据，调用cli_output_t的write_frame()写入数据。下面简单分析一下它们之间的关系。
+    <br/>
+    <br/>
+    <h3>
+     cli_output_t
+    </h3>
+    x264项目中和cli_output_t结构体相关的源代码都位于根目录的output文件夹下。cli_output_t的定义位于output\output.h，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_22_6227409">typedef struct
+{
+    int (*open_file)( char *psz_filename, hnd_t *p_handle, cli_output_opt_t *opt );
+    int (*set_param)( hnd_t handle, x264_param_t *p_param );
+    int (*write_headers)( hnd_t handle, x264_nal_t *p_nal );
+    int (*write_frame)( hnd_t handle, uint8_t *p_nal, int i_size, x264_picture_t *p_picture );
+    int (*close_file)( hnd_t handle, int64_t largest_pts, int64_t second_largest_pts );
+} cli_output_t;
+
+extern const cli_output_t raw_output;
+extern const cli_output_t mkv_output;
+extern const cli_output_t mp4_output;
+extern const cli_output_t flv_output;
+</pre>
+    <br/>
+    从源代码中可以看出，cli_output_t中一共包含了open_file()，set_param()，write_headers()，write_frame()，close_file()五个接口。在x264中有raw_output，mkv_output，mp4_output，flv_output这几个cli_output_t结构体，分别对应H.264裸流，MKV，MP4，FLV格式。下面举例看两个结构体：raw_output和flv_output。
+    <br/>
+    <br/>
+    <strong>
+     raw_output（H.264裸流的cli_output_t结构体）
+    </strong>
+    <br/>
+    raw_output的定义位于output\raw.c，该文件内容如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_23_8622052">#include "output.h"
+
+static int open_file( char *psz_filename, hnd_t *p_handle, cli_output_opt_t *opt )
+{
+    if( !strcmp( psz_filename, "-" ) )
+        *p_handle = stdout;
+    else if( !(*p_handle = x264_fopen( psz_filename, "w+b" )) )
+        return -1;
+
+    return 0;
+}
+
+static int set_param( hnd_t handle, x264_param_t *p_param )
+{
+    return 0;
+}
+
+static int write_headers( hnd_t handle, x264_nal_t *p_nal )
+{
+    int size = p_nal[0].i_payload + p_nal[1].i_payload + p_nal[2].i_payload;
+
+    if( fwrite( p_nal[0].p_payload, size, 1, (FILE*)handle ) )
+        return size;
+    return -1;
+}
+
+static int write_frame( hnd_t handle, uint8_t *p_nalu, int i_size, x264_picture_t *p_picture )
+{
+    if( fwrite( p_nalu, i_size, 1, (FILE*)handle ) )
+        return i_size;
+    return -1;
+}
+
+static int close_file( hnd_t handle, int64_t largest_pts, int64_t second_largest_pts )
+{
+    if( !handle || handle == stdout )
+        return 0;
+
+    return fclose( (FILE*)handle );
+}
+
+const cli_output_t raw_output = { open_file, set_param, write_headers, write_frame, close_file };
+</pre>
+    <br/>
+    可以看出raw_output中的函数定义都比较简单，只是封装了fwrite()，fclose()等函数。
+    <br/>
+    <br/>
+    <strong>
+     flv_output（FLV格式的cli_output_t结构体）
+    </strong>
+    <br/>
+    flv_output的定义位于output\flv.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_24_4289101">const cli_output_t flv_output = { open_file, set_param, write_headers, write_frame, close_file };</pre>
+    该文件内容比较多，只举例看一下其中的两个函数：open_file()和write_frame()。
+    <br/>
+    <br/>
+    <strong>
+     open_file()
+    </strong>
+    <br/>
+    flv_output 中的open_file()的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_25_5288304">static int write_header( flv_buffer *c )
+{
+    flv_put_tag( c, "FLV" ); // Signature
+    flv_put_byte( c, 1 );    // Version
+    flv_put_byte( c, 1 );    // Video Only
+    flv_put_be32( c, 9 );    // DataOffset
+    flv_put_be32( c, 0 );    // PreviousTagSize0
+
+    return flv_flush_data( c );
+}
+
+static int open_file( char *psz_filename, hnd_t *p_handle, cli_output_opt_t *opt )
+{
+    *p_handle = NULL;
+    flv_hnd_t *p_flv = calloc( 1, sizeof(flv_hnd_t) );
+    if( !p_flv )
+        return -1;
+
+    p_flv-&gt;b_dts_compress = opt-&gt;use_dts_compress;
+
+    p_flv-&gt;c = flv_create_writer( psz_filename );
+    if( !p_flv-&gt;c )
+        return -1;
+
+    CHECK( write_header( p_flv-&gt;c ) );
+    *p_handle = p_flv;
+
+    return 0;
+}</pre>
+    可以看出flv_output 中的open_file()中完成了FLV封装格式文件头的创建。
+    <br/>
+    <br/>
+    <strong>
+     write_frame()
+    </strong>
+    <br/>
+    flv_output 中的write_frame()的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_26_3463608">static int write_frame( hnd_t handle, uint8_t *p_nalu, int i_size, x264_picture_t *p_picture )
+{
+    flv_hnd_t *p_flv = handle;
+    flv_buffer *c = p_flv-&gt;c;
+
+#define convert_timebase_ms( timestamp, timebase ) (int64_t)((timestamp) * (timebase) * 1000 + 0.5)
+
+    if( !p_flv-&gt;i_framenum )
+    {
+        p_flv-&gt;i_delay_time = p_picture-&gt;i_dts * -1;
+        if( !p_flv-&gt;b_dts_compress &amp;&amp; p_flv-&gt;i_delay_time )
+            x264_cli_log( "flv", X264_LOG_INFO, "initial delay %"PRId64" ms\n",
+                          convert_timebase_ms( p_picture-&gt;i_pts + p_flv-&gt;i_delay_time, p_flv-&gt;d_timebase ) );
+    }
+
+    int64_t dts;
+    int64_t cts;
+    int64_t offset;
+
+    if( p_flv-&gt;b_dts_compress )
+    {
+        if( p_flv-&gt;i_framenum == 1 )
+            p_flv-&gt;i_init_delta = convert_timebase_ms( p_picture-&gt;i_dts + p_flv-&gt;i_delay_time, p_flv-&gt;d_timebase );
+        dts = p_flv-&gt;i_framenum &gt; p_flv-&gt;i_delay_frames
+            ? convert_timebase_ms( p_picture-&gt;i_dts, p_flv-&gt;d_timebase )
+            : p_flv-&gt;i_framenum * p_flv-&gt;i_init_delta / (p_flv-&gt;i_delay_frames + 1);
+        cts = convert_timebase_ms( p_picture-&gt;i_pts, p_flv-&gt;d_timebase );
+    }
+    else
+    {
+        dts = convert_timebase_ms( p_picture-&gt;i_dts + p_flv-&gt;i_delay_time, p_flv-&gt;d_timebase );
+        cts = convert_timebase_ms( p_picture-&gt;i_pts + p_flv-&gt;i_delay_time, p_flv-&gt;d_timebase );
+    }
+    offset = cts - dts;
+
+    if( p_flv-&gt;i_framenum )
+    {
+        if( p_flv-&gt;i_prev_dts == dts )
+            x264_cli_log( "flv", X264_LOG_WARNING, "duplicate DTS %"PRId64" generated by rounding\n"
+                          "               decoding framerate cannot exceed 1000fps\n", dts );
+        if( p_flv-&gt;i_prev_cts == cts )
+            x264_cli_log( "flv", X264_LOG_WARNING, "duplicate CTS %"PRId64" generated by rounding\n"
+                          "               composition framerate cannot exceed 1000fps\n", cts );
+    }
+    p_flv-&gt;i_prev_dts = dts;
+    p_flv-&gt;i_prev_cts = cts;
+
+    // A new frame - write packet header
+    flv_put_byte( c, FLV_TAG_TYPE_VIDEO );
+    flv_put_be24( c, 0 ); // calculated later
+    flv_put_be24( c, dts );
+    flv_put_byte( c, dts &gt;&gt; 24 );
+    flv_put_be24( c, 0 );
+
+    p_flv-&gt;start = c-&gt;d_cur;
+    flv_put_byte( c, p_picture-&gt;b_keyframe ? FLV_FRAME_KEY : FLV_FRAME_INTER );
+    flv_put_byte( c, 1 ); // AVC NALU
+    flv_put_be24( c, offset );
+
+    if( p_flv-&gt;sei )
+    {
+        flv_append_data( c, p_flv-&gt;sei, p_flv-&gt;sei_len );
+        free( p_flv-&gt;sei );
+        p_flv-&gt;sei = NULL;
+    }
+    flv_append_data( c, p_nalu, i_size );
+
+    unsigned length = c-&gt;d_cur - p_flv-&gt;start;
+    flv_rewrite_amf_be24( c, length, p_flv-&gt;start - 10 );
+    flv_put_be32( c, 11 + length ); // Last tag size
+    CHECK( flv_flush_data( c ) );
+
+    p_flv-&gt;i_framenum++;
+
+    return i_size;
+}
+</pre>
+    <br/>
+    flv_output 中的可以看出write_frame()中完成了FLV封装格式中一个Tag单元的创建。
+    <br/>
+    <br/>
+    <h3>
+     cli_input_t
+    </h3>
+    x264项目中和cli_input_t结构体相关的源代码都位于根目录的input文件夹下。cli_input_t的定义位于input\input.h，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_27_9479320">typedef struct
+{
+    int (*open_file)( char *psz_filename, hnd_t *p_handle, video_info_t *info, cli_input_opt_t *opt );
+    int (*picture_alloc)( cli_pic_t *pic, int csp, int width, int height );
+    int (*read_frame)( cli_pic_t *pic, hnd_t handle, int i_frame );
+    int (*release_frame)( cli_pic_t *pic, hnd_t handle );
+    void (*picture_clean)( cli_pic_t *pic );
+    int (*close_file)( hnd_t handle );
+} cli_input_t;
+
+extern const cli_input_t raw_input;
+extern const cli_input_t y4m_input;
+extern const cli_input_t avs_input;
+extern const cli_input_t lavf_input;
+extern const cli_input_t ffms_input;
+</pre>
+    <br/>
+    从源代码中可以看出，cli_input_t中一共包含了open_file()，picture_alloc()，read_frame()，release_frame()，picture_clean()，close_file()六个接口。在x264中有raw_input，y4m_input，avs_input，lavf_input，ffms_input这几个cli_output_t结构体，分别对应H.264裸流，Y4M，AVS，LAVF，FFMS格式（后几种没有接触过）。下面举例看两个结构体：raw_input和y4m_input。
+    <br/>
+    <br/>
+    <strong>
+     raw_input（纯YUV像素数据的cli_input_t结构体）
+    </strong>
+    <br/>
+    raw_input的定义位于input\raw.c，该文件内容如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_28_4066574">#include "input.h"
+#define FAIL_IF_ERROR( cond, ... ) FAIL_IF_ERR( cond, "raw", __VA_ARGS__ )
+
+typedef struct
+{
+    FILE *fh;
+    int next_frame;
+    uint64_t plane_size[4];
+    uint64_t frame_size;
+    int bit_depth;
+} raw_hnd_t;
+
+//打开raw YUV格式文件
+static int open_file( char *psz_filename, hnd_t *p_handle, video_info_t *info, cli_input_opt_t *opt )
+{
+    raw_hnd_t *h = calloc( 1, sizeof(raw_hnd_t) );
+    if( !h )
+        return -1;
+
+    if( !opt-&gt;resolution )
+    {
+    	//如果没有设置分辨率
+    	//尝试从文件名中解析分辨率
+        /* try to parse the file name */
+        for( char *p = psz_filename; *p; p++ )
+            if( *p &gt;= '0' &amp;&amp; *p &lt;= '9' &amp;&amp; sscanf( p, "%dx%d", &amp;info-&gt;width, &amp;info-&gt;height ) == 2 )
+                break;
+    }
+    else
+        sscanf( opt-&gt;resolution, "%dx%d", &amp;info-&gt;width, &amp;info-&gt;height );
+    //没有分辨率信息的话，会弹出错误信息
+    FAIL_IF_ERROR( !info-&gt;width || !info-&gt;height, "raw input requires a resolution.\n" )
+    //设置颜色空间
+    if( opt-&gt;colorspace )
+    {
+        for( info-&gt;csp = X264_CSP_CLI_MAX-1; info-&gt;csp &gt; X264_CSP_NONE; info-&gt;csp-- )
+        {
+            if( x264_cli_csps[info-&gt;csp].name &amp;&amp; !strcasecmp( x264_cli_csps[info-&gt;csp].name, opt-&gt;colorspace ) )
+                break;
+        }
+        FAIL_IF_ERROR( info-&gt;csp == X264_CSP_NONE, "unsupported colorspace `%s'\n", opt-&gt;colorspace );
+    }
+    else /* default */
+        info-&gt;csp = X264_CSP_I420;//默认为YUV420P
+    //颜色位深
+    h-&gt;bit_depth = opt-&gt;bit_depth;
+    FAIL_IF_ERROR( h-&gt;bit_depth &lt; 8 || h-&gt;bit_depth &gt; 16, "unsupported bit depth `%d'\n", h-&gt;bit_depth );
+    if( h-&gt;bit_depth &gt; 8 )
+        info-&gt;csp |= X264_CSP_HIGH_DEPTH;
+
+    if( !strcmp( psz_filename, "-" ) )
+        h-&gt;fh = stdin;  //从管道输入
+    else
+        h-&gt;fh = x264_fopen( psz_filename, "rb" );  //打开文件
+    if( h-&gt;fh == NULL )
+        return -1;
+
+    info-&gt;thread_safe = 1;
+    info-&gt;num_frames  = 0;
+    info-&gt;vfr         = 0;
+
+    const x264_cli_csp_t *csp = x264_cli_get_csp( info-&gt;csp );
+    for( int i = 0; i &lt; csp-&gt;planes; i++ )
+    {
+        h-&gt;plane_size[i] = x264_cli_pic_plane_size( info-&gt;csp, info-&gt;width, info-&gt;height, i );
+        h-&gt;frame_size += h-&gt;plane_size[i];
+        /* x264_cli_pic_plane_size returns the size in bytes, we need the value in pixels from here on */
+        h-&gt;plane_size[i] /= x264_cli_csp_depth_factor( info-&gt;csp );
+    }
+
+    if( x264_is_regular_file( h-&gt;fh ) )
+    {
+        fseek( h-&gt;fh, 0, SEEK_END );
+        uint64_t size = ftell( h-&gt;fh );
+        fseek( h-&gt;fh, 0, SEEK_SET );
+        info-&gt;num_frames = size / h-&gt;frame_size;
+    }
+
+    *p_handle = h;
+    return 0;
+}
+
+//读取一帧数据-内部
+static int read_frame_internal( cli_pic_t *pic, raw_hnd_t *h, int bit_depth_uc )
+{
+    int error = 0;
+    int pixel_depth = x264_cli_csp_depth_factor( pic-&gt;img.csp );
+    //一个分量一个分量读
+    for( int i = 0; i &lt; pic-&gt;img.planes &amp;&amp; !error; i++ )
+    {
+    	//fread()读取
+        error |= fread( pic-&gt;img.plane[i], pixel_depth, h-&gt;plane_size[i], h-&gt;fh ) != h-&gt;plane_size[i];
+        if( bit_depth_uc )
+        {
+            /* upconvert non 16bit high depth planes to 16bit using the same
+             * algorithm as used in the depth filter. */
+            uint16_t *plane = (uint16_t*)pic-&gt;img.plane[i];
+            uint64_t pixel_count = h-&gt;plane_size[i];
+            int lshift = 16 - h-&gt;bit_depth;
+            for( uint64_t j = 0; j &lt; pixel_count; j++ )
+                plane[j] = plane[j] &lt;&lt; lshift;
+        }
+    }
+    return error;
+}
+//读取一帧数据
+static int read_frame( cli_pic_t *pic, hnd_t handle, int i_frame )
+{
+    raw_hnd_t *h = handle;
+
+    if( i_frame &gt; h-&gt;next_frame )
+    {
+        if( x264_is_regular_file( h-&gt;fh ) )
+            fseek( h-&gt;fh, i_frame * h-&gt;frame_size, SEEK_SET );  //fseek()。偏移量=帧序号*帧大小。
+        else
+            while( i_frame &gt; h-&gt;next_frame )
+            {
+            	//读取一帧数据-内部
+                if( read_frame_internal( pic, h, 0 ) )
+                    return -1;
+                h-&gt;next_frame++;
+            }
+    }
+
+    if( read_frame_internal( pic, h, h-&gt;bit_depth &amp; 7 ) )
+        return -1;
+
+    h-&gt;next_frame = i_frame+1;
+    return 0;
+}
+
+//关闭文件
+static int close_file( hnd_t handle )
+{
+    raw_hnd_t *h = handle;
+    if( !h || !h-&gt;fh )
+        return 0;
+    //fclose()关闭文件
+    fclose( h-&gt;fh );
+    free( h );
+    return 0;
+}
+//raw格式对应的数组
+const cli_input_t raw_input = { open_file, x264_cli_pic_alloc, read_frame, NULL, x264_cli_pic_clean, close_file };
+</pre>
+    <br/>
+    <p>
+     从源代码中可以看出，raw_input 中的open_file()函数在打开YUV像素数据的时候，会首先判断是否设置了宽和高（YUV是纯像素数据，没有宽和高信息），如果没有设置，则会尝试从文件路径中解析宽和高信息。如果成功完成上述步骤，open_file()就会调用x264_fopen()打开输入文件。其他的函数在源代码中都写了注释，就不再重复记录了。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <strong>
+     y4m_input（Y4M格式的cli_input_t结构体）
+    </strong>
+    <br/>
+    y4m_input的定义位于input\y4m.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_29_3321673">const cli_input_t y4m_input = { open_file, x264_cli_pic_alloc, read_frame, NULL, x264_cli_pic_clean, close_file };</pre>
+    该文件内容较多，不再进行详细分析。在这里看一个打开文件的函数open_file()。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_30_4811244">typedef struct
+{
+    FILE *fh;
+    int next_frame;
+    int seq_header_len;
+    int frame_header_len;
+    uint64_t frame_size;
+    uint64_t plane_size[3];
+    int bit_depth;
+} y4m_hnd_t;
+
+#define Y4M_MAGIC "YUV4MPEG2"
+#define MAX_YUV4_HEADER 80
+#define Y4M_FRAME_MAGIC "FRAME"
+#define MAX_FRAME_HEADER 80
+
+static int parse_csp_and_depth( char *csp_name, int *bit_depth )
+{
+    int csp    = X264_CSP_MAX;
+
+    /* Set colorspace from known variants */
+    if( !strncmp( "420", csp_name, 3 ) )
+        csp = X264_CSP_I420;
+    else if( !strncmp( "422", csp_name, 3 ) )
+        csp = X264_CSP_I422;
+    else if( !strncmp( "444", csp_name, 3 ) &amp;&amp; strncmp( "444alpha", csp_name, 8 ) ) // only accept alphaless 4:4:4
+        csp = X264_CSP_I444;
+
+    /* Set high bit depth from known extensions */
+    if( sscanf( csp_name, "%*d%*[pP]%d", bit_depth ) != 1 )
+        *bit_depth = 8;
+
+    return csp;
+}
+
+static int open_file( char *psz_filename, hnd_t *p_handle, video_info_t *info, cli_input_opt_t *opt )
+{
+    y4m_hnd_t *h = malloc( sizeof(y4m_hnd_t) );
+    int i;
+    uint32_t n, d;
+    char header[MAX_YUV4_HEADER+10];
+    char *tokend, *header_end;
+    int colorspace = X264_CSP_NONE;
+    int alt_colorspace = X264_CSP_NONE;
+    int alt_bit_depth  = 8;
+    if( !h )
+        return -1;
+
+    h-&gt;next_frame = 0;
+    info-&gt;vfr = 0;
+
+    if( !strcmp( psz_filename, "-" ) )
+        h-&gt;fh = stdin;
+    else
+        h-&gt;fh = x264_fopen(psz_filename, "rb");
+    if( h-&gt;fh == NULL )
+        return -1;
+
+    h-&gt;frame_header_len = strlen( Y4M_FRAME_MAGIC )+1;
+
+    /* Read header */
+    //解析Y4M格式的文件头
+    for( i = 0; i &lt; MAX_YUV4_HEADER; i++ )
+    {
+        header[i] = fgetc( h-&gt;fh );
+        if( header[i] == '\n' )
+        {
+            /* Add a space after last option. Makes parsing "444" vs
+               "444alpha" easier. */
+            header[i+1] = 0x20;
+            header[i+2] = 0;
+            break;
+        }
+    }
+    if( i == MAX_YUV4_HEADER || strncmp( header, Y4M_MAGIC, strlen( Y4M_MAGIC ) ) )
+        return -1;
+
+    /* Scan properties */
+    header_end = &amp;header[i+1]; /* Include space */
+    h-&gt;seq_header_len = i+1;
+    for( char *tokstart = &amp;header[strlen( Y4M_MAGIC )+1]; tokstart &lt; header_end; tokstart++ )
+    {
+        if( *tokstart == 0x20 )
+            continue;
+        switch( *tokstart++ )
+        {
+            case 'W': /* Width. Required. */
+                info-&gt;width = strtol( tokstart, &amp;tokend, 10 );
+                tokstart=tokend;
+                break;
+            case 'H': /* Height. Required. */
+                info-&gt;height = strtol( tokstart, &amp;tokend, 10 );
+                tokstart=tokend;
+                break;
+            case 'C': /* Color space */
+                colorspace = parse_csp_and_depth( tokstart, &amp;h-&gt;bit_depth );
+                tokstart = strchr( tokstart, 0x20 );
+                break;
+            case 'I': /* Interlace type */
+                switch( *tokstart++ )
+                {
+                    case 't':
+                        info-&gt;interlaced = 1;
+                        info-&gt;tff = 1;
+                        break;
+                    case 'b':
+                        info-&gt;interlaced = 1;
+                        info-&gt;tff = 0;
+                        break;
+                    case 'm':
+                        info-&gt;interlaced = 1;
+                        break;
+                    //case '?':
+                    //case 'p':
+                    default:
+                        break;
+                }
+                break;
+            case 'F': /* Frame rate - 0:0 if unknown */
+                if( sscanf( tokstart, "%u:%u", &amp;n, &amp;d ) == 2 &amp;&amp; n &amp;&amp; d )
+                {
+                    x264_reduce_fraction( &amp;n, &amp;d );
+                    info-&gt;fps_num = n;
+                    info-&gt;fps_den = d;
+                }
+                tokstart = strchr( tokstart, 0x20 );
+                break;
+            case 'A': /* Pixel aspect - 0:0 if unknown */
+                /* Don't override the aspect ratio if sar has been explicitly set on the commandline. */
+                if( sscanf( tokstart, "%u:%u", &amp;n, &amp;d ) == 2 &amp;&amp; n &amp;&amp; d )
+                {
+                    x264_reduce_fraction( &amp;n, &amp;d );
+                    info-&gt;sar_width  = n;
+                    info-&gt;sar_height = d;
+                }
+                tokstart = strchr( tokstart, 0x20 );
+                break;
+            case 'X': /* Vendor extensions */
+                if( !strncmp( "YSCSS=", tokstart, 6 ) )
+                {
+                    /* Older nonstandard pixel format representation */
+                    tokstart += 6;
+                    alt_colorspace = parse_csp_and_depth( tokstart, &amp;alt_bit_depth );
+                }
+                tokstart = strchr( tokstart, 0x20 );
+                break;
+        }
+    }
+
+    if( colorspace == X264_CSP_NONE )
+    {
+        colorspace   = alt_colorspace;
+        h-&gt;bit_depth = alt_bit_depth;
+    }
+
+    // default to 8bit 4:2:0 if nothing is specified
+    if( colorspace == X264_CSP_NONE )
+    {
+        colorspace    = X264_CSP_I420;
+        h-&gt;bit_depth  = 8;
+    }
+
+    FAIL_IF_ERROR( colorspace &lt;= X264_CSP_NONE || colorspace &gt;= X264_CSP_MAX, "colorspace unhandled\n" )
+    FAIL_IF_ERROR( h-&gt;bit_depth &lt; 8 || h-&gt;bit_depth &gt; 16, "unsupported bit depth `%d'\n", h-&gt;bit_depth );
+
+    info-&gt;thread_safe = 1;
+    info-&gt;num_frames  = 0;
+    info-&gt;csp         = colorspace;
+    h-&gt;frame_size     = h-&gt;frame_header_len;
+
+    if( h-&gt;bit_depth &gt; 8 )
+        info-&gt;csp |= X264_CSP_HIGH_DEPTH;
+
+    const x264_cli_csp_t *csp = x264_cli_get_csp( info-&gt;csp );
+
+    for( i = 0; i &lt; csp-&gt;planes; i++ )
+    {
+        h-&gt;plane_size[i] = x264_cli_pic_plane_size( info-&gt;csp, info-&gt;width, info-&gt;height, i );
+        h-&gt;frame_size += h-&gt;plane_size[i];
+        /* x264_cli_pic_plane_size returns the size in bytes, we need the value in pixels from here on */
+        h-&gt;plane_size[i] /= x264_cli_csp_depth_factor( info-&gt;csp );
+    }
+
+    /* Most common case: frame_header = "FRAME" */
+    if( x264_is_regular_file( h-&gt;fh ) )
+    {
+        uint64_t init_pos = ftell( h-&gt;fh );
+        fseek( h-&gt;fh, 0, SEEK_END );
+        uint64_t i_size = ftell( h-&gt;fh );
+        fseek( h-&gt;fh, init_pos, SEEK_SET );
+        info-&gt;num_frames = (i_size - h-&gt;seq_header_len) / h-&gt;frame_size;
+    }
+
+    *p_handle = h;
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码可以看出，y4m_input中的open_file()完成了Y4M文件的打开和文件头解析的功能。
+    <br/>
+    <br/>
+    <h3>
+     cli_vid_filter_t
+    </h3>
+    x264项目中和cli_vid_filter_t结构体相关的源代码都位于根目录的filters文件夹下。cli_vid_filter_t的定义位于filters\video\video.h，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_31_9365478">struct cli_vid_filter_t
+{
+    /* name of the filter */
+    const char *name;
+    /* help: a short message on what the filter does and how to use it.
+     * this should only be implemented by filters directly accessible by the user */
+    void (*help)( int longhelp );
+    /* init: initializes the filter given the input clip properties and parameter to adjust them as necessary
+     * with the given options provided by the user.
+     * returns 0 on success, nonzero on error. */
+    int (*init)( hnd_t *handle, cli_vid_filter_t *filter, video_info_t *info, x264_param_t *param, char *opt_string );
+    /* get_frame: given the storage for the output frame and desired frame number, generate the frame accordingly.
+     * the image data returned by get_frame should be treated as const and not be altered.
+     * returns 0 on success, nonzero on error. */
+    int (*get_frame)( hnd_t handle, cli_pic_t *output, int frame );
+    /* release_frame: frame is done being used and is signaled for cleanup.
+     * returns 0 on succeess, nonzero on error. */
+    int (*release_frame)( hnd_t handle, cli_pic_t *pic, int frame );
+    /* free: run filter cleanup procedures. */
+    void (*free)( hnd_t handle );
+    /* next registered filter, unused by filters themselves */
+    cli_vid_filter_t *next;
+};
+</pre>
+    <br/>
+    从源代码中可以看出，cli_vid_filter_t中一共包含了help()，init()，get_frame()，release_frame()，free()几个接口。下面举例看两个Filter结构体：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     source_filter：不作任何处理。
+     <br/>
+     resize_filter：拉伸。
+    </blockquote>
+    <br/>
+    <strong>
+     source_filter（没有功能的cli_vid_filter_t结构体）
+    </strong>
+    <br/>
+    source_filter的定义位于filters\video\source.c，该文件内容如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_32_8445853">#include "video.h"
+
+/* This filter converts the demuxer API into the filtering API for video frames.
+ * Backseeking is prohibited here as not all demuxers are capable of doing so. */
+
+typedef struct
+{
+    cli_pic_t pic;
+    hnd_t hin;
+    int cur_frame;
+} source_hnd_t;
+
+cli_vid_filter_t source_filter;
+
+static int init( hnd_t *handle, cli_vid_filter_t *filter, video_info_t *info, x264_param_t *param, char *opt_string )
+{
+    source_hnd_t *h = calloc( 1, sizeof(source_hnd_t) );
+    if( !h )
+        return -1;
+    h-&gt;cur_frame = -1;
+
+    if( cli_input.picture_alloc( &amp;h-&gt;pic, info-&gt;csp, info-&gt;width, info-&gt;height ) )
+        return -1;
+
+    h-&gt;hin = *handle;
+    *handle = h;
+    *filter = source_filter;
+
+    return 0;
+}
+
+static int get_frame( hnd_t handle, cli_pic_t *output, int frame )
+{
+    source_hnd_t *h = handle;
+    /* do not allow requesting of frames from before the current position */
+    if( frame &lt;= h-&gt;cur_frame || cli_input.read_frame( &amp;h-&gt;pic, h-&gt;hin, frame ) )
+        return -1;
+    h-&gt;cur_frame = frame;
+    *output = h-&gt;pic;
+    return 0;
+}
+
+static int release_frame( hnd_t handle, cli_pic_t *pic, int frame )
+{
+    source_hnd_t *h = handle;
+    if( cli_input.release_frame &amp;&amp; cli_input.release_frame( &amp;h-&gt;pic, h-&gt;hin ) )
+        return -1;
+    return 0;
+}
+
+static void free_filter( hnd_t handle )
+{
+    source_hnd_t *h = handle;
+    cli_input.picture_clean( &amp;h-&gt;pic );
+    cli_input.close_file( h-&gt;hin );
+    free( h );
+}
+
+cli_vid_filter_t source_filter = { "source", NULL, init, get_frame, release_frame, free_filter, NULL };
+</pre>
+    <br/>
+    从源代码中可以看出，source_filter的get_frame()直接调用了cli_input_t的read_frame()；而它的release_frame()也是直接调用了cli_input_t的release_frame()。简而言之，source_filter相当于是一个cli_input_t。
+    <br/>
+    <br/>
+    <strong>
+     resize_filter（拉伸功能对应的cli_vid_filter_t结构体）
+    </strong>
+    <br/>
+    resize_filter的定义位于filters\video\resize.c，该结构体定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_33_6031730">cli_vid_filter_t resize_filter = { NAME, help, init, get_frame, release_frame, free_filter, NULL };</pre>
+    由于resize_filter涉及到的代码比较多，在这里仅看一下它的get_frame()的定义。
+    <br/>
+    <pre class="cpp" code_snippet_id="662196" name="code" snippet_file_name="blog_20150508_34_8110728">static int get_frame( hnd_t handle, cli_pic_t *output, int frame )
+{
+    resizer_hnd_t *h = handle;
+    if( h-&gt;prev_filter.get_frame( h-&gt;prev_hnd, output, frame ) )
+        return -1;
+    if( h-&gt;variable_input &amp;&amp; check_resizer( h, output ) )
+        return -1;
+    h-&gt;working = 1;
+    if( h-&gt;pre_swap_chroma )
+        XCHG( uint8_t*, output-&gt;img.plane[1], output-&gt;img.plane[2] );
+    if( h-&gt;ctx )
+    {
+        sws_scale( h-&gt;ctx, (const uint8_t* const*)output-&gt;img.plane, output-&gt;img.stride,
+                   0, output-&gt;img.height, h-&gt;buffer.img.plane, h-&gt;buffer.img.stride );
+        output-&gt;img = h-&gt;buffer.img; /* copy img data */
+    }
+    else
+        output-&gt;img.csp = h-&gt;dst_csp;
+    if( h-&gt;post_swap_chroma )
+        XCHG( uint8_t*, output-&gt;img.plane[1], output-&gt;img.plane[2] );
+
+    return 0;
+}
+</pre>
+    <br/>
+    可以看出resize_filter中调用了libswscale类库中的sws_scale()对图像完成了拉伸工作。
+    <br/>
+    <span style="font-family:FangSong_GB2312;">
+     注：拉伸滤镜需要libswscale类库的支持。
+    </span>
+    <br/>
+    <br/>
+    <br/>
+    至此cli_output_t，cli_input_t，cli_vid_filter_t这3个在x264中与输入输出有关的结构体的源代码就分析完毕了。有关x264命令行工具的源代码分析工作也就做完了。下一篇文章开始对libx264内部的源代码进行分析。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <span style="color:#990000;">
+     <strong>
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </strong>
+    </span>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/45583217
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=x264&amp;t=blog" target="_blank">
+    x264
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=H.264&amp;t=blog" target="_blank">
+    H.264
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频编码&amp;t=blog" target="_blank">
+    视频编码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=YUV&amp;t=blog" target="_blank">
+    YUV
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2619503" target="_blank">
+    x264
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

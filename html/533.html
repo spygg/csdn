@@ -1,0 +1,408 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 使用FFMPEG类库分离出多媒体文件中的H.264码流 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_533">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   使用FFMPEG类库分离出多媒体文件中的H.264码流
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月18日 11:15:37
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：27968
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     在使用FFMPEG的类库进行编程的过程中，可以直接输出解复用之后的的视频数据码流。只需要在每次调用
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;line-height:18px;">
+      av_read_frame()之后将得到的视频的AVPacket存为本地文件即可。
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;line-height:18px;">
+      经试验，在分离MPEG2码流的时候，直接存储AVPacket即可。
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       在分离H.264码流的时候，直接存储AVPacket后的文件可能是不能播放的。
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       如果视音频复用格式是TS（MPEG2 Transport Stream），直接存储后的文件是可以播放的。
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       复用格式是FLV，MP4则不行。
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       经过长时间资料搜索发现，FLV，MP4这些属于“特殊容器”，需要经过以下处理才能得到可播放的H.264码流：
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       1.第一次存储AVPacket之前需要在前面加上H.264的SPS和PPS。这些信息存储在AVCodecContext的extradata里面。
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       并且需要使用FFMPEG中的名为"h264_mp4toannexb"的
+      </span>
+     </span>
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;line-height:18px;">
+      bitstream filter 进行处理。
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       然后将处理后的extradata存入文件
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       具体代码如下：
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+      </span>
+     </span>
+    </p>
+    <div class="dp-highlighter bg_cpp" style="font-family:Consolas, 'Courier New', Courier, mono, serif;background-color:rgb(231,229,220);overflow:auto;padding-top:1px;color:rgb(51,51,51);line-height:26px;margin:18px 0px !important;">
+     <div class="bar" style="padding-left:45px;">
+      <div class="tools" style="padding:3px 8px 10px 10px;font-size:9px;line-height:normal;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;color:#C0C0C0;background-color:rgb(248,248,248);border-left-width:3px;border-left-style:solid;border-left-color:rgb(108,226,108);">
+       <strong>
+        [cpp]
+       </strong>
+       <a class="ViewSource" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="view plain">
+        view plain
+       </a>
+       <a class="CopyToClipboard" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="copy">
+        copy
+       </a>
+       <div style="z-index:99;">
+       </div>
+      </div>
+     </div>
+     <ol class="dp-cpp" start="1" style="padding:0px;border:none;background-color:rgb(255,255,255);color:rgb(92,92,92);margin:0px 0px 1px 45px !important;">
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        <span class="datatypes" style="margin:0px;padding:0px;border:none;color:rgb(46,139,87);background-color:inherit;font-weight:bold;">
+         FILE
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         *fp=fopen(
+        </span>
+        <span class="string" style="margin:0px;padding:0px;border:none;color:#0000FF;background-color:inherit;">
+         "test.264"
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         ,
+        </span>
+        <span class="string" style="margin:0px;padding:0px;border:none;color:#0000FF;background-color:inherit;">
+         "ab"
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         );
+        </span>
+       </span>
+      </li>
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         AVCodecContext *pCodecCtx=...
+        </span>
+       </span>
+      </li>
+     </ol>
+    </div>
+    <div class="dp-highlighter bg_cpp" style="font-family:Consolas, 'Courier New', Courier, mono, serif;background-color:rgb(231,229,220);overflow:auto;padding-top:1px;color:rgb(51,51,51);line-height:26px;margin:18px 0px !important;">
+     <div class="bar" style="padding-left:45px;">
+      <div class="tools" style="padding:3px 8px 10px 10px;font-size:9px;line-height:normal;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;color:#C0C0C0;background-color:rgb(248,248,248);border-left-width:3px;border-left-style:solid;border-left-color:rgb(108,226,108);">
+       <strong>
+        [cpp]
+       </strong>
+       <a class="ViewSource" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="view plain">
+        view plain
+       </a>
+       <a class="CopyToClipboard" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="copy">
+        copy
+       </a>
+       <div style="z-index:99;">
+       </div>
+      </div>
+     </div>
+     <ol class="dp-cpp" start="1" style="padding:0px;border:none;background-color:rgb(255,255,255);color:rgb(92,92,92);margin:0px 0px 1px 45px !important;">
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         unsigned
+        </span>
+        <span class="datatypes" style="margin:0px;padding:0px;border:none;color:rgb(46,139,87);background-color:inherit;font-weight:bold;">
+         char
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         *dummy=NULL;
+        </span>
+        <span class="comment" style="margin:0px;padding:0px;border:none;color:rgb(0,130,0);background-color:inherit;">
+         //输入的指针
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+        </span>
+       </span>
+      </li>
+      <li style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;background-color:rgb(248,248,248);line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        <span class="datatypes" style="margin:0px;padding:0px;border:none;color:rgb(46,139,87);background-color:inherit;font-weight:bold;">
+         int
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         dummy_len;
+        </span>
+       </span>
+      </li>
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        AVBitStreamFilterContext* bsfc =  av_bitstream_filter_init(
+        <span class="string" style="margin:0px;padding:0px;border:none;color:#0000FF;background-color:inherit;">
+         "h264_mp4toannexb"
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         );
+        </span>
+       </span>
+      </li>
+      <li style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;background-color:rgb(248,248,248);line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        av_bitstream_filter_filter(bsfc,
+        <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;line-height:18px;">
+         pCodecCtx
+        </span>
+        , NULL, &amp;dummy, &amp;dummy_len, NULL, 0, 0);
+       </span>
+      </li>
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        fwrite(pCodecCtx-&gt;extradata,
+        <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;line-height:18px;">
+         pCodecCtx-
+        </span>
+        -&gt;extradata_size,1,fp);
+       </span>
+      </li>
+      <li style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;background-color:rgb(248,248,248);line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        av_bitstream_filter_close(bsfc);
+       </span>
+      </li>
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        free(dummy);
+       </span>
+      </li>
+     </ol>
+    </div>
+    <br style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;"/>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       2.通过查看FFMPEG源代码我们发现，AVPacket中的数据起始处没有分隔符(0x00000001), 也不是0x65、0x67、0x68、0x41等字节，所以可以AVPacket肯定这不是标准的nalu。其实，AVPacket前4个字表示的是nalu的长度，从第5个字节开始才是nalu的数据。所以直接将AVPacket前4个字节替换为0x00000001即可得到标准的nalu数据。
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       具体代码如下：
+      </span>
+     </span>
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+      </span>
+     </span>
+    </p>
+    <div class="dp-highlighter bg_cpp" style="font-family:Consolas, 'Courier New', Courier, mono, serif;background-color:rgb(231,229,220);overflow:auto;padding-top:1px;color:rgb(51,51,51);line-height:26px;margin:18px 0px !important;">
+     <div class="bar" style="padding-left:45px;">
+      <div class="tools" style="padding:3px 8px 10px 10px;font-size:9px;line-height:normal;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;color:#C0C0C0;background-color:rgb(248,248,248);border-left-width:3px;border-left-style:solid;border-left-color:rgb(108,226,108);">
+       <strong>
+        [cpp]
+       </strong>
+       <a class="ViewSource" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="view plain">
+        view plain
+       </a>
+       <a class="CopyToClipboard" href="http://blog.csdn.net/leixiaohua1020/article/details/11768385#" style="color:rgb(160,160,160);text-decoration:none;background-color:inherit;border:none;padding:1px;margin:0px 10px 0px 0px;font-size:9px;display:inline-block;text-indent:-2000px;" title="copy">
+        copy
+       </a>
+       <div style="z-index:99;">
+       </div>
+      </div>
+     </div>
+     <ol class="dp-cpp" start="1" style="padding:0px;border:none;background-color:rgb(255,255,255);color:rgb(92,92,92);margin:0px 0px 1px 45px !important;">
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        <span class="datatypes" style="margin:0px;padding:0px;border:none;color:rgb(46,139,87);background-color:inherit;font-weight:bold;">
+         char
+        </span>
+        <span style="margin:0px;padding:0px;border:none;background-color:inherit;">
+         nal_start[]={0,0,0,1};
+        </span>
+       </span>
+      </li>
+      <li style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;background-color:rgb(248,248,248);line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        fwrite(nal_start,4,1,fp);
+       </span>
+      </li>
+      <li class="alt" style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;color:inherit;line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        fwrite(pkt-&gt;data+4,pkt-&gt;size-4,1,fp);
+       </span>
+      </li>
+      <li style="border-style:none none none solid;border-left-width:3px;border-left-color:rgb(108,226,108);list-style:outside;background-color:rgb(248,248,248);line-height:18px;margin:0px !important;padding:0px 3px 0px 10px !important;">
+       <span style="margin:0px;padding:0px;border:none;color:#000000;background-color:inherit;">
+        fclose(fp);
+       </span>
+      </li>
+     </ol>
+    </div>
+    <br style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;"/>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+    </p>
+    <p style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+     <span style="font-family:Consolas, 'Courier New', Courier, mono, serif;">
+      <span style="line-height:18px;">
+       经过以上两步处理之后，我们就得到了可以正常播放的H.264码流
+      </span>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/11800877
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=h.264&amp;t=blog" target="_blank">
+    h.264
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

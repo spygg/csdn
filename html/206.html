@@ -1,0 +1,757 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 开源项目管理系统：ProjectForge - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_206">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   开源项目管理系统：ProjectForge
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年12月27日 12:27:32
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：10288
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     ProjectForge是一个Java编写的开源的基于Web的项目管理解决方案。包括：工时表(Timesheet)、费用管理、项目甘特图，控制和管理工程分解结构。集成JiRA做为问题管理系统。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131126213531859"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     使用的时候发现，ProjectForge好像对IE内核的浏览器支持不佳，对其他内核的浏览器支持还是不错的。
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <strong>
+      ProjectForge体验
+     </strong>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     ProjectForge的安装极其简单，几乎什么都不用做。下载独立运行的版本后，得到一个exe文件，运行后出现如下界面。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163413390?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     单击“Start”之后，就可以开始准备启动服务器了。第一次运行的时候，会出现安装界面，要求设置ProjectForge安装路径。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163417687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     安装完成后，单击“Launch”，启动服务器。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163422203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     访问http://localhost:8080/ProjectForge/，打开ProjectForge页面。注意不是http://localhost:8080/。
+    </p>
+    <p style="text-align:left;">
+     第一次运行的话，会出现配置页面。要求设置管理员的用户名密码等等操作。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163425328?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     设置完成后，进入系统。可以看到菜单栏包含：Tasks，Calendar，Addresses，Books。下图所示是Task界面截图，该界面主要显示了包含的任务。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163428812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     下图所示是Calendar界面截图，该界面主要用日历了方式显示了日程信息。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163432250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     单击日历上的一天，弹出以下界面。可以编辑任务信息。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163435812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     下图所示是Address界面截图，该界面主要显示了联系人的信息。
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163440609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     点击一个联系人，弹出以下界面，可以编辑联系人信息。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163443984?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     下图所示是Books界面截图，该界面主要显示了出版书籍的信息。这个的作用是什么？目前还没太弄懂。
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163454453?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     单击页面左上角的版本信息，可以查看ProjectForge的documenation（文档）。ProjectForge的文档很全，包含了面向使用者的，面向管理员的以及面向开发者的。
+    </p>
+    <p style="text-align:left;">
+     遇到不明白的问题，看文档基本上都能解决。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163458031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     在菜单栏右边，有一个按钮“Main menu”（感觉有点像Windows里面的开始按钮）。单击该按钮的话，会弹出一个巨大的菜单，包含了ProjectForge方方面面的功能。由于功能太多，就不一一体验了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163501531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     单击“Project Management”的“Gantt”（甘特图）后，出现如下界面，是和甘特图有关的信息。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131221163504781?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p>
+     <strong>
+      Demo系统:
+     </strong>
+    </p>
+    <p>
+     <a href="https://www.projectforge.org/demo/">
+      https://www.projectforge.org/demo/
+     </a>
+    </p>
+    <p>
+     Login                  ：demo
+    </p>
+    <p>
+     Password          ：demo123
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      ProjectForge包含下列版本：
+     </strong>
+    </p>
+    <p>
+    </p>
+    <table border="1" cellpadding="0" cellspacing="0" width="548">
+     <tbody>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="center">
+         <strong>
+          <span style="color:#555555;">
+           种类
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="center">
+         <strong>
+          <span style="color:#555555;">
+           描述
+          </span>
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          Windows
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          Windows
+         </span>
+         <span style="color:#555555;">
+          下独立运行的版本（零配置）。包含了
+         </span>
+         <span style="color:#555555;">
+          war
+         </span>
+         <span style="color:#555555;">
+          包。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          MacOS X
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          MacOS X
+         </span>
+         <span style="color:#555555;">
+          下独立运行的版本（零配置）。包含了
+         </span>
+         <span style="color:#555555;">
+          war
+         </span>
+         <span style="color:#555555;">
+          包。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          Generic
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          支持所有
+         </span>
+         <span style="color:#555555;">
+          Java
+         </span>
+         <span style="color:#555555;">
+          平台的独立运行的版本（零配置）。包含了
+         </span>
+         <span style="color:#555555;">
+          war
+         </span>
+         <span style="color:#555555;">
+          包。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          WAR
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          完整的
+         </span>
+         <span style="color:#555555;">
+          war
+         </span>
+         <span style="color:#555555;">
+          包
+         </span>
+         <span style="color:#555555;">
+          (for HTTP and HTTPS).
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          WAR
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          需要
+         </span>
+         <span style="color:#555555;">
+          SSL
+         </span>
+         <span style="color:#555555;">
+          的完整的
+         </span>
+         <span style="color:#555555;">
+          war
+         </span>
+         <span style="color:#555555;">
+          包
+         </span>
+         <span style="color:#555555;">
+          (HTTPS).
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          Sources
+         </span>
+        </p>
+       </td>
+       <td style="background:transparent;" valign="top">
+        <p align="left">
+         <span style="color:#555555;">
+          源代码
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+     <strong>
+      源代码位于：
+     </strong>
+    </p>
+    <p>
+     <a href="https://github.com/micromata/projectforge-webapp">
+      https://github.com/micromata/projectforge-webapp
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      文档：
+     </strong>
+    </p>
+    <table border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          <span style="color:#555555;">
+           名称
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <strong>
+          <span style="color:#555555;">
+           语言
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <strong>
+          <span style="color:#555555;">
+           格式
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <strong>
+          <span style="color:#555555;">
+           描述
+          </span>
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Project Forge
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/ProjectForge.html" title="html">
+          html
+         </a>
+         <span style="color:#555555;">
+          ,
+         </span>
+         <a href="http://www.projectforge.org/doc/ProjectForge.pdf" title="pdf">
+          pdf
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          给新手提供一个快速指南
+         </span>
+         <span style="color:#555555;">
+          .
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          User guide
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/UserGuide.html" title="html">
+          html
+         </a>
+         <span style="color:#555555;">
+          ,
+         </span>
+         <a href="http://www.projectforge.org/doc/UserGuide.pdf" title="pdf">
+          pdf
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          描述了
+         </span>
+         <span style="color:#555555;">
+          ProjectForge
+         </span>
+         <span style="color:#555555;">
+          的功能和概念
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Administration Guide
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/AdministrationGuide.html" title="html">
+          html
+         </a>
+         <span style="color:#555555;">
+          ,
+         </span>
+         <a href="http://www.projectforge.org/doc/AdministrationGuide.pdf" title="pdf">
+          pdf
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          管理员的文档：安装，维护，备份，修复
+         </span>
+         <br/>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Release-News
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/News.html" title="html">
+          html
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          版本说明
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Admin Logbuch
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/AdminLogbuch.html" title="html">
+          html
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          更改日志
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Developer Guide
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/DeveloperGuide.html" title="html">
+          html
+         </a>
+         <span style="color:#555555;">
+          ,
+         </span>
+         <a href="http://www.projectforge.org/doc/DeveloperGuide.pdf" title="pdf">
+          pdf
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          开发的提示
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          Sure Fire
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <span style="color:#555555;">
+          English
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <a href="http://www.projectforge.org/doc/site/project-reports.html" title="html">
+          html
+         </a>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         <br/>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+    </p>
+    <p>
+     官网地址：
+     <a href="http://www.projectforge.org/">
+      http://www.projectforge.org/
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/16966837
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=项目管理&amp;t=blog" target="_blank">
+    项目管理
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源项目&amp;t=blog" target="_blank">
+    开源项目
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Java&amp;t=blog" target="_blank">
+    Java
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1652801" target="_blank">
+    开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

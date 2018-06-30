@@ -1,0 +1,707 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ XBMC源代码简析 5：视频播放器（dvdplayer）-解复用器（以ffmpeg为例） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_197">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   XBMC源代码简析 5：视频播放器（dvdplayer）-解复用器（以ffmpeg为例）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年01月08日 00:03:28
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6720
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     XBMC分析系列文章：
+    </p>
+    <p>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17454977" style="list-style:none;text-decoration:none;color:rgb(59,89,152);font-family:Verdana, 'Lucida Grande', Arial, Helvetica, sans-serif;">
+      XBMC源代码分析
+ 1：整体结构以及编译方法
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17511993" style="list-style:none;text-decoration:none;color:rgb(59,89,152);font-family:Verdana, 'Lucida Grande', Arial, Helvetica, sans-serif;">
+      XBMC源代码分析
+ 2：Addons（皮肤Skin）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17512743" style="list-style:none;text-decoration:none;color:rgb(59,89,152);font-family:Verdana, 'Lucida Grande', Arial, Helvetica, sans-serif;">
+      XBMC源代码分析
+ 3：核心部分（core）-综述
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17512509" style="list-style:none;text-decoration:none;color:rgb(59,89,152);font-family:Verdana, 'Lucida Grande', Arial, Helvetica, sans-serif;">
+      XBMC源代码分析
+ 4：视频播放器（dvdplayer）-解码器（以ffmpeg为例）
+     </a>
+    </p>
+    <p>
+     本文我们分析XBMC中视频播放器（dvdplayer）中的解复用器部分。由于解复用器种类很多，不可能一一分析，因此以ffmpeg解复用器为例进行分析。
+     <br/>
+    </p>
+    <p>
+     XBMC解复用器部分文件目录如下图所示：
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131225132212234?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     在这里我们看一下解复用器中的FFMPEG解复用器。对应DVDDemuxFFmpeg.h和DVDDemuxFFmpeg.cpp
+    </p>
+    <p>
+     之前的分析类文章在解复用器这方面已经做过详细的分析了。在此就不多叙述了，代码很清晰。重点的地方已经标上了注释。
+    </p>
+    <p>
+     DVDDemuxFFmpeg.h源代码如下所示：
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/*
+ * 雷霄骅
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ *
+ */
+#include "DVDDemux.h"
+#include "DllAvFormat.h"
+#include "DllAvCodec.h"
+#include "DllAvUtil.h"
+
+#include "threads/CriticalSection.h"
+#include "threads/SystemClock.h"
+
+#include &lt;map&gt;
+
+class CDVDDemuxFFmpeg;
+class CURL;
+
+class CDemuxStreamVideoFFmpeg
+  : public CDemuxStreamVideo
+{
+  CDVDDemuxFFmpeg *m_parent;
+  AVStream*        m_stream;
+public:
+  CDemuxStreamVideoFFmpeg(CDVDDemuxFFmpeg *parent, AVStream* stream)
+    : m_parent(parent)
+    , m_stream(stream)
+  {}
+  virtual void GetStreamInfo(std::string&amp; strInfo);
+};
+
+
+class CDemuxStreamAudioFFmpeg
+  : public CDemuxStreamAudio
+{
+  CDVDDemuxFFmpeg *m_parent;
+  AVStream*        m_stream;
+public:
+  CDemuxStreamAudioFFmpeg(CDVDDemuxFFmpeg *parent, AVStream* stream)
+    : m_parent(parent)
+    , m_stream(stream)
+  {}
+  std::string m_description;
+
+  virtual void GetStreamInfo(std::string&amp; strInfo);
+  virtual void GetStreamName(std::string&amp; strInfo);
+};
+
+class CDemuxStreamSubtitleFFmpeg
+  : public CDemuxStreamSubtitle
+{
+  CDVDDemuxFFmpeg *m_parent;
+  AVStream*        m_stream;
+public:
+  CDemuxStreamSubtitleFFmpeg(CDVDDemuxFFmpeg *parent, AVStream* stream)
+    : m_parent(parent)
+    , m_stream(stream)
+  {}
+  std::string m_description;
+
+  virtual void GetStreamInfo(std::string&amp; strInfo);
+  virtual void GetStreamName(std::string&amp; strInfo);
+
+};
+
+#define FFMPEG_FILE_BUFFER_SIZE   32768 // default reading size for ffmpeg
+#define FFMPEG_DVDNAV_BUFFER_SIZE 2048  // for dvd's
+//FFMPEG解复用
+class CDVDDemuxFFmpeg : public CDVDDemux
+{
+public:
+  CDVDDemuxFFmpeg();
+  virtual ~CDVDDemuxFFmpeg();
+  //打开一个流
+  bool Open(CDVDInputStream* pInput);
+  void Dispose();//关闭
+  void Reset();//复位
+  void Flush();
+  void Abort();
+  void SetSpeed(int iSpeed);
+  virtual std::string GetFileName();
+
+  DemuxPacket* Read();
+
+  bool SeekTime(int time, bool backwords = false, double* startpts = NULL);
+  bool SeekByte(int64_t pos);
+  int GetStreamLength();
+  CDemuxStream* GetStream(int iStreamId);
+  int GetNrOfStreams();
+
+  bool SeekChapter(int chapter, double* startpts = NULL);
+  int GetChapterCount();
+  int GetChapter();
+  void GetChapterName(std::string&amp; strChapterName);
+  virtual void GetStreamCodecName(int iStreamId, CStdString &amp;strName);
+
+  bool Aborted();
+
+  AVFormatContext* m_pFormatContext;
+  CDVDInputStream* m_pInput;
+
+protected:
+  friend class CDemuxStreamAudioFFmpeg;
+  friend class CDemuxStreamVideoFFmpeg;
+  friend class CDemuxStreamSubtitleFFmpeg;
+
+  int ReadFrame(AVPacket *packet);
+  CDemuxStream* AddStream(int iId);
+  void AddStream(int iId, CDemuxStream* stream);
+  CDemuxStream* GetStreamInternal(int iStreamId);
+  void CreateStreams(unsigned int program = UINT_MAX);
+  void DisposeStreams();
+
+  AVDictionary *GetFFMpegOptionsFromURL(const CURL &amp;url);
+  double ConvertTimestamp(int64_t pts, int den, int num);
+  void UpdateCurrentPTS();
+  bool IsProgramChange();
+
+  CCriticalSection m_critSection;
+  std::map&lt;int, CDemuxStream*&gt; m_streams;
+  std::vector&lt;std::map&lt;int, CDemuxStream*&gt;::iterator&gt; m_stream_index;
+
+  AVIOContext* m_ioContext;
+  //各种封装的Dll
+  DllAvFormat m_dllAvFormat;
+  DllAvCodec  m_dllAvCodec;
+  DllAvUtil   m_dllAvUtil;
+
+  double   m_iCurrentPts; // used for stream length estimation
+  bool     m_bMatroska;
+  bool     m_bAVI;
+  int      m_speed;
+  unsigned m_program;
+  XbmcThreads::EndTime  m_timeout;
+
+  // Due to limitations of ffmpeg, we only can detect a program change
+  // with a packet. This struct saves the packet for the next read and
+  // signals STREAMCHANGE to player
+  struct
+  {
+    AVPacket pkt;       // packet ffmpeg returned
+    int      result;    // result from av_read_packet
+  }m_pkt;
+};
+</pre>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    该类中以下几个函数包含了解复用器的几个功能。
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <span style="color:rgb(153,0,0);">
+      bool Open(CDVDInputStream* pInput);//打开
+      <br/>
+     </span>
+     <span style="color:#990000;">
+      void Dispose();//关闭
+      <br/>
+     </span>
+     <span style="color:#990000;">
+      void Reset();//复位
+      <br/>
+     </span>
+     <span style="color:#990000;">
+      void Flush();
+     </span>
+    </blockquote>
+    <p>
+     我们查看一下这几个函数的源代码。
+    </p>
+    <p>
+     Open()
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//打开一个流
+bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
+{
+  AVInputFormat* iformat = NULL;
+  std::string strFile;
+  m_iCurrentPts = DVD_NOPTS_VALUE;
+  m_speed = DVD_PLAYSPEED_NORMAL;
+  m_program = UINT_MAX;
+  const AVIOInterruptCB int_cb = { interrupt_cb, this };
+
+  if (!pInput) return false;
+
+  if (!m_dllAvUtil.Load() || !m_dllAvCodec.Load() || !m_dllAvFormat.Load())  {
+    CLog::Log(LOGERROR,"CDVDDemuxFFmpeg::Open - failed to load ffmpeg libraries");
+    return false;
+  }
+  //注册解复用器
+  // register codecs
+  m_dllAvFormat.av_register_all();
+
+  m_pInput = pInput;
+  strFile = m_pInput-&gt;GetFileName();
+
+  bool streaminfo = true; /* set to true if we want to look for streams before playback*/
+
+  if( m_pInput-&gt;GetContent().length() &gt; 0 )
+  {
+    std::string content = m_pInput-&gt;GetContent();
+
+    /* check if we can get a hint from content */
+    if     ( content.compare("video/x-vobsub") == 0 )
+      iformat = m_dllAvFormat.av_find_input_format("mpeg");
+    else if( content.compare("video/x-dvd-mpeg") == 0 )
+      iformat = m_dllAvFormat.av_find_input_format("mpeg");
+    else if( content.compare("video/x-mpegts") == 0 )
+      iformat = m_dllAvFormat.av_find_input_format("mpegts");
+    else if( content.compare("multipart/x-mixed-replace") == 0 )
+      iformat = m_dllAvFormat.av_find_input_format("mjpeg");
+  }
+
+  // open the demuxer
+  m_pFormatContext  = m_dllAvFormat.avformat_alloc_context();
+  m_pFormatContext-&gt;interrupt_callback = int_cb;
+
+  // try to abort after 30 seconds
+  m_timeout.Set(30000);
+
+  if( m_pInput-&gt;IsStreamType(DVDSTREAM_TYPE_FFMPEG) )
+  {
+    // special stream type that makes avformat handle file opening
+    // allows internal ffmpeg protocols to be used
+    CURL url = m_pInput-&gt;GetURL();
+    CStdString protocol = url.GetProtocol();
+
+    AVDictionary *options = GetFFMpegOptionsFromURL(url);
+
+    int result=-1;
+    if (protocol.Equals("mms"))
+    {
+      // try mmsh, then mmst
+      url.SetProtocol("mmsh");
+      url.SetProtocolOptions("");
+	  //真正地打开
+      result = m_dllAvFormat.avformat_open_input(&amp;m_pFormatContext, url.Get().c_str(), iformat, &amp;options);
+      if (result &lt; 0)
+      {
+        url.SetProtocol("mmst");
+        strFile = url.Get();
+      } 
+    }
+	//真正地打开
+    if (result &lt; 0 &amp;&amp; m_dllAvFormat.avformat_open_input(&amp;m_pFormatContext, strFile.c_str(), iformat, &amp;options) &lt; 0 )
+    {
+      CLog::Log(LOGDEBUG, "Error, could not open file %s", CURL::GetRedacted(strFile).c_str());
+      Dispose();
+      m_dllAvUtil.av_dict_free(&amp;options);
+      return false;
+    }
+    m_dllAvUtil.av_dict_free(&amp;options);
+  }
+  else
+  {
+    unsigned char* buffer = (unsigned char*)m_dllAvUtil.av_malloc(FFMPEG_FILE_BUFFER_SIZE);
+    m_ioContext = m_dllAvFormat.avio_alloc_context(buffer, FFMPEG_FILE_BUFFER_SIZE, 0, this, dvd_file_read, NULL, dvd_file_seek);
+    m_ioContext-&gt;max_packet_size = m_pInput-&gt;GetBlockSize();
+    if(m_ioContext-&gt;max_packet_size)
+      m_ioContext-&gt;max_packet_size *= FFMPEG_FILE_BUFFER_SIZE / m_ioContext-&gt;max_packet_size;
+
+    if(m_pInput-&gt;Seek(0, SEEK_POSSIBLE) == 0)
+      m_ioContext-&gt;seekable = 0;
+
+    if( iformat == NULL )
+    {
+      // let ffmpeg decide which demuxer we have to open
+
+      bool trySPDIFonly = (m_pInput-&gt;GetContent() == "audio/x-spdif-compressed");
+
+      if (!trySPDIFonly)
+        m_dllAvFormat.av_probe_input_buffer(m_ioContext, &amp;iformat, strFile.c_str(), NULL, 0, 0);
+
+      // Use the more low-level code in case we have been built against an old
+      // FFmpeg without the above av_probe_input_buffer(), or in case we only
+      // want to probe for spdif (DTS or IEC 61937) compressed audio
+      // specifically, or in case the file is a wav which may contain DTS or
+      // IEC 61937 (e.g. ac3-in-wav) and we want to check for those formats.
+      if (trySPDIFonly || (iformat &amp;&amp; strcmp(iformat-&gt;name, "wav") == 0))
+      {
+        AVProbeData pd;
+        uint8_t probe_buffer[FFMPEG_FILE_BUFFER_SIZE + AVPROBE_PADDING_SIZE];
+
+        // init probe data
+        pd.buf = probe_buffer;
+        pd.filename = strFile.c_str();
+
+        // read data using avformat's buffers
+        pd.buf_size = m_dllAvFormat.avio_read(m_ioContext, pd.buf, m_ioContext-&gt;max_packet_size ? m_ioContext-&gt;max_packet_size : m_ioContext-&gt;buffer_size);
+        if (pd.buf_size &lt;= 0)
+        {
+          CLog::Log(LOGERROR, "%s - error reading from input stream, %s", __FUNCTION__, CURL::GetRedacted(strFile).c_str());
+          return false;
+        }
+        memset(pd.buf+pd.buf_size, 0, AVPROBE_PADDING_SIZE);
+
+        // restore position again
+        m_dllAvFormat.avio_seek(m_ioContext , 0, SEEK_SET);
+
+        // the advancedsetting is for allowing the user to force outputting the
+        // 44.1 kHz DTS wav file as PCM, so that an A/V receiver can decode
+        // it (this is temporary until we handle 44.1 kHz passthrough properly)
+        if (trySPDIFonly || (iformat &amp;&amp; strcmp(iformat-&gt;name, "wav") == 0 &amp;&amp; !g_advancedSettings.m_dvdplayerIgnoreDTSinWAV))
+        {
+          // check for spdif and dts
+          // This is used with wav files and audio CDs that may contain
+          // a DTS or AC3 track padded for S/PDIF playback. If neither of those
+          // is present, we assume it is PCM audio.
+          // AC3 is always wrapped in iec61937 (ffmpeg "spdif"), while DTS
+          // may be just padded.
+          AVInputFormat *iformat2;
+          iformat2 = m_dllAvFormat.av_find_input_format("spdif");
+
+          if (iformat2 &amp;&amp; iformat2-&gt;read_probe(&amp;pd) &gt; AVPROBE_SCORE_MAX / 4)
+          {
+            iformat = iformat2;
+          }
+          else
+          {
+            // not spdif or no spdif demuxer, try dts
+            iformat2 = m_dllAvFormat.av_find_input_format("dts");
+
+            if (iformat2 &amp;&amp; iformat2-&gt;read_probe(&amp;pd) &gt; AVPROBE_SCORE_MAX / 4)
+            {
+              iformat = iformat2;
+            }
+            else if (trySPDIFonly)
+            {
+              // not dts either, return false in case we were explicitely
+              // requested to only check for S/PDIF padded compressed audio
+              CLog::Log(LOGDEBUG, "%s - not spdif or dts file, fallbacking", __FUNCTION__);
+              return false;
+            }
+          }
+        }
+      }
+
+      if(!iformat)
+      {
+        std::string content = m_pInput-&gt;GetContent();
+
+        /* check if we can get a hint from content */
+        if( content.compare("audio/aacp") == 0 )
+          iformat = m_dllAvFormat.av_find_input_format("aac");
+        else if( content.compare("audio/aac") == 0 )
+          iformat = m_dllAvFormat.av_find_input_format("aac");
+        else if( content.compare("video/flv") == 0 )
+          iformat = m_dllAvFormat.av_find_input_format("flv");
+        else if( content.compare("video/x-flv") == 0 )
+          iformat = m_dllAvFormat.av_find_input_format("flv");
+      }
+
+      if (!iformat)
+      {
+        CLog::Log(LOGERROR, "%s - error probing input format, %s", __FUNCTION__, CURL::GetRedacted(strFile).c_str());
+        return false;
+      }
+      else
+      {
+        if (iformat-&gt;name)
+          CLog::Log(LOGDEBUG, "%s - probing detected format [%s]", __FUNCTION__, iformat-&gt;name);
+        else
+          CLog::Log(LOGDEBUG, "%s - probing detected unnamed format", __FUNCTION__);
+      }
+    }
+
+
+    m_pFormatContext-&gt;pb = m_ioContext;
+
+    if (m_dllAvFormat.avformat_open_input(&amp;m_pFormatContext, strFile.c_str(), iformat, NULL) &lt; 0)
+    {
+      CLog::Log(LOGERROR, "%s - Error, could not open file %s", __FUNCTION__, CURL::GetRedacted(strFile).c_str());
+      Dispose();
+      return false;
+    }
+  }
+
+  // Avoid detecting framerate if advancedsettings.xml says so
+  if (g_advancedSettings.m_videoFpsDetect == 0) 
+      m_pFormatContext-&gt;fps_probe_size = 0;
+  
+  // analyse very short to speed up mjpeg playback start
+  if (iformat &amp;&amp; (strcmp(iformat-&gt;name, "mjpeg") == 0) &amp;&amp; m_ioContext-&gt;seekable == 0)
+    m_pFormatContext-&gt;max_analyze_duration = 500000;
+
+  // we need to know if this is matroska or avi later
+  m_bMatroska = strncmp(m_pFormatContext-&gt;iformat-&gt;name, "matroska", 8) == 0;	// for "matroska.webm"
+  m_bAVI = strcmp(m_pFormatContext-&gt;iformat-&gt;name, "avi") == 0;
+
+  if (streaminfo)
+  {
+    /* too speed up dvd switches, only analyse very short */
+    if(m_pInput-&gt;IsStreamType(DVDSTREAM_TYPE_DVD))
+      m_pFormatContext-&gt;max_analyze_duration = 500000;
+
+
+    CLog::Log(LOGDEBUG, "%s - avformat_find_stream_info starting", __FUNCTION__);
+    int iErr = m_dllAvFormat.avformat_find_stream_info(m_pFormatContext, NULL);
+    if (iErr &lt; 0)
+    {
+      CLog::Log(LOGWARNING,"could not find codec parameters for %s", CURL::GetRedacted(strFile).c_str());
+      if (m_pInput-&gt;IsStreamType(DVDSTREAM_TYPE_DVD)
+      ||  m_pInput-&gt;IsStreamType(DVDSTREAM_TYPE_BLURAY)
+      || (m_pFormatContext-&gt;nb_streams == 1 &amp;&amp; m_pFormatContext-&gt;streams[0]-&gt;codec-&gt;codec_id == AV_CODEC_ID_AC3))
+      {
+        // special case, our codecs can still handle it.
+      }
+      else
+      {
+        Dispose();
+        return false;
+      }
+    }
+    CLog::Log(LOGDEBUG, "%s - av_find_stream_info finished", __FUNCTION__);
+  }
+  // reset any timeout
+  m_timeout.SetInfinite();
+
+  // if format can be nonblocking, let's use that
+  m_pFormatContext-&gt;flags |= AVFMT_FLAG_NONBLOCK;
+
+  // print some extra information
+  m_dllAvFormat.av_dump_format(m_pFormatContext, 0, strFile.c_str(), 0);
+
+  UpdateCurrentPTS();
+
+  CreateStreams();
+
+  return true;
+}
+</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     Dispose()
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//关闭
+void CDVDDemuxFFmpeg::Dispose()
+{
+  m_pkt.result = -1;
+  m_dllAvCodec.av_free_packet(&amp;m_pkt.pkt);
+
+  if (m_pFormatContext)
+  {
+    if (m_ioContext &amp;&amp; m_pFormatContext-&gt;pb &amp;&amp; m_pFormatContext-&gt;pb != m_ioContext)
+    {
+      CLog::Log(LOGWARNING, "CDVDDemuxFFmpeg::Dispose - demuxer changed our byte context behind our back, possible memleak");
+      m_ioContext = m_pFormatContext-&gt;pb;
+    }
+    m_dllAvFormat.avformat_close_input(&amp;m_pFormatContext);
+  }
+
+  if(m_ioContext)
+  {
+    m_dllAvUtil.av_free(m_ioContext-&gt;buffer);
+    m_dllAvUtil.av_free(m_ioContext);
+  }
+
+  m_ioContext = NULL;
+  m_pFormatContext = NULL;
+  m_speed = DVD_PLAYSPEED_NORMAL;
+
+  DisposeStreams();
+
+  m_pInput = NULL;
+
+  m_dllAvFormat.Unload();
+  m_dllAvCodec.Unload();
+  m_dllAvUtil.Unload();
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     Reset()
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//复位
+void CDVDDemuxFFmpeg::Reset()
+{
+  CDVDInputStream* pInputStream = m_pInput;
+  Dispose();
+  Open(pInputStream);
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     Flush()
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">void CDVDDemuxFFmpeg::Flush()
+{
+  // naughty usage of an internal ffmpeg function
+  if (m_pFormatContext)
+    m_dllAvFormat.av_read_frame_flush(m_pFormatContext);
+
+  m_iCurrentPts = DVD_NOPTS_VALUE;
+
+  m_pkt.result = -1;
+  m_dllAvCodec.av_free_packet(&amp;m_pkt.pkt);
+}</pre>
+    <p>
+    </p>
+    <br/>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/17512633
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xbmc&amp;t=blog" target="_blank">
+    xbmc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解复用&amp;t=blog" target="_blank">
+    解复用
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286583" target="_blank">
+    XBMC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

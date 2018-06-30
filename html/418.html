@@ -1,0 +1,1378 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MYSQL常用命令 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_418">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   MYSQL常用命令
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月10日 00:13:49
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：1675
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1.导出整个数据库
+     <br/>
+     mysqldump -u 用户名 -p --default-character-set=latin1 数据库名 &gt; 导出的文件名(数据库默认编码是latin1)
+     <br/>
+     mysqldump -u wcnc -p smgp_apps_wcnc &gt; wcnc.sql
+     <br/>
+     2.导出一个表
+     <br/>
+     mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名
+     <br/>
+     mysqldump -u wcnc -p smgp_apps_wcnc users&gt; wcnc_users.sql
+     <br/>
+     3.导出一个数据库结构
+     <br/>
+     mysqldump -u wcnc -p -d –add-drop-table smgp_apps_wcnc &gt;d:wcnc_db.sql
+     <br/>
+     -d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table
+     <br/>
+     4.导入数据库
+     <br/>
+     A:常用source 命令
+     <br/>
+     进入mysql数据库控制台，
+     <br/>
+     如mysql -u root -p
+     <br/>
+     mysql&gt;use 数据库
+     <br/>
+     然后使用source命令，后面参数为脚本文件(如这里用到的.sql)
+     <br/>
+     mysql&gt;source wcnc_db.sql
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     B:使用mysqldump命令
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysqldump -u username -p dbname &lt; filename.sql
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     C:使用mysql命令
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysql -u username -p -D dbname &lt; filename.sql
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     一、启动与退出
+     <br/>
+     1、进入MySQL：启动MySQL Command Line Client（MySQL的DOS界面），直接输入安装时的密码即可。此时的提示符是：mysql&gt;
+     <br/>
+     2、退出MySQL：quit或exit
+     <br/>
+     二、库操作
+     <br/>
+     1、、创建数据库
+     <br/>
+     命令：create database &lt;数据库名&gt;
+     <br/>
+     例如：建立一个名为xhkdb的数据库
+     <br/>
+     mysql&gt; create database xhkdb;
+     <br/>
+     2、显示所有的数据库
+     <br/>
+     命令：show databases （注意：最后有个s）
+     <br/>
+     mysql&gt; show databases;
+     <br/>
+     3、删除数据库
+     <br/>
+     命令：drop database &lt;数据库名&gt;
+     <br/>
+     例如：删除名为 xhkdb的数据库
+     <br/>
+     mysql&gt; drop database xhkdb;
+     <br/>
+     4、连接数据库
+     <br/>
+     命令： use &lt;数据库名&gt;
+     <br/>
+     例如：如果xhkdb数据库存在，尝试存取它：
+     <br/>
+     mysql&gt; use xhkdb;
+     <br/>
+     屏幕提示：Database changed
+     <br/>
+     5、查看当前使用的数据库
+     <br/>
+     mysql&gt; select database();
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     6、当前数据库包含的表信息：
+     <br/>
+     mysql&gt; show tables; （注意：最后有个s）
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     三、表操作，操作之前应连接某个数据库
+     <br/>
+     1、建表
+     <br/>
+     命令：create table &lt;表名&gt; ( &lt;字段名1&gt; &lt;类型1&gt; [,..&lt;字段名n&gt; &lt;类型n&gt;]);
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysql&gt; create table MyClass(
+     <br/>
+     &gt; id int(4) not null primary key auto_increment,
+     <br/>
+     &gt; name char(20) not null,
+     <br/>
+     &gt; sex int(4) not null default '0',
+     <br/>
+     &gt; degree double(16,2));
+     <br/>
+     2、获取表结构
+     <br/>
+     命令： desc 表名，或者show columns from 表名
+     <br/>
+     mysql&gt;DESCRIBE MyClass
+     <br/>
+     mysql&gt; desc MyClass;
+     <br/>
+     mysql&gt; show columns from MyClass;
+     <br/>
+     3、删除表
+     <br/>
+     命令：drop table &lt;表名&gt;
+     <br/>
+     例如：删除表名为 MyClass 的表
+     <br/>
+     mysql&gt; drop table MyClass;
+     <br/>
+     4、插入数据
+     <br/>
+     命令：insert into &lt;表名&gt; [( &lt;字段名1&gt;[,..&lt;字段名n &gt; ])] values ( 值1 )[, ( 值n )]
+     <br/>
+     例如，往表 MyClass中插入二条记录, 这二条记录表示：编号为1的名为Tom的成绩为96.45, 编号为2 的名为Joan 的成绩为82.99，编号为3 的名为Wang 的成绩为96.5.
+     <br/>
+     mysql&gt; insert into MyClass values(1,'Tom',96.45),(2,'Joan',82.99), (2,'Wang', 96.59);
+     <br/>
+     5、查询表中的数据
+     <br/>
+     1)、查询所有行
+     <br/>
+     命令： select &lt;字段1，字段2，...&gt; from &lt; 表名 &gt; where &lt; 表达式 &gt;
+     <br/>
+     例如：查看表 MyClass 中所有数据
+     <br/>
+     mysql&gt; select * from MyClass;
+     <br/>
+     2）、查询前几行数据
+     <br/>
+     例如：查看表 MyClass 中前2行数据
+     <br/>
+     mysql&gt; select * from MyClass order by id limit 0,2;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     或者：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysql&gt; select * from MyClass limit 0,2;
+     <br/>
+     6、删除表中数据
+     <br/>
+     命令：delete from 表名 where 表达式
+     <br/>
+     例如：删除表 MyClass中编号为1 的记录
+     <br/>
+     mysql&gt; delete from MyClass where id=1;
+     <br/>
+     7、修改表中数据：update 表名 set 字段=新值,… where 条件
+     <br/>
+     mysql&gt; update MyClass set name='Mary' where id=1;
+     <br/>
+     7、在表中增加字段：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     命令：alter table 表名 add字段 类型 其他;
+     <br/>
+     例如：在表MyClass中添加了一个字段passtest，类型为int(4)，默认值为0
+     <br/>
+     mysql&gt; alter table MyClass add passtest int(4) default '0'
+     <br/>
+     8、更改表名：
+     <br/>
+     命令：rename table 原表名 to 新表名;
+     <br/>
+     例如：在表MyClass名字更改为YouClass
+     <br/>
+     mysql&gt; rename table MyClass to YouClass;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     更新字段内容
+     <br/>
+     update 表名 set 字段名 = 新内容
+     <br/>
+     update 表名 set 字段名 = replace(字段名,'旧内容','新内容');
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     文章前面加入4个空格
+     <br/>
+     update article set content=concat('　　',content);
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     字段类型
+     <br/>
+     1．INT[(M)] 型： 正常大小整数类型
+     <br/>
+     2．DOUBLE[(M,D)] [ZEROFILL] 型： 正常大小(双精密)浮点数字类型
+     <br/>
+     3．DATE 日期类型：支持的范围是1000-01-01到9999-12-31。MySQL以YYYY-MM-DD格式来显示DATE值，但是允许你使用字符串或数字把值赋给DATE列
+     <br/>
+     4．CHAR(M) 型：定长字符串类型，当存储时，总是是用空格填满右边到指定的长度
+     <br/>
+     5．BLOB TEXT类型，最大长度为65535(2^16-1)个字符。
+     <br/>
+     6．VARCHAR型：变长字符串类型
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     5.导入数据库表
+     <br/>
+     （1）创建.sql文件
+     <br/>
+     （2）先产生一个库如auction.c:mysqlbin&gt;mysqladmin -u root -p creat auction，会提示输入密码，然后成功创建。
+     <br/>
+     （2）导入auction.sql文件
+     <br/>
+     c:mysqlbin&gt;mysql -u root -p auction &lt; auction.sql。
+     <br/>
+     通过以上操作，就可以创建了一个数据库auction以及其中的一个表auction。
+     <br/>
+     6．修改数据库
+     <br/>
+     （1）在mysql的表中增加字段：
+     <br/>
+     alter table dbname add column userid int(11) not null primary key auto_increment;
+     <br/>
+     这样，就在表dbname中添加了一个字段userid，类型为int(11)。
+     <br/>
+     7．mysql数据库的授权
+     <br/>
+     mysql&gt;grant select,insert,delete,create,drop
+     <br/>
+     on *.* (或test.*/user.*/..)
+     <br/>
+     to 用户名@localhost
+     <br/>
+     identified by '密码'；
+     <br/>
+     如：新建一个用户帐号以便可以访问数据库，需要进行如下操作：
+     <br/>
+     mysql&gt; grant usage
+     <br/>
+     -&gt; ON test.*
+     <br/>
+     -&gt; TO
+     <a href="mailto:testuser@localhost" style="color:rgb(0,0,0);">
+      testuser@localhost
+     </a>
+     ;
+     <br/>
+     Query OK, 0 rows affected (0.15 sec)
+     <br/>
+     此后就创建了一个新用户叫：testuser，这个用户只能从localhost连接到数据库并可以连接到test 数据库。下一步，我们必须指定testuser这个用户可以执行哪些操作：
+     <br/>
+     mysql&gt; GRANT select, insert, delete,update
+     <br/>
+     -&gt; ON test.*
+     <br/>
+     -&gt; TO
+     <a href="mailto:testuser@localhost" style="color:rgb(0,0,0);">
+      testuser@localhost
+     </a>
+     ;
+     <br/>
+     Query OK, 0 rows affected (0.00 sec)
+     <br/>
+     此操作使testuser能够在每一个test数据库中的表执行SELECT，INSERT和DELETE以及UPDATE查询操作。现在我们结束操作并退出MySQL客户程序：
+     <br/>
+     mysql&gt; exit
+     <br/>
+     Bye9!
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1:使用SHOW语句找出在服务器上当前存在什么数据库：
+     <br/>
+     mysql&gt; SHOW DATABASES;
+     <br/>
+     2:2、创建一个数据库MYSQLDATA
+     <br/>
+     mysql&gt; Create DATABASE MYSQLDATA;
+     <br/>
+     3:选择你所创建的数据库
+     <br/>
+     mysql&gt; USE MYSQLDATA; (按回车键出现Database changed 时说明操作成功！)
+     <br/>
+     4:查看现在的数据库中存在什么表
+     <br/>
+     mysql&gt; SHOW TABLES;
+     <br/>
+     5:创建一个数据库表
+     <br/>
+     mysql&gt; Create TABLE MYTABLE (name VARCHAR(20), sex CHAR(1));
+     <br/>
+     6:显示表的结构：
+     <br/>
+     mysql&gt; DESCRIBE MYTABLE;
+     <br/>
+     7:往表中加入记录
+     <br/>
+     mysql&gt; insert into MYTABLE values ("hyq","M");
+     <br/>
+     8:用文本方式将数据装入数据库表中（例如D:/mysql.txt）
+     <br/>
+     mysql&gt; LOAD DATA LOCAL INFILE "D:/mysql.txt" INTO TABLE MYTABLE;
+     <br/>
+     9:导入.sql文件命令（例如D:/mysql.sql）
+     <br/>
+     mysql&gt;use database;
+     <br/>
+     mysql&gt;source d:/mysql.sql;
+     <br/>
+     10:删除表
+     <br/>
+     mysql&gt;drop TABLE MYTABLE;
+     <br/>
+     11:清空表
+     <br/>
+     mysql&gt;delete from MYTABLE;
+     <br/>
+     12:更新表中数据
+     <br/>
+     mysql&gt;update MYTABLE set sex="f" where name='hyq';
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     以下是无意中在网络看到的使用MySql的管理心得,
+     <br/>
+     摘自:http://www1.xjtusky.com/article/htmldata/2004_12/3/57/article_1060_1.html
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     在windows中MySql以服务形式存在，在使用前应确保此服务已经启动，未启动可用net start mysql命令启动。而Linux中启动时可用“/etc/rc.d/init.d/mysqld start"命令，注意启动者应具有管理员权限。
+     <br/>
+     刚安装好的MySql包含一个含空密码的root帐户和一个匿名帐户，这是很大的安全隐患，对于一些重要的应用我们应将安全性尽可能提高，在这里应把匿名帐户删除、 root帐户设置密码，可用如下命令进行：
+     <br/>
+     use mysql;
+     <br/>
+     delete from User where User="";
+     <br/>
+     update User set Password=PASSWORD('newpassword') where User='root';
+     <br/>
+     如果要对用户所用的登录终端进行限制，可以更新User表中相应用户的Host字段，在进行了以上更改后应重新启动数据库服务，此时登录时可用如下类似命令：
+     <br/>
+     mysql -uroot -p;
+     <br/>
+     mysql -uroot -pnewpassword;
+     <br/>
+     mysql mydb -uroot -p;
+     <br/>
+     mysql mydb -uroot -pnewpassword;
+     <br/>
+     上面命令参数是常用参数的一部分，详细情况可参考文档。此处的mydb是要登录的数据库的名称。
+     <br/>
+     在进行开发和实际应用中，用户不应该只用root用户进行连接数据库，虽然使用root用户进行测试时很方便，但会给系统带来重大安全隐患，也不利于管理技术的提高。我们给一个应用中使用的用户赋予最恰当的数据库权限。如一个只进行数据插入的用户不应赋予其删除数据的权限。MySql的用户管理是通过 User表来实现的，添加新用户常用的方法有两个，一是在User表插入相应的数据行，同时设置相应的权限；二是通过GRANT命令创建具有某种权限的用户。其中GRANT的常用用法如下：
+     <br/>
+     grant all on mydb.* to
+     <a href="mailto:NewUserName@HostName" style="color:rgb(0,0,0);">
+      NewUserName@HostName
+     </a>
+     identified by "password" ;
+     <br/>
+     grant usage on *.* to
+     <a href="mailto:NewUserName@HostName" style="color:rgb(0,0,0);">
+      NewUserName@HostName
+     </a>
+     identified by "password";
+     <br/>
+     grant select,insert,update on mydb.* to
+     <a href="mailto:NewUserName@HostName" style="color:rgb(0,0,0);">
+      NewUserName@HostName
+     </a>
+     identified by "password";
+     <br/>
+     grant update,delete on mydb.TestTable to
+     <a href="mailto:NewUserName@HostName" style="color:rgb(0,0,0);">
+      NewUserName@HostName
+     </a>
+     identified by "password";
+     <br/>
+     若要给此用户赋予他在相应对象上的权限的管理能力，可在GRANT后面添加WITH GRANT OPTION选项。而对于用插入User表添加的用户，Password字段应用PASSWORD 函数进行更新加密，以防不轨之人窃看密码。对于那些已经不用的用户应给予清除，权限过界的用户应及时回收权限，回收权限可以通过更新User表相应字段，也可以使用REVOKE操作。
+     <br/>
+     下面给出本人从其它资料(
+     <a href="http://www.cn-java.com/" style="color:rgb(0,0,0);">
+      www.cn-java.com
+     </a>
+     )获得的对常用权限的解释：
+     <br/>
+     全局管理权限：
+     <br/>
+     FILE: 在MySQL服务器上读写文件。
+     <br/>
+     PROCESS: 显示或杀死属于其它用户的服务线程。
+     <br/>
+     RELOAD: 重载访问控制表，刷新日志等。
+     <br/>
+     SHUTDOWN: 关闭MySQL服务。
+     <br/>
+     数据库/数据表/数据列权限：
+     <br/>
+     Alter: 修改已存在的数据表(例如增加/删除列)和索引。
+     <br/>
+     Create: 建立新的数据库或数据表。
+     <br/>
+     Delete: 删除表的记录。
+     <br/>
+     Drop: 删除数据表或数据库。
+     <br/>
+     INDEX: 建立或删除索引。
+     <br/>
+     Insert: 增加表的记录。
+     <br/>
+     Select: 显示/搜索表的记录。
+     <br/>
+     Update: 修改表中已存在的记录。
+     <br/>
+     特别的权限：
+     <br/>
+     ALL: 允许做任何事(和root一样)。
+     <br/>
+     USAGE: 只允许登录--其它什么也不允许做。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     ---------------------
+     <br/>
+     MYSQL常用命令
+     <br/>
+     有很多朋友虽然安装好了mysql但却不知如何使用它。在这篇文章中我们就从连接MYSQL、修改密码、增加用户等方面来学习一些MYSQL的常用命令。
+     <br/>
+     有很多朋友虽然安装好了mysql但却不知如何使用它。在这篇文章中我们就从连接MYSQL、修改密码、增加用户等方面来学习一些MYSQL的常用命令。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     一、连接MYSQL
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     格式： mysql -h主机地址 -u用户名 －p用户密码
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1、例1：连接到本机上的MYSQL
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     首先在打开DOS窗口，然后进入目录 mysqlbin，再键入命令mysql -uroot -p，回车后提示你输密码，如果刚安装好MYSQL，超级用户root是没有密码的，故直接回车即可进入到MYSQL中了，MYSQL的提示符是：mysql&gt;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2、例2：连接到远程主机上的MYSQL
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysql -h110.110.110.110 -uroot -pabcd123
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     （注:u与root可以不用加空格，其它也一样）
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     3、退出MYSQL命令： exit （回车）
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     二、修改密码
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     格式：mysqladmin -u用户名 -p旧密码 password 新密码
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1、例1：给root加个密码ab12。首先在DOS下进入目录mysqlbin，然后键入以下命令
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysqladmin -uroot -password ab12
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     注：因为开始时root没有密码，所以-p旧密码一项就可以省略了。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2、例2：再将root的密码改为djg345
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysqladmin -uroot -pab12 password djg345
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     MYSQL常用命令（下）
+     <br/>
+     一、操作技巧
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1、如果你打命令时，回车后发现忘记加分号，你无须重打一遍命令，只要打个分号回车就可以了。也就是说你可以把一个完整的命令分成几行来打，完后用分号作结束标志就OK。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2、你可以使用光标上下键调出以前的命令。但以前我用过的一个MYSQL旧版本不支持。我现在用的是mysql-3.23.27-beta-win。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     二、显示命令
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1、显示数据库列表。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     show databases;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     刚开始时才两个数据库：mysql和test。mysql库很重要它里面有MYSQL的系统信息，我们改密码和新增用户，实际上就是用这个库进行操作。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2、显示库中的数据表：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     use mysql； ／／打开库，学过FOXBASE的一定不会陌生吧
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     show tables;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     3、显示数据表的结构：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     describe 表名;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     4、建库：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     create database 库名;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     5、建表：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     use 库名；
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     create table 表名 (字段设定列表)；
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     6、删库和删表:
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     drop database 库名;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     drop table 表名；
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     7、将表中记录清空：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     delete from 表名;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     8、显示表中的记录：
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     select * from 表名;
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     三、一个建库和建表以及插入数据的实例
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     drop database if exists school; //如果存在SCHOOL则删除
+     <br/>
+     create database school; //建立库SCHOOL
+     <br/>
+     use school; //打开库SCHOOL
+     <br/>
+     create table teacher //建立表TEACHER
+     <br/>
+     (
+     <br/>
+     id int(3) auto_increment not null primary key,
+     <br/>
+     name char(10) not null,
+     <br/>
+     address varchar(50) default '深圳',
+     <br/>
+     year date
+     <br/>
+     ); //建表结束
+     <br/>
+     //以下为插入字段
+     <br/>
+     insert into teacher values('','glchengang','深圳一中','1976-10-10');
+     <br/>
+     insert into teacher values('','jack','深圳一中','1975-12-23');
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     注：在建表中（1）将ID设为长度为3的数字字段:int(3)并让它每个记录自动加一:auto_increment并不能为空:not null而且让他成为主字段primary key
+     <br/>
+     （2）将NAME设为长度为10的字符字段
+     <br/>
+     （3）将ADDRESS设为长度50的字符字段，而且缺省值为深圳。varchar和char有什么区别呢，只有等以后的文章再说了。
+     <br/>
+     （4）将YEAR设为日期字段。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     如果你在mysql提示符键入上面的命令也可以，但不方便调试。你可以将以上命令原样写入一个文本文件中假设为school.sql，然后复制到c:\下，并在DOS状态进入目录\mysql\bin，然后键入以下命令：
+     <br/>
+     mysql -uroot -p密码 &lt; c:\school.sql
+     <br/>
+     如果成功，空出一行无任何显示；如有错误，会有提示。（以上命令已经调试，你只要将//的注释去掉即可使用）。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     四、将文本数据转到数据库中
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1、文本数据应符合的格式：字段数据之间用tab键隔开，null值用\n来代替.
+     <br/>
+     例：
+     <br/>
+     3 rose 深圳二中 1976-10-10
+     <br/>
+     4 mike 深圳一中 1975-12-23
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2、数据传入命令 load data local infile "文件名" into table 表名;
+     <br/>
+     注意：你最好将文件复制到\mysql\bin目录下，并且要先用use命令打表所在的库 。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     五、备份数据库：（命令在DOS的\mysql\bin目录下执行）
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     mysqldump --opt school&gt;school.bbb
+     <br/>
+     注释:将数据库school备份到school.bbb文件，school.bbb是一个文本文件，文件名任取，打开看看你会有新发现。
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     一.SELECT语句的完整语法为：
+     <br/>
+     SELECT[ALL|DISTINCT|DISTINCTROW|TOP]
+     <br/>
+     {*|talbe.*|[table.]field1[AS alias1][,[table.]field2[AS alias2][,…]]}
+     <br/>
+     FROM tableexpression[,…][IN externaldatabase]
+     <br/>
+     [WHERE…]
+     <br/>
+     [GROUP BY…]
+     <br/>
+     [HAVING…]
+     <br/>
+     [ORDER BY…]
+     <br/>
+     [WITH OWNERACCESS OPTION]
+     <br/>
+     说明：
+     <br/>
+     用中括号([])括起来的部分表示是可选的，用大括号({})括起来的部分是表示必须从中选择其中的一个。
+     <br/>
+     1 FROM子句
+     <br/>
+     FROM 子句指定了SELECT语句中字段的来源。FROM子句后面是包含一个或多个的表达式(由逗号分开)，其中的表达式可为单一表名称、已保存的查询或由 INNER JOIN、LEFT JOIN 或 RIGHT JOIN 得到的复合结果。如果表或查询存储在外部数据库，在IN 子句之后指明其完整路径。
+     <br/>
+     例：下列SQL语句返回所有有定单的客户：
+     <br/>
+     SELECT OrderID,Customer.customerID
+     <br/>
+     FROM Orders Customers
+     <br/>
+     WHERE Orders.CustomerID=Customers.CustomeersID
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2 ALL、DISTINCT、DISTINCTROW、TOP谓词
+     <br/>
+     (1) ALL 返回满足SQL语句条件的所有记录。如果没有指明这个谓词，默认为ALL。
+     <br/>
+     例：SELECT ALL FirstName,LastName
+     <br/>
+     FROM Employees
+     <br/>
+     (2) DISTINCT 如果有多个记录的选择字段的数据相同，只返回一个。
+     <br/>
+     (3) DISTINCTROW 如果有重复的记录，只返回一个
+     <br/>
+     (4) TOP显示查询头尾若干记录。也可返回记录的百分比，这是要用 TOP N PERCENT子句（其中N 表示百分比）
+     <br/>
+     例：返回5%定货额最大的定单
+     <br/>
+     SELECT TOP 5 PERCENT*
+     <br/>
+     FROM [ Order Details]
+     <br/>
+     ORDER BY UnitPrice*Quantity*(1-Discount) DESC
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     3 用 AS 子句为字段取别名
+     <br/>
+     如果想为返回的列取一个新的标题，或者，经过对字段的计算或总结之后，产生了一个新的值，希望把它放到一个新的列里显示，则用AS保留。
+     <br/>
+     例：返回FirstName字段取别名为NickName
+     <br/>
+     SELECT FirstName AS NickName ,LastName ,City
+     <br/>
+     FROM Employees
+     <br/>
+     例：返回新的一列显示库存价值
+     <br/>
+     SELECT ProductName ,UnitPrice ,UnitsInStock ,UnitPrice*UnitsInStock AS valueInStock
+     <br/>
+     FROM Products
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     二 .WHERE 子句指定查询条件
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     1 比较运算符
+     <br/>
+     比较运算符 含义
+     <br/>
+     = 等于
+     <br/>
+     &gt; 大于
+     <br/>
+     &lt; 小于
+     <br/>
+     &gt;= 大于等于
+     <br/>
+     &lt;= 小于等于
+     <br/>
+     &lt;&gt; 不等于
+     <br/>
+     !&gt; 不大于
+     <br/>
+     !&lt; 不小于
+     <br/>
+     例：返回96年1月的定单
+     <br/>
+     SELECT OrderID, CustomerID, OrderDate
+     <br/>
+     FROM Orders
+     <br/>
+     WHERE OrderDate&gt;#1/1/96# AND OrderDate&lt;#1/30/96#
+     <br/>
+     注意：
+     <br/>
+     Mcirosoft JET SQL 中，日期用‘#’定界。日期也可以用Datevalue()函数来代替。在比较字符型的数据时，要加上单引号’’，尾空格在比较中被忽略。
+     <br/>
+     例：
+     <br/>
+     WHERE OrderDate&gt;#96-1-1#
+     <br/>
+     也可以表示为：
+     <br/>
+     WHERE OrderDate&gt;Datevalue(‘1/1/96’)
+     <br/>
+     使用 NOT 表达式求反。
+     <br/>
+     例：查看96年1月1日以后的定单
+     <br/>
+     WHERE Not OrderDate&lt;=#1/1/96#
+     <br/>
+     2 范围（BETWEEN 和 NOT BETWEEN）
+     <br/>
+     BETWEEN …AND…运算符指定了要搜索的一个闭区间。
+     <br/>
+     例：返回96年1月到96年2月的定单。
+     <br/>
+     WHERE OrderDate Between #1/1/96# And #2/1/96#
+     <br/>
+     3 列表（IN ，NOT IN）
+     <br/>
+     IN 运算符用来匹配列表中的任何一个值。IN子句可以代替用OR子句连接的一连串的条件。
+     <br/>
+     例：要找出住在 London、Paris或Berlin的所有客户
+     <br/>
+     SELECT CustomerID, CompanyName, ContactName, City
+     <br/>
+     FROM Customers
+     <br/>
+     WHERE City In(‘London’,’ Paris’,’ Berlin’)
+     <br/>
+     4 模式匹配(LIKE)
+     <br/>
+     LIKE运算符检验一个包含字符串数据的字段值是否匹配一指定模式。
+     <br/>
+     LIKE运算符里使用的通配符
+     <br/>
+     通配符 含义
+     <br/>
+     ？ 任何一个单一的字符
+     <br/>
+     * 任意长度的字符
+     <br/>
+     # 0~9之间的单一数字
+     <br/>
+     [字符列表] 在字符列表里的任一值
+     <br/>
+     [！字符列表] 不在字符列表里的任一值
+     <br/>
+     - 指定字符范围，两边的值分别为其上下限
+     <br/>
+     例：返回邮政编码在（171）555-0000到（171）555-9999之间的客户
+     <br/>
+     SELECT CustomerID ,CompanyName,City,Phone
+     <br/>
+     FROM Customers
+     <br/>
+     WHERE Phone Like ‘(171)555-####’
+     <br/>
+     LIKE运算符的一些样式及含义
+     <br/>
+     样式 含义 不符合
+     <br/>
+     LIKE ‘A*’ A后跟任意长度的字符 Bc,c255
+     <br/>
+     LIKE’5[*]’ 5*5 555
+     <br/>
+     LIKE’5?5’ 5与5之间有任意一个字符 55,5wer5
+     <br/>
+     LIKE’5##5’ 5235，5005 5kd5,5346
+     <br/>
+     LIKE’[a-z]’ a-z间的任意一个字符 5,%
+     <br/>
+     LIKE’[!0-9]’ 非0-9间的任意一个字符 0,1
+     <br/>
+     LIKE’[[]’ 1,*
+     <br/>
+     三 .用ORDER BY子句排序结果
+     <br/>
+     ORDER子句按一个或多个（最多16个）字段排序查询结果，可以是升序（ASC）也可以是降序（DESC），缺省是升序。ORDER子句通常放在SQL语句的最后。
+     <br/>
+     ORDER子句中定义了多个字段，则按照字段的先后顺序排序。
+     <br/>
+     例：
+     <br/>
+     SELECT ProductName,UnitPrice, UnitInStock
+     <br/>
+     FROM Products
+     <br/>
+     ORDER BY UnitInStock DESC , UnitPrice DESC, ProductName
+     <br/>
+     ORDER BY 子句中可以用字段在选择列表中的位置号代替字段名，可以混合字段名和位置号。
+     <br/>
+     例：下面的语句产生与上列相同的效果。
+     <br/>
+     SELECT ProductName,UnitPrice, UnitInStock
+     <br/>
+     FROM Products
+     <br/>
+     ORDER BY 1 DESC , 2 DESC,3
+     <br/>
+     四 .运用连接关系实现多表查询
+     <br/>
+     例：找出同一个城市中供应商和客户的名字
+     <br/>
+     SELECT Customers.CompanyName, Suppliers.ComPany.Name
+     <br/>
+     FROM Customers, Suppliers
+     <br/>
+     WHERE Customers.City=Suppliers.City
+     <br/>
+     例：找出产品库存量大于同一种产品的定单的数量的产品和定单
+     <br/>
+     SELECT ProductName,OrderID, UnitInStock, Quantity
+     <br/>
+     FROM Products, [Order Deails]
+     <br/>
+     WHERE Product.productID=[Order Details].ProductID
+     <br/>
+     AND UnitsInStock&gt;Quantity
+     <br/>
+     另一种方法是用 Microsof JET SQL 独有的 JNNER JOIN
+     <br/>
+     语法：
+     <br/>
+     FROM table1 INNER JOIN table2
+     <br/>
+     ON table1.field1 comparision table2.field2
+     <br/>
+     其中comparision 就是前面WHERE子句用到的比较运算符。
+     <br/>
+     SELECT FirstName,lastName,OrderID,CustomerID,OrderDate
+     <br/>
+     FROM Employees
+     <br/>
+     INNER JOIN Orders ON Employees.EmployeeID=Orders.EmployeeID
+     <br/>
+     注意：
+     <br/>
+     INNER JOIN不能连接Memo OLE Object Single Double 数据类型字段。
+     <br/>
+     在一个JOIN语句中连接多个ON子句
+     <br/>
+     语法：
+     <br/>
+     SELECT fields
+     <br/>
+     FROM table1 INNER JOIN table2
+     <br/>
+     ON table1.field1 compopr table2.field1 AND
+     <br/>
+     ON table1.field2 compopr table2.field2 OR
+     <br/>
+     ON table1.field3 compopr table2.field3
+     <br/>
+     也可以
+     <br/>
+     SELECT fields
+     <br/>
+     FROM table1 INNER JOIN
+     <br/>
+     （table2 INNER JOIN [( ]table3
+     <br/>
+     [INNER JOER] [( ]tablex[INNER JOIN]
+     <br/>
+     ON table1.field1 compopr table2.field1
+     <br/>
+     ON table1.field2 compopr table2.field2
+     <br/>
+     ON table1.field3 compopr table2.field3
+     <br/>
+     外部连接返回更多记录，在结果中保留不匹配的记录，不管存不存在满足条件的记录都要返回另一侧的所有记录。
+     <br/>
+     FROM table [LEFT|RIGHT]JOIN table2
+     <br/>
+     ON table1.field1comparision table.field2
+     <br/>
+     用左连接来建立外部连接，在表达式的左边的表会显示其所有的数据
+     <br/>
+     例：不管有没有定货量，返回所有商品
+     <br/>
+     SELECT ProductName ,OrderID
+     <br/>
+     FROM Products
+     <br/>
+     LEFT JOIN Orders ON Products.PrductsID=Orders.ProductID
+     <br/>
+     右连接与左连接的差别在于：不管左侧表里有没有匹配的记录，它都从左侧表中返回所有记录。
+     <br/>
+     例：如果想了解客户的信息，并统计各个地区的客户分布，这时可以用一个右连接，即使某个地区没有客户，也要返回客户信息。
+     <br/>
+     空值不会相互匹配，可以通过外连接才能测试被连接的某个表的字段是否有空值。
+     <br/>
+     SELECT *
+     <br/>
+     FROM talbe1
+     <br/>
+     LEFT JOIN table2 ON table1.a=table2.c
+     <br/>
+     1 连接查询中使用Iif函数实现以0值显示空值
+     <br/>
+     Iif表达式： Iif(IsNull(Amount,0,Amout)
+     <br/>
+     例：无论定货大于或小于￥50，都要返回一个标志。
+     <br/>
+     Iif([Amount]&gt;50,?Big order?,?Small order?)
+     <br/>
+     五. 分组和总结查询结果
+     <br/>
+     在SQL的语法里，GROUP BY和HAVING子句用来对数据进行汇总。GROUP BY子句指明了按照哪几个字段来分组，而将记录分组后，用HAVING子句过滤这些记录。
+     <br/>
+     GROUP BY 子句的语法
+     <br/>
+     SELECT fidldlist
+     <br/>
+     FROM table
+     <br/>
+     WHERE criteria
+     <br/>
+     [GROUP BY groupfieldlist [HAVING groupcriteria]]
+     <br/>
+     注：Microsoft Jet数据库 Jet 不能对备注或OLE对象字段分组。
+     <br/>
+     GROUP BY字段中的Null值以备分组但是不能被省略。
+     <br/>
+     在任何SQL合计函数中不计算Null值。
+     <br/>
+     GROUP BY子句后最多可以带有十个字段，排序优先级按从左到右的顺序排列。
+     <br/>
+     例：在‘WA’地区的雇员表中按头衔分组后，找出具有同等头衔的雇员数目大于1人的所有头衔。
+     <br/>
+     SELECT Title ,Count(Title) as Total
+     <br/>
+     FROM Employees
+     <br/>
+     WHERE Region = ‘WA’
+     <br/>
+     GROUP BY Title
+     <br/>
+     HAVING Count(Title)&gt;1
+     <br/>
+     JET SQL 中的聚积函数
+     <br/>
+     聚集函数 意义
+     <br/>
+     SUM ( ) 求和
+     <br/>
+     AVG ( ) 平均值
+     <br/>
+     COUNT ( ) 表达式中记录的数目
+     <br/>
+     COUNT (* ) 计算记录的数目
+     <br/>
+     MAX 最大值
+     <br/>
+     MIN 最小值
+     <br/>
+     VAR 方差
+     <br/>
+     STDEV 标准误差
+     <br/>
+     FIRST 第一个值
+     <br/>
+     LAST 最后一个值
+     <br/>
+     六. 用Parameters声明创建参数查询
+     <br/>
+     Parameters声明的语法:
+     <br/>
+     PARAMETERS name datatype[,name datatype[, …]]
+     <br/>
+     其中name 是参数的标志符,可以通过标志符引用参数.
+     <br/>
+     Datatype说明参数的数据类型.
+     <br/>
+     使用时要把PARAMETERS 声明置于任何其他语句之前.
+     <br/>
+     例:
+     <br/>
+     PARAMETERS[Low price] Currency,[Beginning date]datatime
+     <br/>
+     SELECT OrderID ,OrderAmount
+     <br/>
+     FROM Orders
+     <br/>
+     WHERE OrderAMount&gt;[low price]
+     <br/>
+     AND OrderDate&gt;=[Beginning date]
+     <br/>
+     七. 功能查询
+     <br/>
+     所谓功能查询,实际上是一种操作查询,它可以对数据库进行快速高效的操作.它以选择查询为目的,挑选出符合条件的数据,再对数据进行批处理.功能查询包括更新查询,删除查询,添加查询,和生成表查询.
+     <br/>
+     1 更新查询
+     <br/>
+     UPDATE子句可以同时更改一个或多个表中的数据.它也可以同时更改多个字段的值.
+     <br/>
+     更新查询语法:
+     <br/>
+     UPDATE 表名
+     <br/>
+     SET 新值
+     <br/>
+     WHERE 准则
+     <br/>
+     例:英国客户的定货量增加5%,货运量增加3%
+     <br/>
+     UPDATE OEDERS
+     <br/>
+     SET OrderAmount = OrderAmount *1.1
+     <br/>
+     Freight = Freight*1.03
+     <br/>
+     WHERE ShipCountry = ‘UK’
+     <br/>
+     2 删除查询
+     <br/>
+     DELETE子句可以使用户删除大量的过时的或冗于的数据.
+     <br/>
+     注:删除查询的对象是整个记录.
+     <br/>
+     DELETE子句的语法:
+     <br/>
+     DELETE [表名.*]
+     <br/>
+     FROM 来源表
+     <br/>
+     WHERE 准则
+     <br/>
+     例: 要删除所有94年前的定单
+     <br/>
+     DELETE *
+     <br/>
+     FROM Orders
+     <br/>
+     WHERE OrderData&lt;#94-1-1#
+     <br/>
+     3 追加查询
+     <br/>
+     INSERT子句可以将一个或一组记录追加到一个或多个表的尾部.
+     <br/>
+     INTO 子句指定接受新记录的表
+     <br/>
+     valueS 关键字指定新记录所包含的数据值.
+     <br/>
+     INSERT 子句的语法:
+     <br/>
+     INSETR INTO 目的表或查询(字段1,字段2,…)
+     <br/>
+     valueS(数值1,数值2,…)
+     <br/>
+     例:增加一个客户
+     <br/>
+     INSERT INTO Employees(FirstName,LastName,title)
+     <br/>
+     valueS(‘Harry’,’Washington’,’Trainee’)
+     <br/>
+     4 生成表查询
+     <br/>
+     可以一次性地把所有满足条件的记录拷贝到一张新表中.通常制作记录的备份或副本或作为报表的基础.
+     <br/>
+     SELECT INTO子句用来创建生成表查询语法:
+     <br/>
+     SELECT 字段1,字段2,…
+     <br/>
+     INTO 新表[IN 外部数据库]
+     <br/>
+     FROM 来源数据库
+     <br/>
+     WHERE 准则
+     <br/>
+     例:为定单制作一个存档备份
+     <br/>
+     SELECT *
+     <br/>
+     INTO OrdersArchive
+     <br/>
+     FROM Orders
+     <br/>
+     八. 联合查询
+     <br/>
+     UNION运算可以把多个查询的结果合并到一个结果集里显示.
+     <br/>
+     UNION运算的一般语法:
+     <br/>
+     [表]查询1 UNION [ALL]查询2 UNION …
+     <br/>
+     例:返回巴西所有供给商和客户的名字和城市
+     <br/>
+     SELECT CompanyName,City
+     <br/>
+     FROM Suppliers
+     <br/>
+     WHERE Country = ‘Brazil’
+     <br/>
+     UNION
+     <br/>
+     SELECT CompanyName,City
+     <br/>
+     FROM Customers
+     <br/>
+     WHERE Country = ‘Brazil’
+     <br/>
+     注:
+     <br/>
+     缺省的情况下,UNION子句不返回重复的记录.如果想显示所有记录,可以加ALL选项
+     <br/>
+     UNION运算要求查询具有相同数目的字段.但是,字段数据类型不必相同.
+     <br/>
+     每一个查询参数中可以使用GROUP BY 子句 或 HAVING 子句进行分组.要想以指定的顺序来显示返回的数据,可以在最后一个查询的尾部使用OREER BY子句.
+     <br/>
+     九. 交叉查询
+     <br/>
+     交叉查询可以对数据进行总和,平均,计数或其他总和计算法的计算,这些数据通过两种信息进行分组:一个显示在表的左部,另一个显示在表的顶部.
+     <br/>
+     Microsoft Jet SQL 用TRANSFROM语句创建交叉表查询语法:
+     <br/>
+     TRANSFORM aggfunction
+     <br/>
+     SELECT 语句
+     <br/>
+     GROUP BY 子句
+     <br/>
+     PIVOT pivotfield[IN(value1 [,value2[,…]]) ]
+     <br/>
+     Aggfounction指SQL聚积函数,
+     <br/>
+     SELECT语句选择作为标题的的字段,
+     <br/>
+     GROUP BY 分组
+     <br/>
+     说明：
+     <br/>
+     Pivotfield 在查询结果集中创建列标题时用的字段或表达式,用可选的IN子句限制它的取值.
+     <br/>
+     value代表创建列标题的固定值.
+     <br/>
+     例:显示在1996年里每一季度每一位员工所接的定单的数目:
+     <br/>
+     TRANSFORM Count(OrderID)
+     <br/>
+     SELECT FirstName&amp;’’&amp;LastName AS FullName
+     <br/>
+     FROM Employees INNER JOIN Orders
+     <br/>
+     ON Employees.EmployeeID = Orders.EmployeeID
+     <br/>
+     WHERE DatePart(“yyyy”,OrderDate)= ‘1996’
+     <br/>
+     GROUP BY FirstName&amp;’’&amp;LastName
+     <br/>
+     ORDER BY FirstName&amp;’’&amp;LastName
+     <br/>
+     POVOT DatePart(“q”,OrderDate)&amp;’季度’
+     <br/>
+     十 .子查询
+     <br/>
+     子查询可以理解为 套查询.子查询是一个SELECT语句.
+     <br/>
+     1 表达式的值与子查询返回的单一值做比较
+     <br/>
+     语法:
+     <br/>
+     表达式 comparision [ANY|ALL|SOME](子查询)
+     <br/>
+     说明：
+     <br/>
+     ANY 和SOME谓词是同义词,与比较运算符(=,&lt;,&gt;,&lt;&gt;,&lt;=,&gt;=)一起使用.返回一个布尔值True或 False.ANY的意思是,表达式与子查询返回的一系列的值逐一比较,只要其中的一次比较产生True结果,ANY测试的返回 True值(既WHERE子句的结果),对应于该表达式的当前记录将进入主查询的结果中.ALL测试则要求表达式与子查询返回的一系列的值的比较都产生 True结果,才回返回True值.
+     <br/>
+     例:主查询返回单价比任何一个折扣大于等于25%的产品的单价要高的所有产品
+     <br/>
+     SELECT * FROM Products
+     <br/>
+     WHERE UnitPrice&gt;ANY
+     <br/>
+     (SELECT UnitPrice FROM[Order Details] WHERE Discount&gt;0.25)
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     2 检查表达式的值是否匹配子查询返回的一组值的某个值
+     <br/>
+     语法:
+     <br/>
+     [NOT]IN(子查询)
+     <br/>
+     例:返回库存价值大于等于1000的产品.
+     <br/>
+     SELECT ProductName FROM Products
+     <br/>
+     WHERE ProductID IN
+     <br/>
+     (SELECT PrdoctID FROM [Order DEtails]
+     <br/>
+     WHERE UnitPrice*Quantity&gt;= 1000)
+    </p>
+    <p style="margin:10px auto !important;color:rgb(75,75,75);line-height:19px;font-family:verdana, Arial, helvetica, 'sans-seriff';font-size:13px;">
+     3检测子查询是否返回任何记录
+     <br/>
+     语法:
+     <br/>
+     [NOT]EXISTS (子查询)
+     <br/>
+     例:用EXISTS检索英国的客户
+     <br/>
+     SELECT ComPanyName,ContactName
+     <br/>
+     FROM Orders
+     <br/>
+     WHERE EXISTS
+     <br/>
+     (SELECT *
+     <br/>
+     FROM Customers
+     <br/>
+     WHERE Country = ‘UK’ AND
+     <br/>
+     Customers.CustomerID= Orders.CustomerID)
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mysql&amp;t=blog" target="_blank">
+    mysql
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=命令&amp;t=blog" target="_blank">
+    命令
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=控制台&amp;t=blog" target="_blank">
+    控制台
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=管理&amp;t=blog" target="_blank">
+    管理
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,996 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：avformat_close_input() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_89">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：avformat_close_input()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月07日 10:58:52
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：15639
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单分析FFmpeg的avformat_close_input()函数。该函数用于关闭一个AVFormatContext，一般情况下是和avformat_open_input()成对使用的。
+    </p>
+    <br/>
+    avformat_close_input()的声明位于libavformat\avformat.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Close an opened input AVFormatContext. Free it and all its contents
+ * and set *s to NULL.
+ */
+void avformat_close_input(AVFormatContext **s);</pre>
+    <br/>
+    <p>
+     该函数最典型的例子可以参考：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/38868499">
+      最简单的基于FFMPEG+SDL的视频播放器 ver2 （采用SDL2.0）
+     </a>
+     <br/>
+    </p>
+    <br/>
+    <h2>
+     函数调用关系图
+    </h2>
+    <p>
+     函数的调用关系如下图所示。
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150307011114372"/>
+    </div>
+    <br/>
+    <h2>
+     avformat_close_input()
+    </h2>
+    下面看一下avformat_close_input()的源代码，位于libavformat\utils.c文件中。
+    <br/>
+    <pre class="cpp">void avformat_close_input(AVFormatContext **ps)
+{
+    AVFormatContext *s;
+    AVIOContext *pb;
+
+    if (!ps || !*ps)
+        return;
+
+    s  = *ps;
+    pb = s-&gt;pb;
+
+    if ((s-&gt;iformat &amp;&amp; strcmp(s-&gt;iformat-&gt;name, "image2") &amp;&amp; s-&gt;iformat-&gt;flags &amp; AVFMT_NOFILE) ||
+        (s-&gt;flags &amp; AVFMT_FLAG_CUSTOM_IO))
+        pb = NULL;
+
+    flush_packet_queue(s);
+
+    if (s-&gt;iformat)
+        if (s-&gt;iformat-&gt;read_close)
+            s-&gt;iformat-&gt;read_close(s);
+
+    avformat_free_context(s);
+
+    *ps = NULL;
+
+    avio_close(pb);
+}
+</pre>
+    <br/>
+    从源代码中可以看出，avformat_close_input()主要做了以下几步工作：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）调用AVInputFormat的read_close()方法关闭输入流
+     <br/>
+     （2）调用avformat_free_context()释放AVFormatContext
+     <br/>
+     （3）调用avio_close()关闭并且释放AVIOContext
+    </blockquote>
+    下面我们分别来看上述几个步骤。
+    <br/>
+    <br/>
+    <h2>
+     AVInputFormat-&gt; read_close()
+    </h2>
+    AVInputFormat的read_close()是一个函数指针，指向关闭输入流的函数。不同的AVInputFormat包含有不同的read_close()方法。例如，FLV格式对应的AVInputFormat的定义如下。
+    <br/>
+    <pre class="cpp">AVInputFormat ff_flv_demuxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .priv_data_size = sizeof(FLVContext),
+    .read_probe     = flv_probe,
+    .read_header    = flv_read_header,
+    .read_packet    = flv_read_packet,
+    .read_seek      = flv_read_seek,
+    .read_close     = flv_read_close,
+    .extensions     = "flv",
+    .priv_class     = &amp;flv_class,
+};</pre>
+    <br/>
+    从ff_flv_demuxer的定义中可以看出，read_close()指向的函数是flv_read_close()。我们可以看一下flv_read_close()的定义，如下所示。
+    <br/>
+    <pre class="cpp">static int flv_read_close(AVFormatContext *s)
+{
+    int i;
+    FLVContext *flv = s-&gt;priv_data;
+    for (i=0; i&lt;FLV_STREAM_TYPE_NB; i++)
+        av_freep(&amp;flv-&gt;new_extradata[i]);
+    return 0;
+}</pre>
+    <br/>
+    从flv_read_close()的定义可以看出，该函数释放了FLVContext中的new_extradata数组中每个元素指向的内存。
+    <br/>
+    <br/>
+    <h2>
+     avformat_free_context()
+    </h2>
+    avformat_free_context()是一个FFmpeg的API函数，用于释放一个AVFormatContext。在这里要注意搞清楚avformat_free_context()和avformat_close_input()之间的区别与联系。
+    <br/>
+    <p>
+     有关avformat_free_context()可以参考文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      FFmpeg源代码简单分析：内存的分配和释放
+     </a>
+    </p>
+    <br/>
+    <h2>
+     avio_close()
+    </h2>
+    <p>
+     avio_close()是一个FFmpeg的API函数，用于关闭和释放AVIOContext。它的声明位于libavformat\avio.h，如下所示。
+    </p>
+    <pre class="cpp">/**
+ * Close the resource accessed by the AVIOContext s and free it.
+ * This function can only be used if s was opened by avio_open().
+ *
+ * The internal buffer is automatically flushed before closing the
+ * resource.
+ *
+ * @return 0 on success, an AVERROR &lt; 0 on error.
+ * @see avio_closep
+ */
+int avio_close(AVIOContext *s);
+</pre>
+    <br/>
+    avio_close()的定义位于libavformat\aviobuf.c，如下所示。
+    <br/>
+    <pre class="cpp">int avio_close(AVIOContext *s)
+{
+    URLContext *h;
+
+    if (!s)
+        return 0;
+
+    avio_flush(s);
+    h = s-&gt;opaque;
+    av_freep(&amp;s-&gt;buffer);
+    if (s-&gt;write_flag)
+        av_log(s, AV_LOG_DEBUG, "Statistics: %d seeks, %d writeouts\n", s-&gt;seek_count, s-&gt;writeout_count);
+    else
+        av_log(s, AV_LOG_DEBUG, "Statistics: %"PRId64" bytes read, %d seeks\n", s-&gt;bytes_read, s-&gt;seek_count);
+    av_free(s);
+    return ffurl_close(h);
+}
+</pre>
+    <br/>
+    从源代码可以看出，avio_close()按照顺序做了以下几个步骤：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）调用avio_flush()强制清除缓存中的数据
+     <br/>
+     （2）调用av_freep()释放掉AVIOContext种的buffer
+     <br/>
+     （3）调用av_free()释放掉AVIOContext结构体
+     <br/>
+     （4）调用ffurl_close()关闭并且释放掉URLContext
+    </blockquote>
+    <p>
+     下面按照顺序分别看看avio_flush()和ffurl_close()这两个函数。
+    </p>
+    <h3>
+     avio_flush()
+    </h3>
+    avio_flush()是一个FFmpeg的API函数，声明位于libavformat\avio.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Force flushing of buffered data.
+ *
+ * For write streams, force the buffered data to be immediately written to the output,
+ * without to wait to fill the internal buffer.
+ *
+ * For read streams, discard all currently buffered data, and advance the
+ * reported file position to that of the underlying stream. This does not
+ * read new data, and does not perform any seeks.
+ */
+void avio_flush(AVIOContext *s);</pre>
+    <br/>
+    avio_flush()的定义位于libavformat\aviobuf.c，如下所示。
+    <br/>
+    <pre class="cpp">void avio_flush(AVIOContext *s)
+{
+    flush_buffer(s);
+    s-&gt;must_flush = 0;
+}</pre>
+    <br/>
+    可以看出avio_flush()简单调用了flush_buffer()函数。我们看一下flush_buffer()的定义。
+    <br/>
+    <pre class="cpp">static void flush_buffer(AVIOContext *s)
+{
+    if (s-&gt;write_flag &amp;&amp; s-&gt;buf_ptr &gt; s-&gt;buffer) {
+        writeout(s, s-&gt;buffer, s-&gt;buf_ptr - s-&gt;buffer);
+        if (s-&gt;update_checksum) {
+            s-&gt;checksum     = s-&gt;update_checksum(s-&gt;checksum, s-&gt;checksum_ptr,
+                                                 s-&gt;buf_ptr - s-&gt;checksum_ptr);
+            s-&gt;checksum_ptr = s-&gt;buffer;
+        }
+    }
+    s-&gt;buf_ptr = s-&gt;buffer;
+    if (!s-&gt;write_flag)
+        s-&gt;buf_end = s-&gt;buffer;
+}</pre>
+    <br/>
+    从flush_buffer()定义我们可以看出，该函数将当前缓存指针buf_ptr的位置重新设置到缓存buffer的首部，然后根据AVIOContext对应的流是否可写分别做不同的处理。如果AVIOContext对应的流是只读的（write_flag取值为0），就将缓存的尾部buf_end设定到缓存首部位置；如果AVIOContext对应的流如果是可写的（write_flag取值非0），则会调用writeout()函数输出缓存中剩余的数据。
+    <br/>
+    在这里我们看一下writeout()函数的定义，如下所示。
+    <br/>
+    <pre class="cpp">static void writeout(AVIOContext *s, const uint8_t *data, int len)
+{
+    if (s-&gt;write_packet &amp;&amp; !s-&gt;error) {
+        int ret = s-&gt;write_packet(s-&gt;opaque, (uint8_t *)data, len);
+        if (ret &lt; 0) {
+            s-&gt;error = ret;
+        }
+    }
+    s-&gt;writeout_count ++;
+    s-&gt;pos += len;
+}</pre>
+    <br/>
+    <p>
+     从定义可以看出，writeout()调用了AVIOContext的write_packet()方法。根据此前文章《
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      FFmpeg源代码简单分析：avio_open2()
+     </a>
+     》中的分析我们可以了解到，AVIOContext的write_packet()实际指向了ffurl_write()函数，而ffurl_write()经过retry_transfer_wrapper()函数最终调用了URLProtocol的url_write()函数。url_write()是一个函数指针，不同的URLProtocol的url_write()指向不同的函数。
+    </p>
+    <p>
+     例如，file（文件）对应的URLProtocol的定义位于libavformat\file.c，如下所示。
+    </p>
+    <pre class="cpp">URLProtocol ff_file_protocol = {
+    .name                = "file",
+    .url_open            = file_open,
+    .url_read            = file_read,
+    .url_write           = file_write,
+    .url_seek            = file_seek,
+    .url_close           = file_close,
+    .url_get_file_handle = file_get_handle,
+    .url_check           = file_check,
+    .priv_data_size      = sizeof(FileContext),
+    .priv_data_class     = &amp;file_class,
+};</pre>
+    <br/>
+    可以看出ff_file_protocol中的url_write()指向的是file_write()函数。我们继续看一下file_write()的源代码，如下所示。
+    <br/>
+    <pre class="cpp">static int file_write(URLContext *h, const unsigned char *buf, int size)
+{
+    FileContext *c = h-&gt;priv_data;
+    int r;
+    size = FFMIN(size, c-&gt;blocksize);
+    r = write(c-&gt;fd, buf, size);
+    return (-1 == r)?AVERROR(errno):r;
+}</pre>
+    <br/>
+    从源代码中可以看出file_write()调用了系统的write()方法向文件中写数据（很多人可能对write()函数很陌生，可以简单理解为它等同于fwrite()）。
+    <br/>
+    <br/>
+    <br/>
+    <h3>
+     ffurl_close()和ffurl_closep()
+    </h3>
+    ffurl_close()和ffurl_closep()是FFmpeg内部的两个函数，它们的声明位于libavformat\url.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Close the resource accessed by the URLContext h, and free the
+ * memory used by it. Also set the URLContext pointer to NULL.
+ *
+ * @return a negative value if an error condition occurred, 0
+ * otherwise
+ */
+int ffurl_closep(URLContext **h);
+int ffurl_close(URLContext *h);</pre>
+    <br/>
+    其实这两个函数是等同的。ffurl_close()的定义位于libavformat\avio.c，如下所示。
+    <br/>
+    <pre class="cpp">int ffurl_close(URLContext *h)
+{
+    return ffurl_closep(&amp;h);
+}</pre>
+    <br/>
+    可见ffurl_close()调用了ffurl_closep()。
+    <br/>
+    ffurl_closep()的定义如下所示。
+    <br/>
+    <pre class="cpp">int ffurl_closep(URLContext **hh)
+{
+    URLContext *h= *hh;
+    int ret = 0;
+    if (!h)
+        return 0;     /* can happen when ffurl_open fails */
+
+    if (h-&gt;is_connected &amp;&amp; h-&gt;prot-&gt;url_close)
+        ret = h-&gt;prot-&gt;url_close(h);
+#if CONFIG_NETWORK
+    if (h-&gt;prot-&gt;flags &amp; URL_PROTOCOL_FLAG_NETWORK)
+        ff_network_close();
+#endif
+    if (h-&gt;prot-&gt;priv_data_size) {
+        if (h-&gt;prot-&gt;priv_data_class)
+            av_opt_free(h-&gt;priv_data);
+        av_freep(&amp;h-&gt;priv_data);
+    }
+    av_freep(hh);
+    return ret;
+}
+</pre>
+    <br/>
+    从ffurl_closep()的定义可以看出，它主要做了两步工作：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     （1）调用URLProtocol的url_close()
+     <br/>
+     （2）调用av_freep()释放URLContext结构体
+    </blockquote>
+    其中URLProtocol的url_close()是一个函数指针，其指向的函数与具体的URLProtocol有关，这里我们还是看一下file（文件）对应的URLProtocol，如下所示。
+    <br/>
+    <pre class="cpp">URLProtocol ff_file_protocol = {
+    .name                = "file",
+    .url_open            = file_open,
+    .url_read            = file_read,
+    .url_write           = file_write,
+    .url_seek            = file_seek,
+    .url_close           = file_close,
+    .url_get_file_handle = file_get_handle,
+    .url_check           = file_check,
+    .priv_data_size      = sizeof(FileContext),
+    .priv_data_class     = &amp;file_class,
+};</pre>
+    <br/>
+    从ff_file_protocol中可以看出，url_close()指向file_close()函数。我们再看一下file_close()的定义，如下所示。
+    <br/>
+    <pre class="cpp">static int file_close(URLContext *h)
+{
+    FileContext *c = h-&gt;priv_data;
+    return close(c-&gt;fd);
+}</pre>
+    <br/>
+    可见file_close()最终调用了系统函数close()关闭了文件指针（不熟悉close()的可以简单把它理解为fclose()）。
+    <br/>
+    <p>
+     至此avio_close()函数分析完毕。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#660000;">
+       雷霄骅
+       <br/>
+       leixiaohua1020@126.com
+       <br/>
+       http://blog.csdn.net/leixiaohua1020
+      </span>
+     </strong>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44110683
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=关闭&amp;t=blog" target="_blank">
+    关闭
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=avformatcontext&amp;t=blog" target="_blank">
+    avformatcontext
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=函数&amp;t=blog" target="_blank">
+    函数
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

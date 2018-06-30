@@ -1,0 +1,288 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 图像全参考客观评价算法比较 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_159">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   图像全参考客观评价算法比较
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年08月05日 00:06:17
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：18110
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     Lin Zhang等人在论文《A COMPREHENSIVEEVALUATION OF FULL REFERENCE IMAGE QUALITY ASSESSMENT ALGORITHMS》中，比较了几种全参考图像质量评价算法，在此记录一下他们的结果。
+    </p>
+    <p>
+     下表所示是他们所用的图像库，包含了：
+     <a href="http://www.ponomarenko.info/tid2008.htm">
+      TID2008database
+     </a>
+     ，
+     <a href="http://vision.okstate.edu/csiq">
+      CSIQ database
+     </a>
+     ，
+     <a href="http://live.ece.utexas.edu/research/Quality/">
+      LIVEdatabase
+     </a>
+     ，
+     <a href="http://www2.irccyn.ec-nantes.fr/ivcdb/">
+      IVCdatabase
+     </a>
+     ，
+     <a href="http://mict.eng.u-toyama.ac.jp/mictdb.html">
+      Toyama-MICTdatabase
+     </a>
+     ，
+     <a href="http://foulard.ece.cornell.edu/dmc27/vsnr/vsnr.html">
+      Cornell A57 database
+     </a>
+     ，以及
+     <a href="http://www.bth.se/tek/rcg.nsf/pages/wiq-db">
+      WirelessImaging Quality database (WIQ)
+     </a>
+     。从上到下数据库的规模依次下降。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140731221707234?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     一共比较了如下所列的全参考图像客观质量评价算法：
+    </p>
+    <p>
+     <strong>
+      PeakSignal to Noise Ratio(PSNR)
+     </strong>
+    </p>
+    <p>
+     峰值信噪比。
+    </p>
+    <p>
+     <strong>
+      noise quality measure (NQM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：N. Damera-Venkata, T.D. Kite, W.S. Geisler, B.L. Evans, and A.C.Bovik, “Image quality assessment based on a degradation model,” IEEE Trans. IP,vol. 9, pp. 636-650, 2000.
+    </p>
+    <p>
+     <strong>
+      universal quality index (UQI)
+     </strong>
+    </p>
+    <p>
+     参考文献：Z. Wang and A.C. Bovik, “A universal image quality index,” IEEE SignalProcess. Lett., vol. 9, pp. 81-84, 2002.
+    </p>
+    <p>
+     <strong>
+      structural similarity (SSIM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：Z. Wang, A.C. Bovik, H.R. Sheikh, and E.P. Simoncelli,”Image qualityassessment: from error visibility to structural similarity,” IEEE Trans. IP,vol. 13, pp. 600-612, 2004.
+    </p>
+    <p>
+     <strong>
+      multi-scaleSSIM (MS-SSIM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：Z. Wang, E.P. Simoncelli, and A.C. Bovik, “Multi-scale structuralsimilarity for image quality assessment,” ACSSC’03, pp. 1398-1402, 2003.
+    </p>
+    <p>
+     <strong>
+      information fidelity criterion (IFC) index
+     </strong>
+    </p>
+    <p>
+     参考文献：H.R. Sheikh, A.C. Bovik, and G. de Veciana, “An information fidelitycriterion for image quality assessment using natural scene statistics,” IEEETrans. IP, vol. 14, pp. 2117-2128, 2005.
+    </p>
+    <p>
+     <strong>
+      visual information fidelity (VIF) index
+     </strong>
+    </p>
+    <p>
+     参考文献：H.R. Sheikh and A.C. Bovik, “Image information and visual quality,”IEEE Trans. IP, vol. 15, pp. 430-444, 2006.
+    </p>
+    <p>
+     <strong>
+      visual signal to noise ratio (VSNR) index
+     </strong>
+    </p>
+    <p>
+     参考文献：D.M. Chandler and S.S. Hemami, “VSNR: a wavelet-based visualsignal-to-noise ratio for natural images,” IEEE Trans. IP, vol. 16, pp.2284-2298, 2007.
+    </p>
+    <p>
+     <strong>
+      information content weighted SSIM (IW-SSIM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：Z. Wang and Q. Li, “Information content weighting for perceptualimage quality assessment,” IEEE Trans. IP, vol. 20,
+    </p>
+    <p>
+     pp. 1185-1198, 2011.
+    </p>
+    <p>
+     <strong>
+      Riesz transforms based feature similarity (RFSIM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：L. Zhang, L. Zhang, and X. Mou, “RFSIM: a feature based imagequality assessment metric using Riesz transforms,” ICIP’10, pp. 321-324, 2010.
+    </p>
+    <p>
+     <strong>
+      feature similarity (FSIM) index
+     </strong>
+    </p>
+    <p>
+     参考文献：L. Zhang, L. Zhang, X. Mou, and D. Zhang, “FSIM: a feature similarityindex for image quality assessment,” IEEE Trans. IP, vol. 20, pp. 2378-2386,2011.
+    </p>
+    <p>
+    </p>
+    <p>
+     统计了每种全参考图像质量评价算法的客观值和主观值之间的相关系数：
+    </p>
+    <p>
+     斯皮尔曼秩相关系数（Spearman rankorder correlation coefficient，SROCC），肯德尔秩次相关系数（Kendallrank-order correlation coefficient，KROCC），皮尔森线性相关系数（Pearsonlinear correlation coefficient，PLCC）。客观算法的结果和主观评价的结果相关性越高，则以上三个系数的值越接近于1，说明算法越准确。由表可见，FSIM算法的准确度相对来说是最高的，三个系数的取值分分别达到了0.9094，0.7409，0.9050。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140731221931468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下表将上表的数值进行了一下排名。排在前面的有FSIM，IW-SSIM，RFSIM，MS-SSIM。猛然发现：PSNR真的是好不准啊~~
+    </p>
+    <p>
+    </p>
+    <div style="text-align:center;">
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140731221934946?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <p>
+    </p>
+    <p>
+     下表反映了每种全参考质量评价算法的耗时，耗时越短，说明算法速度越快。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140731221718234?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     总体说来FSIM，IW-SSIM，RFSIM这三种比较新的图像质量评价算法准确性比较高。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/38324973
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像质量&amp;t=blog" target="_blank">
+    图像质量
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=psnr&amp;t=blog" target="_blank">
+    psnr
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ssim&amp;t=blog" target="_blank">
+    ssim
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=fsim&amp;t=blog" target="_blank">
+    fsim
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=评价&amp;t=blog" target="_blank">
+    评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

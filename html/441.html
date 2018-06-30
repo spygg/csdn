@@ -1,0 +1,666 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Flex+BlazeDs+Java的教程及Demo - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_441">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   Flex+BlazeDs+Java的教程及Demo
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月06日 20:05:33
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：3212
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      这个基础教程是
+     </span>
+     <span style="font-family:Calibri;">
+      Flex4.1
+     </span>
+     <span style="font-family:SimSun;">
+      ，
+     </span>
+     <span style="font-family:Calibri;">
+      Blazeds4.0
+     </span>
+     <span style="font-family:SimSun;">
+      为基础写的。
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第一步：新建
+     </span>
+     <span style="font-family:Calibri;">
+      Web Project
+     </span>
+     <span style="font-family:SimSun;">
+      ，名字为：
+     </span>
+     <span style="font-family:Calibri;">
+      FlexBlazeDsDemo
+     </span>
+     <span style="font-family:SimSun;">
+      ，点
+     </span>
+     <span style="font-family:Calibri;">
+      Finish
+     </span>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="520" src="http://dl.iteye.com/upload/attachment/578711/25464d78-8f12-30f8-983e-240684915d1d.png" width="524"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第二步：去
+     </span>
+     <span style="font-family:Calibri;">
+      Adobe
+     </span>
+     <span style="font-family:SimSun;">
+      公司的网站上下载
+     </span>
+     <span style="font-family:Calibri;">
+      Blazeds
+     </span>
+     <span style="font-family:SimSun;">
+      的包，
+     </span>
+    </p>
+    <p style="margin:0in;">
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+     <span style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;">
+      <img alt="" height="91" src="http://dl.iteye.com/upload/attachment/578713/d54d23b6-5e8a-3aa3-9974-26a9c745f803.png" width="545"/>
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      解压
+     </span>
+     <span style="font-family:Calibri;">
+      blazeds.war
+     </span>
+     <span style="font-family:SimSun;">
+      ，看到
+     </span>
+     <span style="font-family:Calibri;font-weight:bold;">
+      blaeds
+     </span>
+     <span style="font-family:SimSun;">
+      的文件夹，里面有一个
+     </span>
+     <span style="font-family:Calibri;">
+      lib
+     </span>
+     <span style="font-family:SimSun;">
+      的文件夹，将包引入到项目工作中去
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      同时将
+     </span>
+     <span style="font-family:Calibri;">
+      blazeds-&gt;WEB-INF
+     </span>
+     <span style="font-family:SimSun;">
+      下的
+     </span>
+     <span style="font-family:Calibri;">
+      flex
+     </span>
+     <span style="font-family:SimSun;">
+      文件夹
+     </span>
+     <span style="font-family:Calibri;">
+      Copy
+     </span>
+     <span style="font-family:SimSun;">
+      到项目中的
+     </span>
+     <span style="font-family:Calibri;">
+      WEB-INF
+     </span>
+     <span style="font-family:SimSun;">
+      下，目录结构如下：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="480" src="http://dl.iteye.com/upload/attachment/578715/0c9a56a3-4cf0-387d-ab75-b45a45cef59a.png" width="305"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第三步：在
+     </span>
+     <span style="font-family:Calibri;">
+      Tomcat
+     </span>
+     <span style="font-family:SimSun;">
+      中发布项目
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第四步：在
+     </span>
+     <span style="font-family:Calibri;">
+      Web Project
+     </span>
+     <span style="font-family:SimSun;">
+      中添加
+     </span>
+     <span style="font-family:Calibri;">
+      Flex
+     </span>
+     <span style="font-family:SimSun;">
+      项目
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:Calibri;">
+      Step1
+     </span>
+     <span style="font-family:SimSun;">
+      ：
+     </span>
+    </p>
+    <p style="margin:0in;">
+     <img alt="" class="magplus" height="562" src="http://dl.iteye.com/upload/attachment/578717/52c9e8d6-9059-3631-b3dd-654343c1aea9.png" title="点击查看原始大小图片" width="700"/>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:Calibri;">
+      Step2
+     </span>
+     <span style="font-family:SimSun;">
+      ：服务器技术选择
+     </span>
+     <span style="font-family:Calibri;">
+      J2EE
+     </span>
+     <span style="font-family:SimSun;">
+      及
+     </span>
+     <span style="font-family:Calibri;">
+      Blazeds
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="520" src="http://dl.iteye.com/upload/attachment/578723/e10bb17a-53a8-3a06-9ab9-bd26ba606415.png" width="522"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:Calibri;">
+      Step3
+     </span>
+     <span style="font-family:SimSun;">
+      ：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="520" src="http://dl.iteye.com/upload/attachment/578719/a7699e1e-95dd-34bc-bdf3-d4b77554db44.png" width="524"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:Calibri;">
+      Step4
+     </span>
+     <span style="font-family:SimSun;">
+      ：配置上述图中的信息，根文件夹，选择
+     </span>
+     <span style="font-family:Calibri;">
+      FlexBlazeDsDemo
+     </span>
+     <span style="font-family:SimSun;">
+      发布之后的位置，配置之后的信息如下：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="525" src="http://dl.iteye.com/upload/attachment/578721/f01ee433-75b8-3f88-9919-ebc2f91d1d6c.png" width="524"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <span style="font-family:Calibri;font-size:10.5pt;">
+      Step5
+     </span>
+     <span style="font-family:SimSun;font-size:10.5pt;">
+      ：新建
+     </span>
+     <span style="font-family:Calibri;font-size:10.5pt;">
+      html-template
+     </span>
+     <span style="font-family:SimSun;font-size:10.5pt;">
+      （打开
+     </span>
+     <span style="font-family:Calibri;font-size:10.5pt;">
+      porblem
+     </span>
+     <span style="font-family:SimSun;font-size:10.5pt;">
+      窗口，如果有提示这个错误就新建）和
+     </span>
+     <span style="font-family:Calibri;font-size:10.5pt;">
+      flex-src
+     </span>
+     <span style="font-family:SimSun;font-size:10.5pt;">
+      文件夹，目录结构如下：建立完文件，会提示：
+     </span>
+     <span style="font-family:SimSun;">
+      <span style="font-size:14px;">
+       Description
+       <span style="white-space:pre;">
+       </span>
+       Resource
+       <span style="white-space:pre;">
+       </span>
+       Path
+       <span style="white-space:pre;">
+       </span>
+       Location
+       <span style="white-space:pre;">
+       </span>
+       Type
+      </span>
+     </span>
+    </p>
+    <p style="margin:0in;">
+     <span style="font-family:SimSun;">
+      <span style="font-size:14px;">
+       missing ; before statement
+       <span style="white-space:pre;">
+       </span>
+       index.template.htm，这个错误不用处理，接着往下走。
+      </span>
+     </span>
+    </p>
+    <div>
+     <br/>
+    </div>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="174" src="http://dl.iteye.com/upload/attachment/578727/c1f8741e-7ed5-3650-9cdb-a37c34b20cfe.png" width="260"/>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:Calibri;">
+      Step6
+     </span>
+     <span style="font-family:SimSun;">
+      ：调整目录结构及参数配置，如下图
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     <span style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;">
+      <img alt="" class="magplus" height="541" src="http://dl.iteye.com/upload/attachment/578725/03805779-fd2d-3d6f-862d-46d9bb4bf250.png" title="点击查看原始大小图片" width="700"/>
+     </span>
+    </p>
+    <p style="margin:0in;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      在上图中，将主源文件夹修改成：
+     </span>
+     <span style="font-family:Calibri;">
+      flex
+     </span>
+     <span style="font-family:SimSun;">
+      -src
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <strong>
+      特别注意：将FlexBlazeDsDemo.mxml文件移动到flex-src目录下，因为我们已经将主源文件夹修改，并且以后所建的Flex文件也都要放到flex-src下。
+     </strong>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     <span>
+      Step8
+     </span>
+     <span>
+      ：服务参数，也就是
+     </span>
+     <span>
+      Flex
+     </span>
+     <span>
+      编译器
+     </span>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+     <span style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;">
+      <img alt="" class="magplus" height="496" src="http://dl.iteye.com/upload/attachment/578729/80528c9f-4303-33d8-8079-76585cdfeb14.png" title="点击查看原始大小图片" width="700"/>
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      我们也可以打开配置文件去查看参数的（
+     </span>
+     <span style="font-family:Calibri;">
+      .actionScriptProperties
+     </span>
+     <span style="font-family:SimSun;">
+      及
+     </span>
+     <span style="font-family:Calibri;">
+      .flexProperties
+     </span>
+     <span style="font-family:SimSun;">
+      ），如下图：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" class="magplus" height="185" src="http://dl.iteye.com/upload/attachment/578731/d44b3c7b-2005-3b46-b6be-4ae15c85cf2e.png" title="点击查看原始大小图片" width="700"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     第五步：在FelxBlazeDsDemo输入以下几行代码
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     <img alt="" class="magplus" height="296" src="http://dl.iteye.com/upload/attachment/578733/6e9908b0-4018-329b-865f-fd33e8316d9c.png" title="点击查看原始大小图片" width="700"/>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span>
+      第六步：在浏览器地址栏输入
+     </span>
+     <a href="http://localhost:8080/FlexBlazeDsDemo/FlexBlazeDsDemo.html">
+      <span style="font-family:Calibri;">
+       http://localhost:8080/FlexBlazeDsDemo/FlexBlazeDsDemo.html
+      </span>
+     </a>
+     <span>
+      ，
+     </span>
+     <span style="font-family:Calibri;">
+     </span>
+     <span>
+      查看效果，端口号和项目名称改成自己
+     </span>
+     <span style="font-family:Calibri;">
+     </span>
+     <span>
+      即可。效果如下：
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <img alt="" height="259" src="http://dl.iteye.com/upload/attachment/578736/6375ef80-95b6-333d-9768-65a9f6f06873.png" width="620"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第七步：添加
+     </span>
+     <span style="font-family:Calibri;">
+      BlazeDs
+     </span>
+     <span style="font-family:SimSun;">
+      ，配置
+     </span>
+     <span style="font-family:Calibri;">
+      web.xml
+     </span>
+     <span style="font-family:SimSun;">
+      文件，将我们下载的
+     </span>
+     <span style="font-family:Calibri;">
+      BlazeDs
+     </span>
+     <span style="font-family:SimSun;">
+      包下在的
+     </span>
+     <span style="font-family:Calibri;">
+      we
+     </span>
+     <span style="font-family:SimSun;">
+      b.xml
+     </span>
+     <span style="font-family:SimSun;">
+      文件覆盖我们项目的文件，
+     </span>
+     <span style="font-family:SimSun;">
+      web.xml
+     </span>
+     <span style="font-family:SimSun;">
+      文件内容如下：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" class="magplus" height="429" src="http://dl.iteye.com/upload/attachment/578739/9f6b5ce0-b0d9-3399-8b5a-941a6f7f6388.png" title="点击查看原始大小图片" width="700"/>
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第八步：写一个
+     </span>
+     <span style="font-family:Calibri;">
+      Java
+     </span>
+     <span style="font-family:SimSun;">
+      类，
+     </span>
+     <span style="font-family:Calibri;">
+      HelloWorld
+     </span>
+     <span style="font-family:SimSun;">
+      ，代码如下：
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" height="398" src="http://dl.iteye.com/upload/attachment/578738/3a0bca0c-f308-3815-8e3b-df1a9b7bffbc.png" width="443"/>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第九步：配置
+     </span>
+     <span style="font-family:Calibri;">
+      remote-0bject
+     </span>
+     <span style="font-family:SimSun;">
+      .xml
+     </span>
+     <span style="font-family:SimSun;">
+      文件
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;font-family:Calibri;font-size:10.5pt;">
+     <span style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;">
+      <img alt="" class="magplus" height="338" src="http://dl.iteye.com/upload/attachment/578742/cec6df6b-b8e8-3f63-96cb-d3378088ef0e.png" title="点击查看原始大小图片" width="700"/>
+     </span>
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      第十步：更改
+     </span>
+     <span style="font-family:Calibri;">
+      FlexBlazeDsDemo
+     </span>
+     <span style="font-family:SimSun;">
+      代码，内容如下：
+     </span>
+     <span style="font-family:Calibri;">
+      destinatioin
+     </span>
+     <span style="font-family:SimSun;">
+      一定要与上一步中的
+     </span>
+     <span style="font-family:Calibri;">
+      remote-object.xml
+     </span>
+     <span style="font-family:SimSun;">
+      的
+     </span>
+     <span style="font-family:Calibri;">
+      destination
+     </span>
+     <span style="font-family:SimSun;">
+      一样，
+     </span>
+     <span style="font-family:Calibri;">
+      reusult
+     </span>
+     <span style="font-family:SimSun;">
+      是调用成功之后处理函数。
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+    </p>
+    <p style="margin:0in;">
+     <img alt="" class="magplus" height="410" src="http://dl.iteye.com/upload/attachment/578744/67620564-8fac-30c6-86aa-0fc033958704.png" title="点击查看原始大小图片" width="700"/>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     第十一步：测试
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     <span style="font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;">
+      <img alt="" height="228" src="http://dl.iteye.com/upload/attachment/578748/fc14d6cb-5dbb-34f4-bf7c-184825d048d4.png" width="461"/>
+     </span>
+     <span style="font-family:Calibri;">
+     </span>
+    </p>
+    <p style="margin:0in;font-family:SimSun;font-size:10.5pt;">
+     <img alt="" height="115" src="http://dl.iteye.com/upload/attachment/578746/1c8e4e99-9ffd-35ff-92f0-908dad3313da.png" width="410"/>
+    </p>
+    <p style="margin:0in;">
+    </p>
+    <p style="margin:0in;font-size:10.5pt;">
+     <span style="font-family:SimSun;">
+      原文地址：
+      <a href="http://wangdongsong.iteye.com/blog/1222435">
+       http://wangdongsong.iteye.com/blog/1222435
+      </a>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=java&amp;t=blog" target="_blank">
+    java
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=flex&amp;t=blog" target="_blank">
+    flex
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=blazeds&amp;t=blog" target="_blank">
+    blazeds
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=demo&amp;t=blog" target="_blank">
+    demo
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1653525" target="_blank">
+    Flash相关
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

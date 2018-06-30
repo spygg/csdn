@@ -1,0 +1,663 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于FFmpeg的封装格式处理：视音频分离器（demuxer） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_143">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于FFmpeg的封装格式处理：视音频分离器（demuxer）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年10月08日 00:58:56
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：23377
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     最简单的基于FFmpeg的封装格式处理系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39767055">
+      最简单的基于FFmpeg的封装格式处理：视音频分离器简化版（demuxer-simple）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39802819">
+      最简单的基于FFmpeg的封装格式处理：视音频分离器（demuxer）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39802913">
+      最简单的基于FFmpeg的封装格式处理：视音频复用器（muxer）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/25422685">
+      最简单的基于FFMPEG的封装格式处理：封装格式转换（remuxer）
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     简介
+    </h2>
+    <p>
+     打算记录一下基于FFmpeg的封装格式处理方面的例子。包括了视音频分离，复用，封装格式转换。这是第2篇。
+    </p>
+    <p>
+     本文记录一个基于FFmpeg的视音频分离器（Simplest FFmpeg demuxer）。视音频分离器（Demuxer）即是将封装格式数据（例如MKV）中的视频压缩数据（例如H.264）和音频压缩数据（例如AAC）分离开。如图所示。在这个过程中并不涉及到编码和解码。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141005135649219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    本文记录的程序可以将一个MPEG2TS封装的视频文件（其中视频编码为H.264，音频编码为AAC）分离成为两个文件：一个H.264编码的视频码流文件，一个AAC编码的音频码流文件。
+    <br/>
+    前一篇文章中，记录一个简单版的视音频分离器。相比于前一篇文中的分离器，本篇文章记录的分离器复杂了很多。相比于简单版的分离器，学习的难度大了一些。但是该分离器可以很好地处理FFmpeg支持的各种格式（例如分离AAC音频流），拥有更好的实用性。
+    <br/>
+    <br/>
+    <h2>
+     流程图
+    </h2>
+    <br/>
+    程序的流程如下图所示。从流程图中可以看出，一共初始化了3个AVFormatContext，其中1个用于输入，另外2个分别用于视频输出和音频输出。3个AVFormatContext初始化之后，通过avcodec_copy_context()函数可以将输入视频/音频的参数拷贝至输出视频/音频的AVCodecContext结构体。最后，通过av_read_frame()获取AVPacket，根据AVPacket类型的不同，分别使用av_interleaved_write_frame()写入不同的输出文件中即可。
+    <br/>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1788287">
+      <img alt="" src="https://img-blog.csdn.net/20141005135535140?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </a>
+    </div>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1788287">
+      单击查看更清晰的图片
+     </a>
+    </div>
+    <br/>
+    PS：对于某些封装格式（例如MP4/FLV/MKV等）中的H.264，需要用到名称为“h264_mp4toannexb”的bitstream filter。这一点在前一篇文章《最简单的基于FFmpeg的封装格式处理：视音频分离器简化版（demuxer-simple）》中，已经有过详细叙述，这里不再重复。
+    <br/>
+    <br/>
+    简单介绍一下流程中各个重要函数的意义：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     avformat_open_input()：打开输入文件。
+     <br/>
+     avcodec_copy_context()：赋值AVCodecContext的参数。
+     <br/>
+     avformat_alloc_output_context2()：初始化输出文件。
+     <br/>
+     avio_open()：打开输出文件。
+     <br/>
+     avformat_write_header()：写入文件头。
+     <br/>
+     av_read_frame()：从输入文件读取一个AVPacket。
+     <br/>
+     av_interleaved_write_frame()：写入一个AVPacket到输出文件。
+     <br/>
+     av_write_trailer()：写入文件尾。
+    </blockquote>
+    <br/>
+    <h2>
+     代码
+    </h2>
+    <p>
+     下面贴上代码：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * 最简单的基于FFmpeg的视音频分离器
+ * Simplest FFmpeg Demuxer
+ *
+ * 雷霄骅 Lei Xiaohua
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ * 本程序可以将封装格式中的视频码流数据和音频码流数据分离出来。
+ * 在该例子中， 将MPEG2TS的文件分离得到H.264视频码流文件和AAC
+ * 音频码流文件。
+ *
+ * This software split a media file (in Container such as 
+ * MKV, FLV, AVI...) to video and audio bitstream.
+ * In this example, it demux a MPEG2TS file to H.264 bitstream
+ * and AAC bitstream.
+ */
+
+#include &lt;stdio.h&gt;
+
+#define __STDC_CONSTANT_MACROS
+
+#ifdef _WIN32
+//Windows
+extern "C"
+{
+#include "libavformat/avformat.h"
+};
+#else
+//Linux...
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include &lt;libavformat/avformat.h&gt;
+#ifdef __cplusplus
+};
+#endif
+#endif
+
+/*
+FIX: H.264 in some container format (FLV, MP4, MKV etc.) need 
+"h264_mp4toannexb" bitstream filter (BSF)
+  *Add SPS,PPS in front of IDR frame
+  *Add start code ("0,0,0,1") in front of NALU
+H.264 in some container (MPEG2TS) don't need this BSF.
+*/
+//'1': Use H.264 Bitstream Filter 
+#define USE_H264BSF 0
+
+int main(int argc, char* argv[])
+{
+	AVOutputFormat *ofmt_a = NULL,*ofmt_v = NULL;
+	//（Input AVFormatContext and Output AVFormatContext）
+	AVFormatContext *ifmt_ctx = NULL, *ofmt_ctx_a = NULL, *ofmt_ctx_v = NULL;
+	AVPacket pkt;
+	int ret, i;
+	int videoindex=-1,audioindex=-1;
+	int frame_index=0;
+
+	const char *in_filename  = "cuc_ieschool.ts";//Input file URL
+	//char *in_filename  = "cuc_ieschool.mkv";
+	const char *out_filename_v = "cuc_ieschool.h264";//Output file URL
+	//char *out_filename_a = "cuc_ieschool.mp3";
+	const char *out_filename_a = "cuc_ieschool.aac";
+
+	av_register_all();
+	//Input
+	if ((ret = avformat_open_input(&amp;ifmt_ctx, in_filename, 0, 0)) &lt; 0) {
+		printf( "Could not open input file.");
+		goto end;
+	}
+	if ((ret = avformat_find_stream_info(ifmt_ctx, 0)) &lt; 0) {
+		printf( "Failed to retrieve input stream information");
+		goto end;
+	}
+
+	//Output
+	avformat_alloc_output_context2(&amp;ofmt_ctx_v, NULL, NULL, out_filename_v);
+	if (!ofmt_ctx_v) {
+		printf( "Could not create output context\n");
+		ret = AVERROR_UNKNOWN;
+		goto end;
+	}
+	ofmt_v = ofmt_ctx_v-&gt;oformat;
+
+	avformat_alloc_output_context2(&amp;ofmt_ctx_a, NULL, NULL, out_filename_a);
+	if (!ofmt_ctx_a) {
+		printf( "Could not create output context\n");
+		ret = AVERROR_UNKNOWN;
+		goto end;
+	}
+	ofmt_a = ofmt_ctx_a-&gt;oformat;
+
+	for (i = 0; i &lt; ifmt_ctx-&gt;nb_streams; i++) {
+			//Create output AVStream according to input AVStream
+			AVFormatContext *ofmt_ctx;
+			AVStream *in_stream = ifmt_ctx-&gt;streams[i];
+			AVStream *out_stream = NULL;
+			
+			if(ifmt_ctx-&gt;streams[i]-&gt;codec-&gt;codec_type==AVMEDIA_TYPE_VIDEO){
+				videoindex=i;
+				out_stream=avformat_new_stream(ofmt_ctx_v, in_stream-&gt;codec-&gt;codec);
+				ofmt_ctx=ofmt_ctx_v;
+			}else if(ifmt_ctx-&gt;streams[i]-&gt;codec-&gt;codec_type==AVMEDIA_TYPE_AUDIO){
+				audioindex=i;
+				out_stream=avformat_new_stream(ofmt_ctx_a, in_stream-&gt;codec-&gt;codec);
+				ofmt_ctx=ofmt_ctx_a;
+			}else{
+				break;
+			}
+			
+			if (!out_stream) {
+				printf( "Failed allocating output stream\n");
+				ret = AVERROR_UNKNOWN;
+				goto end;
+			}
+			//Copy the settings of AVCodecContext
+			if (avcodec_copy_context(out_stream-&gt;codec, in_stream-&gt;codec) &lt; 0) {
+				printf( "Failed to copy context from input to output stream codec context\n");
+				goto end;
+			}
+			out_stream-&gt;codec-&gt;codec_tag = 0;
+
+			if (ofmt_ctx-&gt;oformat-&gt;flags &amp; AVFMT_GLOBALHEADER)
+				out_stream-&gt;codec-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;
+	}
+
+	//Dump Format------------------
+	printf("\n==============Input Video=============\n");
+	av_dump_format(ifmt_ctx, 0, in_filename, 0);
+	printf("\n==============Output Video============\n");
+	av_dump_format(ofmt_ctx_v, 0, out_filename_v, 1);
+	printf("\n==============Output Audio============\n");
+	av_dump_format(ofmt_ctx_a, 0, out_filename_a, 1);
+	printf("\n======================================\n");
+	//Open output file
+	if (!(ofmt_v-&gt;flags &amp; AVFMT_NOFILE)) {
+		if (avio_open(&amp;ofmt_ctx_v-&gt;pb, out_filename_v, AVIO_FLAG_WRITE) &lt; 0) {
+			printf( "Could not open output file '%s'", out_filename_v);
+			goto end;
+		}
+	}
+
+	if (!(ofmt_a-&gt;flags &amp; AVFMT_NOFILE)) {
+		if (avio_open(&amp;ofmt_ctx_a-&gt;pb, out_filename_a, AVIO_FLAG_WRITE) &lt; 0) {
+			printf( "Could not open output file '%s'", out_filename_a);
+			goto end;
+		}
+	}
+
+	//Write file header
+	if (avformat_write_header(ofmt_ctx_v, NULL) &lt; 0) {
+		printf( "Error occurred when opening video output file\n");
+		goto end;
+	}
+	if (avformat_write_header(ofmt_ctx_a, NULL) &lt; 0) {
+		printf( "Error occurred when opening audio output file\n");
+		goto end;
+	}
+	
+#if USE_H264BSF
+	AVBitStreamFilterContext* h264bsfc =  av_bitstream_filter_init("h264_mp4toannexb"); 
+#endif
+
+	while (1) {
+		AVFormatContext *ofmt_ctx;
+		AVStream *in_stream, *out_stream;
+		//Get an AVPacket
+		if (av_read_frame(ifmt_ctx, &amp;pkt) &lt; 0)
+			break;
+		in_stream  = ifmt_ctx-&gt;streams[pkt.stream_index];
+
+		
+		if(pkt.stream_index==videoindex){
+			out_stream = ofmt_ctx_v-&gt;streams[0];
+			ofmt_ctx=ofmt_ctx_v;
+			printf("Write Video Packet. size:%d\tpts:%lld\n",pkt.size,pkt.pts);
+#if USE_H264BSF
+			av_bitstream_filter_filter(h264bsfc, in_stream-&gt;codec, NULL, &amp;pkt.data, &amp;pkt.size, pkt.data, pkt.size, 0);
+#endif
+		}else if(pkt.stream_index==audioindex){
+			out_stream = ofmt_ctx_a-&gt;streams[0];
+			ofmt_ctx=ofmt_ctx_a;
+			printf("Write Audio Packet. size:%d\tpts:%lld\n",pkt.size,pkt.pts);
+		}else{
+			continue;
+		}
+
+
+		//Convert PTS/DTS
+		pkt.pts = av_rescale_q_rnd(pkt.pts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		pkt.dts = av_rescale_q_rnd(pkt.dts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		pkt.duration = av_rescale_q(pkt.duration, in_stream-&gt;time_base, out_stream-&gt;time_base);
+		pkt.pos = -1;
+		pkt.stream_index=0;
+		//Write
+		if (av_interleaved_write_frame(ofmt_ctx, &amp;pkt) &lt; 0) {
+			printf( "Error muxing packet\n");
+			break;
+		}
+		//printf("Write %8d frames to output file\n",frame_index);
+		av_free_packet(&amp;pkt);
+		frame_index++;
+	}
+
+#if USE_H264BSF
+	av_bitstream_filter_close(h264bsfc);  
+#endif
+
+	//Write file trailer
+	av_write_trailer(ofmt_ctx_a);
+	av_write_trailer(ofmt_ctx_v);
+end:
+	avformat_close_input(&amp;ifmt_ctx);
+	/* close output */
+	if (ofmt_ctx_a &amp;&amp; !(ofmt_a-&gt;flags &amp; AVFMT_NOFILE))
+		avio_close(ofmt_ctx_a-&gt;pb);
+
+	if (ofmt_ctx_v &amp;&amp; !(ofmt_v-&gt;flags &amp; AVFMT_NOFILE))
+		avio_close(ofmt_ctx_v-&gt;pb);
+
+	avformat_free_context(ofmt_ctx_a);
+	avformat_free_context(ofmt_ctx_v);
+
+
+	if (ret &lt; 0 &amp;&amp; ret != AVERROR_EOF) {
+		printf( "Error occurred.\n");
+		return -1;
+	}
+	return 0;
+}
+
+</pre>
+    <br/>
+    <h2>
+     结果
+    </h2>
+    输入文件为：
+    <br/>
+    cuc_ieschool.ts：MPEG2TS封装格式数据。
+    <br/>
+    <br/>
+    <br/>
+    输出文件为：
+    <br/>
+    cuc_ieschool.h264：H.264视频码流数据。
+    <br/>
+    cuc_ieschool.aac：AAC音频码流数据。
+    <br/>
+    <br/>
+    <h2>
+     下载
+    </h2>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      simplest ffmpeg format
+     </strong>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      项目主页
+     </strong>
+    </p>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestffmpegformat/">
+      https://sourceforge.net/projects/simplestffmpegformat/
+     </a>
+    </p>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_ffmpeg_format">
+      https://github.com/leixiaohua1020/simplest_ffmpeg_format
+     </a>
+    </p>
+    <p>
+     开源中国：
+     <a href="http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_format">
+      http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_format
+     </a>
+    </p>
+    <br/>
+    CSDN下载地址：
+    <br/>
+    <a href="http://download.csdn.net/detail/leixiaohua1020/8005317">
+     http://download.csdn.net/detail/leixiaohua1020/8005317
+    </a>
+    <br/>
+    <br/>
+    <p>
+     工程中包含4个例子：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     <p>
+      simplest_ffmpeg_demuxer_simple：视音频分离器（简化版）。
+     </p>
+     <p>
+      <span style="color:#ff0000;">
+       simplest_ffmpeg_demuxer：视音频分离器。
+      </span>
+     </p>
+     <p>
+      simplest_ffmpeg_muxer：视音频复用器。
+     </p>
+     <p>
+      simplest_ffmpeg_remuxer：封装格式转换器。
+     </p>
+    </blockquote>
+    <br/>
+    <p>
+     <span style="font-weight:bold;">
+      更新-1.1==================================================
+     </span>
+    </p>
+    <p>
+     修复了以下问题：
+     <br/>
+     (1)Release版本下的运行问题
+     <br/>
+     (2)simplest_ffmpeg_muxer分装H.264裸流的时候丢失声音的错误
+    </p>
+    <div>
+     <p>
+      CSDN下载地址：
+      <br/>
+     </p>
+     <p>
+      <a href="http://download.csdn.net/detail/leixiaohua1020/8284309">
+       http://download.csdn.net/detail/leixiaohua1020/8284309
+      </a>
+     </p>
+     <p>
+      <br/>
+     </p>
+     <p>
+      <strong>
+       更新-1.2 (2015.2.13)=========================================
+      </strong>
+     </p>
+     <p>
+      这次考虑到了跨平台的要求，调整了源代码。经过这次调整之后，源代码可以在以下平台编译通过：
+     </p>
+    </div>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <div>
+      <p>
+       <em>
+        VC++：打开sln文件即可编译，无需配置。
+       </em>
+      </p>
+     </div>
+    </blockquote>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <div>
+      <p>
+       <em>
+        cl.exe：打开compile_cl.bat即可命令行下使用cl.exe进行编译，注意可能需要按照VC的安装路径调整脚本里面的参数。编译命令如下。
+       </em>
+      </p>
+     </div>
+    </blockquote>
+    <div>
+     <p>
+     </p>
+     <pre class="plain">::VS2010 Environment
+call "D:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+::include
+@set INCLUDE=include;%INCLUDE%
+::lib
+@set LIB=lib;%LIB%
+::compile and link
+cl simplest_ffmpeg_demuxer.cpp /link avcodec.lib avformat.lib avutil.lib ^
+avdevice.lib avfilter.lib postproc.lib swresample.lib swscale.lib /OPT:NOREF</pre>
+    </div>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <div>
+      <p>
+       <em>
+        MinGW：MinGW命令行下运行compile_mingw.sh即可使用MinGW的g++进行编译。编译命令如下。
+       </em>
+      </p>
+     </div>
+    </blockquote>
+    <div>
+     <p>
+     </p>
+     <pre class="plain">g++ simplest_ffmpeg_demuxer.cpp -g -o simplest_ffmpeg_demuxer.exe \
+-I /usr/local/include -L /usr/local/lib -lavformat -lavcodec -lavutil</pre>
+    </div>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <div>
+      <p>
+       <em>
+        GCC：Linux或者MacOS命令行下运行compile_gcc.sh即可使用GCC进行编译。编译命令如下。
+       </em>
+      </p>
+     </div>
+    </blockquote>
+    <div>
+     <p>
+     </p>
+     <pre class="plain">gcc simplest_ffmpeg_demuxer.cpp -g -o simplest_ffmpeg_demuxer.out \
+-I /usr/local/include -L /usr/local/lib -lavformat -lavcodec -lavutil</pre>
+     PS：相关的编译命令已经保存到了工程文件夹中
+     <br/>
+     <br/>
+     CSDN下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/8445303">
+      http://download.csdn.net/detail/leixiaohua1020/8445303
+     </a>
+     <p>
+      SourceForge上已经更新。
+      <br/>
+     </p>
+     <p>
+      <br/>
+     </p>
+    </div>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/39802819
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=demux&amp;t=blog" target="_blank">
+    demux
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分离&amp;t=blog" target="_blank">
+    分离
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AAC&amp;t=blog" target="_blank">
+    AAC
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=封装格式&amp;t=blog" target="_blank">
+    封装格式
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1843731" target="_blank">
+    我的开源项目
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

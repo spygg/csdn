@@ -1,0 +1,1350 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MSU 出品的 H.264 编码器比较 （2012.5） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_437">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   MSU 出品的 H.264 编码器比较 （2012.5）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月07日 10:37:24
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：15051
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     莫斯科国立大学的MSU Graphics &amp; Media Lab (Video Group)出品的H.264编码器性能测试报告《Eighth MPEG-4 AVC/H.264 Video Codecs Comparison》。这个报告每年都有，这是最近的一次。它们测试了主流的H.264编码器的性能。从测试的结果来看，开源产品x264性能已经超过了商用编码器的性能。在此简单记录其结果。
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     一.概述
+    </h3>
+    <p>
+     参与测试的编码器有如下几种：
+    </p>
+    <p>
+    </p>
+    <strong>
+     H.264
+    </strong>
+    <menu>
+     <li>
+      DivX H.264
+     </li>
+     <li>
+      Elecard H.264
+     </li>
+     <li>
+      Intel Ivy Bridge QuickSync (GPU encoder)
+     </li>
+     <li>
+      MainConcept H.264 (software)
+     </li>
+     <li>
+      MainConcept H.264 (CUDA based encoder)
+     </li>
+     <li>
+      MainConcept H.264 (OpenCL based encoder)
+     </li>
+     <li>
+      DiscretePhoton
+     </li>
+     <li>
+      x264
+     </li>
+    </menu>
+    <strong>
+     非H.264
+    </strong>
+    <menu>
+     <li>
+      XviD (MPEG-4 ASP codec)
+     </li>
+    </menu>
+    <p>
+    </p>
+    <p>
+     使用的测试序列：
+    </p>
+    <p>
+    </p>
+    <div>
+     <table border="1" cellpadding="7" cellspacing="1" class="normal" style="text-align:left;border-collapse:collapse;" width="570">
+      <tbody>
+       <tr>
+        <th>
+         序列
+        </th>
+        <th>
+         帧数
+        </th>
+        <th>
+         帧率
+        </th>
+        <th>
+         分辨率
+        </th>
+       </tr>
+       <tr>
+        <td colspan="4">
+         <strong>
+          视频会议 (5 个)
+         </strong>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Deadline
+        </td>
+        <td>
+         1374
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         352x288
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Developers 4CIF
+        </td>
+        <td>
+         3600
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         640x480
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Developers 720p
+        </td>
+        <td>
+         1500
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1280x720
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Presentation
+        </td>
+        <td>
+         548
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         720x480
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Business
+        </td>
+        <td>
+         493
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td colspan="4">
+         <strong>
+          电影 (10 个)
+         </strong>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Ice Age
+        </td>
+        <td>
+         2014
+        </td>
+        <td>
+         24
+        </td>
+        <td>
+         720x480
+        </td>
+       </tr>
+       <tr>
+        <td>
+         City
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         60
+        </td>
+        <td>
+         704x576
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Crew
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         60
+        </td>
+        <td>
+         704x576
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Indiana Jones
+        </td>
+        <td>
+         5000
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         704x288
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Harbour
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         60
+        </td>
+        <td>
+         704x576
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Ice Skating
+        </td>
+        <td>
+         480
+        </td>
+        <td>
+         60
+        </td>
+        <td>
+         704x576
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Soccer
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         60
+        </td>
+        <td>
+         704x576
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Race Horses
+        </td>
+        <td>
+         300
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         832x480
+        </td>
+       </tr>
+       <tr>
+        <td>
+         State Enemy
+        </td>
+        <td>
+         6500
+        </td>
+        <td>
+         24
+        </td>
+        <td>
+         720x304
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Party Scene
+        </td>
+        <td>
+         500
+        </td>
+        <td>
+         50
+        </td>
+        <td>
+         832x480
+        </td>
+       </tr>
+       <tr>
+        <td colspan="4">
+         <strong>
+          HDTV (16个)
+         </strong>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Park Joy
+        </td>
+        <td>
+         500
+        </td>
+        <td>
+         50
+        </td>
+        <td>
+         1280x720
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Riverbed
+        </td>
+        <td>
+         250
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Rush Hour
+        </td>
+        <td>
+         500
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Blue Sky
+        </td>
+        <td>
+         217
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Station
+        </td>
+        <td>
+         313
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Stockholm
+        </td>
+        <td>
+         604
+        </td>
+        <td>
+         50
+        </td>
+        <td>
+         1280x720
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Sunflower
+        </td>
+        <td>
+         500
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Tractor
+        </td>
+        <td>
+         690
+        </td>
+        <td>
+         25
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Bunny
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         24
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Dream
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         24
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Troy
+        </td>
+        <td>
+         300
+        </td>
+        <td>
+         24
+        </td>
+        <td>
+         1920x1072
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Water Drops
+        </td>
+        <td>
+         535
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Capitol
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Parrots
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Citybus
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Underwater
+        </td>
+        <td>
+         600
+        </td>
+        <td>
+         30
+        </td>
+        <td>
+         1920x1080
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+    </p>
+    <div style="text-align:left;">
+     <br/>
+    </div>
+    <p>
+    </p>
+    <p style="text-align:left;">
+     测试硬件设备配置：
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h3>
+    </h3>
+    Sugar Bay platform, 3rd Generation Core i7 3xxx(IVB), 4 Cores CPU @3.4 GHz,Integrated GPU: Intel HD Graphics 4000GPU: NVIDIA GeForce GTX 580HDD: SSD160GTotal Physical Memory: 2x2 Gb RAM (1600 MHz)
+    <div style="text-align:left;">
+     OS Name: Microsoft Windows 7
+    </div>
+    <div style="text-align:left;">
+     <br/>
+    </div>
+    <div style="text-align:left;">
+     总体结果：
+    </div>
+    <div style="text-align:center;">
+     <img alt="" height="441" src="https://img-blog.csdn.net/20131007103357187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="719"/>
+     <br/>
+    </div>
+    <div style="text-align:left;">
+     <br/>
+    </div>
+    <p style="text-align:left;">
+    </p>
+    <p style="text-align:left;">
+     编码器编码质量排序（注意：这里并没有考虑编码速度）：
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <ol>
+     <li style="text-align:left;">
+      x264
+     </li>
+     <li style="text-align:left;">
+      MainConcept
+     </li>
+     <li style="text-align:left;">
+      DivX H.264
+     </li>
+     <li style="text-align:left;">
+      Elecard
+     </li>
+     <li style="text-align:left;">
+      Intel Ivy Bridge QuickSync
+     </li>
+     <li style="text-align:left;">
+      XviD
+     </li>
+     <li style="text-align:left;">
+      DiscretePhoton
+     </li>
+     <li style="text-align:left;">
+      MainConcept CUDA
+     </li>
+    </ol>
+    <p style="text-align:left;">
+    </p>
+    <h3 style="text-align:left;">
+     二.部分详细图表
+    </h3>
+    <p style="text-align:left;">
+     整个测试分为三种场景：视频会议（Video Conferences），电影（Movies），高清电视（HDTV）。每种场景的每个测试视频序列都列了一张图表。总体说来图表数量非常之巨大。在此不能一一列举。仅仅举一些例子说明图表的意义。
+    </p>
+    <h4>
+     2.1.视频会议（Video Conferences）
+    </h4>
+    <h5>
+     2.1.1.RD曲线（RD Curves）
+    </h5>
+    <p style="text-align:left;">
+     RD曲线是视频质量评价中最常见的一种曲线，中文名是率失真曲线。横坐标是码率，纵坐标是视频客观算法的结果（例如PSNR或者SSIM）。下面可以看一下第一个测试视频序列的RD曲线：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810223347812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     这张图的视频分辨率是QCIF（176×144）。曲线横坐标是视频的码率，纵坐标是计算出来的SSIM。SSIM取值0-1之间，值越大，代表视频质量越好。从曲线中可以看出，在码率相同的情况下，x264编码的视频质量要高于其他编码器（绿色的线）。第二名是MainConcept。
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <h5>
+     2.1.2.编码速度（Encoding Speed）
+    </h5>
+    <p style="text-align:left;">
+     编码速度的图表如图所示。横坐标是编码视频的码率，纵坐标是编码速度（在这里是每秒编码的帧数）。总体来说，随着编码的码率的增长，所有编码器的编码速度都有所下降。Intel Ivy Bridge QuickSync编码的速度非常之快，远超其他编码器。Discrete Photon，MainConcept CUDA和 Elecard在第二集团。X264编码速度算是比较慢的了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810224141119?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h5>
+     2.1.3.速度/质量权衡（Speed/Quality Trade-Off）
+    </h5>
+    <p style="text-align:left;">
+     一般情况下，编码速度越快，编码的质量就会差一些；编码对质量的要求较高，那么编码的速度就会慢很多。这就是所谓的“鱼和熊掌不可兼得”了。于是就有了速度/质量权衡的图表。在这张图表中，横坐标代表相对的编码时间，取值越小越好。纵坐标代表相同视频质量的时候编码器使用的相对码率。在这里MSU使用XviD作为参考编码器。即XviD在这张表的横坐标和纵坐标都是1，即位于（1,1）点。可以看出，X264是编码慢，质量最好。Intel Ivy Bridge QuickSync是编码最快，质量稍差。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810225031046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h5>
+     2.1.4.码率控制（Bitrate Handling）
+    </h5>
+    <p style="text-align:left;">
+     这张图表用于测试编码器的码率控制性能。码率控制性能好的编码器，编码后输出的视频码率和编码前设定的码率相同。码率控制性能差的编码器，编码后输出的视频码率和编码前设定的码率差别会很大。图表中纵坐标是实际码率与设定码率的比值。这个值为1，代表码率控制准确。横坐标是码率。从图中可以看出XviD在码率大于800kbps之后，出现码率控制不准的情况。Discrete Photon在码率小于500kbps的时候也出现不准的情况。其他编码器码率控制都很准确。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810225732500?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h5>
+     2.1.5.相对质量分析（Relative Quality Analysis）
+    </h5>
+    <p style="text-align:left;">
+     下列这张表列出了在相同的视频质量的前提下，不同的编码器需要使用的码率。可以看出，X264确实是最强悍的。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810230913146?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     下图以图形化的方式显示了上面那张表。不同颜色的线代表不同的编码器。纵坐标代表达到和横坐标编码器相同的视频质量需要的相对码率。
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810231249674?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <br/>
+    <h4>
+     2.2.电影（Movies）
+    </h4>
+    <p style="text-align:left;">
+     电影（Movies）场景的实验方式和上文中的视频会议（Video Conferences）类似。在此不再详述，列出图表以作备忘。需要注意的是电影（Movies）场景每个编码器使用了3种preset：High Speed Preset，Normal Preset，High Quality Preset。其中High Speed Preset更注重编码的速度，视频的质量其次考虑。High Quality Preset更注重编码的质量，速度相对会慢一些。
+     <span style="text-align:center;">
+     </span>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h5>
+     2.1.1.RD曲线（RD Curves）
+    </h5>
+    <p>
+    </p>
+    <p style="text-align:center;">
+     （1）High Speed Preset
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181543843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181551859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181809514?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h5>
+     2.1.2.编码速度（Encoding Speed）
+    </h5>
+    <p>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （1）
+     </span>
+     <span style="text-align:center;">
+      High Speed Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181820746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181629843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181637062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h5>
+     2.1.3.速度/质量权衡（Speed/Quality Trade-Off）
+    </h5>
+    <p>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （1）
+     </span>
+     <span style="text-align:center;">
+      High Speed Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181848171?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181658437?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181910089?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h5>
+     2.1.1.码率控制（Bitrate Handling）
+    </h5>
+    <p>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （1）
+     </span>
+     <span style="text-align:center;">
+      High Speed Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181920681?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181933817?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181744968?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h5>
+     2.1.1.相对质量分析（Relative Quality Analysis）
+    </h5>
+    <br/>
+    <p>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （1）
+     </span>
+     <span style="text-align:center;">
+      High Speed Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812182050382?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181909546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812181921828?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （1）
+     </span>
+     <span style="text-align:center;">
+      High Speed Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812182132860?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （2）
+     </span>
+     <span style="text-align:center;">
+      Normal Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812182144857?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="text-align:center;">
+      （3）
+     </span>
+     <span style="text-align:center;">
+      High Quality Preset
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812182200129?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <h4>
+     2.3.高清电视（HDTV）
+    </h4>
+    <p style="text-align:left;">
+     高清电视场景的测试方式也完全一样。图太多，不再例举。
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <h3>
+     三.附录
+    </h3>
+    <h4>
+     3.1.使用的测试视频序列
+    </h4>
+    <p>
+    </p>
+    <p style="text-align:left;">
+     附上几张前面这些图表使用的测试视频序列的截图：
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <p style="text-align:center;">
+     Deadline
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140810231952310?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p style="text-align:center;">
+     City
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812184025844?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <div style="text-align:center;">
+     Crew
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812184323918?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <div style="text-align:center;">
+     Ice Age
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812184345025?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+    </p>
+    <p>
+    </p>
+    <h4>
+     <br/>
+     3.2.编码器
+    </h4>
+    <div>
+     本次测试使用的编码器信息如下，都是控制台程序。此处不再翻译。
+     <br/>
+    </div>
+    <div>
+     <br/>
+    </div>
+    <div>
+     (1) DivX AVC/H.264 Video Encoder
+     <br/>
+     · Console encoding program version 1.1.1.9
+     <br/>
+     · Presets were chosen by ourselves to meet the comparison requirements
+     <br/>
+     Remarks: Owing to our choice of presets, the results for the DivX H.264 encoder could be slightly diminished compared with the case where the developers provide the presets.
+     <br/>
+     <br/>
+     (2) Elecard AVC Video Encoder 8-bit edition,
+     <br/>
+     · Console encoding program version 2.1.032820.120220
+     <br/>
+     · Codec and presets were provided by Elecard Ltd Company specifically for this test
+     <br/>
+     <br/>
+     (3) MainConcept AVC/H.264 Video Encoder Console Application
+     <br/>
+     · Console software and CUDA encoder applications and presets for them were provided by MainConcept AG Company specifically for this test
+     <br/>
+     (4) x264
+     <br/>
+     · Console encoding application with core:120 r2146 bcd41db was from the public repository
+     <br/>
+     · Presets were provided by developers specifically for this test
+     <br/>
+     Remarks: The presets provided by the developers for this comparison were specifically chosen for the SSIM metric.
+     <br/>
+     <br/>
+     (5) XviD raw mpeg4 bitstream encoder
+     <br/>
+     · Console encoding program
+     <br/>
+     · Codec and presets used was taken from previous comparison
+     <br/>
+     <br/>
+     (6) Discrete Photon
+     <br/>
+     · Console encoding application version (1.1.0.4) and presets was provided by developers specifically for this test
+     <br/>
+     <br/>
+     (7) Intel Ivy Bridge QuickSync
+     <br/>
+     · Transcoder and presets was provided by Intel specifically for this test
+     <br/>
+     · Intel Ivy Bridge Platform used in hardware/software comparison was provided by Intel
+    </div>
+    <h4>
+    </h4>
+    <h4>
+     3.3.基于GPU硬件的编码器的比较
+    </h4>
+    <span style="font-weight:normal;">
+     直接比较软件编码器和硬件编码器（基于GPU）在某些条件下并不是非常合适。因为基于GPU的硬件编码器可以调用更为强大的计算资源，因此有更快的计算速度。但是基于GPU的编码器不能使用一些提高视频编码质量的算法，从而导致其质量不能达到最好。在这里单独列出基于GPU的编码器并对其性能进行性比较。如下所列：
+    </span>
+    <div>
+     <span style="font-weight:normal;">
+      · Intel Ivy Bridge QuickSync (GPU encoder)
+      <br/>
+      · MainConcept H.264 (CUDA based encoder)
+      <br/>
+      · MainConcept H.264 (OpenCL based encoder), ATI 6970 graphic card was used
+      <br/>
+     </span>
+    </div>
+    <div>
+     <span style="font-weight:normal;">
+      在这里使用HD（1920x1080）的测试视频序列进行比较。实际上编码HD视频是硬件编码器主要的作用。
+     </span>
+    </div>
+    <div>
+     <span style="font-weight:normal;">
+      本文中仅列几个图示。
+     </span>
+    </div>
+    <div>
+     （1）RD曲线（RD Curves）
+    </div>
+    <div>
+     Intel Ivy Bridge QuickSync整体上最好，个别视频中MainConcept H.264 (OpenCL based encoder)编码器性能会更好。MainConcept H.264 (CUDA based encoder)一般情况下都排在最后。
+     <br/>
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812191545497?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <div>
+     （2）码率控制（Bitrate Handling）
+    </div>
+    <div>
+     <br/>
+    </div>
+    <div>
+     除了低码率的情况外，所有编码器的码率控制都不错。MainConcept在低码率情况下输出实际码率偏高，Intel Ivy Bridge QuickSync 不编码低码率视频。
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812191605481?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <div>
+     （3）速度/质量权衡（Speed/Quality Trade-Off）
+    </div>
+    <div>
+     <br/>
+    </div>
+    <div>
+     Intel Ivy Bridge QuickSync整体在速度和质量上都有些优势。MainConcept H.264 (OpenCL based encoder)编码器性能好于MainConcept H.264 (CUDA based encoder)。
+     <br/>
+    </div>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812191409359?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    <div>
+     （4）结论
+    </div>
+    <div>
+     排序如下：
+    </div>
+    <div>
+     <span style="font-weight:normal;">
+      1. Intel Ivy Bridge QuickSync
+      <br/>
+      2. MainConcept OpenCL
+      <br/>
+      3. MainConcept CUDA
+      <br/>
+     </span>
+    </div>
+    <div>
+     <br/>
+    </div>
+    <h4>
+     3.4.x264各个版本之间比较
+    </h4>
+    此外，作为最优秀的H.264编码器x264.对比了其各个版本之间性能的区别，排序如下，可以看出其一直是出于发展状态的。1. x264 (2012)2. x264 (2011)
+    <br/>
+    3. x264 (2010)
+    <br/>
+    4. x264 (2009)
+    <br/>
+    5. x264 (2007)
+    <br/>
+    6. x264 (2006)
+    <br/>
+    7. x264 (2005)
+    <p style="text-align:left;">
+     （1）RD曲线（RD Curves）
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812192729484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     （2）速度/质量权衡（Speed/Quality Trade-Off）
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140812192940707?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     完整文档地址：
+     <a href="http://www.compression.ru/video/codec_comparison/h264_2012/mpeg4_avc_h264_video_codecs_comparison.pdf">
+      http://www.compression.ru/video/codec_comparison/h264_2012/mpeg4_avc_h264_video_codecs_comparison.pdf
+     </a>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+    <p style="text-align:left;">
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=H.264&amp;t=blog" target="_blank">
+    H.264
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频编码器&amp;t=blog" target="_blank">
+    视频编码器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=速度&amp;t=blog" target="_blank">
+    速度
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频质量&amp;t=blog" target="_blank">
+    视频质量
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=cuda&amp;t=blog" target="_blank">
+    cuda
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638135" target="_blank">
+    视频编码
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

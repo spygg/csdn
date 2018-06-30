@@ -1,0 +1,461 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 图像检索：CEDD（Color and Edge Directivity Descriptor）算法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_234">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   图像检索：CEDD（Color and Edge Directivity Descriptor）算法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月23日 00:11:37
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：9631
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     颜色和边缘的方向性描述符（Color and Edge Directivity Descriptor，CEDD）
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     本文节选自论文《Android手机上图像分类技术的研究》。
+    </p>
+    <p>
+    </p>
+    <p>
+     CEDD具有抽取特征速度较快，特征描述符占用空间较小的优势。下面就对CEDD原理进行详细的阐述和分析。
+    </p>
+    <p>
+     1.颜色信息
+    </p>
+    <p>
+     CEDD特征结合了颜色和纹理两方面信息，本小结将给出颜色信息提取的过程，重点分析RGB-HSV模型转换、10-bins模糊过滤器和24-bins模糊过滤器的原理。
+    </p>
+    <p>
+     1.1.RGB模型转换为HSV模型
+    </p>
+    <p>
+     RGB模型可以说是我们最熟悉、使用也最多的颜色模型，它们分别代表组成一个颜色的三个分量，（0，0，0）代表黑色，（255,255,255）代表白色，（255,0,0）代表红色，（0，255，0）代表绿色，（0,0,255）代表蓝色，其它颜色也可通过调整这三个分量表示出来。RGB颜色模型的设计是根据色彩发光原理而来的，且与硬件相关，一般情况下，计算机都会釆用这种空间模型在屏幕上显示某种颜色的定义，即人们所熟悉的三色组合。所以，当从一幅图像中提取像素点时首先提取的一般也是像素点的RGB信息。
+    </p>
+    <p>
+     HSV模型中，H （Hue）代表色调，指通过物体传播或从物体射出的颜色，一般在使用中是由颜色名称来标识的。S （Saturation）代表饱和度，表示色调中灰色成分的比例，指颜色的纯度或强度。V （Value）代表亮度，指颜色相对的明暗程度。HSV模型能够较好地反应人对颜色的感知和鉴别能力，所以非常适合于比较基于颜色的图像相似性，在图像分类中也得到了广泛应用。
+    </p>
+    <p>
+     综合上述两点，在提取颜色信息前就需要对图像像素进行RGB-HSV的模型转换。在此特征提取算法中RGB-HSV转换的方式稍有不同，且最后得出的S、V取值范围也有差别，都是（0，255），但基本原理不变，这是为了方便于后面在模糊过滤器中的运算，转换公式如下：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122140725796"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122140735578"/>
+     <br/>
+    </p>
+    <p align="center">
+    </p>
+    <p>
+     这里所有的HSV值最后都取整数。
+    </p>
+    <p>
+     通过上面的计算，便可以得出像素点的HSV值，下面将用HSV值进行模糊过滤，得出颜色信息的直方图。
+    </p>
+    <p>
+    </p>
+    <p>
+     1.2. 10-bins模糊过滤器
+    </p>
+    <p align="left" style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122140816796"/>
+    </p>
+    <p>
+     10-bins模糊过滤器的工作过程是通过三个通道输入HSV信息，然后输出10个模糊的直方图信息值。10个直方图信息值的含义如下：（0）黒色（Black），（1）灰色（Gray），（2）白色（White），（3）红色（Red）, （4）橙色（Orange），（5）黄色（Yellow），（6）绿色（Green），（7）青色（Cyan），（8）蓝色（Blue），（9）品红色（Magenta）。其原理如图所示。
+    </p>
+    <p>
+     10-bins模糊过滤器是基于模糊理论的，我们先来分析一下模糊理论中颜色径向边缘的生成。由于H代表的是色调，从它的计算方法可以看出H的取值范围为0-360，则当一张图片上出现由一种颜色向另一种颜色过渡时，H值的变化就会较快，这时就会出现所谓的颜色径向边缘。根据模糊理论可以找出这些径向边缘的位置。如图所示，图（a）为提取出的H通道值的图像，图（b）是将图（a）通过CLF过滤器模糊处理后得出的。CLF的英文全称为Coordinatelogic filters，它的方法就是将图像上每个3*3方块的九个像素点的二进制值进行逻辑“与”运算，这样，在H通道的颜色边缘处就会出现较小的H值，也就是我们看到的图
+ （b）的效果。再将原H值图像与过滤后的H图像进行差运算即可得如图（c）所示的较明显的颜色径向边缘。图 （d）为H通道理论上的径向边缘位置。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122140902593"/>
+     <br/>
+    </p>
+    <p>
+     通过上述原理反复实验可以得到H径向边缘的范围，如图所示，将H通道的值分为八个模糊区域，每一区域依次命名为：（0）红色-橙色（Redto Orange），（1）橙色（Orange），（2）黄色（Yellow），（3）绿色（Green），（4）青色（Cyan），（5）蓝色（Blue），（6）品红色（Magenta），（7）蓝色-红色（Blueto Red）。每两个相邻区域都有交叉的部分。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.1.3.24-bins模糊过滤器
+    </p>
+    <p>
+     24-bins模糊过滤器就是将10-bins模糊过滤器输出的每种色区再分为3个H值区域，输入一个10维向量和S、V通道值，输出的是一个24维向量，其系统模型如图3-7所示。它输出的每一维所代表的信息分别是：（0）黑色（Black），（1）灰色（Grey），（2）白色（White），（3）暗红色（Dark Red），（4）红色（Red），（5）浅红（Light Red）,（6）暗橙色（DarkOrange），（7）橙色（Orange），（8）浅橙色（Light Orange），（9）暗黄色（Dark Yellow），（10）黄色（Yellow）,
+ （11）浅黄色（LightYellow），（12）深绿色（Dark Green），（13）绿色（Green），（14）浅绿色（Light Green），（15）暗青色（Dark Cyan），（16）青色（Cyan），（17）浅青色（Light Cyan），（18）深蓝色（Dark Blue）,（19）蓝色（Blue），（20）淡蓝色（LightBlue），（21）暗品红色（DarkMagenta），（22）品红色（Magenta），（23）浅品红色（Light Magenta）。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122140934781"/>
+    </p>
+    <p align="center">
+     <br/>
+    </p>
+    <p>
+     3.2.纹理信息
+    </p>
+    <p>
+     本小结将介绍CEDD特征中纹理信息的提取过程，通过YIQ模型计算出像素灰度值，再提取图像的边缘方向直方图纹理信息。
+    </p>
+    <p>
+     3.2.1.YIQ彩色空间
+    </p>
+    <p>
+     YIQ色彩空间属于NTSC （国际电视标准委员会）系统。Y（Luminace）代表了颜色的明视度，直观点说就是图像的灰度值。I和Q （Chrominace）代表了色调信息，它们分别描述图像色彩以及饱和度的属性。在YIQ色彩空间模型中，Y分量表示图像的亮度信息，I和Q分量表示颜色信息，I分量是指从橙色到青色，Q分量则是指从紫色到黄绿色[24]。
+    </p>
+    <p>
+     通过对彩色图像从RGB到YIQ空间的转换，可以分开彩色图像中的亮度信息与色度信息，并对其各自进行独立处理。RGB转换到YIQ空间模型的对应关系如下面方程所示：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141009093"/>
+     <br/>
+    </p>
+    <p>
+     提取纹理特征时，最常用的就是图像的灰度值，这里引出YIQ空间也只为求出Y值，以便后面进行纹理信息的提取。
+    </p>
+    <p>
+     3.2.2.边缘方向直方图
+    </p>
+    <p>
+     在这里将提出一种计算速度较快捷的纹理信息提取方法，EHD（ Edge Histogram Descriptor），即边缘直方图描述符，将会用到5个数字滤波器，如图3-9所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141105859"/>
+    </p>
+    <p align="center">
+    </p>
+    <p>
+     这五个数字滤波器是用来提取纹理边缘信息的，它们能够将其所作用的区域分为垂直方向、水平方向、45度方向、135度方向和无方向五个类别。在对图像进行纹理信息提取时会将图像分为若干小区。然后每个小区再分为如图3-9的四个大小相等的子小区。然后每个小区再分为如图3-9的四个大小相等的子小区。用g
+     <sub>
+      0
+     </sub>
+     (i，j)，g
+     <sub>
+      1
+     </sub>
+     (i，j)，g
+     <sub>
+      2
+     </sub>
+     (i，j)，g
+     <sub>
+      3
+     </sub>
+     (i，j)分别表示在第（i,j)个小区内四个子小区的平均灰度值。a
+     <sub>
+      v
+     </sub>
+     (k)，a
+     <sub>
+      h
+     </sub>
+     (k)，a
+     <sub>
+      d-45
+     </sub>
+     (k)，a
+     <sub>
+      d-135
+     </sub>
+     (k)和a
+     <sub>
+      nd
+     </sub>
+     (k)分别代表四个子小区平均灰度值经过过滤器时的参数，图中每个子小区中的数值便是滤波器的参数，其中k的取值范围是0到3整数，表示小区内的四个子小区。n
+     <sub>
+      v
+     </sub>
+     (i, j)，n
+     <sub>
+      h
+     </sub>
+     (i，j)，n
+     <sub>
+      d-45
+     </sub>
+     (i，j)，n
+     <sub>
+      d-135
+     </sub>
+     (i，j)和n
+     <sub>
+      nd
+     </sub>
+     (i，j)为第（i，j)个小区内所判定各方向的取值。计算方法如下：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141128500"/>
+     <br/>
+    </p>
+    <p>
+     找出最大值，
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141154000"/>
+     <br/>
+    </p>
+    <p>
+     再对所有n值规范化，
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141157234"/>
+     <br/>
+    </p>
+    <p>
+     通过上面的计算公式，可以得出每个小区内图像边缘的信息。CEDD中纹理信息提取的是一个6维直方图，直方图中各维信息的含义分别是：（0）无边缘信息，（1）无方向的边缘信息，（2）水平方向的边缘信息，（3）垂直方向的边缘信息，（4） 45度方向的边缘信息，（5） 135度方向的边缘信息。判断每个小区纹理信息所属的直方图区域的方法如图3-10所示：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141201812"/>
+     <br/>
+    </p>
+    <p>
+     首先设定4个阈值：T
+     <sub>
+      0
+     </sub>
+     =14，检验该小区是否含有边缘信息；T
+     <sub>
+      1
+     </sub>
+     =0.68，判断该小区是否含有无方向信息；T
+     <sub>
+      2
+     </sub>
+     =T
+     <sub>
+      3
+     </sub>
+     =0.98，用来判断该小区是否含有其它四个方向的信息。如果m
+     <sub>
+      max
+     </sub>
+     大于T
+     <sub>
+      0
+     </sub>
+     ，则该小区含有纹理信息，如果不大于则是非含有纹理信息的小区，那么6维直方图第一维的值会加1。如果该区域是有边缘信息的，即m
+     <sub>
+      max
+     </sub>
+     大于等于T
+     <sub>
+      0
+     </sub>
+     ，便可以计算其它各方向信息的值，如图3-10所示。此原理图是一个发散的五边形，每个顶点代表一个边缘方向类别，每个小区内计算出的n
+     <sub>
+      nd
+     </sub>
+     、n
+     <sub>
+      h
+     </sub>
+     、n
+     <sub>
+      v
+     </sub>
+     、n
+     <sub>
+      d-45
+     </sub>
+     、n
+     <sub>
+      d-135
+     </sub>
+     值便分别落在五个点与中心原点的连线上。中心点的值为1，五边形边界线上的值为0。如果n值大于它相应边缘方向类别上的阈值，则可判定该小区属于这个边缘方向类别，可想而知，一个小区可以同时属于几个类别。由此，便有如下划分方法：若n
+     <sub>
+      nd
+     </sub>
+     大于T
+     <sub>
+      1
+     </sub>
+     ，则直方图中含有无方向信息的区域值加1;若n
+     <sub>
+      h
+     </sub>
+     大于T
+     <sub>
+      2
+     </sub>
+     ,则直方图中含有水平方向边缘信息的区域值加1;若n
+     <sub>
+      v
+     </sub>
+     大于T
+     <sub>
+      2
+     </sub>
+     ，则直方图中含有垂直方向边缘信息的区域值加1;若n
+     <sub>
+      d-45
+     </sub>
+     大于T
+     <sub>
+      3
+     </sub>
+     ，则直方图中含有45度方向边缘信息的区域值加1;若n
+     <sub>
+      d-135
+     </sub>
+     大于T
+     <sub>
+      3
+     </sub>
+     ，则直方图中含有135度方向边缘信息的区域值加1。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.3. CEDD 特征
+    </p>
+    <p>
+     CEDD的英文全称是Color and Edge Directivity Descriptor,即颜色和边缘方向特征描述符。它结合了图像的颜色和纹理信息，生成一个144位的直方图。这个特征提取方法可以分为两个子模块系统，提取颜色信息的是颜色模块，提取纹理信息的是纹理模块，这两个单元的具体算法已经在3.1小节和3.2小节进行了详细讲述。CEDD直方图信息由六个区域组成，也就是3.2中讲到的纹理模块，六个区域就是提取出的6维向量直方图，然后在这些纹理信息的每一维中再加入颜色模块提取出的24维颜色信息，这样就可以将颜色和纹理有效结合起来，最终得出6*24=144维的直方图信息。其原理如图3-11所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122141242734"/>
+     <br/>
+    </p>
+    <p>
+     在实现过程中先将图片分成若干小区，小区的数量是根据图像具体情况和计算机能力综合决定的，每一个图像小区都会经过纹理模块和颜色模块的处理。
+    </p>
+    <p>
+     小区在纹理模块特征提取过程中会先分为4个子小区。根据YIQ计算公式得出每个像素的灰度值，求出每个子小区的平均灰度值。再经过5个数字滤波器过滤后，根据图3-10的原理判断该子小区属于哪些纹理信息类别。
+    </p>
+    <p>
+     在颜色模块中，每个图像小区都会转换为HSV色彩空间，系统会将小区内HSV各通道的平均值通过10-bins模糊过滤器输出的10维向量再通过24-bins模糊过滤器中。通过10-bins模糊过滤器后根据H值得出了 10个色彩类别，当通过24-bins模糊过滤器时会根据S和V的区域判定对H进行再分类输出24维的直方图。
+    </p>
+    <p>
+     图像的每一个小区都会经过颜色模块的处理，处理后将24个数据分别加入到该小区所属的各纹理类别中，最后对直方图进行归一化处理。
+    </p>
+    <p>
+     如果只进行到归一化这一步并不能体现出CEDD的优越性，因为这里面的值含有小数部分，要占用大量的存储空间。如果对其进行量化，则量化后的整数值既方便存储，又可以让人们直观的读取特征值。表3-1是CEDD特征提取后的量化表，量化范围是0-7的整数。可以看出它并不是一个均匀量化，向量中每一纹理区域的量化范围都是不同的，而且区域内的量化级也不是等比递增，有关它的原理可以参考文献。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131122141301015"/>
+    </p>
+    <p align="center">
+    </p>
+    <p align="center">
+    </p>
+    <p>
+     原文地址：
+    </p>
+    <p>
+     <a href="http://www.cnki.net/KCMS/detail/detail.aspx?QueryID=0&amp;CurRec=1&amp;recid=&amp;filename=1013244249.nh&amp;dbname=CMFDTEMP&amp;dbcode=CMFD&amp;pr=&amp;urlid=&amp;yx=&amp;uid=WEEvREcwSlJHSldSdnQ1ZStuZ0NTSk9iRWltY2FjWXRhVnU3aTllaWxjQnBWWk4yRkIrTDdmd1Bka1BrY3pZPQ==&amp;v=MjQzNTVuVzcvQVZGMjZIYkc4R3RQSXBwRWJQSVI4ZVgxTHV4WVM3RGgxVDNxVHJXTTFGckNVUkxtZVp1UnVGeXI=">
+      http://www.cnki.net/KCMS/detail/detail.aspx?QueryID=0&amp;CurRec=1&amp;recid=&amp;filename=1013244249.nh&amp;dbname=CMFDTEMP&amp;dbcode=CMFD&amp;pr=&amp;urlid=&amp;yx=&amp;uid=WEEvREcwSlJHSldSdnQ1ZStuZ0NTSk9iRWltY2FjWXRhVnU3aTllaWxjQnBWWk4yRkIrTDdmd1Bka1BrY3pZPQ==&amp;v=MjQzNTVuVzcvQVZGMjZIYkc4R3RQSXBwRWJQSVI4ZVgxTHV4WVM3RGgxVDNxVHJXTTFGckNVUkxtZVp1UnVGeXI=
+     </a>
+    </p>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=cedd&amp;t=blog" target="_blank">
+    cedd
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=算法&amp;t=blog" target="_blank">
+    算法
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=纹理&amp;t=blog" target="_blank">
+    纹理
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362935" target="_blank">
+    MPEG7/图像检索
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

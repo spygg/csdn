@@ -1,0 +1,207 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffmpeg处理RTMP流媒体的命令大全 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_458">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   ffmpeg处理RTMP流媒体的命令大全
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月25日 21:23:55
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：54137
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     最近浏览国外网站时候发现，翻译不准确的敬请谅解。
+    </span>
+    <br/>
+    <br/>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     1、将文件当做直播送至live
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -re -i localFile.mp4 -c copy -f flv rtmp://server/live/streamName</pre>
+    <p>
+     <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+      2、将直播媒体保存至本地文件
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     </span>
+    </p>
+    <pre class="plain">ffmpeg -i rtmp://server/live/streamName -c copy dump.flv</pre>
+    <p>
+     3、将其中一个直播流，视频改用h264压缩，音频不变，送至另外一个直播服务流
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     </span>
+    </p>
+    <pre class="plain">ffmpeg -i rtmp://server/live/originalStream -c:a copy -c:v libx264 -vpre slow -f flv rtmp://server/live/h264Stream</pre>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+      4、将其中一个直播流，视频改用h264压缩，音频改用faac压缩，送至另外一个直播服务流
+     </span>
+    </p>
+    <pre class="plain">ffmpeg -i rtmp://server/live/originalStream -c:a libfaac -ar 44100 -ab 48k -c:v libx264 -vpre slow -vpre baseline -f flv rtmp://server/live/h264Stream</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     5、将其中一个直播流，视频不变，音频改用faac压缩，送至另外一个直播服务流
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -i rtmp://server/live/originalStream -acodec libfaac -ar 44100 -ab 48k -vcodec copy -f flv rtmp://server/live/h264_AAC_Stream</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     6、将一个高清流，复制为几个不同视频清晰度的流重新发布，其中音频不变
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -re -i rtmp://server/live/high_FMLE_stream -acodec copy -vcodec x264lib -s 640×360 -b 500k -vpre medium -vpre baseline rtmp://server/live/baseline_500k -acodec copy -vcodec x264lib -s 480×272 -b 300k -vpre medium -vpre baseline rtmp://server/live/baseline_300k -acodec copy -vcodec x264lib -s 320×200 -b 150k -vpre medium -vpre baseline rtmp://server/live/baseline_150k -acodec libfaac -vn -ab 48k rtmp://server/live/audio_only_AAC_48k</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     7、功能一样，只是采用-x264opts选项
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -re -i rtmp://server/live/high_FMLE_stream -c:a copy -c:v x264lib -s 640×360 -x264opts bitrate=500:profile=baseline:preset=slow rtmp://server/live/baseline_500k -c:a copy -c:v x264lib -s 480×272 -x264opts bitrate=300:profile=baseline:preset=slow rtmp://server/live/baseline_300k -c:a copy -c:v x264lib -s 320×200 -x264opts bitrate=150:profile=baseline:preset=slow rtmp://server/live/baseline_150k -c:a libfaac -vn -b:a 48k rtmp://server/live/audio_only_AAC_48k</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     8、将当前
+    </span>
+    <span class="t_tag">
+     摄像头
+    </span>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     及音频通过DSSHOW
+    </span>
+    <span class="t_tag">
+     采集
+    </span>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     ，视频h264、音频faac压缩后发布
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -r 25 -f dshow -s 640×480 -i video=”video source name”:audio=”audio source name” -vcodec libx264 -b 600k -vpre slow -acodec libfaac -ab 128k -f flv rtmp://server/application/stream_name</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     9、将一个JPG
+    </span>
+    <span class="t_tag">
+     图片
+    </span>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     经过h264压缩循环输出为mp4视频
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg.exe -i INPUT.jpg -an -vcodec libx264 -coder 1 -flags +loop -cmp +chroma -subq 10 -qcomp 0.6 -qmin 10 -qmax 51 -qdiff 4 -flags2 +dct8x8 -trellis 2 -partitions +parti8x8+parti4x4 -crf 24 -threads 0 -r 25 -g 25 -y OUTPUT.mp4</pre>
+    <span style="font-family:Verdanna, Helvetica, Arial, sans-serif;font-size:14px;color:#444444;line-height:22.39px;background-color:rgb(255,253,251);">
+     10、将普通流视频改用h264压缩，音频不变，送至高清流服务(新版本FMS live=1)
+    </span>
+    <br/>
+    <pre class="plain">ffmpeg -i rtmp://server/live/originalStream -c:a copy -c:v libx264 -vpre slow -f flv “rtmp://server/live/h264Stream live=1″</pre>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RTMP&amp;t=blog" target="_blank">
+    RTMP
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=用法&amp;t=blog" target="_blank">
+    用法
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

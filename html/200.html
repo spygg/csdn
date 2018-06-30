@@ -1,0 +1,247 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ XBMC源代码分析 3：核心部分（core）-综述 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_200">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   XBMC源代码分析 3：核心部分（core）-综述
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年01月02日 13:07:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6656
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     前文分析了XBMC的整体结构以及皮肤部分：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17454977">
+      XBMC源代码分析 1：整体结构以及编译方法
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/17511993">
+      XBMC源代码分析 2：Addons（皮肤Skin）
+     </a>
+     <br/>
+    </p>
+    <p>
+     本文以及以后的文章主要分析XBMC的VC工程中的源代码。XBMC源代码体积庞大，想要完全分析所有代码是比较困难的。在这里我们选择它和音视频编解码有关的部分进行分析。在本文里，我们主要分析其核心部分（core）代码。
+    </p>
+    <p>
+     核心部分（core）源代码结构如图所示：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140102130422828?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     我目前理解的有以下3个，其他的有时间研究后再补上：
+    </p>
+    <blockquote>
+     <p>
+      <span>
+       <span>
+        AudioEngine：音频引擎。其封装了所有不同的媒体类型的混音、采样率转换、格式转换、编码、上混、缩混等。
+       </span>
+      </span>
+     </p>
+     <p>
+      <span>
+       <span>
+        dvdplayer：视频播放器。其中封装了FFMPEG等一些库，是我们分析的重点。
+       </span>
+      </span>
+     </p>
+     <p>
+      <span>
+       <span>
+        paplayer：XBMC自行开发出来的音频播放器。
+       </span>
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     本系列文章将会重点分析dvdplayer这个播放器。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     下面我们先来看看dvdplayer的代码结构：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140102130443468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     先不说一大堆cpp文件。dvdplayer包含以下5个文件夹，我们分析以下3个文件夹中的内容
+    </p>
+    <blockquote>
+     <p>
+      <span>
+       DVDCodecs：封装各种解码器
+      </span>
+     </p>
+     <p>
+      <span>
+       DVDDemuxers：封装各种解复用器
+      </span>
+     </p>
+     <p>
+      <span>
+       DVDHeaders：封装各种Dll的头文件
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <p>
+     DVDCodecs里面包含各种解码器的封装，下图列出了封装视频解码器的文件。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140102130522031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     DVDDemuxers里面包含了各种解复用器（视音频分离器）的封装，如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140102130536250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     DVDHeaders里面包含了封装各种Dll的头文件，如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140102130613531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     详细的分析会在后续文章中完成。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/17512743
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=xbmc&amp;t=blog" target="_blank">
+    xbmc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=媒体中心&amp;t=blog" target="_blank">
+    媒体中心
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=vc&amp;t=blog" target="_blank">
+    vc
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286583" target="_blank">
+    XBMC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

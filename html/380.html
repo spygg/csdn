@@ -1,0 +1,426 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ C语言堆栈入门 —— 堆和栈的区别 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_380">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   C语言堆栈入门 —— 堆和栈的区别
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月15日 00:01:21
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：2429
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     在计算机领域，堆栈是一个不容忽视的概念，我们编写的C语言程序基本上都要用到。但对于很多的初学着来说，堆栈是一个很模糊的概念。堆栈：一种数据结构、一个在程序运行时用于存放的地方，这可能是很多初学者的认识，因为我曾经就是这么想的和汇编语言中的堆栈一词混为一谈。我身边的一些编程的朋友以及在网上看帖遇到的朋友中有好多也说不清堆栈，所以我想有必要给大家分享一下我对堆栈的看法，有说的不对的地方请朋友们不吝赐教，这对于大家学习会有很大帮助。
+    </p>
+    <h3 style="margin:15px auto 2px;padding:3px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:17px;background-color:rgb(135,206,235);">
+     数据结构的栈和堆
+    </h3>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     首先在数据结构上要知道堆栈，尽管我们这么称呼它，但实际上堆栈是两种数据结构：堆和栈。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     堆和栈都是一种数据项按序排列的数据结构。
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     栈就像装数据的桶或箱子
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     我们先从大家比较熟悉的栈说起吧，它是一种具有
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      <span style="margin:0px;padding:0px;">
+       后进先出
+      </span>
+     </span>
+     性质的数据结构，也就是说后存放的先取，先存放的后取。这就如同我们要取出放在箱子里面底下的东西（放入的比较早的物体），我们首先要移开压在它上面的物体（放入的比较晚的物体）。
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     堆像一棵倒过来的树
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     而堆就不同了，堆是一种
+     <span style="margin:0px;padding:0px;">
+      <span style="color:#ff0000;margin:0px;padding:0px;">
+       经过排序的树形数据结构
+      </span>
+     </span>
+     ，每个结点都有一个值。通常我们所说的堆的数据结构，是指二叉堆。堆的特点是根结点的值最小（或最大），且根结点的两个子树也是一个堆。由于堆的这个特性，常用来实现优先队列，
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      堆的存取是随意
+     </span>
+     ，这就如同我们在图书馆的书架上取书，虽然书的摆放是有顺序的，但是我们想取任意一本时不必像栈一样，先取出前面所有的书，书架这种机制不同于箱子，我们可以直接取出我们想要的书。
+    </p>
+    <h3 style="margin:15px auto 2px;padding:3px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:17px;background-color:rgb(135,206,235);">
+     内存分配中的栈和堆
+    </h3>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     然而我要说的重点并不在这，我要说的堆和栈并不是数据结构的堆和栈，之所以要说数据结构的堆和栈是为了和后面我要说的堆区和栈区区别开来，请大家一定要注意。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     下面就说说C语言程序内存分配中的堆和栈，这里有必要把
+     <span style="color:#0000ff;margin:0px;padding:0px;">
+      内存分配
+     </span>
+     也提一下，大家不要嫌我啰嗦，一般情况下程序存放在Rom或Flash中，运行时需要拷到内存中执行，内存会分别存储不同的信息。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     内存中的栈区处于相对较高的地址以地址的增长方向为上的话，栈地址是向下增长的。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     栈中分配局部变量空间，堆区是向上增长的用于分配程序员申请的内存空间。另外还有静态区是分配静态变量，全局变量空间的；只读区是分配常量和程序代码空间的；以及其他一些分区。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     来看一个网上很流行的经典例子：
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     main.cpp
+     <br style="margin:0px;padding:0px;"/>
+     int a = 0; 全局初始化区
+     <br style="margin:0px;padding:0px;"/>
+     char *p1; 全局未初始化区
+     <br style="margin:0px;padding:0px;"/>
+     main()
+     <br style="margin:0px;padding:0px;"/>
+     {
+     <br style="margin:0px;padding:0px;"/>
+     int b; 栈
+     <br style="margin:0px;padding:0px;"/>
+     char s[] = "abc"; 栈
+     <br style="margin:0px;padding:0px;"/>
+     char *p2; 栈
+     <br style="margin:0px;padding:0px;"/>
+     char *p3 = "123456"; 123456\0在常量区，p3在栈上。
+     <br style="margin:0px;padding:0px;"/>
+     static int c =0； 全局（静态）初始化区
+     <br style="margin:0px;padding:0px;"/>
+     p1 = (char *)malloc(10);  堆
+     <br style="margin:0px;padding:0px;"/>
+     p2 = (char *)malloc(20);  堆
+     <br style="margin:0px;padding:0px;"/>
+     }
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     0.申请方式和回收方式不同
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     不知道你是否有点明白了，堆和栈的第一个区别就是申请方式不同：栈（英文名称是stack）是系统自动分配空间的，例如我们定义一个 char a；
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      系统会自动在栈上为其开辟空间
+     </span>
+     。而堆（英文名称是heap）则是
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      程序员根据需要自己申请的空间
+     </span>
+     ，例如malloc（10）；开辟十个字节的空间。由于
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      栈上的空间是自动分配自动回收的
+     </span>
+     ，所以栈上的数据的生存周期只是在函数的运行过程中，运行后就释放掉，不可以再访问。而
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      堆上的数据只要程序员不释放空间，就一直可以访问到
+     </span>
+     ，不过缺点是一旦忘记释放会造成内存泄露。还有其他的一些区别我认为网上的朋友总结的不错这里转述一下：
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     <span style="margin:0px;padding:0px;">
+      1.申请后系统的响应
+     </span>
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+     </span>
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      栈
+     </span>
+     ：只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      堆
+     </span>
+     ：首先应该知道
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      操作系统有一个记录空闲内存地址的链表
+     </span>
+     ，当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序，另外，对于大多数系统，会在这块内存空间中的
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      首地址处记录本次分配的大小
+     </span>
+     ，这样，代码中的 delete语句才能正确的释放本内存空间。另外，由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      将多余的那部分重新放入空闲链表中
+     </span>
+     。
+     <br style="margin:0px;padding:0px;"/>
+     也就是说
+     <span style="margin:0px;padding:0px;">
+      堆会在申请后还要做一些后续的工作这就会引出申请效率的问题。
+     </span>
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+     </span>
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     <span style="margin:0px;padding:0px;">
+      2.申请效率的比较
+     </span>
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     根据第0点和第1点可知。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+     </span>
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      栈
+     </span>
+     ：由系统自动分配，速度较快。但程序员是无法控制的。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      堆
+     </span>
+     ：是由new分配的内存，一般速度比较慢，而且容易产生内存碎片,不过用起来最方便。
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     <span style="margin:0px;padding:0px;">
+      3.申请大小的限制
+     </span>
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      栈
+     </span>
+     ：在Windows下,栈是向低地址扩展的数据结构，是一块
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      连续的内存的区域
+     </span>
+     。这句话的意思是
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      栈顶的地址和栈的最大容量是系统预先规定好的
+     </span>
+     ，在 WINDOWS下，栈的大小是2M（也有的说是1M，总之是一个编译时就确定的常数），如果申请的空间超过栈的剩余空间时，将提示overflow。因此，能从栈获得的空间较小。
+     <br style="margin:0px;padding:0px;"/>
+     <span style="margin:0px;padding:0px;">
+      堆
+     </span>
+     ：堆是向高地址扩展的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     <span style="margin:0px;padding:0px;">
+      4.堆和栈中的存储内容
+     </span>
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      由于栈的大小有限，所以用子函数还是有物理意义的，而不仅仅是逻辑意义。
+     </span>
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     <span style="margin:0px;padding:0px;">
+      栈
+     </span>
+     ： 在函数调用时，第一个进栈的是
+     <span style="margin:0px;padding:0px;">
+      主函数中函数调用后的下一条指令
+     </span>
+     （函数调用语句的下一条可执行语句）的地址，然后是函数的各个参数，在大多数的C编译器中，参数是由右往左入栈的，然后是
+     <span style="margin:0px;padding:0px;">
+      函数中的局部变量
+     </span>
+     。注意静态变量是不入栈的。
+     <br style="margin:0px;padding:0px;"/>
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      当本次函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向最开始存的地址，也就是主函数中的下一条指令，程序由该点继续运行。
+      <br style="margin:0px;padding:0px;"/>
+     </span>
+     <span style="margin:0px;padding:0px;">
+      堆
+     </span>
+     ：一般是在堆的头部用一个字节存放堆的大小。堆中的具体内容有程序员安排。
+    </p>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     关于存储内容还可以参考
+     <a href="http://student.csdn.net/space.php?do=question&amp;ac=detail&amp;qid=588" style="margin:0px;padding:0px;color:#000000;">
+      这道题
+     </a>
+     。这道题还涉及到局部变量的存活期。
+    </p>
+    <h4 style="margin:15px auto 2px;padding:0px;color:rgb(51,51,51);font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:15px;">
+     <span style="margin:0px;padding:0px;">
+      5.存取效率的比较
+     </span>
+    </h4>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     char s1[] = "aaaaaaaaaaaaaaa";
+     <br style="margin:0px;padding:0px;"/>
+     char *s2 = "bbbbbbbbbbbbbbbbb";
+     <br style="margin:0px;padding:0px;"/>
+     <span style="color:#ff0000;margin:0px;padding:0px;">
+      aaaaaaaaaaa是在运行时刻赋值的；放在栈中。
+      <br style="margin:0px;padding:0px;"/>
+      而bbbbbbbbbbb是在编译时就确定的；放在堆中。
+     </span>
+     <br style="margin:0px;padding:0px;"/>
+     但是，在以后的存取中，在栈上的数组比指针所指向的字符串(例如堆)快。
+     <br style="margin:0px;padding:0px;"/>
+     比如：
+     <br style="margin:0px;padding:0px;"/>
+     #include
+     <br style="margin:0px;padding:0px;"/>
+     void main()
+     <br style="margin:0px;padding:0px;"/>
+     {
+     <br style="margin:0px;padding:0px;"/>
+     char a = 1;
+     <br style="margin:0px;padding:0px;"/>
+     char c[] = "1234567890";
+     <br style="margin:0px;padding:0px;"/>
+     char *p ="1234567890";
+     <br style="margin:0px;padding:0px;"/>
+     a = c[1];
+     <br style="margin:0px;padding:0px;"/>
+     a = p[1];
+     <br style="margin:0px;padding:0px;"/>
+     return;
+     <br style="margin:0px;padding:0px;"/>
+     }
+     <br style="margin:0px;padding:0px;"/>
+     对应的汇编代码
+     <br style="margin:0px;padding:0px;"/>
+     10: a = c[1];
+     <br style="margin:0px;padding:0px;"/>
+     00401067 8A 4D F1 mov cl,byte ptr [ebp-0Fh]
+     <br style="margin:0px;padding:0px;"/>
+     0040106A 88 4D FC mov byte ptr [ebp-4],cl
+     <br style="margin:0px;padding:0px;"/>
+     11: a = p[1];
+     <br style="margin:0px;padding:0px;"/>
+     0040106D 8B 55 EC mov edx,dword ptr [ebp-14h]
+     <br style="margin:0px;padding:0px;"/>
+     00401070 8A 42 01 mov al,byte ptr [edx+1]
+     <br style="margin:0px;padding:0px;"/>
+     00401073 88 45 FC mov byte ptr [ebp-4],al
+    </p>
+    <h3 style="margin:15px auto 2px;padding:3px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:17px;background-color:rgb(135,206,235);">
+     关于堆和栈区别的比喻
+    </h3>
+    <p style="margin:10px auto;line-height:22px;padding-top:0px;padding-bottom:0px;font-family:verdana, 'ms song', '宋体', Arial, '微软雅黑', Helvetica, sans-serif;font-size:14px;">
+     堆和栈的区别可以引用一位前辈的比喻来看出：
+     <br style="margin:0px;padding:0px;"/>
+     使用栈就象我们去饭馆里吃饭，只管点菜（发出申请）、付钱、和吃（使用），吃饱了就走，不必理会切菜、洗菜等准备工作和洗碗、刷锅等扫尾工作，他的好处是快捷，但是自由度小。
+     <br style="margin:0px;padding:0px;"/>
+     使用堆就象是自己动手做喜欢吃的菜肴，比较麻烦，但是比较符合自己的口味，而且自由度大。比喻很形象，说的很通俗易懂，不知道你是否有点收获。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=栈&amp;t=blog" target="_blank">
+    栈
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=堆&amp;t=blog" target="_blank">
+    堆
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=区别&amp;t=blog" target="_blank">
+    区别
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=c&amp;t=blog" target="_blank">
+    c
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

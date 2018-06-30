@@ -1,0 +1,3795 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：libswscale的sws_getContext() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_77">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：libswscale的sws_getContext()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月17日 12:16:43
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：23209
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码结构图 -
+      </span>
+      <span style="color:blue;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码结构图 -
+      </span>
+      <span style="color:blue;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:blue;">
+       av_malloc()
+      </span>
+      <span style="color:blue;">
+       、
+      </span>
+      <span style="color:blue;">
+       av_free()
+      </span>
+      <span style="color:blue;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:blue;">
+       AVFormatContext
+      </span>
+      <span style="color:blue;">
+       ，
+      </span>
+      <span style="color:blue;">
+       AVFrame
+      </span>
+      <span style="color:blue;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       av_find_decoder()
+      </span>
+      <span style="color:blue;">
+       和
+      </span>
+      <span style="color:blue;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       图解
+      </span>
+      <span style="color:blue;">
+       FFMPEG
+      </span>
+      <span style="color:blue;">
+       打开媒体的函数
+      </span>
+      <span style="color:blue;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:blue;">
+       av_log()
+      </span>
+      <span style="color:blue;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:blue;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:blue;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       libswscale
+      </span>
+      <span style="color:blue;">
+       的
+      </span>
+      <span style="color:blue;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       libswscale
+      </span>
+      <span style="color:blue;">
+       的
+      </span>
+      <span style="color:blue;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       libavdevice
+      </span>
+      <span style="color:blue;">
+       的
+      </span>
+      <span style="color:blue;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       libavdevice
+      </span>
+      <span style="color:blue;">
+       的
+      </span>
+      <span style="color:blue;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       源代码简单分析：
+      </span>
+      <span style="color:blue;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509" rel="nofollow" target="_blank">
+      <span style="color:blue;">
+       FFmpeg
+      </span>
+      <span style="color:blue;">
+       的
+      </span>
+      <span style="color:blue;">
+       H.264
+      </span>
+      <span style="color:blue;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     打算写两篇文章记录FFmpeg中的图像处理（缩放，YUV/RGB格式转换）类库libswsscale的源代码。libswscale是一个主要用于处理图片像素数据的类库。可以完成图片像素格式的转换，图片的拉伸等工作。有关libswscale的使用可以参考文章：
+    </p>
+    <p>
+     《
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42134965" rel="nofollow" target="_blank">
+      最简单的基于FFmpeg的libswscale的示例（YUV转RGB）
+     </a>
+     》
+    </p>
+    <p>
+     libswscale常用的函数数量很少，一般情况下就3个：
+    </p>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     <p>
+      sws_getContext()：初始化一个SwsContext。
+     </p>
+     <p>
+      sws_scale()：处理图像数据。
+     </p>
+     sws_freeContext()：释放一个SwsContext。
+    </blockquote>
+    <p>
+     其中sws_getContext()也可以用sws_getCachedContext()取代。
+    </p>
+    <p>
+     尽管libswscale从表面上看常用函数的个数不多，它的内部却有一个大大的“世界”。做为一个几乎“万能”的图片像素数据处理类库，它的内部包含了大量的代码。因此计划写两篇文章分析它的源代码。本文首先分析它的初始化函数sws_getContext()，而下一篇文章则分析它的数据处理函数sws_scale()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用结构图
+    </h2>
+    <p>
+     分析得到的libswscale的函数调用关系如下图所示。
+    </p>
+    <p style="text-align: center;">
+     <img alt="" src="https://img-blog.csdn.net/20150317145505134"/>
+     <br/>
+    </p>
+    <p style="text-align: left;">
+     <br/>
+    </p>
+    <h2>
+     Libswscale处理数据流程
+    </h2>
+    <p>
+     Libswscale处理像素数据的流程可以概括为下图。
+    </p>
+    <p style="text-align: center;">
+     <img alt="" src="https://img-blog.csdn.net/20150316142106418"/>
+     <br/>
+    </p>
+    <p>
+     从图中可以看出，libswscale处理数据有两条最主要的方式：unscaled和scaled。unscaled用于处理不需要拉伸的像素数据（属于比较特殊的情况），scaled用于处理需要拉伸的像素数据。Unscaled只需要对图像像素格式进行转换；而Scaled则除了对像素格式进行转换之外，还需要对图像进行缩放。Scaled方式可以分成以下几个步骤：
+    </p>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+    </blockquote>
+    <ul>
+     <li>
+      XXX to YUV Converter：首相将数据像素数据转换为8bitYUV格式；
+     </li>
+     <li>
+      Horizontal scaler：水平拉伸图像，并且转换为15bitYUV；
+     </li>
+     <li>
+      Vertical scaler：垂直拉伸图像；
+     </li>
+     <li>
+      Output converter：转换为输出像素格式。
+     </li>
+    </ul>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+    </blockquote>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+    </blockquote>
+    <br/>
+    <h2>
+     SwsContext
+    </h2>
+    SwsContext是使用libswscale时候一个贯穿始终的结构体。但是我们在使用FFmpeg的类库进行开发的时候，是无法看到它的内部结构的。在libswscale\swscale.h中只能看到一行定义：
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_1_5455076">struct SwsContext;</pre>
+    一般人看到这个只有一行定义的结构体，会猜测它的内部一定十分简单。但是假使我们看一下FFmpeg的源代码，会发现这个猜测是完全错误的——SwsContext的定义是十分复杂的。它的定义位于libswscale\swscale_internal.h中，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_2_848342">/* This struct should be aligned on at least a 32-byte boundary. */
+typedef struct SwsContext {
+    /**
+     * info on struct for av_log
+     */
+    const AVClass *av_class;
+
+    /**
+     * Note that src, dst, srcStride, dstStride will be copied in the
+     * sws_scale() wrapper so they can be freely modified here.
+     */
+    SwsFunc swscale;
+    int srcW;                     ///&lt; Width  of source      luma/alpha planes.
+    int srcH;                     ///&lt; Height of source      luma/alpha planes.
+    int dstH;                     ///&lt; Height of destination luma/alpha planes.
+    int chrSrcW;                  ///&lt; Width  of source      chroma     planes.
+    int chrSrcH;                  ///&lt; Height of source      chroma     planes.
+    int chrDstW;                  ///&lt; Width  of destination chroma     planes.
+    int chrDstH;                  ///&lt; Height of destination chroma     planes.
+    int lumXInc, chrXInc;
+    int lumYInc, chrYInc;
+    enum AVPixelFormat dstFormat; ///&lt; Destination pixel format.
+    enum AVPixelFormat srcFormat; ///&lt; Source      pixel format.
+    int dstFormatBpp;             ///&lt; Number of bits per pixel of the destination pixel format.
+    int srcFormatBpp;             ///&lt; Number of bits per pixel of the source      pixel format.
+    int dstBpc, srcBpc;
+    int chrSrcHSubSample;         ///&lt; Binary logarithm of horizontal subsampling factor between luma/alpha and chroma planes in source      image.
+    int chrSrcVSubSample;         ///&lt; Binary logarithm of vertical   subsampling factor between luma/alpha and chroma planes in source      image.
+    int chrDstHSubSample;         ///&lt; Binary logarithm of horizontal subsampling factor between luma/alpha and chroma planes in destination image.
+    int chrDstVSubSample;         ///&lt; Binary logarithm of vertical   subsampling factor between luma/alpha and chroma planes in destination image.
+    int vChrDrop;                 ///&lt; Binary logarithm of extra vertical subsampling factor in source image chroma planes specified by user.
+    int sliceDir;                 ///&lt; Direction that slices are fed to the scaler (1 = top-to-bottom, -1 = bottom-to-top).
+    double param[2];              ///&lt; Input parameters for scaling algorithms that need them.
+
+    /* The cascaded_* fields allow spliting a scaler task into multiple
+     * sequential steps, this is for example used to limit the maximum
+     * downscaling factor that needs to be supported in one scaler.
+     */
+    struct SwsContext *cascaded_context[2];
+    int cascaded_tmpStride[4];
+    uint8_t *cascaded_tmp[4];
+
+    uint32_t pal_yuv[256];
+    uint32_t pal_rgb[256];
+
+    /**
+     * @name Scaled horizontal lines ring buffer.
+     * The horizontal scaler keeps just enough scaled lines in a ring buffer
+     * so they may be passed to the vertical scaler. The pointers to the
+     * allocated buffers for each line are duplicated in sequence in the ring
+     * buffer to simplify indexing and avoid wrapping around between lines
+     * inside the vertical scaler code. The wrapping is done before the
+     * vertical scaler is called.
+     */
+    //@{
+    int16_t **lumPixBuf;          ///&lt; Ring buffer for scaled horizontal luma   plane lines to be fed to the vertical scaler.
+    int16_t **chrUPixBuf;         ///&lt; Ring buffer for scaled horizontal chroma plane lines to be fed to the vertical scaler.
+    int16_t **chrVPixBuf;         ///&lt; Ring buffer for scaled horizontal chroma plane lines to be fed to the vertical scaler.
+    int16_t **alpPixBuf;          ///&lt; Ring buffer for scaled horizontal alpha  plane lines to be fed to the vertical scaler.
+    int vLumBufSize;              ///&lt; Number of vertical luma/alpha lines allocated in the ring buffer.
+    int vChrBufSize;              ///&lt; Number of vertical chroma     lines allocated in the ring buffer.
+    int lastInLumBuf;             ///&lt; Last scaled horizontal luma/alpha line from source in the ring buffer.
+    int lastInChrBuf;             ///&lt; Last scaled horizontal chroma     line from source in the ring buffer.
+    int lumBufIndex;              ///&lt; Index in ring buffer of the last scaled horizontal luma/alpha line from source.
+    int chrBufIndex;              ///&lt; Index in ring buffer of the last scaled horizontal chroma     line from source.
+    //@}
+
+    uint8_t *formatConvBuffer;
+
+    /**
+     * @name Horizontal and vertical filters.
+     * To better understand the following fields, here is a pseudo-code of
+     * their usage in filtering a horizontal line:
+     * @code
+     * for (i = 0; i &lt; width; i++) {
+     *     dst[i] = 0;
+     *     for (j = 0; j &lt; filterSize; j++)
+     *         dst[i] += src[ filterPos[i] + j ] * filter[ filterSize * i + j ];
+     *     dst[i] &gt;&gt;= FRAC_BITS; // The actual implementation is fixed-point.
+     * }
+     * @endcode
+     */
+    //@{
+    int16_t *hLumFilter;          ///&lt; Array of horizontal filter coefficients for luma/alpha planes.
+    int16_t *hChrFilter;          ///&lt; Array of horizontal filter coefficients for chroma     planes.
+    int16_t *vLumFilter;          ///&lt; Array of vertical   filter coefficients for luma/alpha planes.
+    int16_t *vChrFilter;          ///&lt; Array of vertical   filter coefficients for chroma     planes.
+    int32_t *hLumFilterPos;       ///&lt; Array of horizontal filter starting positions for each dst[i] for luma/alpha planes.
+    int32_t *hChrFilterPos;       ///&lt; Array of horizontal filter starting positions for each dst[i] for chroma     planes.
+    int32_t *vLumFilterPos;       ///&lt; Array of vertical   filter starting positions for each dst[i] for luma/alpha planes.
+    int32_t *vChrFilterPos;       ///&lt; Array of vertical   filter starting positions for each dst[i] for chroma     planes.
+    int hLumFilterSize;           ///&lt; Horizontal filter size for luma/alpha pixels.
+    int hChrFilterSize;           ///&lt; Horizontal filter size for chroma     pixels.
+    int vLumFilterSize;           ///&lt; Vertical   filter size for luma/alpha pixels.
+    int vChrFilterSize;           ///&lt; Vertical   filter size for chroma     pixels.
+    //@}
+
+    int lumMmxextFilterCodeSize;  ///&lt; Runtime-generated MMXEXT horizontal fast bilinear scaler code size for luma/alpha planes.
+    int chrMmxextFilterCodeSize;  ///&lt; Runtime-generated MMXEXT horizontal fast bilinear scaler code size for chroma planes.
+    uint8_t *lumMmxextFilterCode; ///&lt; Runtime-generated MMXEXT horizontal fast bilinear scaler code for luma/alpha planes.
+    uint8_t *chrMmxextFilterCode; ///&lt; Runtime-generated MMXEXT horizontal fast bilinear scaler code for chroma planes.
+
+    int canMMXEXTBeUsed;
+
+    int dstY;                     ///&lt; Last destination vertical line output from last slice.
+    int flags;                    ///&lt; Flags passed by the user to select scaler algorithm, optimizations, subsampling, etc...
+    void *yuvTable;             // pointer to the yuv-&gt;rgb table start so it can be freed()
+    // alignment ensures the offset can be added in a single
+    // instruction on e.g. ARM
+    DECLARE_ALIGNED(16, int, table_gV)[256 + 2*YUVRGB_TABLE_HEADROOM];
+    uint8_t *table_rV[256 + 2*YUVRGB_TABLE_HEADROOM];
+    uint8_t *table_gU[256 + 2*YUVRGB_TABLE_HEADROOM];
+    uint8_t *table_bU[256 + 2*YUVRGB_TABLE_HEADROOM];
+    DECLARE_ALIGNED(16, int32_t, input_rgb2yuv_table)[16+40*4]; // This table can contain both C and SIMD formatted values, the C vales are always at the XY_IDX points
+#define RY_IDX 0
+#define GY_IDX 1
+#define BY_IDX 2
+#define RU_IDX 3
+#define GU_IDX 4
+#define BU_IDX 5
+#define RV_IDX 6
+#define GV_IDX 7
+#define BV_IDX 8
+#define RGB2YUV_SHIFT 15
+
+    int *dither_error[4];
+
+    //Colorspace stuff
+    int contrast, brightness, saturation;    // for sws_getColorspaceDetails
+    int srcColorspaceTable[4];
+    int dstColorspaceTable[4];
+    int srcRange;                 ///&lt; 0 = MPG YUV range, 1 = JPG YUV range (source      image).
+    int dstRange;                 ///&lt; 0 = MPG YUV range, 1 = JPG YUV range (destination image).
+    int src0Alpha;
+    int dst0Alpha;
+    int srcXYZ;
+    int dstXYZ;
+    int src_h_chr_pos;
+    int dst_h_chr_pos;
+    int src_v_chr_pos;
+    int dst_v_chr_pos;
+    int yuv2rgb_y_offset;
+    int yuv2rgb_y_coeff;
+    int yuv2rgb_v2r_coeff;
+    int yuv2rgb_v2g_coeff;
+    int yuv2rgb_u2g_coeff;
+    int yuv2rgb_u2b_coeff;
+
+#define RED_DITHER            "0*8"
+#define GREEN_DITHER          "1*8"
+#define BLUE_DITHER           "2*8"
+#define Y_COEFF               "3*8"
+#define VR_COEFF              "4*8"
+#define UB_COEFF              "5*8"
+#define VG_COEFF              "6*8"
+#define UG_COEFF              "7*8"
+#define Y_OFFSET              "8*8"
+#define U_OFFSET              "9*8"
+#define V_OFFSET              "10*8"
+#define LUM_MMX_FILTER_OFFSET "11*8"
+#define CHR_MMX_FILTER_OFFSET "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)
+#define DSTW_OFFSET           "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2"
+#define ESP_OFFSET            "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+8"
+#define VROUNDER_OFFSET       "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+16"
+#define U_TEMP                "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+24"
+#define V_TEMP                "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+32"
+#define Y_TEMP                "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+40"
+#define ALP_MMX_FILTER_OFFSET "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*2+48"
+#define UV_OFF_PX             "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*3+48"
+#define UV_OFF_BYTE           "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*3+56"
+#define DITHER16              "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*3+64"
+#define DITHER32              "11*8+4*4*"AV_STRINGIFY(MAX_FILTER_SIZE)"*3+80"
+#define DITHER32_INT          (11*8+4*4*MAX_FILTER_SIZE*3+80) // value equal to above, used for checking that the struct hasn't been changed by mistake
+
+    DECLARE_ALIGNED(8, uint64_t, redDither);
+    DECLARE_ALIGNED(8, uint64_t, greenDither);
+    DECLARE_ALIGNED(8, uint64_t, blueDither);
+
+    DECLARE_ALIGNED(8, uint64_t, yCoeff);
+    DECLARE_ALIGNED(8, uint64_t, vrCoeff);
+    DECLARE_ALIGNED(8, uint64_t, ubCoeff);
+    DECLARE_ALIGNED(8, uint64_t, vgCoeff);
+    DECLARE_ALIGNED(8, uint64_t, ugCoeff);
+    DECLARE_ALIGNED(8, uint64_t, yOffset);
+    DECLARE_ALIGNED(8, uint64_t, uOffset);
+    DECLARE_ALIGNED(8, uint64_t, vOffset);
+    int32_t lumMmxFilter[4 * MAX_FILTER_SIZE];
+    int32_t chrMmxFilter[4 * MAX_FILTER_SIZE];
+    int dstW;                     ///&lt; Width  of destination luma/alpha planes.
+    DECLARE_ALIGNED(8, uint64_t, esp);
+    DECLARE_ALIGNED(8, uint64_t, vRounder);
+    DECLARE_ALIGNED(8, uint64_t, u_temp);
+    DECLARE_ALIGNED(8, uint64_t, v_temp);
+    DECLARE_ALIGNED(8, uint64_t, y_temp);
+    int32_t alpMmxFilter[4 * MAX_FILTER_SIZE];
+    // alignment of these values is not necessary, but merely here
+    // to maintain the same offset across x8632 and x86-64. Once we
+    // use proper offset macros in the asm, they can be removed.
+    DECLARE_ALIGNED(8, ptrdiff_t, uv_off); ///&lt; offset (in pixels) between u and v planes
+    DECLARE_ALIGNED(8, ptrdiff_t, uv_offx2); ///&lt; offset (in bytes) between u and v planes
+    DECLARE_ALIGNED(8, uint16_t, dither16)[8];
+    DECLARE_ALIGNED(8, uint32_t, dither32)[8];
+
+    const uint8_t *chrDither8, *lumDither8;
+
+#if HAVE_ALTIVEC
+    vector signed short   CY;
+    vector signed short   CRV;
+    vector signed short   CBU;
+    vector signed short   CGU;
+    vector signed short   CGV;
+    vector signed short   OY;
+    vector unsigned short CSHIFT;
+    vector signed short  *vYCoeffsBank, *vCCoeffsBank;
+#endif
+
+    int use_mmx_vfilter;
+
+/* pre defined color-spaces gamma */
+#define XYZ_GAMMA (2.6f)
+#define RGB_GAMMA (2.2f)
+    int16_t *xyzgamma;
+    int16_t *rgbgamma;
+    int16_t *xyzgammainv;
+    int16_t *rgbgammainv;
+    int16_t xyz2rgb_matrix[3][4];
+    int16_t rgb2xyz_matrix[3][4];
+
+    /* function pointers for swscale() */
+    yuv2planar1_fn yuv2plane1;
+    yuv2planarX_fn yuv2planeX;
+    yuv2interleavedX_fn yuv2nv12cX;
+    yuv2packed1_fn yuv2packed1;
+    yuv2packed2_fn yuv2packed2;
+    yuv2packedX_fn yuv2packedX;
+    yuv2anyX_fn yuv2anyX;
+
+    /// Unscaled conversion of luma plane to YV12 for horizontal scaler.
+    void (*lumToYV12)(uint8_t *dst, const uint8_t *src, const uint8_t *src2, const uint8_t *src3,
+                      int width, uint32_t *pal);
+    /// Unscaled conversion of alpha plane to YV12 for horizontal scaler.
+    void (*alpToYV12)(uint8_t *dst, const uint8_t *src, const uint8_t *src2, const uint8_t *src3,
+                      int width, uint32_t *pal);
+    /// Unscaled conversion of chroma planes to YV12 for horizontal scaler.
+    void (*chrToYV12)(uint8_t *dstU, uint8_t *dstV,
+                      const uint8_t *src1, const uint8_t *src2, const uint8_t *src3,
+                      int width, uint32_t *pal);
+
+    /**
+     * Functions to read planar input, such as planar RGB, and convert
+     * internally to Y/UV/A.
+     */
+    /** @{ */
+    void (*readLumPlanar)(uint8_t *dst, const uint8_t *src[4], int width, int32_t *rgb2yuv);
+    void (*readChrPlanar)(uint8_t *dstU, uint8_t *dstV, const uint8_t *src[4],
+                          int width, int32_t *rgb2yuv);
+    void (*readAlpPlanar)(uint8_t *dst, const uint8_t *src[4], int width, int32_t *rgb2yuv);
+    /** @} */
+
+    /**
+     * Scale one horizontal line of input data using a bilinear filter
+     * to produce one line of output data. Compared to SwsContext-&gt;hScale(),
+     * please take note of the following caveats when using these:
+     * - Scaling is done using only 7bit instead of 14bit coefficients.
+     * - You can use no more than 5 input pixels to produce 4 output
+     *   pixels. Therefore, this filter should not be used for downscaling
+     *   by more than ~20% in width (because that equals more than 5/4th
+     *   downscaling and thus more than 5 pixels input per 4 pixels output).
+     * - In general, bilinear filters create artifacts during downscaling
+     *   (even when &lt;20%), because one output pixel will span more than one
+     *   input pixel, and thus some pixels will need edges of both neighbor
+     *   pixels to interpolate the output pixel. Since you can use at most
+     *   two input pixels per output pixel in bilinear scaling, this is
+     *   impossible and thus downscaling by any size will create artifacts.
+     * To enable this type of scaling, set SWS_FLAG_FAST_BILINEAR
+     * in SwsContext-&gt;flags.
+     */
+    /** @{ */
+    void (*hyscale_fast)(struct SwsContext *c,
+                         int16_t *dst, int dstWidth,
+                         const uint8_t *src, int srcW, int xInc);
+    void (*hcscale_fast)(struct SwsContext *c,
+                         int16_t *dst1, int16_t *dst2, int dstWidth,
+                         const uint8_t *src1, const uint8_t *src2,
+                         int srcW, int xInc);
+    /** @} */
+
+    /**
+     * Scale one horizontal line of input data using a filter over the input
+     * lines, to produce one (differently sized) line of output data.
+     *
+     * @param dst        pointer to destination buffer for horizontally scaled
+     *                   data. If the number of bits per component of one
+     *                   destination pixel (SwsContext-&gt;dstBpc) is &lt;= 10, data
+     *                   will be 15bpc in 16bits (int16_t) width. Else (i.e.
+     *                   SwsContext-&gt;dstBpc == 16), data will be 19bpc in
+     *                   32bits (int32_t) width.
+     * @param dstW       width of destination image
+     * @param src        pointer to source data to be scaled. If the number of
+     *                   bits per component of a source pixel (SwsContext-&gt;srcBpc)
+     *                   is 8, this is 8bpc in 8bits (uint8_t) width. Else
+     *                   (i.e. SwsContext-&gt;dstBpc &gt; 8), this is native depth
+     *                   in 16bits (uint16_t) width. In other words, for 9-bit
+     *                   YUV input, this is 9bpc, for 10-bit YUV input, this is
+     *                   10bpc, and for 16-bit RGB or YUV, this is 16bpc.
+     * @param filter     filter coefficients to be used per output pixel for
+     *                   scaling. This contains 14bpp filtering coefficients.
+     *                   Guaranteed to contain dstW * filterSize entries.
+     * @param filterPos  position of the first input pixel to be used for
+     *                   each output pixel during scaling. Guaranteed to
+     *                   contain dstW entries.
+     * @param filterSize the number of input coefficients to be used (and
+     *                   thus the number of input pixels to be used) for
+     *                   creating a single output pixel. Is aligned to 4
+     *                   (and input coefficients thus padded with zeroes)
+     *                   to simplify creating SIMD code.
+     */
+    /** @{ */
+    void (*hyScale)(struct SwsContext *c, int16_t *dst, int dstW,
+                    const uint8_t *src, const int16_t *filter,
+                    const int32_t *filterPos, int filterSize);
+    void (*hcScale)(struct SwsContext *c, int16_t *dst, int dstW,
+                    const uint8_t *src, const int16_t *filter,
+                    const int32_t *filterPos, int filterSize);
+    /** @} */
+
+    /// Color range conversion function for luma plane if needed.
+    void (*lumConvertRange)(int16_t *dst, int width);
+    /// Color range conversion function for chroma planes if needed.
+    void (*chrConvertRange)(int16_t *dst1, int16_t *dst2, int width);
+
+    int needs_hcscale; ///&lt; Set if there are chroma planes to be converted.
+
+    SwsDither dither;
+} SwsContext;
+</pre>
+    <br/>
+    这个结构体的定义确实比较复杂，里面包含了libswscale所需要的全部变量。一一分析这些变量是不太现实的，在后文中会简单分析其中的几个变量。
+    <br/>
+    <br/>
+    <h2>
+     sws_getContext()
+    </h2>
+    sws_getContext()是初始化SwsContext的函数。sws_getContext()的声明位于libswscale\swscale.h，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_3_1041533">/**
+ * Allocate and return an SwsContext. You need it to perform
+ * scaling/conversion operations using sws_scale().
+ *
+ * @param srcW the width of the source image
+ * @param srcH the height of the source image
+ * @param srcFormat the source image format
+ * @param dstW the width of the destination image
+ * @param dstH the height of the destination image
+ * @param dstFormat the destination image format
+ * @param flags specify which algorithm and options to use for rescaling
+ * @return a pointer to an allocated context, or NULL in case of error
+ * @note this function is to be removed after a saner alternative is
+ *       written
+ */
+struct SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcFormat,
+                                  int dstW, int dstH, enum AVPixelFormat dstFormat,
+                                  int flags, SwsFilter *srcFilter,
+                                  SwsFilter *dstFilter, const double *param);</pre>
+    <br/>
+    该函数包含以下参数：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     srcW：源图像的宽
+     <br/>
+     srcH：源图像的高
+     <br/>
+     srcFormat：源图像的像素格式
+     <br/>
+     dstW：目标图像的宽
+     <br/>
+     dstH：目标图像的高
+     <br/>
+     dstFormat：目标图像的像素格式
+     <br/>
+     flags：设定图像拉伸使用的算法
+    </blockquote>
+    成功执行的话返回生成的SwsContext，否则返回NULL。
+    <br/>
+    sws_getContext()的定义位于libswscale\utils.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_4_5138418">SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcFormat,
+                           int dstW, int dstH, enum AVPixelFormat dstFormat,
+                           int flags, SwsFilter *srcFilter,
+                           SwsFilter *dstFilter, const double *param)
+{
+    SwsContext *c;
+
+    if (!(c = sws_alloc_context()))
+        return NULL;
+
+    c-&gt;flags     = flags;
+    c-&gt;srcW      = srcW;
+    c-&gt;srcH      = srcH;
+    c-&gt;dstW      = dstW;
+    c-&gt;dstH      = dstH;
+    c-&gt;srcFormat = srcFormat;
+    c-&gt;dstFormat = dstFormat;
+
+    if (param) {
+        c-&gt;param[0] = param[0];
+        c-&gt;param[1] = param[1];
+    }
+
+    if (sws_init_context(c, srcFilter, dstFilter) &lt; 0) {
+        sws_freeContext(c);
+        return NULL;
+    }
+
+    return c;
+}
+</pre>
+    <br/>
+    <p>
+     从sws_getContext()的定义中可以看出，它首先调用了一个函数sws_alloc_context()用于给SwsContext分配内存。然后将传入的源图像，目标图像的宽高，像素格式，以及标志位分别赋值给该SwsContext相应的字段。最后调用一个函数sws_init_context()完成初始化工作。下面我们分别看一下sws_alloc_context()和sws_init_context()这两个函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     sws_alloc_context()
+    </h2>
+    sws_alloc_context()是FFmpeg的一个API，用于给SwsContext分配内存，它的声明如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_5_3969188">/**
+ * Allocate an empty SwsContext. This must be filled and passed to
+ * sws_init_context(). For filling see AVOptions, options.c and
+ * sws_setColorspaceDetails().
+ */
+struct SwsContext *sws_alloc_context(void);</pre>
+    <br/>
+    sws_alloc_context()的定义位于libswscale\utils.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_6_607349">SwsContext *sws_alloc_context(void)
+{
+    SwsContext *c = av_mallocz(sizeof(SwsContext));
+
+    av_assert0(offsetof(SwsContext, redDither) + DITHER32_INT == offsetof(SwsContext, dither32));
+
+    if (c) {
+        c-&gt;av_class = &amp;sws_context_class;
+        av_opt_set_defaults(c);
+    }
+
+    return c;
+}
+</pre>
+    <br/>
+    从代码中可以看出，sws_alloc_context()首先调用av_mallocz()为SwsContext结构体分配了一块内存；然后设置了该结构体的AVClass，并且给该结构体的字段设置了默认值。
+    <br/>
+    <br/>
+    <h2>
+     sws_init_context()
+    </h2>
+    sws_init_context()的是FFmpeg的一个API，用于初始化SwsContext。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_7_9405098">/**
+ * Initialize the swscaler context sws_context.
+ *
+ * @return zero or positive value on success, a negative value on
+ * error
+ */
+int sws_init_context(struct SwsContext *sws_context, SwsFilter *srcFilter, SwsFilter *dstFilter);</pre>
+    <br/>
+    sws_init_context()的函数定义非常的长，位于libswscale\utils.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_8_6533627">av_cold int sws_init_context(SwsContext *c, SwsFilter *srcFilter,
+                             SwsFilter *dstFilter)
+{
+    int i, j;
+    int usesVFilter, usesHFilter;
+    int unscaled;
+    SwsFilter dummyFilter = { NULL, NULL, NULL, NULL };
+    int srcW              = c-&gt;srcW;
+    int srcH              = c-&gt;srcH;
+    int dstW              = c-&gt;dstW;
+    int dstH              = c-&gt;dstH;
+    int dst_stride        = FFALIGN(dstW * sizeof(int16_t) + 66, 16);
+    int flags, cpu_flags;
+    enum AVPixelFormat srcFormat = c-&gt;srcFormat;
+    enum AVPixelFormat dstFormat = c-&gt;dstFormat;
+    const AVPixFmtDescriptor *desc_src;
+    const AVPixFmtDescriptor *desc_dst;
+    int ret = 0;
+    //获取
+    cpu_flags = av_get_cpu_flags();
+    flags     = c-&gt;flags;
+    emms_c();
+    if (!rgb15to16)
+        sws_rgb2rgb_init();
+    //如果输入的宽高和输出的宽高一样，则做特殊处理
+    unscaled = (srcW == dstW &amp;&amp; srcH == dstH);
+    //如果是JPEG标准（Y取值0-255），则需要设置这两项
+    c-&gt;srcRange |= handle_jpeg(&amp;c-&gt;srcFormat);
+    c-&gt;dstRange |= handle_jpeg(&amp;c-&gt;dstFormat);
+
+    if(srcFormat!=c-&gt;srcFormat || dstFormat!=c-&gt;dstFormat)
+        av_log(c, AV_LOG_WARNING, "deprecated pixel format used, make sure you did set range correctly\n");
+    //设置Colorspace
+    if (!c-&gt;contrast &amp;&amp; !c-&gt;saturation &amp;&amp; !c-&gt;dstFormatBpp)
+        sws_setColorspaceDetails(c, ff_yuv2rgb_coeffs[SWS_CS_DEFAULT], c-&gt;srcRange,
+                                 ff_yuv2rgb_coeffs[SWS_CS_DEFAULT],
+                                 c-&gt;dstRange, 0, 1 &lt;&lt; 16, 1 &lt;&lt; 16);
+
+    handle_formats(c);
+    srcFormat = c-&gt;srcFormat;
+    dstFormat = c-&gt;dstFormat;
+    desc_src = av_pix_fmt_desc_get(srcFormat);
+    desc_dst = av_pix_fmt_desc_get(dstFormat);
+    //转换大小端？
+    if (!(unscaled &amp;&amp; sws_isSupportedEndiannessConversion(srcFormat) &amp;&amp;
+          av_pix_fmt_swap_endianness(srcFormat) == dstFormat)) {
+    //检查输入格式是否支持
+    if (!sws_isSupportedInput(srcFormat)) {
+        av_log(c, AV_LOG_ERROR, "%s is not supported as input pixel format\n",
+               av_get_pix_fmt_name(srcFormat));
+        return AVERROR(EINVAL);
+    }
+    //检查输出格式是否支持
+    if (!sws_isSupportedOutput(dstFormat)) {
+        av_log(c, AV_LOG_ERROR, "%s is not supported as output pixel format\n",
+               av_get_pix_fmt_name(dstFormat));
+        return AVERROR(EINVAL);
+    }
+    }
+    //检查拉伸的方法
+    i = flags &amp; (SWS_POINT         |
+                 SWS_AREA          |
+                 SWS_BILINEAR      |
+                 SWS_FAST_BILINEAR |
+                 SWS_BICUBIC       |
+                 SWS_X             |
+                 SWS_GAUSS         |
+                 SWS_LANCZOS       |
+                 SWS_SINC          |
+                 SWS_SPLINE        |
+                 SWS_BICUBLIN);
+
+    /* provide a default scaler if not set by caller */
+    //如果没有指定，就使用默认的
+    if (!i) {
+        if (dstW &lt; srcW &amp;&amp; dstH &lt; srcH)
+            flags |= SWS_BICUBIC;
+        else if (dstW &gt; srcW &amp;&amp; dstH &gt; srcH)
+            flags |= SWS_BICUBIC;
+        else
+            flags |= SWS_BICUBIC;
+        c-&gt;flags = flags;
+    } else if (i &amp; (i - 1)) {
+        av_log(c, AV_LOG_ERROR,
+               "Exactly one scaler algorithm must be chosen, got %X\n", i);
+        return AVERROR(EINVAL);
+    }
+    /* sanity check */
+    //检查宽高参数
+    if (srcW &lt; 1 || srcH &lt; 1 || dstW &lt; 1 || dstH &lt; 1) {
+        /* FIXME check if these are enough and try to lower them after
+         * fixing the relevant parts of the code */
+        av_log(c, AV_LOG_ERROR, "%dx%d -&gt; %dx%d is invalid scaling dimension\n",
+               srcW, srcH, dstW, dstH);
+        return AVERROR(EINVAL);
+    }
+
+    if (!dstFilter)
+        dstFilter = &amp;dummyFilter;
+    if (!srcFilter)
+        srcFilter = &amp;dummyFilter;
+
+    c-&gt;lumXInc      = (((int64_t)srcW &lt;&lt; 16) + (dstW &gt;&gt; 1)) / dstW;
+    c-&gt;lumYInc      = (((int64_t)srcH &lt;&lt; 16) + (dstH &gt;&gt; 1)) / dstH;
+    c-&gt;dstFormatBpp = av_get_bits_per_pixel(desc_dst);
+    c-&gt;srcFormatBpp = av_get_bits_per_pixel(desc_src);
+    c-&gt;vRounder     = 4 * 0x0001000100010001ULL;
+
+    usesVFilter = (srcFilter-&gt;lumV &amp;&amp; srcFilter-&gt;lumV-&gt;length &gt; 1) ||
+                  (srcFilter-&gt;chrV &amp;&amp; srcFilter-&gt;chrV-&gt;length &gt; 1) ||
+                  (dstFilter-&gt;lumV &amp;&amp; dstFilter-&gt;lumV-&gt;length &gt; 1) ||
+                  (dstFilter-&gt;chrV &amp;&amp; dstFilter-&gt;chrV-&gt;length &gt; 1);
+    usesHFilter = (srcFilter-&gt;lumH &amp;&amp; srcFilter-&gt;lumH-&gt;length &gt; 1) ||
+                  (srcFilter-&gt;chrH &amp;&amp; srcFilter-&gt;chrH-&gt;length &gt; 1) ||
+                  (dstFilter-&gt;lumH &amp;&amp; dstFilter-&gt;lumH-&gt;length &gt; 1) ||
+                  (dstFilter-&gt;chrH &amp;&amp; dstFilter-&gt;chrH-&gt;length &gt; 1);
+
+    av_pix_fmt_get_chroma_sub_sample(srcFormat, &amp;c-&gt;chrSrcHSubSample, &amp;c-&gt;chrSrcVSubSample);
+    av_pix_fmt_get_chroma_sub_sample(dstFormat, &amp;c-&gt;chrDstHSubSample, &amp;c-&gt;chrDstVSubSample);
+
+    if (isAnyRGB(dstFormat) &amp;&amp; !(flags&amp;SWS_FULL_CHR_H_INT)) {
+        if (dstW&amp;1) {
+            av_log(c, AV_LOG_DEBUG, "Forcing full internal H chroma due to odd output size\n");
+            flags |= SWS_FULL_CHR_H_INT;
+            c-&gt;flags = flags;
+        }
+
+        if (   c-&gt;chrSrcHSubSample == 0
+            &amp;&amp; c-&gt;chrSrcVSubSample == 0
+            &amp;&amp; c-&gt;dither != SWS_DITHER_BAYER //SWS_FULL_CHR_H_INT is currently not supported with SWS_DITHER_BAYER
+            &amp;&amp; !(c-&gt;flags &amp; SWS_FAST_BILINEAR)
+        ) {
+            av_log(c, AV_LOG_DEBUG, "Forcing full internal H chroma due to input having non subsampled chroma\n");
+            flags |= SWS_FULL_CHR_H_INT;
+            c-&gt;flags = flags;
+        }
+    }
+
+    if (c-&gt;dither == SWS_DITHER_AUTO) {
+        if (flags &amp; SWS_ERROR_DIFFUSION)
+            c-&gt;dither = SWS_DITHER_ED;
+    }
+
+    if(dstFormat == AV_PIX_FMT_BGR4_BYTE ||
+       dstFormat == AV_PIX_FMT_RGB4_BYTE ||
+       dstFormat == AV_PIX_FMT_BGR8 ||
+       dstFormat == AV_PIX_FMT_RGB8) {
+        if (c-&gt;dither == SWS_DITHER_AUTO)
+            c-&gt;dither = (flags &amp; SWS_FULL_CHR_H_INT) ? SWS_DITHER_ED : SWS_DITHER_BAYER;
+        if (!(flags &amp; SWS_FULL_CHR_H_INT)) {
+            if (c-&gt;dither == SWS_DITHER_ED || c-&gt;dither == SWS_DITHER_A_DITHER || c-&gt;dither == SWS_DITHER_X_DITHER) {
+                av_log(c, AV_LOG_DEBUG,
+                    "Desired dithering only supported in full chroma interpolation for destination format '%s'\n",
+                    av_get_pix_fmt_name(dstFormat));
+                flags   |= SWS_FULL_CHR_H_INT;
+                c-&gt;flags = flags;
+            }
+        }
+        if (flags &amp; SWS_FULL_CHR_H_INT) {
+            if (c-&gt;dither == SWS_DITHER_BAYER) {
+                av_log(c, AV_LOG_DEBUG,
+                    "Ordered dither is not supported in full chroma interpolation for destination format '%s'\n",
+                    av_get_pix_fmt_name(dstFormat));
+                c-&gt;dither = SWS_DITHER_ED;
+            }
+        }
+    }
+    if (isPlanarRGB(dstFormat)) {
+        if (!(flags &amp; SWS_FULL_CHR_H_INT)) {
+            av_log(c, AV_LOG_DEBUG,
+                   "%s output is not supported with half chroma resolution, switching to full\n",
+                   av_get_pix_fmt_name(dstFormat));
+            flags   |= SWS_FULL_CHR_H_INT;
+            c-&gt;flags = flags;
+        }
+    }
+
+    /* reuse chroma for 2 pixels RGB/BGR unless user wants full
+     * chroma interpolation */
+    if (flags &amp; SWS_FULL_CHR_H_INT &amp;&amp;
+        isAnyRGB(dstFormat)        &amp;&amp;
+        !isPlanarRGB(dstFormat)    &amp;&amp;
+        dstFormat != AV_PIX_FMT_RGBA  &amp;&amp;
+        dstFormat != AV_PIX_FMT_ARGB  &amp;&amp;
+        dstFormat != AV_PIX_FMT_BGRA  &amp;&amp;
+        dstFormat != AV_PIX_FMT_ABGR  &amp;&amp;
+        dstFormat != AV_PIX_FMT_RGB24 &amp;&amp;
+        dstFormat != AV_PIX_FMT_BGR24 &amp;&amp;
+        dstFormat != AV_PIX_FMT_BGR4_BYTE &amp;&amp;
+        dstFormat != AV_PIX_FMT_RGB4_BYTE &amp;&amp;
+        dstFormat != AV_PIX_FMT_BGR8 &amp;&amp;
+        dstFormat != AV_PIX_FMT_RGB8
+    ) {
+        av_log(c, AV_LOG_WARNING,
+               "full chroma interpolation for destination format '%s' not yet implemented\n",
+               av_get_pix_fmt_name(dstFormat));
+        flags   &amp;= ~SWS_FULL_CHR_H_INT;
+        c-&gt;flags = flags;
+    }
+    if (isAnyRGB(dstFormat) &amp;&amp; !(flags &amp; SWS_FULL_CHR_H_INT))
+        c-&gt;chrDstHSubSample = 1;
+
+    // drop some chroma lines if the user wants it
+    c-&gt;vChrDrop          = (flags &amp; SWS_SRC_V_CHR_DROP_MASK) &gt;&gt;
+                           SWS_SRC_V_CHR_DROP_SHIFT;
+    c-&gt;chrSrcVSubSample += c-&gt;vChrDrop;
+
+    /* drop every other pixel for chroma calculation unless user
+     * wants full chroma */
+    if (isAnyRGB(srcFormat) &amp;&amp; !(flags &amp; SWS_FULL_CHR_H_INP)   &amp;&amp;
+        srcFormat != AV_PIX_FMT_RGB8 &amp;&amp; srcFormat != AV_PIX_FMT_BGR8 &amp;&amp;
+        srcFormat != AV_PIX_FMT_RGB4 &amp;&amp; srcFormat != AV_PIX_FMT_BGR4 &amp;&amp;
+        srcFormat != AV_PIX_FMT_RGB4_BYTE &amp;&amp; srcFormat != AV_PIX_FMT_BGR4_BYTE &amp;&amp;
+        srcFormat != AV_PIX_FMT_GBRP9BE   &amp;&amp; srcFormat != AV_PIX_FMT_GBRP9LE  &amp;&amp;
+        srcFormat != AV_PIX_FMT_GBRP10BE  &amp;&amp; srcFormat != AV_PIX_FMT_GBRP10LE &amp;&amp;
+        srcFormat != AV_PIX_FMT_GBRP12BE  &amp;&amp; srcFormat != AV_PIX_FMT_GBRP12LE &amp;&amp;
+        srcFormat != AV_PIX_FMT_GBRP14BE  &amp;&amp; srcFormat != AV_PIX_FMT_GBRP14LE &amp;&amp;
+        srcFormat != AV_PIX_FMT_GBRP16BE  &amp;&amp; srcFormat != AV_PIX_FMT_GBRP16LE &amp;&amp;
+        ((dstW &gt;&gt; c-&gt;chrDstHSubSample) &lt;= (srcW &gt;&gt; 1) ||
+         (flags &amp; SWS_FAST_BILINEAR)))
+        c-&gt;chrSrcHSubSample = 1;
+
+    // Note the FF_CEIL_RSHIFT is so that we always round toward +inf.
+    c-&gt;chrSrcW = FF_CEIL_RSHIFT(srcW, c-&gt;chrSrcHSubSample);
+    c-&gt;chrSrcH = FF_CEIL_RSHIFT(srcH, c-&gt;chrSrcVSubSample);
+    c-&gt;chrDstW = FF_CEIL_RSHIFT(dstW, c-&gt;chrDstHSubSample);
+    c-&gt;chrDstH = FF_CEIL_RSHIFT(dstH, c-&gt;chrDstVSubSample);
+
+    FF_ALLOC_OR_GOTO(c, c-&gt;formatConvBuffer, FFALIGN(srcW*2+78, 16) * 2, fail);
+
+    c-&gt;srcBpc = 1 + desc_src-&gt;comp[0].depth_minus1;
+    if (c-&gt;srcBpc &lt; 8)
+        c-&gt;srcBpc = 8;
+    c-&gt;dstBpc = 1 + desc_dst-&gt;comp[0].depth_minus1;
+    if (c-&gt;dstBpc &lt; 8)
+        c-&gt;dstBpc = 8;
+    if (isAnyRGB(srcFormat) || srcFormat == AV_PIX_FMT_PAL8)
+        c-&gt;srcBpc = 16;
+    if (c-&gt;dstBpc == 16)
+        dst_stride &lt;&lt;= 1;
+
+    if (INLINE_MMXEXT(cpu_flags) &amp;&amp; c-&gt;srcBpc == 8 &amp;&amp; c-&gt;dstBpc &lt;= 14) {
+        c-&gt;canMMXEXTBeUsed = dstW &gt;= srcW &amp;&amp; (dstW &amp; 31) == 0 &amp;&amp;
+                             c-&gt;chrDstW &gt;= c-&gt;chrSrcW &amp;&amp;
+                             (srcW &amp; 15) == 0;
+        if (!c-&gt;canMMXEXTBeUsed &amp;&amp; dstW &gt;= srcW &amp;&amp; c-&gt;chrDstW &gt;= c-&gt;chrSrcW &amp;&amp; (srcW &amp; 15) == 0
+
+            &amp;&amp; (flags &amp; SWS_FAST_BILINEAR)) {
+            if (flags &amp; SWS_PRINT_INFO)
+                av_log(c, AV_LOG_INFO,
+                       "output width is not a multiple of 32 -&gt; no MMXEXT scaler\n");
+        }
+        if (usesHFilter || isNBPS(c-&gt;srcFormat) || is16BPS(c-&gt;srcFormat) || isAnyRGB(c-&gt;srcFormat))
+            c-&gt;canMMXEXTBeUsed = 0;
+    } else
+        c-&gt;canMMXEXTBeUsed = 0;
+
+    c-&gt;chrXInc = (((int64_t)c-&gt;chrSrcW &lt;&lt; 16) + (c-&gt;chrDstW &gt;&gt; 1)) / c-&gt;chrDstW;
+    c-&gt;chrYInc = (((int64_t)c-&gt;chrSrcH &lt;&lt; 16) + (c-&gt;chrDstH &gt;&gt; 1)) / c-&gt;chrDstH;
+
+    /* Match pixel 0 of the src to pixel 0 of dst and match pixel n-2 of src
+     * to pixel n-2 of dst, but only for the FAST_BILINEAR mode otherwise do
+     * correct scaling.
+     * n-2 is the last chrominance sample available.
+     * This is not perfect, but no one should notice the difference, the more
+     * correct variant would be like the vertical one, but that would require
+     * some special code for the first and last pixel */
+    if (flags &amp; SWS_FAST_BILINEAR) {
+        if (c-&gt;canMMXEXTBeUsed) {
+            c-&gt;lumXInc += 20;
+            c-&gt;chrXInc += 20;
+        }
+        // we don't use the x86 asm scaler if MMX is available
+        else if (INLINE_MMX(cpu_flags) &amp;&amp; c-&gt;dstBpc &lt;= 14) {
+            c-&gt;lumXInc = ((int64_t)(srcW       - 2) &lt;&lt; 16) / (dstW       - 2) - 20;
+            c-&gt;chrXInc = ((int64_t)(c-&gt;chrSrcW - 2) &lt;&lt; 16) / (c-&gt;chrDstW - 2) - 20;
+        }
+    }
+
+    if (isBayer(srcFormat)) {
+        if (!unscaled ||
+            (dstFormat != AV_PIX_FMT_RGB24 &amp;&amp; dstFormat != AV_PIX_FMT_YUV420P)) {
+            enum AVPixelFormat tmpFormat = AV_PIX_FMT_RGB24;
+
+            ret = av_image_alloc(c-&gt;cascaded_tmp, c-&gt;cascaded_tmpStride,
+                                srcW, srcH, tmpFormat, 64);
+            if (ret &lt; 0)
+                return ret;
+
+            c-&gt;cascaded_context[0] = sws_getContext(srcW, srcH, srcFormat,
+                                                    srcW, srcH, tmpFormat,
+                                                    flags, srcFilter, NULL, c-&gt;param);
+            if (!c-&gt;cascaded_context[0])
+                return -1;
+
+            c-&gt;cascaded_context[1] = sws_getContext(srcW, srcH, tmpFormat,
+                                                    dstW, dstH, dstFormat,
+                                                    flags, NULL, dstFilter, c-&gt;param);
+            if (!c-&gt;cascaded_context[1])
+                return -1;
+            return 0;
+        }
+    }
+
+#define USE_MMAP (HAVE_MMAP &amp;&amp; HAVE_MPROTECT &amp;&amp; defined MAP_ANONYMOUS)
+
+    /* precalculate horizontal scaler filter coefficients */
+    {
+#if HAVE_MMXEXT_INLINE
+// can't downscale !!!
+        if (c-&gt;canMMXEXTBeUsed &amp;&amp; (flags &amp; SWS_FAST_BILINEAR)) {
+            c-&gt;lumMmxextFilterCodeSize = ff_init_hscaler_mmxext(dstW, c-&gt;lumXInc, NULL,
+                                                             NULL, NULL, 8);
+            c-&gt;chrMmxextFilterCodeSize = ff_init_hscaler_mmxext(c-&gt;chrDstW, c-&gt;chrXInc,
+                                                             NULL, NULL, NULL, 4);
+
+#if USE_MMAP
+            c-&gt;lumMmxextFilterCode = mmap(NULL, c-&gt;lumMmxextFilterCodeSize,
+                                          PROT_READ | PROT_WRITE,
+                                          MAP_PRIVATE | MAP_ANONYMOUS,
+                                          -1, 0);
+            c-&gt;chrMmxextFilterCode = mmap(NULL, c-&gt;chrMmxextFilterCodeSize,
+                                          PROT_READ | PROT_WRITE,
+                                          MAP_PRIVATE | MAP_ANONYMOUS,
+                                          -1, 0);
+#elif HAVE_VIRTUALALLOC
+            c-&gt;lumMmxextFilterCode = VirtualAlloc(NULL,
+                                                  c-&gt;lumMmxextFilterCodeSize,
+                                                  MEM_COMMIT,
+                                                  PAGE_EXECUTE_READWRITE);
+            c-&gt;chrMmxextFilterCode = VirtualAlloc(NULL,
+                                                  c-&gt;chrMmxextFilterCodeSize,
+                                                  MEM_COMMIT,
+                                                  PAGE_EXECUTE_READWRITE);
+#else
+            c-&gt;lumMmxextFilterCode = av_malloc(c-&gt;lumMmxextFilterCodeSize);
+            c-&gt;chrMmxextFilterCode = av_malloc(c-&gt;chrMmxextFilterCodeSize);
+#endif
+
+#ifdef MAP_ANONYMOUS
+            if (c-&gt;lumMmxextFilterCode == MAP_FAILED || c-&gt;chrMmxextFilterCode == MAP_FAILED)
+#else
+            if (!c-&gt;lumMmxextFilterCode || !c-&gt;chrMmxextFilterCode)
+#endif
+            {
+                av_log(c, AV_LOG_ERROR, "Failed to allocate MMX2FilterCode\n");
+                return AVERROR(ENOMEM);
+            }
+
+            FF_ALLOCZ_OR_GOTO(c, c-&gt;hLumFilter,    (dstW           / 8 + 8) * sizeof(int16_t), fail);
+            FF_ALLOCZ_OR_GOTO(c, c-&gt;hChrFilter,    (c-&gt;chrDstW     / 4 + 8) * sizeof(int16_t), fail);
+            FF_ALLOCZ_OR_GOTO(c, c-&gt;hLumFilterPos, (dstW       / 2 / 8 + 8) * sizeof(int32_t), fail);
+            FF_ALLOCZ_OR_GOTO(c, c-&gt;hChrFilterPos, (c-&gt;chrDstW / 2 / 4 + 8) * sizeof(int32_t), fail);
+
+            ff_init_hscaler_mmxext(      dstW, c-&gt;lumXInc, c-&gt;lumMmxextFilterCode,
+                                c-&gt;hLumFilter, (uint32_t*)c-&gt;hLumFilterPos, 8);
+            ff_init_hscaler_mmxext(c-&gt;chrDstW, c-&gt;chrXInc, c-&gt;chrMmxextFilterCode,
+                                c-&gt;hChrFilter, (uint32_t*)c-&gt;hChrFilterPos, 4);
+
+#if USE_MMAP
+            if (   mprotect(c-&gt;lumMmxextFilterCode, c-&gt;lumMmxextFilterCodeSize, PROT_EXEC | PROT_READ) == -1
+                || mprotect(c-&gt;chrMmxextFilterCode, c-&gt;chrMmxextFilterCodeSize, PROT_EXEC | PROT_READ) == -1) {
+                av_log(c, AV_LOG_ERROR, "mprotect failed, cannot use fast bilinear scaler\n");
+                goto fail;
+            }
+#endif
+        } else
+#endif /* HAVE_MMXEXT_INLINE */
+        {
+            const int filterAlign = X86_MMX(cpu_flags)     ? 4 :
+                                    PPC_ALTIVEC(cpu_flags) ? 8 : 1;
+
+            if ((ret = initFilter(&amp;c-&gt;hLumFilter, &amp;c-&gt;hLumFilterPos,
+                           &amp;c-&gt;hLumFilterSize, c-&gt;lumXInc,
+                           srcW, dstW, filterAlign, 1 &lt;&lt; 14,
+                           (flags &amp; SWS_BICUBLIN) ? (flags | SWS_BICUBIC) : flags,
+                           cpu_flags, srcFilter-&gt;lumH, dstFilter-&gt;lumH,
+                           c-&gt;param,
+                           get_local_pos(c, 0, 0, 0),
+                           get_local_pos(c, 0, 0, 0))) &lt; 0)
+                goto fail;
+            if ((ret = initFilter(&amp;c-&gt;hChrFilter, &amp;c-&gt;hChrFilterPos,
+                           &amp;c-&gt;hChrFilterSize, c-&gt;chrXInc,
+                           c-&gt;chrSrcW, c-&gt;chrDstW, filterAlign, 1 &lt;&lt; 14,
+                           (flags &amp; SWS_BICUBLIN) ? (flags | SWS_BILINEAR) : flags,
+                           cpu_flags, srcFilter-&gt;chrH, dstFilter-&gt;chrH,
+                           c-&gt;param,
+                           get_local_pos(c, c-&gt;chrSrcHSubSample, c-&gt;src_h_chr_pos, 0),
+                           get_local_pos(c, c-&gt;chrDstHSubSample, c-&gt;dst_h_chr_pos, 0))) &lt; 0)
+                goto fail;
+        }
+    } // initialize horizontal stuff
+
+    /* precalculate vertical scaler filter coefficients */
+    {
+        const int filterAlign = X86_MMX(cpu_flags)     ? 2 :
+                                PPC_ALTIVEC(cpu_flags) ? 8 : 1;
+
+        if ((ret = initFilter(&amp;c-&gt;vLumFilter, &amp;c-&gt;vLumFilterPos, &amp;c-&gt;vLumFilterSize,
+                       c-&gt;lumYInc, srcH, dstH, filterAlign, (1 &lt;&lt; 12),
+                       (flags &amp; SWS_BICUBLIN) ? (flags | SWS_BICUBIC) : flags,
+                       cpu_flags, srcFilter-&gt;lumV, dstFilter-&gt;lumV,
+                       c-&gt;param,
+                       get_local_pos(c, 0, 0, 1),
+                       get_local_pos(c, 0, 0, 1))) &lt; 0)
+            goto fail;
+        if ((ret = initFilter(&amp;c-&gt;vChrFilter, &amp;c-&gt;vChrFilterPos, &amp;c-&gt;vChrFilterSize,
+                       c-&gt;chrYInc, c-&gt;chrSrcH, c-&gt;chrDstH,
+                       filterAlign, (1 &lt;&lt; 12),
+                       (flags &amp; SWS_BICUBLIN) ? (flags | SWS_BILINEAR) : flags,
+                       cpu_flags, srcFilter-&gt;chrV, dstFilter-&gt;chrV,
+                       c-&gt;param,
+                       get_local_pos(c, c-&gt;chrSrcVSubSample, c-&gt;src_v_chr_pos, 1),
+                       get_local_pos(c, c-&gt;chrDstVSubSample, c-&gt;dst_v_chr_pos, 1))) &lt; 0)
+
+            goto fail;
+
+#if HAVE_ALTIVEC
+        FF_ALLOC_OR_GOTO(c, c-&gt;vYCoeffsBank, sizeof(vector signed short) * c-&gt;vLumFilterSize * c-&gt;dstH,    fail);
+        FF_ALLOC_OR_GOTO(c, c-&gt;vCCoeffsBank, sizeof(vector signed short) * c-&gt;vChrFilterSize * c-&gt;chrDstH, fail);
+
+        for (i = 0; i &lt; c-&gt;vLumFilterSize * c-&gt;dstH; i++) {
+            int j;
+            short *p = (short *)&amp;c-&gt;vYCoeffsBank[i];
+            for (j = 0; j &lt; 8; j++)
+                p[j] = c-&gt;vLumFilter[i];
+        }
+
+        for (i = 0; i &lt; c-&gt;vChrFilterSize * c-&gt;chrDstH; i++) {
+            int j;
+            short *p = (short *)&amp;c-&gt;vCCoeffsBank[i];
+            for (j = 0; j &lt; 8; j++)
+                p[j] = c-&gt;vChrFilter[i];
+        }
+#endif
+    }
+
+    // calculate buffer sizes so that they won't run out while handling these damn slices
+    c-&gt;vLumBufSize = c-&gt;vLumFilterSize;
+    c-&gt;vChrBufSize = c-&gt;vChrFilterSize;
+    for (i = 0; i &lt; dstH; i++) {
+        int chrI      = (int64_t)i * c-&gt;chrDstH / dstH;
+        int nextSlice = FFMAX(c-&gt;vLumFilterPos[i] + c-&gt;vLumFilterSize - 1,
+                              ((c-&gt;vChrFilterPos[chrI] + c-&gt;vChrFilterSize - 1)
+                               &lt;&lt; c-&gt;chrSrcVSubSample));
+
+        nextSlice &gt;&gt;= c-&gt;chrSrcVSubSample;
+        nextSlice &lt;&lt;= c-&gt;chrSrcVSubSample;
+        if (c-&gt;vLumFilterPos[i] + c-&gt;vLumBufSize &lt; nextSlice)
+            c-&gt;vLumBufSize = nextSlice - c-&gt;vLumFilterPos[i];
+        if (c-&gt;vChrFilterPos[chrI] + c-&gt;vChrBufSize &lt;
+            (nextSlice &gt;&gt; c-&gt;chrSrcVSubSample))
+            c-&gt;vChrBufSize = (nextSlice &gt;&gt; c-&gt;chrSrcVSubSample) -
+                             c-&gt;vChrFilterPos[chrI];
+    }
+
+    for (i = 0; i &lt; 4; i++)
+        FF_ALLOCZ_OR_GOTO(c, c-&gt;dither_error[i], (c-&gt;dstW+2) * sizeof(int), fail);
+
+    /* Allocate pixbufs (we use dynamic allocation because otherwise we would
+     * need to allocate several megabytes to handle all possible cases) */
+    FF_ALLOC_OR_GOTO(c, c-&gt;lumPixBuf,  c-&gt;vLumBufSize * 3 * sizeof(int16_t *), fail);
+    FF_ALLOC_OR_GOTO(c, c-&gt;chrUPixBuf, c-&gt;vChrBufSize * 3 * sizeof(int16_t *), fail);
+    FF_ALLOC_OR_GOTO(c, c-&gt;chrVPixBuf, c-&gt;vChrBufSize * 3 * sizeof(int16_t *), fail);
+    if (CONFIG_SWSCALE_ALPHA &amp;&amp; isALPHA(c-&gt;srcFormat) &amp;&amp; isALPHA(c-&gt;dstFormat))
+        FF_ALLOCZ_OR_GOTO(c, c-&gt;alpPixBuf, c-&gt;vLumBufSize * 3 * sizeof(int16_t *), fail);
+    /* Note we need at least one pixel more at the end because of the MMX code
+     * (just in case someone wants to replace the 4000/8000). */
+    /* align at 16 bytes for AltiVec */
+    for (i = 0; i &lt; c-&gt;vLumBufSize; i++) {
+        FF_ALLOCZ_OR_GOTO(c, c-&gt;lumPixBuf[i + c-&gt;vLumBufSize],
+                          dst_stride + 16, fail);
+        c-&gt;lumPixBuf[i] = c-&gt;lumPixBuf[i + c-&gt;vLumBufSize];
+    }
+    // 64 / c-&gt;scalingBpp is the same as 16 / sizeof(scaling_intermediate)
+    c-&gt;uv_off   = (dst_stride&gt;&gt;1) + 64 / (c-&gt;dstBpc &amp;~ 7);
+    c-&gt;uv_offx2 = dst_stride + 16;
+    for (i = 0; i &lt; c-&gt;vChrBufSize; i++) {
+        FF_ALLOC_OR_GOTO(c, c-&gt;chrUPixBuf[i + c-&gt;vChrBufSize],
+                         dst_stride * 2 + 32, fail);
+        c-&gt;chrUPixBuf[i] = c-&gt;chrUPixBuf[i + c-&gt;vChrBufSize];
+        c-&gt;chrVPixBuf[i] = c-&gt;chrVPixBuf[i + c-&gt;vChrBufSize]
+                         = c-&gt;chrUPixBuf[i] + (dst_stride &gt;&gt; 1) + 8;
+    }
+    if (CONFIG_SWSCALE_ALPHA &amp;&amp; c-&gt;alpPixBuf)
+        for (i = 0; i &lt; c-&gt;vLumBufSize; i++) {
+            FF_ALLOCZ_OR_GOTO(c, c-&gt;alpPixBuf[i + c-&gt;vLumBufSize],
+                              dst_stride + 16, fail);
+            c-&gt;alpPixBuf[i] = c-&gt;alpPixBuf[i + c-&gt;vLumBufSize];
+        }
+
+    // try to avoid drawing green stuff between the right end and the stride end
+    for (i = 0; i &lt; c-&gt;vChrBufSize; i++)
+        if(desc_dst-&gt;comp[0].depth_minus1 == 15){
+            av_assert0(c-&gt;dstBpc &gt; 14);
+            for(j=0; j&lt;dst_stride/2+1; j++)
+                ((int32_t*)(c-&gt;chrUPixBuf[i]))[j] = 1&lt;&lt;18;
+        } else
+            for(j=0; j&lt;dst_stride+1; j++)
+                ((int16_t*)(c-&gt;chrUPixBuf[i]))[j] = 1&lt;&lt;14;
+
+    av_assert0(c-&gt;chrDstH &lt;= dstH);
+    //是否要输出
+    if (flags &amp; SWS_PRINT_INFO) {
+        const char *scaler = NULL, *cpucaps;
+
+        for (i = 0; i &lt; FF_ARRAY_ELEMS(scale_algorithms); i++) {
+            if (flags &amp; scale_algorithms[i].flag) {
+                scaler = scale_algorithms[i].description;
+                break;
+            }
+        }
+        if (!scaler)
+            scaler =  "ehh flags invalid?!";
+        av_log(c, AV_LOG_INFO, "%s scaler, from %s to %s%s ",
+               scaler,
+               av_get_pix_fmt_name(srcFormat),
+#ifdef DITHER1XBPP
+               dstFormat == AV_PIX_FMT_BGR555   || dstFormat == AV_PIX_FMT_BGR565   ||
+               dstFormat == AV_PIX_FMT_RGB444BE || dstFormat == AV_PIX_FMT_RGB444LE ||
+               dstFormat == AV_PIX_FMT_BGR444BE || dstFormat == AV_PIX_FMT_BGR444LE ?
+                                                             "dithered " : "",
+#else
+               "",
+#endif
+               av_get_pix_fmt_name(dstFormat));
+
+        if (INLINE_MMXEXT(cpu_flags))
+            cpucaps = "MMXEXT";
+        else if (INLINE_AMD3DNOW(cpu_flags))
+            cpucaps = "3DNOW";
+        else if (INLINE_MMX(cpu_flags))
+            cpucaps = "MMX";
+        else if (PPC_ALTIVEC(cpu_flags))
+            cpucaps = "AltiVec";
+        else
+            cpucaps = "C";
+
+        av_log(c, AV_LOG_INFO, "using %s\n", cpucaps);
+
+        av_log(c, AV_LOG_VERBOSE, "%dx%d -&gt; %dx%d\n", srcW, srcH, dstW, dstH);
+        av_log(c, AV_LOG_DEBUG,
+               "lum srcW=%d srcH=%d dstW=%d dstH=%d xInc=%d yInc=%d\n",
+               c-&gt;srcW, c-&gt;srcH, c-&gt;dstW, c-&gt;dstH, c-&gt;lumXInc, c-&gt;lumYInc);
+        av_log(c, AV_LOG_DEBUG,
+               "chr srcW=%d srcH=%d dstW=%d dstH=%d xInc=%d yInc=%d\n",
+               c-&gt;chrSrcW, c-&gt;chrSrcH, c-&gt;chrDstW, c-&gt;chrDstH,
+               c-&gt;chrXInc, c-&gt;chrYInc);
+    }
+
+    /* unscaled special cases */
+    //不拉伸的情况
+    if (unscaled &amp;&amp; !usesHFilter &amp;&amp; !usesVFilter &amp;&amp;
+        (c-&gt;srcRange == c-&gt;dstRange || isAnyRGB(dstFormat))) {
+    	//不许拉伸的情况下，初始化相应的函数
+        ff_get_unscaled_swscale(c);
+
+        if (c-&gt;swscale) {
+            if (flags &amp; SWS_PRINT_INFO)
+                av_log(c, AV_LOG_INFO,
+                       "using unscaled %s -&gt; %s special converter\n",
+                       av_get_pix_fmt_name(srcFormat), av_get_pix_fmt_name(dstFormat));
+            return 0;
+        }
+    }
+    //关键：设置SwsContext中的swscale()指针
+    c-&gt;swscale = ff_getSwsFunc(c);
+    return 0;
+fail: // FIXME replace things by appropriate error codes
+    if (ret == RETCODE_USE_CASCADE)  {
+        int tmpW = sqrt(srcW * (int64_t)dstW);
+        int tmpH = sqrt(srcH * (int64_t)dstH);
+        enum AVPixelFormat tmpFormat = AV_PIX_FMT_YUV420P;
+
+        if (srcW*(int64_t)srcH &lt;= 4LL*dstW*dstH)
+            return AVERROR(EINVAL);
+
+        ret = av_image_alloc(c-&gt;cascaded_tmp, c-&gt;cascaded_tmpStride,
+                             tmpW, tmpH, tmpFormat, 64);
+        if (ret &lt; 0)
+            return ret;
+
+        c-&gt;cascaded_context[0] = sws_getContext(srcW, srcH, srcFormat,
+                                                tmpW, tmpH, tmpFormat,
+                                                flags, srcFilter, NULL, c-&gt;param);
+        if (!c-&gt;cascaded_context[0])
+            return -1;
+
+        c-&gt;cascaded_context[1] = sws_getContext(tmpW, tmpH, tmpFormat,
+                                                dstW, dstH, dstFormat,
+                                                flags, NULL, dstFilter, c-&gt;param);
+        if (!c-&gt;cascaded_context[1])
+            return -1;
+        return 0;
+    }
+    return -1;
+}
+</pre>
+    <br/>
+    sws_init_context()除了对SwsContext中的各种变量进行赋值之外，主要按照顺序完成了以下一些工作：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     1.
+     <span style="white-space:pre">
+     </span>
+     通过sws_rgb2rgb_init()初始化RGB转RGB（或者YUV转YUV）的函数（注意不包含RGB与YUV相互转换的函数）。
+     <br/>
+     2.
+     <span style="white-space:pre">
+     </span>
+     通过判断输入输出图像的宽高来判断图像是否需要拉伸。如果图像需要拉伸，那么unscaled变量会被标记为1。
+     <br/>
+     3.
+     <span style="white-space:pre">
+     </span>
+     通过sws_setColorspaceDetails()初始化颜色空间。
+     <br/>
+     4.
+     <span style="white-space:pre">
+     </span>
+     一些输入参数的检测。例如：如果没有设置图像拉伸方法的话，默认设置为SWS_BICUBIC；如果输入和输出图像的宽高小于等于0的话，也会返回错误信息。
+     <br/>
+     5.
+     <span style="white-space:pre">
+     </span>
+     初始化Filter。这一步根据拉伸方法的不同，初始化不同的Filter。
+     <br/>
+     6.
+     <span style="white-space:pre">
+     </span>
+     如果flags中设置了“打印信息”选项SWS_PRINT_INFO，则输出信息。
+     <br/>
+     7.
+     <span style="white-space:pre">
+     </span>
+     如果不需要拉伸的话，调用ff_get_unscaled_swscale()将特定的像素转换函数的指针赋值给SwsContext中的swscale指针。
+     <br/>
+     8.
+     <span style="white-space:pre">
+     </span>
+     如果需要拉伸的话，调用ff_getSwsFunc()将通用的swscale()赋值给SwsContext中的swscale指针（这个地方有点绕，但是确实是这样的）。
+    </blockquote>
+    <br/>
+    <p>
+     下面分别记录一下上述步骤的实现。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <strong>
+     1.初始化RGB转RGB（或者YUV转YUV）的函数。注意这部分函数不包含RGB与YUV相互转换的函数。
+    </strong>
+    <br/>
+    <h3>
+     sws_rgb2rgb_init()
+    </h3>
+    sws_rgb2rgb_init()的定义位于libswscale\rgb2rgb.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_9_7042462">av_cold void sws_rgb2rgb_init(void){
+    rgb2rgb_init_c();
+    if (ARCH_X86)
+        rgb2rgb_init_x86();
+}</pre>
+    <br/>
+    从sws_rgb2rgb_init()代码中可以看出，有两个初始化函数：rgb2rgb_init_c()是初始化C语言版本的RGB互转（或者YUV互转）的函数，rgb2rgb_init_x86()则是初始化X86汇编版本的RGB互转的函数。
+    <br/>
+    <span style="font-family:FangSong_GB2312;">
+     PS：在libswscale中有一点需要注意：很多的函数名称中包含类似“_c”这样的字符串，代表了该函数是C语言写的。与之对应的还有其它标记，比如“_mmx”，“sse2”等。
+     <br/>
+    </span>
+    <p>
+     <span style="font-family:SimSun;">
+      <br/>
+     </span>
+    </p>
+    <h4>
+     <span style="font-family:SimSun;">
+      rgb2rgb_init_c()
+     </span>
+    </h4>
+    首先来看一下C语言版本的RGB互转函数的初始化函数rgb2rgb_init_c()，定义位于libswscale\rgb2rgb_template.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_10_6188877">static av_cold void rgb2rgb_init_c(void)
+{
+    rgb15to16          = rgb15to16_c;
+    rgb15tobgr24       = rgb15tobgr24_c;
+    rgb15to32          = rgb15to32_c;
+    rgb16tobgr24       = rgb16tobgr24_c;
+    rgb16to32          = rgb16to32_c;
+    rgb16to15          = rgb16to15_c;
+    rgb24tobgr16       = rgb24tobgr16_c;
+    rgb24tobgr15       = rgb24tobgr15_c;
+    rgb24tobgr32       = rgb24tobgr32_c;
+    rgb32to16          = rgb32to16_c;
+    rgb32to15          = rgb32to15_c;
+    rgb32tobgr24       = rgb32tobgr24_c;
+    rgb24to15          = rgb24to15_c;
+    rgb24to16          = rgb24to16_c;
+    rgb24tobgr24       = rgb24tobgr24_c;
+    shuffle_bytes_2103 = shuffle_bytes_2103_c;
+    rgb32tobgr16       = rgb32tobgr16_c;
+    rgb32tobgr15       = rgb32tobgr15_c;
+    yv12toyuy2         = yv12toyuy2_c;
+    yv12touyvy         = yv12touyvy_c;
+    yuv422ptoyuy2      = yuv422ptoyuy2_c;
+    yuv422ptouyvy      = yuv422ptouyvy_c;
+    yuy2toyv12         = yuy2toyv12_c;
+    planar2x           = planar2x_c;
+    ff_rgb24toyv12     = ff_rgb24toyv12_c;
+    interleaveBytes    = interleaveBytes_c;
+    deinterleaveBytes  = deinterleaveBytes_c;
+    vu9_to_vu12        = vu9_to_vu12_c;
+    yvu9_to_yuy2       = yvu9_to_yuy2_c;
+
+    uyvytoyuv420       = uyvytoyuv420_c;
+    uyvytoyuv422       = uyvytoyuv422_c;
+    yuyvtoyuv420       = yuyvtoyuv420_c;
+    yuyvtoyuv422       = yuyvtoyuv422_c;
+}
+</pre>
+    <br/>
+    <p>
+     可以看出rgb2rgb_init_c()执行后，会把C语言版本的图像格式转换函数赋值给系统的函数指针。
+    </p>
+    <p>
+     下面我们选择几个函数看一下这些转换函数的定义。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     rgb24tobgr24_c()
+    </h4>
+    rgb24tobgr24_c()完成了RGB24向BGR24格式的转换。函数的定义如下所示。从代码中可以看出，该函数实现了“R”与“B”之间位置的对调，从而完成了这两种格式之间的转换。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_11_1954985">static inline void rgb24tobgr24_c(const uint8_t *src, uint8_t *dst, int src_size)
+{
+    unsigned i;
+
+    for (i = 0; i &lt; src_size; i += 3) {
+        register uint8_t x = src[i + 2];
+        dst[i + 1]         = src[i + 1];
+        dst[i + 2]         = src[i + 0];
+        dst[i + 0]         = x;
+    }
+}
+</pre>
+    <br/>
+    <h4>
+     rgb24to16_c()
+    </h4>
+    rgb24to16_c()完成了RGB24向RGB16像素格式的转换。函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_12_4133042">static inline void rgb24to16_c(const uint8_t *src, uint8_t *dst, int src_size)
+{
+    uint16_t *d        = (uint16_t *)dst;
+    const uint8_t *s   = src;
+    const uint8_t *end = s + src_size;
+
+    while (s &lt; end) {
+        const int r = *s++;
+        const int g = *s++;
+        const int b = *s++;
+        *d++        = (b &gt;&gt; 3) | ((g &amp; 0xFC) &lt;&lt; 3) | ((r &amp; 0xF8) &lt;&lt; 8);
+    }
+}
+</pre>
+    <br/>
+    <h4>
+     yuyvtoyuv422_c()
+    </h4>
+    yuyvtoyuv422_c()完成了YUYV向YUV422像素格式的转换。函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_13_6867507">static void yuyvtoyuv422_c(uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
+                           const uint8_t *src, int width, int height,
+                           int lumStride, int chromStride, int srcStride)
+{
+    int y;
+    const int chromWidth = FF_CEIL_RSHIFT(width, 1);
+
+    for (y = 0; y &lt; height; y++) {
+        extract_even_c(src, ydst, width);
+        extract_odd2_c(src, udst, vdst, chromWidth);
+
+        src  += srcStride;
+        ydst += lumStride;
+        udst += chromStride;
+        vdst += chromStride;
+    }
+}
+</pre>
+    <br/>
+    该函数将YUYV像素数据分离成为Y，U，V三个分量的像素数据。其中extract_even_c()用于获取一行像素中序数为偶数的像素，对应提取了YUYV像素格式中的“Y”。extract_odd2_c()用于获取一行像素中序数为奇数的像素，并且把这些像素值再次按照奇偶的不同，存储于两个数组中。对应提取了YUYV像素格式中的“U”和“V”。
+    <br/>
+    extract_even_c()定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_14_2949260">static void extract_even_c(const uint8_t *src, uint8_t *dst, int count)
+{
+    dst   +=  count;
+    src   +=  count * 2;
+    count  = -count;
+    while (count &lt; 0) {
+        dst[count] = src[2 * count];
+        count++;
+    }
+}</pre>
+    extract_odd2_c()定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_15_2619063">static void extract_even2_c(const uint8_t *src, uint8_t *dst0, uint8_t *dst1,
+                            int count)
+{
+    dst0  +=  count;
+    dst1  +=  count;
+    src   +=  count * 4;
+    count  = -count;
+    while (count &lt; 0) {
+        dst0[count] = src[4 * count + 0];
+        dst1[count] = src[4 * count + 2];
+        count++;
+    }
+}</pre>
+    <br/>
+    <h3>
+     rgb2rgb_init_x86()
+    </h3>
+    rgb2rgb_init_x86()用于初始化基于X86汇编语言的RGB互转的代码。由于对汇编不是很熟，不再作详细分析，出于和rgb2rgb_init_c()相对比的目的，列出它的代码。它的代码位于libswscale\x86\rgb2rgb.c，如下所示。
+    <br/>
+    <p>
+     <span style="font-family:FangSong_GB2312;">
+      PS：所有和汇编有关的代码都位于libswscale目录的x86子目录下。
+     </span>
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_16_4448456">av_cold void rgb2rgb_init_x86(void)
+{
+#if HAVE_INLINE_ASM
+    int cpu_flags = av_get_cpu_flags();
+
+    if (INLINE_MMX(cpu_flags))
+        rgb2rgb_init_mmx();
+    if (INLINE_AMD3DNOW(cpu_flags))
+        rgb2rgb_init_3dnow();
+    if (INLINE_MMXEXT(cpu_flags))
+        rgb2rgb_init_mmxext();
+    if (INLINE_SSE2(cpu_flags))
+        rgb2rgb_init_sse2();
+    if (INLINE_AVX(cpu_flags))
+        rgb2rgb_init_avx();
+#endif /* HAVE_INLINE_ASM */
+}</pre>
+    <br/>
+    可以看出，rgb2rgb_init_x86()首先调用了av_get_cpu_flags()获取CPU支持的特性，根据特性调用rgb2rgb_init_mmx()，rgb2rgb_init_3dnow()，rgb2rgb_init_mmxext()，rgb2rgb_init_sse2()，rgb2rgb_init_avx()等函数。
+    <br/>
+    <br/>
+    <p>
+     <strong>
+      2.判断图像是否需要拉伸。
+     </strong>
+    </p>
+    这一步主要通过比较输入图像和输出图像的宽高实现。系统使用一个unscaled变量记录图像是否需要拉伸，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_17_5546718">unscaled = (srcW == dstW &amp;&amp; srcH == dstH);</pre>
+    <br/>
+    <p>
+     <strong>
+      3.初始化颜色空间。
+     </strong>
+    </p>
+    初始化颜色空间通过函数sws_setColorspaceDetails()完成。sws_setColorspaceDetails()是FFmpeg的一个API函数，它的声明如下所示：
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_18_2118839">/**
+ * @param dstRange flag indicating the while-black range of the output (1=jpeg / 0=mpeg)
+ * @param srcRange flag indicating the while-black range of the input (1=jpeg / 0=mpeg)
+ * @param table the yuv2rgb coefficients describing the output yuv space, normally ff_yuv2rgb_coeffs[x]
+ * @param inv_table the yuv2rgb coefficients describing the input yuv space, normally ff_yuv2rgb_coeffs[x]
+ * @param brightness 16.16 fixed point brightness correction
+ * @param contrast 16.16 fixed point contrast correction
+ * @param saturation 16.16 fixed point saturation correction
+ * @return -1 if not supported
+ */
+int sws_setColorspaceDetails(struct SwsContext *c, const int inv_table[4],
+                             int srcRange, const int table[4], int dstRange,
+                             int brightness, int contrast, int saturation);</pre>
+    <br/>
+    简单解释一下几个参数的含义：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     c：需要设定的SwsContext。
+     <br/>
+     inv_table：描述输出YUV颜色空间的参数表。
+     <br/>
+     srcRange：输入图像的取值范围（“1”代表JPEG标准，取值范围是0-255；“0”代表MPEG标准，取值范围是16-235）。
+     <br/>
+     table：描述输入YUV颜色空间的参数表。
+     <br/>
+     dstRange：输出图像的取值范围。
+     <br/>
+     brightness：未研究。
+     <br/>
+     contrast：未研究。
+     <br/>
+     saturation：未研究。
+    </blockquote>
+    如果返回-1代表设置不成功。
+    <br/>
+    其中描述颜色空间的参数表可以通过sws_getCoefficients()获取。该函数在后文中再详细记录。
+    <br/>
+    sws_setColorspaceDetails()的定义位于libswscale\utils.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_19_5376692">int sws_setColorspaceDetails(struct SwsContext *c, const int inv_table[4],
+                             int srcRange, const int table[4], int dstRange,
+                             int brightness, int contrast, int saturation)
+{
+    const AVPixFmtDescriptor *desc_dst;
+    const AVPixFmtDescriptor *desc_src;
+    int need_reinit = 0;
+    memmove(c-&gt;srcColorspaceTable, inv_table, sizeof(int) * 4);
+    memmove(c-&gt;dstColorspaceTable, table, sizeof(int) * 4);
+
+    handle_formats(c);
+    desc_dst = av_pix_fmt_desc_get(c-&gt;dstFormat);
+    desc_src = av_pix_fmt_desc_get(c-&gt;srcFormat);
+
+    if(!isYUV(c-&gt;dstFormat) &amp;&amp; !isGray(c-&gt;dstFormat))
+        dstRange = 0;
+    if(!isYUV(c-&gt;srcFormat) &amp;&amp; !isGray(c-&gt;srcFormat))
+        srcRange = 0;
+
+    c-&gt;brightness = brightness;
+    c-&gt;contrast   = contrast;
+    c-&gt;saturation = saturation;
+    if (c-&gt;srcRange != srcRange || c-&gt;dstRange != dstRange)
+        need_reinit = 1;
+    c-&gt;srcRange   = srcRange;
+    c-&gt;dstRange   = dstRange;
+
+    //The srcBpc check is possibly wrong but we seem to lack a definitive reference to test this
+    //and what we have in ticket 2939 looks better with this check
+    if (need_reinit &amp;&amp; (c-&gt;srcBpc == 8 || !isYUV(c-&gt;srcFormat)))
+        ff_sws_init_range_convert(c);
+
+    if ((isYUV(c-&gt;dstFormat) || isGray(c-&gt;dstFormat)) &amp;&amp; (isYUV(c-&gt;srcFormat) || isGray(c-&gt;srcFormat)))
+        return -1;
+
+    c-&gt;dstFormatBpp = av_get_bits_per_pixel(desc_dst);
+    c-&gt;srcFormatBpp = av_get_bits_per_pixel(desc_src);
+
+    if (!isYUV(c-&gt;dstFormat) &amp;&amp; !isGray(c-&gt;dstFormat)) {
+        ff_yuv2rgb_c_init_tables(c, inv_table, srcRange, brightness,
+                                 contrast, saturation);
+        // FIXME factorize
+
+        if (ARCH_PPC)
+            ff_yuv2rgb_init_tables_ppc(c, inv_table, brightness,
+                                       contrast, saturation);
+    }
+
+    fill_rgb2yuv_table(c, table, dstRange);
+
+    return 0;
+}
+</pre>
+    <br/>
+    <p>
+     从sws_setColorspaceDetails()定义中可以看出，该函数将输入的参数分别赋值给了相应的变量，并且在最后调用了一个函数fill_rgb2yuv_table()。fill_rgb2yuv_table()函数还没有弄懂，暂时不记录。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     sws_getCoefficients()
+    </h3>
+    sws_getCoefficients()用于获取描述颜色空间的参数表。它的声明如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_20_6474954">/**
+ * Return a pointer to yuv&lt;-&gt;rgb coefficients for the given colorspace
+ * suitable for sws_setColorspaceDetails().
+ *
+ * @param colorspace One of the SWS_CS_* macros. If invalid,
+ * SWS_CS_DEFAULT is used.
+ */
+const int *sws_getCoefficients(int colorspace);</pre>
+    <br/>
+    其中colorspace可以取值如下变量。默认的取值SWS_CS_DEFAULT等同于SWS_CS_ITU601或者SWS_CS_SMPTE170M。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_21_3603482">#define SWS_CS_ITU709         1
+#define SWS_CS_FCC            4
+#define SWS_CS_ITU601         5
+#define SWS_CS_ITU624         5
+#define SWS_CS_SMPTE170M      5
+#define SWS_CS_SMPTE240M      7
+#define SWS_CS_DEFAULT        5</pre>
+    <br/>
+    下面看一下sws_getCoefficients()的定义，位于libswscale\yuv2rgb.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_22_798050">const int *sws_getCoefficients(int colorspace)
+{
+    if (colorspace &gt; 7 || colorspace &lt; 0)
+        colorspace = SWS_CS_DEFAULT;
+    return ff_yuv2rgb_coeffs[colorspace];
+}</pre>
+    <br/>
+    可以看出它返回了一个名称为ff_yuv2rgb_coeffs的数组中的一个元素，该数组的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_23_5451342">const int32_t ff_yuv2rgb_coeffs[8][4] = {
+    { 117504, 138453, 13954, 34903 }, /* no sequence_display_extension */
+    { 117504, 138453, 13954, 34903 }, /* ITU-R Rec. 709 (1990) */
+    { 104597, 132201, 25675, 53279 }, /* unspecified */
+    { 104597, 132201, 25675, 53279 }, /* reserved */
+    { 104448, 132798, 24759, 53109 }, /* FCC */
+    { 104597, 132201, 25675, 53279 }, /* ITU-R Rec. 624-4 System B, G */
+    { 104597, 132201, 25675, 53279 }, /* SMPTE 170M */
+    { 117579, 136230, 16907, 35559 }  /* SMPTE 240M (1987) */
+};</pre>
+    <br/>
+    <p>
+     <strong>
+      4.一些输入参数的检测。
+     </strong>
+    </p>
+    例如：如果没有设置图像拉伸方法的话，默认设置为SWS_BICUBIC；如果输入和输出图像的宽高小于等于0的话，也会返回错误信息。有关这方面的代码比较多，简单举个例子。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_24_2089503">    i = flags &amp; (SWS_POINT         |
+                 SWS_AREA          |
+                 SWS_BILINEAR      |
+                 SWS_FAST_BILINEAR |
+                 SWS_BICUBIC       |
+                 SWS_X             |
+                 SWS_GAUSS         |
+                 SWS_LANCZOS       |
+                 SWS_SINC          |
+                 SWS_SPLINE        |
+                 SWS_BICUBLIN);
+
+    /* provide a default scaler if not set by caller */
+    if (!i) {
+        if (dstW &lt; srcW &amp;&amp; dstH &lt; srcH)
+            flags |= SWS_BICUBIC;
+        else if (dstW &gt; srcW &amp;&amp; dstH &gt; srcH)
+            flags |= SWS_BICUBIC;
+        else
+            flags |= SWS_BICUBIC;
+        c-&gt;flags = flags;
+    } else if (i &amp; (i - 1)) {
+        av_log(c, AV_LOG_ERROR,
+               "Exactly one scaler algorithm must be chosen, got %X\n", i);
+        return AVERROR(EINVAL);
+    }
+    /* sanity check */
+    if (srcW &lt; 1 || srcH &lt; 1 || dstW &lt; 1 || dstH &lt; 1) {
+        /* FIXME check if these are enough and try to lower them after
+         * fixing the relevant parts of the code */
+        av_log(c, AV_LOG_ERROR, "%dx%d -&gt; %dx%d is invalid scaling dimension\n",
+               srcW, srcH, dstW, dstH);
+        return AVERROR(EINVAL);
+    }
+</pre>
+    <br/>
+    <p>
+     <strong>
+      5.初始化Filter。这一步根据拉伸方法的不同，初始化不同的Filter。
+     </strong>
+    </p>
+    <p>
+     这一部分的工作在函数initFilter()中完成，暂时不详细分析。
+    </p>
+    <p>
+     <strong>
+      6.如果flags中设置了“打印信息”选项SWS_PRINT_INFO，则输出信息。
+     </strong>
+    </p>
+    SwsContext初始化的时候，可以给flags设置SWS_PRINT_INFO标记。这样SwsContext初始化完成的时候就可以打印出一些配置信息。与打印相关的代码如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_25_1759305">if (flags &amp; SWS_PRINT_INFO) {
+        const char *scaler = NULL, *cpucaps;
+
+        for (i = 0; i &lt; FF_ARRAY_ELEMS(scale_algorithms); i++) {
+            if (flags &amp; scale_algorithms[i].flag) {
+                scaler = scale_algorithms[i].description;
+                break;
+            }
+        }
+        if (!scaler)
+            scaler =  "ehh flags invalid?!";
+        av_log(c, AV_LOG_INFO, "%s scaler, from %s to %s%s ",
+               scaler,
+               av_get_pix_fmt_name(srcFormat),
+#ifdef DITHER1XBPP
+               dstFormat == AV_PIX_FMT_BGR555   || dstFormat == AV_PIX_FMT_BGR565   ||
+               dstFormat == AV_PIX_FMT_RGB444BE || dstFormat == AV_PIX_FMT_RGB444LE ||
+               dstFormat == AV_PIX_FMT_BGR444BE || dstFormat == AV_PIX_FMT_BGR444LE ?
+                                                             "dithered " : "",
+#else
+               "",
+#endif
+               av_get_pix_fmt_name(dstFormat));
+
+        if (INLINE_MMXEXT(cpu_flags))
+            cpucaps = "MMXEXT";
+        else if (INLINE_AMD3DNOW(cpu_flags))
+            cpucaps = "3DNOW";
+        else if (INLINE_MMX(cpu_flags))
+            cpucaps = "MMX";
+        else if (PPC_ALTIVEC(cpu_flags))
+            cpucaps = "AltiVec";
+        else
+            cpucaps = "C";
+
+        av_log(c, AV_LOG_INFO, "using %s\n", cpucaps);
+
+        av_log(c, AV_LOG_VERBOSE, "%dx%d -&gt; %dx%d\n", srcW, srcH, dstW, dstH);
+        av_log(c, AV_LOG_DEBUG,
+               "lum srcW=%d srcH=%d dstW=%d dstH=%d xInc=%d yInc=%d\n",
+               c-&gt;srcW, c-&gt;srcH, c-&gt;dstW, c-&gt;dstH, c-&gt;lumXInc, c-&gt;lumYInc);
+        av_log(c, AV_LOG_DEBUG,
+               "chr srcW=%d srcH=%d dstW=%d dstH=%d xInc=%d yInc=%d\n",
+               c-&gt;chrSrcW, c-&gt;chrSrcH, c-&gt;chrDstW, c-&gt;chrDstH,
+               c-&gt;chrXInc, c-&gt;chrYInc);
+    }
+</pre>
+    <br/>
+    <strong>
+     7.如果不需要拉伸的话，就会调用ff_get_unscaled_swscale()将特定的像素转换函数的指针赋值给SwsContext中的swscale指针。
+    </strong>
+    <br/>
+    <h3>
+     ff_get_unscaled_swscale()
+    </h3>
+    <p>
+     ff_get_unscaled_swscale()的定义如下所示。该函数根据输入图像像素格式和输出图像像素格式，选择不同的像素格式转换函数。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_26_8081820">void ff_get_unscaled_swscale(SwsContext *c)
+{
+    const enum AVPixelFormat srcFormat = c-&gt;srcFormat;
+    const enum AVPixelFormat dstFormat = c-&gt;dstFormat;
+    const int flags = c-&gt;flags;
+    const int dstH = c-&gt;dstH;
+    int needsDither;
+
+    needsDither = isAnyRGB(dstFormat) &amp;&amp;
+            c-&gt;dstFormatBpp &lt; 24 &amp;&amp;
+           (c-&gt;dstFormatBpp &lt; c-&gt;srcFormatBpp || (!isAnyRGB(srcFormat)));
+
+    /* yv12_to_nv12 */
+    if ((srcFormat == AV_PIX_FMT_YUV420P || srcFormat == AV_PIX_FMT_YUVA420P) &amp;&amp;
+        (dstFormat == AV_PIX_FMT_NV12 || dstFormat == AV_PIX_FMT_NV21)) {
+        c-&gt;swscale = planarToNv12Wrapper;
+    }
+    /* nv12_to_yv12 */
+    if (dstFormat == AV_PIX_FMT_YUV420P &amp;&amp;
+        (srcFormat == AV_PIX_FMT_NV12 || srcFormat == AV_PIX_FMT_NV21)) {
+        c-&gt;swscale = nv12ToPlanarWrapper;
+    }
+    /* yuv2bgr */
+    if ((srcFormat == AV_PIX_FMT_YUV420P || srcFormat == AV_PIX_FMT_YUV422P ||
+         srcFormat == AV_PIX_FMT_YUVA420P) &amp;&amp; isAnyRGB(dstFormat) &amp;&amp;
+        !(flags &amp; SWS_ACCURATE_RND) &amp;&amp; (c-&gt;dither == SWS_DITHER_BAYER || c-&gt;dither == SWS_DITHER_AUTO) &amp;&amp; !(dstH &amp; 1)) {
+        c-&gt;swscale = ff_yuv2rgb_get_func_ptr(c);
+    }
+
+    if (srcFormat == AV_PIX_FMT_YUV410P &amp;&amp; !(dstH &amp; 3) &amp;&amp;
+        (dstFormat == AV_PIX_FMT_YUV420P || dstFormat == AV_PIX_FMT_YUVA420P) &amp;&amp;
+        !(flags &amp; SWS_BITEXACT)) {
+        c-&gt;swscale = yvu9ToYv12Wrapper;
+    }
+
+    /* bgr24toYV12 */
+    if (srcFormat == AV_PIX_FMT_BGR24 &amp;&amp;
+        (dstFormat == AV_PIX_FMT_YUV420P || dstFormat == AV_PIX_FMT_YUVA420P) &amp;&amp;
+        !(flags &amp; SWS_ACCURATE_RND))
+        c-&gt;swscale = bgr24ToYv12Wrapper;
+
+    /* RGB/BGR -&gt; RGB/BGR (no dither needed forms) */
+    if (isAnyRGB(srcFormat) &amp;&amp; isAnyRGB(dstFormat) &amp;&amp; findRgbConvFn(c)
+        &amp;&amp; (!needsDither || (c-&gt;flags&amp;(SWS_FAST_BILINEAR|SWS_POINT))))
+        c-&gt;swscale = rgbToRgbWrapper;
+
+    if ((srcFormat == AV_PIX_FMT_GBRP &amp;&amp; dstFormat == AV_PIX_FMT_GBRAP) ||
+        (srcFormat == AV_PIX_FMT_GBRAP &amp;&amp; dstFormat == AV_PIX_FMT_GBRP))
+        c-&gt;swscale = planarRgbToplanarRgbWrapper;
+
+#define isByteRGB(f) (             \
+        f == AV_PIX_FMT_RGB32   || \
+        f == AV_PIX_FMT_RGB32_1 || \
+        f == AV_PIX_FMT_RGB24   || \
+        f == AV_PIX_FMT_BGR32   || \
+        f == AV_PIX_FMT_BGR32_1 || \
+        f == AV_PIX_FMT_BGR24)
+
+    if (srcFormat == AV_PIX_FMT_GBRP &amp;&amp; isPlanar(srcFormat) &amp;&amp; isByteRGB(dstFormat))
+        c-&gt;swscale = planarRgbToRgbWrapper;
+
+    if ((srcFormat == AV_PIX_FMT_RGB48LE  || srcFormat == AV_PIX_FMT_RGB48BE  ||
+         srcFormat == AV_PIX_FMT_BGR48LE  || srcFormat == AV_PIX_FMT_BGR48BE  ||
+         srcFormat == AV_PIX_FMT_RGBA64LE || srcFormat == AV_PIX_FMT_RGBA64BE ||
+         srcFormat == AV_PIX_FMT_BGRA64LE || srcFormat == AV_PIX_FMT_BGRA64BE) &amp;&amp;
+        (dstFormat == AV_PIX_FMT_GBRP9LE  || dstFormat == AV_PIX_FMT_GBRP9BE  ||
+         dstFormat == AV_PIX_FMT_GBRP10LE || dstFormat == AV_PIX_FMT_GBRP10BE ||
+         dstFormat == AV_PIX_FMT_GBRP12LE || dstFormat == AV_PIX_FMT_GBRP12BE ||
+         dstFormat == AV_PIX_FMT_GBRP14LE || dstFormat == AV_PIX_FMT_GBRP14BE ||
+         dstFormat == AV_PIX_FMT_GBRP16LE || dstFormat == AV_PIX_FMT_GBRP16BE ||
+         dstFormat == AV_PIX_FMT_GBRAP16LE || dstFormat == AV_PIX_FMT_GBRAP16BE ))
+        c-&gt;swscale = Rgb16ToPlanarRgb16Wrapper;
+
+    if ((srcFormat == AV_PIX_FMT_GBRP9LE  || srcFormat == AV_PIX_FMT_GBRP9BE  ||
+         srcFormat == AV_PIX_FMT_GBRP16LE || srcFormat == AV_PIX_FMT_GBRP16BE ||
+         srcFormat == AV_PIX_FMT_GBRP10LE || srcFormat == AV_PIX_FMT_GBRP10BE ||
+         srcFormat == AV_PIX_FMT_GBRP12LE || srcFormat == AV_PIX_FMT_GBRP12BE ||
+         srcFormat == AV_PIX_FMT_GBRP14LE || srcFormat == AV_PIX_FMT_GBRP14BE ||
+         srcFormat == AV_PIX_FMT_GBRAP16LE || srcFormat == AV_PIX_FMT_GBRAP16BE) &amp;&amp;
+        (dstFormat == AV_PIX_FMT_RGB48LE  || dstFormat == AV_PIX_FMT_RGB48BE  ||
+         dstFormat == AV_PIX_FMT_BGR48LE  || dstFormat == AV_PIX_FMT_BGR48BE  ||
+         dstFormat == AV_PIX_FMT_RGBA64LE || dstFormat == AV_PIX_FMT_RGBA64BE ||
+         dstFormat == AV_PIX_FMT_BGRA64LE || dstFormat == AV_PIX_FMT_BGRA64BE))
+        c-&gt;swscale = planarRgb16ToRgb16Wrapper;
+
+    if (av_pix_fmt_desc_get(srcFormat)-&gt;comp[0].depth_minus1 == 7 &amp;&amp;
+        isPackedRGB(srcFormat) &amp;&amp; dstFormat == AV_PIX_FMT_GBRP)
+        c-&gt;swscale = rgbToPlanarRgbWrapper;
+
+    if (isBayer(srcFormat)) {
+        if (dstFormat == AV_PIX_FMT_RGB24)
+            c-&gt;swscale = bayer_to_rgb24_wrapper;
+        else if (dstFormat == AV_PIX_FMT_YUV420P)
+            c-&gt;swscale = bayer_to_yv12_wrapper;
+        else if (!isBayer(dstFormat)) {
+            av_log(c, AV_LOG_ERROR, "unsupported bayer conversion\n");
+            av_assert0(0);
+        }
+    }
+
+    /* bswap 16 bits per pixel/component packed formats */
+    if (IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BAYER_BGGR16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BAYER_RGGB16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BAYER_GBRG16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BAYER_GRBG16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGR444) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGR48)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGRA64) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGR555) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGR565) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_BGRA64) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GRAY16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YA16)   ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRP9)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRP10) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRP12) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRP14) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRP16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_GBRAP16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGB444) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGB48)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGBA64) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGB555) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGB565) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_RGBA64) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_XYZ12)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV420P9)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV420P10) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV420P12) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV420P14) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV420P16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV422P9)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV422P10) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV422P12) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV422P14) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV422P16) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV444P9)  ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV444P10) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV444P12) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV444P14) ||
+        IS_DIFFERENT_ENDIANESS(srcFormat, dstFormat, AV_PIX_FMT_YUV444P16))
+        c-&gt;swscale = packed_16bpc_bswap;
+
+    if (usePal(srcFormat) &amp;&amp; isByteRGB(dstFormat))
+        c-&gt;swscale = palToRgbWrapper;
+
+    if (srcFormat == AV_PIX_FMT_YUV422P) {
+        if (dstFormat == AV_PIX_FMT_YUYV422)
+            c-&gt;swscale = yuv422pToYuy2Wrapper;
+        else if (dstFormat == AV_PIX_FMT_UYVY422)
+            c-&gt;swscale = yuv422pToUyvyWrapper;
+    }
+
+    /* LQ converters if -sws 0 or -sws 4*/
+    if (c-&gt;flags&amp;(SWS_FAST_BILINEAR|SWS_POINT)) {
+        /* yv12_to_yuy2 */
+        if (srcFormat == AV_PIX_FMT_YUV420P || srcFormat == AV_PIX_FMT_YUVA420P) {
+            if (dstFormat == AV_PIX_FMT_YUYV422)
+                c-&gt;swscale = planarToYuy2Wrapper;
+            else if (dstFormat == AV_PIX_FMT_UYVY422)
+                c-&gt;swscale = planarToUyvyWrapper;
+        }
+    }
+    if (srcFormat == AV_PIX_FMT_YUYV422 &amp;&amp;
+       (dstFormat == AV_PIX_FMT_YUV420P || dstFormat == AV_PIX_FMT_YUVA420P))
+        c-&gt;swscale = yuyvToYuv420Wrapper;
+    if (srcFormat == AV_PIX_FMT_UYVY422 &amp;&amp;
+       (dstFormat == AV_PIX_FMT_YUV420P || dstFormat == AV_PIX_FMT_YUVA420P))
+        c-&gt;swscale = uyvyToYuv420Wrapper;
+    if (srcFormat == AV_PIX_FMT_YUYV422 &amp;&amp; dstFormat == AV_PIX_FMT_YUV422P)
+        c-&gt;swscale = yuyvToYuv422Wrapper;
+    if (srcFormat == AV_PIX_FMT_UYVY422 &amp;&amp; dstFormat == AV_PIX_FMT_YUV422P)
+        c-&gt;swscale = uyvyToYuv422Wrapper;
+
+#define isPlanarGray(x) (isGray(x) &amp;&amp; (x) != AV_PIX_FMT_YA8 &amp;&amp; (x) != AV_PIX_FMT_YA16LE &amp;&amp; (x) != AV_PIX_FMT_YA16BE)
+    /* simple copy */
+    if ( srcFormat == dstFormat ||
+        (srcFormat == AV_PIX_FMT_YUVA420P &amp;&amp; dstFormat == AV_PIX_FMT_YUV420P) ||
+        (srcFormat == AV_PIX_FMT_YUV420P &amp;&amp; dstFormat == AV_PIX_FMT_YUVA420P) ||
+        (isPlanarYUV(srcFormat) &amp;&amp; isPlanarGray(dstFormat)) ||
+        (isPlanarYUV(dstFormat) &amp;&amp; isPlanarGray(srcFormat)) ||
+        (isPlanarGray(dstFormat) &amp;&amp; isPlanarGray(srcFormat)) ||
+        (isPlanarYUV(srcFormat) &amp;&amp; isPlanarYUV(dstFormat) &amp;&amp;
+         c-&gt;chrDstHSubSample == c-&gt;chrSrcHSubSample &amp;&amp;
+         c-&gt;chrDstVSubSample == c-&gt;chrSrcVSubSample &amp;&amp;
+         dstFormat != AV_PIX_FMT_NV12 &amp;&amp; dstFormat != AV_PIX_FMT_NV21 &amp;&amp;
+         srcFormat != AV_PIX_FMT_NV12 &amp;&amp; srcFormat != AV_PIX_FMT_NV21))
+    {
+        if (isPacked(c-&gt;srcFormat))
+            c-&gt;swscale = packedCopyWrapper;
+        else /* Planar YUV or gray */
+            c-&gt;swscale = planarCopyWrapper;
+    }
+
+    if (ARCH_PPC)
+        ff_get_unscaled_swscale_ppc(c);
+//     if (ARCH_ARM)
+//         ff_get_unscaled_swscale_arm(c);
+}
+</pre>
+    <br/>
+    <p>
+     从ff_get_unscaled_swscale()源代码中可以看出，赋值给SwsContext的swscale指针的函数名称大多数为XXXWrapper()。实际上这些函数封装了一些基本的像素格式转换函数。例如yuyvToYuv422Wrapper()的定义如下所示。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_27_9147063">static int yuyvToYuv422Wrapper(SwsContext *c, const uint8_t *src[],
+                               int srcStride[], int srcSliceY, int srcSliceH,
+                               uint8_t *dstParam[], int dstStride[])
+{
+    uint8_t *ydst = dstParam[0] + dstStride[0] * srcSliceY;
+    uint8_t *udst = dstParam[1] + dstStride[1] * srcSliceY;
+    uint8_t *vdst = dstParam[2] + dstStride[2] * srcSliceY;
+
+    yuyvtoyuv422(ydst, udst, vdst, src[0], c-&gt;srcW, srcSliceH, dstStride[0],
+                 dstStride[1], srcStride[0]);
+
+    return srcSliceH;
+}
+</pre>
+    <br/>
+    从yuyvToYuv422Wrapper()的定义中可以看出，它调用了yuyvtoyuv422()。而yuyvtoyuv422()则是rgb2rgb.c中的一个函数，用于将YUVU转换为YUV422（该函数在前文中已经记录）。
+    <br/>
+    <br/>
+    <strong>
+     8.如果需要拉伸的话，就会调用ff_getSwsFunc()将通用的swscale()赋值给SwsContext中的swscale指针，然后返回。
+    </strong>
+    <br/>
+    上一步骤（图像不用缩放）实际上是一种不太常见的情况，更多的情况下会执行本步骤。这个时候就会调用ff_getSwsFunc()获取图像的缩放函数。
+    <br/>
+    <br/>
+    <h3>
+     ff_getSwsFunc()
+    </h3>
+    ff_getSwsFunc()用于获取通用的swscale()函数。该函数的定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_28_6865018">SwsFunc ff_getSwsFunc(SwsContext *c)
+{
+    sws_init_swscale(c);
+
+    if (ARCH_PPC)
+        ff_sws_init_swscale_ppc(c);
+    if (ARCH_X86)
+        ff_sws_init_swscale_x86(c);
+
+    return swscale;
+}
+</pre>
+    <br/>
+    <p>
+     从源代码中可以看出ff_getSwsFunc()调用了函数sws_init_swscale()。如果系统支持X86汇编的话，还会调用ff_sws_init_swscale_x86()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     sws_init_swscale()
+    </h3>
+    <p>
+     sws_init_swscale()的定义位于libswscale\swscale.c，如下所示。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_29_4026566">static av_cold void sws_init_swscale(SwsContext *c)
+{
+    enum AVPixelFormat srcFormat = c-&gt;srcFormat;
+
+    ff_sws_init_output_funcs(c, &amp;c-&gt;yuv2plane1, &amp;c-&gt;yuv2planeX,
+                             &amp;c-&gt;yuv2nv12cX, &amp;c-&gt;yuv2packed1,
+                             &amp;c-&gt;yuv2packed2, &amp;c-&gt;yuv2packedX, &amp;c-&gt;yuv2anyX);
+
+    ff_sws_init_input_funcs(c);
+
+
+    if (c-&gt;srcBpc == 8) {
+        if (c-&gt;dstBpc &lt;= 14) {
+            c-&gt;hyScale = c-&gt;hcScale = hScale8To15_c;
+            if (c-&gt;flags &amp; SWS_FAST_BILINEAR) {
+                c-&gt;hyscale_fast = ff_hyscale_fast_c;
+                c-&gt;hcscale_fast = ff_hcscale_fast_c;
+            }
+        } else {
+            c-&gt;hyScale = c-&gt;hcScale = hScale8To19_c;
+        }
+    } else {
+        c-&gt;hyScale = c-&gt;hcScale = c-&gt;dstBpc &gt; 14 ? hScale16To19_c
+                                                 : hScale16To15_c;
+    }
+
+    ff_sws_init_range_convert(c);
+
+    if (!(isGray(srcFormat) || isGray(c-&gt;dstFormat) ||
+          srcFormat == AV_PIX_FMT_MONOBLACK || srcFormat == AV_PIX_FMT_MONOWHITE))
+        c-&gt;needs_hcscale = 1;
+}
+</pre>
+    <br/>
+    <p>
+     从函数中可以看出，sws_init_swscale()主要调用了3个函数：ff_sws_init_output_funcs()，ff_sws_init_input_funcs()，ff_sws_init_range_convert()。其中，ff_sws_init_output_funcs()用于初始化输出的函数，ff_sws_init_input_funcs()用于初始化输入的函数，ff_sws_init_range_convert()用于初始化像素值范围转换的函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     ff_sws_init_output_funcs()
+    </h3>
+    <p>
+     ff_sws_init_output_funcs()用于初始化“输出函数”。“输出函数”在libswscale中的作用就是将处理后的一行像素数据输出出来。ff_sws_init_output_funcs()的定义位于libswscale\output.c，如下所示。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_30_2267909">av_cold void ff_sws_init_output_funcs(SwsContext *c,
+                                      yuv2planar1_fn *yuv2plane1,
+                                      yuv2planarX_fn *yuv2planeX,
+                                      yuv2interleavedX_fn *yuv2nv12cX,
+                                      yuv2packed1_fn *yuv2packed1,
+                                      yuv2packed2_fn *yuv2packed2,
+                                      yuv2packedX_fn *yuv2packedX,
+                                      yuv2anyX_fn *yuv2anyX)
+{
+    enum AVPixelFormat dstFormat = c-&gt;dstFormat;
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(dstFormat);
+
+    if (is16BPS(dstFormat)) {
+        *yuv2planeX = isBE(dstFormat) ? yuv2planeX_16BE_c  : yuv2planeX_16LE_c;
+        *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_16BE_c  : yuv2plane1_16LE_c;
+    } else if (is9_OR_10BPS(dstFormat)) {
+        if (desc-&gt;comp[0].depth_minus1 == 8) {
+            *yuv2planeX = isBE(dstFormat) ? yuv2planeX_9BE_c  : yuv2planeX_9LE_c;
+            *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_9BE_c  : yuv2plane1_9LE_c;
+        } else if (desc-&gt;comp[0].depth_minus1 == 9) {
+            *yuv2planeX = isBE(dstFormat) ? yuv2planeX_10BE_c  : yuv2planeX_10LE_c;
+            *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_10BE_c  : yuv2plane1_10LE_c;
+        } else if (desc-&gt;comp[0].depth_minus1 == 11) {
+            *yuv2planeX = isBE(dstFormat) ? yuv2planeX_12BE_c  : yuv2planeX_12LE_c;
+            *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_12BE_c  : yuv2plane1_12LE_c;
+        } else if (desc-&gt;comp[0].depth_minus1 == 13) {
+            *yuv2planeX = isBE(dstFormat) ? yuv2planeX_14BE_c  : yuv2planeX_14LE_c;
+            *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_14BE_c  : yuv2plane1_14LE_c;
+        } else
+            av_assert0(0);
+    } else {
+        *yuv2plane1 = yuv2plane1_8_c;
+        *yuv2planeX = yuv2planeX_8_c;
+        if (dstFormat == AV_PIX_FMT_NV12 || dstFormat == AV_PIX_FMT_NV21)
+            *yuv2nv12cX = yuv2nv12cX_c;
+    }
+
+    if(c-&gt;flags &amp; SWS_FULL_CHR_H_INT) {
+        switch (dstFormat) {
+            case AV_PIX_FMT_RGBA:
+#if CONFIG_SMALL
+                *yuv2packedX = yuv2rgba32_full_X_c;
+                *yuv2packed2 = yuv2rgba32_full_2_c;
+                *yuv2packed1 = yuv2rgba32_full_1_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packedX = yuv2rgba32_full_X_c;
+                    *yuv2packed2 = yuv2rgba32_full_2_c;
+                    *yuv2packed1 = yuv2rgba32_full_1_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packedX = yuv2rgbx32_full_X_c;
+                    *yuv2packed2 = yuv2rgbx32_full_2_c;
+                    *yuv2packed1 = yuv2rgbx32_full_1_c;
+                }
+#endif /* !CONFIG_SMALL */
+                break;
+            case AV_PIX_FMT_ARGB:
+#if CONFIG_SMALL
+                *yuv2packedX = yuv2argb32_full_X_c;
+                *yuv2packed2 = yuv2argb32_full_2_c;
+                *yuv2packed1 = yuv2argb32_full_1_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packedX = yuv2argb32_full_X_c;
+                    *yuv2packed2 = yuv2argb32_full_2_c;
+                    *yuv2packed1 = yuv2argb32_full_1_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packedX = yuv2xrgb32_full_X_c;
+                    *yuv2packed2 = yuv2xrgb32_full_2_c;
+                    *yuv2packed1 = yuv2xrgb32_full_1_c;
+                }
+#endif /* !CONFIG_SMALL */
+                break;
+            case AV_PIX_FMT_BGRA:
+#if CONFIG_SMALL
+                *yuv2packedX = yuv2bgra32_full_X_c;
+                *yuv2packed2 = yuv2bgra32_full_2_c;
+                *yuv2packed1 = yuv2bgra32_full_1_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packedX = yuv2bgra32_full_X_c;
+                    *yuv2packed2 = yuv2bgra32_full_2_c;
+                    *yuv2packed1 = yuv2bgra32_full_1_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packedX = yuv2bgrx32_full_X_c;
+                    *yuv2packed2 = yuv2bgrx32_full_2_c;
+                    *yuv2packed1 = yuv2bgrx32_full_1_c;
+                }
+#endif /* !CONFIG_SMALL */
+                break;
+            case AV_PIX_FMT_ABGR:
+#if CONFIG_SMALL
+                *yuv2packedX = yuv2abgr32_full_X_c;
+                *yuv2packed2 = yuv2abgr32_full_2_c;
+                *yuv2packed1 = yuv2abgr32_full_1_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packedX = yuv2abgr32_full_X_c;
+                    *yuv2packed2 = yuv2abgr32_full_2_c;
+                    *yuv2packed1 = yuv2abgr32_full_1_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packedX = yuv2xbgr32_full_X_c;
+                    *yuv2packed2 = yuv2xbgr32_full_2_c;
+                    *yuv2packed1 = yuv2xbgr32_full_1_c;
+                }
+#endif /* !CONFIG_SMALL */
+                break;
+            case AV_PIX_FMT_RGB24:
+            *yuv2packedX = yuv2rgb24_full_X_c;
+            *yuv2packed2 = yuv2rgb24_full_2_c;
+            *yuv2packed1 = yuv2rgb24_full_1_c;
+            break;
+        case AV_PIX_FMT_BGR24:
+            *yuv2packedX = yuv2bgr24_full_X_c;
+            *yuv2packed2 = yuv2bgr24_full_2_c;
+            *yuv2packed1 = yuv2bgr24_full_1_c;
+            break;
+        case AV_PIX_FMT_BGR4_BYTE:
+            *yuv2packedX = yuv2bgr4_byte_full_X_c;
+            *yuv2packed2 = yuv2bgr4_byte_full_2_c;
+            *yuv2packed1 = yuv2bgr4_byte_full_1_c;
+            break;
+        case AV_PIX_FMT_RGB4_BYTE:
+            *yuv2packedX = yuv2rgb4_byte_full_X_c;
+            *yuv2packed2 = yuv2rgb4_byte_full_2_c;
+            *yuv2packed1 = yuv2rgb4_byte_full_1_c;
+            break;
+        case AV_PIX_FMT_BGR8:
+            *yuv2packedX = yuv2bgr8_full_X_c;
+            *yuv2packed2 = yuv2bgr8_full_2_c;
+            *yuv2packed1 = yuv2bgr8_full_1_c;
+            break;
+        case AV_PIX_FMT_RGB8:
+            *yuv2packedX = yuv2rgb8_full_X_c;
+            *yuv2packed2 = yuv2rgb8_full_2_c;
+            *yuv2packed1 = yuv2rgb8_full_1_c;
+            break;
+        case AV_PIX_FMT_GBRP:
+        case AV_PIX_FMT_GBRP9BE:
+        case AV_PIX_FMT_GBRP9LE:
+        case AV_PIX_FMT_GBRP10BE:
+        case AV_PIX_FMT_GBRP10LE:
+        case AV_PIX_FMT_GBRP12BE:
+        case AV_PIX_FMT_GBRP12LE:
+        case AV_PIX_FMT_GBRP14BE:
+        case AV_PIX_FMT_GBRP14LE:
+        case AV_PIX_FMT_GBRP16BE:
+        case AV_PIX_FMT_GBRP16LE:
+        case AV_PIX_FMT_GBRAP:
+            *yuv2anyX = yuv2gbrp_full_X_c;
+            break;
+        }
+        if (!*yuv2packedX &amp;&amp; !*yuv2anyX)
+            goto YUV_PACKED;
+    } else {
+        YUV_PACKED:
+        switch (dstFormat) {
+        case AV_PIX_FMT_RGBA64LE:
+#if CONFIG_SWSCALE_ALPHA
+            if (c-&gt;alpPixBuf) {
+                *yuv2packed1 = yuv2rgba64le_1_c;
+                *yuv2packed2 = yuv2rgba64le_2_c;
+                *yuv2packedX = yuv2rgba64le_X_c;
+            } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+            {
+                *yuv2packed1 = yuv2rgbx64le_1_c;
+                *yuv2packed2 = yuv2rgbx64le_2_c;
+                *yuv2packedX = yuv2rgbx64le_X_c;
+            }
+            break;
+        case AV_PIX_FMT_RGBA64BE:
+#if CONFIG_SWSCALE_ALPHA
+            if (c-&gt;alpPixBuf) {
+                *yuv2packed1 = yuv2rgba64be_1_c;
+                *yuv2packed2 = yuv2rgba64be_2_c;
+                *yuv2packedX = yuv2rgba64be_X_c;
+            } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+            {
+                *yuv2packed1 = yuv2rgbx64be_1_c;
+                *yuv2packed2 = yuv2rgbx64be_2_c;
+                *yuv2packedX = yuv2rgbx64be_X_c;
+            }
+            break;
+        case AV_PIX_FMT_BGRA64LE:
+#if CONFIG_SWSCALE_ALPHA
+            if (c-&gt;alpPixBuf) {
+                *yuv2packed1 = yuv2bgra64le_1_c;
+                *yuv2packed2 = yuv2bgra64le_2_c;
+                *yuv2packedX = yuv2bgra64le_X_c;
+            } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+            {
+                *yuv2packed1 = yuv2bgrx64le_1_c;
+                *yuv2packed2 = yuv2bgrx64le_2_c;
+                *yuv2packedX = yuv2bgrx64le_X_c;
+            }
+            break;
+        case AV_PIX_FMT_BGRA64BE:
+#if CONFIG_SWSCALE_ALPHA
+            if (c-&gt;alpPixBuf) {
+                *yuv2packed1 = yuv2bgra64be_1_c;
+                *yuv2packed2 = yuv2bgra64be_2_c;
+                *yuv2packedX = yuv2bgra64be_X_c;
+            } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+            {
+                *yuv2packed1 = yuv2bgrx64be_1_c;
+                *yuv2packed2 = yuv2bgrx64be_2_c;
+                *yuv2packedX = yuv2bgrx64be_X_c;
+            }
+            break;
+        case AV_PIX_FMT_RGB48LE:
+            *yuv2packed1 = yuv2rgb48le_1_c;
+            *yuv2packed2 = yuv2rgb48le_2_c;
+            *yuv2packedX = yuv2rgb48le_X_c;
+            break;
+        case AV_PIX_FMT_RGB48BE:
+            *yuv2packed1 = yuv2rgb48be_1_c;
+            *yuv2packed2 = yuv2rgb48be_2_c;
+            *yuv2packedX = yuv2rgb48be_X_c;
+            break;
+        case AV_PIX_FMT_BGR48LE:
+            *yuv2packed1 = yuv2bgr48le_1_c;
+            *yuv2packed2 = yuv2bgr48le_2_c;
+            *yuv2packedX = yuv2bgr48le_X_c;
+            break;
+        case AV_PIX_FMT_BGR48BE:
+            *yuv2packed1 = yuv2bgr48be_1_c;
+            *yuv2packed2 = yuv2bgr48be_2_c;
+            *yuv2packedX = yuv2bgr48be_X_c;
+            break;
+        case AV_PIX_FMT_RGB32:
+        case AV_PIX_FMT_BGR32:
+#if CONFIG_SMALL
+            *yuv2packed1 = yuv2rgb32_1_c;
+            *yuv2packed2 = yuv2rgb32_2_c;
+            *yuv2packedX = yuv2rgb32_X_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packed1 = yuv2rgba32_1_c;
+                    *yuv2packed2 = yuv2rgba32_2_c;
+                    *yuv2packedX = yuv2rgba32_X_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packed1 = yuv2rgbx32_1_c;
+                    *yuv2packed2 = yuv2rgbx32_2_c;
+                    *yuv2packedX = yuv2rgbx32_X_c;
+                }
+#endif /* !CONFIG_SMALL */
+            break;
+        case AV_PIX_FMT_RGB32_1:
+        case AV_PIX_FMT_BGR32_1:
+#if CONFIG_SMALL
+                *yuv2packed1 = yuv2rgb32_1_1_c;
+                *yuv2packed2 = yuv2rgb32_1_2_c;
+                *yuv2packedX = yuv2rgb32_1_X_c;
+#else
+#if CONFIG_SWSCALE_ALPHA
+                if (c-&gt;alpPixBuf) {
+                    *yuv2packed1 = yuv2rgba32_1_1_c;
+                    *yuv2packed2 = yuv2rgba32_1_2_c;
+                    *yuv2packedX = yuv2rgba32_1_X_c;
+                } else
+#endif /* CONFIG_SWSCALE_ALPHA */
+                {
+                    *yuv2packed1 = yuv2rgbx32_1_1_c;
+                    *yuv2packed2 = yuv2rgbx32_1_2_c;
+                    *yuv2packedX = yuv2rgbx32_1_X_c;
+                }
+#endif /* !CONFIG_SMALL */
+                break;
+        case AV_PIX_FMT_RGB24:
+            *yuv2packed1 = yuv2rgb24_1_c;
+            *yuv2packed2 = yuv2rgb24_2_c;
+            *yuv2packedX = yuv2rgb24_X_c;
+            break;
+        case AV_PIX_FMT_BGR24:
+            *yuv2packed1 = yuv2bgr24_1_c;
+            *yuv2packed2 = yuv2bgr24_2_c;
+            *yuv2packedX = yuv2bgr24_X_c;
+            break;
+        case AV_PIX_FMT_RGB565LE:
+        case AV_PIX_FMT_RGB565BE:
+        case AV_PIX_FMT_BGR565LE:
+        case AV_PIX_FMT_BGR565BE:
+            *yuv2packed1 = yuv2rgb16_1_c;
+            *yuv2packed2 = yuv2rgb16_2_c;
+            *yuv2packedX = yuv2rgb16_X_c;
+            break;
+        case AV_PIX_FMT_RGB555LE:
+        case AV_PIX_FMT_RGB555BE:
+        case AV_PIX_FMT_BGR555LE:
+        case AV_PIX_FMT_BGR555BE:
+            *yuv2packed1 = yuv2rgb15_1_c;
+            *yuv2packed2 = yuv2rgb15_2_c;
+            *yuv2packedX = yuv2rgb15_X_c;
+            break;
+        case AV_PIX_FMT_RGB444LE:
+        case AV_PIX_FMT_RGB444BE:
+        case AV_PIX_FMT_BGR444LE:
+        case AV_PIX_FMT_BGR444BE:
+            *yuv2packed1 = yuv2rgb12_1_c;
+            *yuv2packed2 = yuv2rgb12_2_c;
+            *yuv2packedX = yuv2rgb12_X_c;
+            break;
+        case AV_PIX_FMT_RGB8:
+        case AV_PIX_FMT_BGR8:
+            *yuv2packed1 = yuv2rgb8_1_c;
+            *yuv2packed2 = yuv2rgb8_2_c;
+            *yuv2packedX = yuv2rgb8_X_c;
+            break;
+        case AV_PIX_FMT_RGB4:
+        case AV_PIX_FMT_BGR4:
+            *yuv2packed1 = yuv2rgb4_1_c;
+            *yuv2packed2 = yuv2rgb4_2_c;
+            *yuv2packedX = yuv2rgb4_X_c;
+            break;
+        case AV_PIX_FMT_RGB4_BYTE:
+        case AV_PIX_FMT_BGR4_BYTE:
+            *yuv2packed1 = yuv2rgb4b_1_c;
+            *yuv2packed2 = yuv2rgb4b_2_c;
+            *yuv2packedX = yuv2rgb4b_X_c;
+            break;
+        }
+    }
+    switch (dstFormat) {
+    case AV_PIX_FMT_MONOWHITE:
+        *yuv2packed1 = yuv2monowhite_1_c;
+        *yuv2packed2 = yuv2monowhite_2_c;
+        *yuv2packedX = yuv2monowhite_X_c;
+        break;
+    case AV_PIX_FMT_MONOBLACK:
+        *yuv2packed1 = yuv2monoblack_1_c;
+        *yuv2packed2 = yuv2monoblack_2_c;
+        *yuv2packedX = yuv2monoblack_X_c;
+        break;
+    case AV_PIX_FMT_YUYV422:
+        *yuv2packed1 = yuv2yuyv422_1_c;
+        *yuv2packed2 = yuv2yuyv422_2_c;
+        *yuv2packedX = yuv2yuyv422_X_c;
+        break;
+    case AV_PIX_FMT_YVYU422:
+        *yuv2packed1 = yuv2yvyu422_1_c;
+        *yuv2packed2 = yuv2yvyu422_2_c;
+        *yuv2packedX = yuv2yvyu422_X_c;
+        break;
+    case AV_PIX_FMT_UYVY422:
+        *yuv2packed1 = yuv2uyvy422_1_c;
+        *yuv2packed2 = yuv2uyvy422_2_c;
+        *yuv2packedX = yuv2uyvy422_X_c;
+        break;
+    }
+}
+</pre>
+    <br/>
+    ff_sws_init_output_funcs()根据输出像素格式的不同，对以下几个函数指针进行赋值：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     yuv2plane1：是yuv2planar1_fn类型的函数指针。该函数用于输出一行水平拉伸后的planar格式数据。数据没有使用垂直拉伸。
+     <br/>
+     yuv2planeX：是yuv2planarX_fn类型的函数指针。该函数用于输出一行水平拉伸后的planar格式数据。数据使用垂直拉伸。
+     <br/>
+     yuv2packed1：是yuv2packed1_fn类型的函数指针。该函数用于输出一行水平拉伸后的packed格式数据。数据没有使用垂直拉伸。
+     <br/>
+     yuv2packed2：是yuv2packed2_fn类型的函数指针。该函数用于输出一行水平拉伸后的packed格式数据。数据使用两行数据进行垂直拉伸。
+     <br/>
+     yuv2packedX：是yuv2packedX_fn类型的函数指针。该函数用于输出一行水平拉伸后的packed格式数据。数据使用垂直拉伸。
+     <br/>
+     yuv2nv12cX：是yuv2interleavedX_fn类型的函数指针。还没有研究该函数。
+     <br/>
+     yuv2anyX：是yuv2anyX_fn类型的函数指针。还没有研究该函数。
+    </blockquote>
+    <br/>
+    <h3>
+     ff_sws_init_input_funcs()
+    </h3>
+    ff_sws_init_input_funcs()用于初始化“输入函数”。“输入函数”在libswscale中的作用就是任意格式的像素转换为YUV格式以供后续的处理。ff_sws_init_input_funcs()的定义位于libswscale\input.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_31_2494120">av_cold void ff_sws_init_input_funcs(SwsContext *c)
+{
+    enum AVPixelFormat srcFormat = c-&gt;srcFormat;
+
+    c-&gt;chrToYV12 = NULL;
+    switch (srcFormat) {
+    case AV_PIX_FMT_YUYV422:
+        c-&gt;chrToYV12 = yuy2ToUV_c;
+        break;
+    case AV_PIX_FMT_YVYU422:
+        c-&gt;chrToYV12 = yvy2ToUV_c;
+        break;
+    case AV_PIX_FMT_UYVY422:
+        c-&gt;chrToYV12 = uyvyToUV_c;
+        break;
+    case AV_PIX_FMT_NV12:
+        c-&gt;chrToYV12 = nv12ToUV_c;
+        break;
+    case AV_PIX_FMT_NV21:
+        c-&gt;chrToYV12 = nv21ToUV_c;
+        break;
+    case AV_PIX_FMT_RGB8:
+    case AV_PIX_FMT_BGR8:
+    case AV_PIX_FMT_PAL8:
+    case AV_PIX_FMT_BGR4_BYTE:
+    case AV_PIX_FMT_RGB4_BYTE:
+        c-&gt;chrToYV12 = palToUV_c;
+        break;
+    case AV_PIX_FMT_GBRP9LE:
+        c-&gt;readChrPlanar = planar_rgb9le_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP10LE:
+        c-&gt;readChrPlanar = planar_rgb10le_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP12LE:
+        c-&gt;readChrPlanar = planar_rgb12le_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP14LE:
+        c-&gt;readChrPlanar = planar_rgb14le_to_uv;
+        break;
+    case AV_PIX_FMT_GBRAP16LE:
+    case AV_PIX_FMT_GBRP16LE:
+        c-&gt;readChrPlanar = planar_rgb16le_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP9BE:
+        c-&gt;readChrPlanar = planar_rgb9be_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP10BE:
+        c-&gt;readChrPlanar = planar_rgb10be_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP12BE:
+        c-&gt;readChrPlanar = planar_rgb12be_to_uv;
+        break;
+    case AV_PIX_FMT_GBRP14BE:
+        c-&gt;readChrPlanar = planar_rgb14be_to_uv;
+        break;
+    case AV_PIX_FMT_GBRAP16BE:
+    case AV_PIX_FMT_GBRP16BE:
+        c-&gt;readChrPlanar = planar_rgb16be_to_uv;
+        break;
+    case AV_PIX_FMT_GBRAP:
+    case AV_PIX_FMT_GBRP:
+        c-&gt;readChrPlanar = planar_rgb_to_uv;
+        break;
+#if HAVE_BIGENDIAN
+    case AV_PIX_FMT_YUV444P9LE:
+    case AV_PIX_FMT_YUV422P9LE:
+    case AV_PIX_FMT_YUV420P9LE:
+    case AV_PIX_FMT_YUV422P10LE:
+    case AV_PIX_FMT_YUV444P10LE:
+    case AV_PIX_FMT_YUV420P10LE:
+    case AV_PIX_FMT_YUV422P12LE:
+    case AV_PIX_FMT_YUV444P12LE:
+    case AV_PIX_FMT_YUV420P12LE:
+    case AV_PIX_FMT_YUV422P14LE:
+    case AV_PIX_FMT_YUV444P14LE:
+    case AV_PIX_FMT_YUV420P14LE:
+    case AV_PIX_FMT_YUV420P16LE:
+    case AV_PIX_FMT_YUV422P16LE:
+    case AV_PIX_FMT_YUV444P16LE:
+
+    case AV_PIX_FMT_YUVA444P9LE:
+    case AV_PIX_FMT_YUVA422P9LE:
+    case AV_PIX_FMT_YUVA420P9LE:
+    case AV_PIX_FMT_YUVA444P10LE:
+    case AV_PIX_FMT_YUVA422P10LE:
+    case AV_PIX_FMT_YUVA420P10LE:
+    case AV_PIX_FMT_YUVA420P16LE:
+    case AV_PIX_FMT_YUVA422P16LE:
+    case AV_PIX_FMT_YUVA444P16LE:
+        c-&gt;chrToYV12 = bswap16UV_c;
+        break;
+#else
+    case AV_PIX_FMT_YUV444P9BE:
+    case AV_PIX_FMT_YUV422P9BE:
+    case AV_PIX_FMT_YUV420P9BE:
+    case AV_PIX_FMT_YUV444P10BE:
+    case AV_PIX_FMT_YUV422P10BE:
+    case AV_PIX_FMT_YUV420P10BE:
+    case AV_PIX_FMT_YUV444P12BE:
+    case AV_PIX_FMT_YUV422P12BE:
+    case AV_PIX_FMT_YUV420P12BE:
+    case AV_PIX_FMT_YUV444P14BE:
+    case AV_PIX_FMT_YUV422P14BE:
+    case AV_PIX_FMT_YUV420P14BE:
+    case AV_PIX_FMT_YUV420P16BE:
+    case AV_PIX_FMT_YUV422P16BE:
+    case AV_PIX_FMT_YUV444P16BE:
+
+    case AV_PIX_FMT_YUVA444P9BE:
+    case AV_PIX_FMT_YUVA422P9BE:
+    case AV_PIX_FMT_YUVA420P9BE:
+    case AV_PIX_FMT_YUVA444P10BE:
+    case AV_PIX_FMT_YUVA422P10BE:
+    case AV_PIX_FMT_YUVA420P10BE:
+    case AV_PIX_FMT_YUVA420P16BE:
+    case AV_PIX_FMT_YUVA422P16BE:
+    case AV_PIX_FMT_YUVA444P16BE:
+        c-&gt;chrToYV12 = bswap16UV_c;
+        break;
+#endif
+    }
+    if (c-&gt;chrSrcHSubSample) {
+        switch (srcFormat) {
+        case AV_PIX_FMT_RGBA64BE:
+            c-&gt;chrToYV12 = rgb64BEToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGBA64LE:
+            c-&gt;chrToYV12 = rgb64LEToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGRA64BE:
+            c-&gt;chrToYV12 = bgr64BEToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGRA64LE:
+            c-&gt;chrToYV12 = bgr64LEToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB48BE:
+            c-&gt;chrToYV12 = rgb48BEToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB48LE:
+            c-&gt;chrToYV12 = rgb48LEToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR48BE:
+            c-&gt;chrToYV12 = bgr48BEToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR48LE:
+            c-&gt;chrToYV12 = bgr48LEToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB32:
+            c-&gt;chrToYV12 = bgr32ToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB32_1:
+            c-&gt;chrToYV12 = bgr321ToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR24:
+            c-&gt;chrToYV12 = bgr24ToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR565LE:
+            c-&gt;chrToYV12 = bgr16leToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR565BE:
+            c-&gt;chrToYV12 = bgr16beToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR555LE:
+            c-&gt;chrToYV12 = bgr15leToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR555BE:
+            c-&gt;chrToYV12 = bgr15beToUV_half_c;
+            break;
+        case AV_PIX_FMT_GBRAP:
+        case AV_PIX_FMT_GBRP:
+            c-&gt;chrToYV12 = gbr24pToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR444LE:
+            c-&gt;chrToYV12 = bgr12leToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR444BE:
+            c-&gt;chrToYV12 = bgr12beToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR32:
+            c-&gt;chrToYV12 = rgb32ToUV_half_c;
+            break;
+        case AV_PIX_FMT_BGR32_1:
+            c-&gt;chrToYV12 = rgb321ToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB24:
+            c-&gt;chrToYV12 = rgb24ToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB565LE:
+            c-&gt;chrToYV12 = rgb16leToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB565BE:
+            c-&gt;chrToYV12 = rgb16beToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB555LE:
+            c-&gt;chrToYV12 = rgb15leToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB555BE:
+            c-&gt;chrToYV12 = rgb15beToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB444LE:
+            c-&gt;chrToYV12 = rgb12leToUV_half_c;
+            break;
+        case AV_PIX_FMT_RGB444BE:
+            c-&gt;chrToYV12 = rgb12beToUV_half_c;
+            break;
+        }
+    } else {
+        switch (srcFormat) {
+        case AV_PIX_FMT_RGBA64BE:
+            c-&gt;chrToYV12 = rgb64BEToUV_c;
+            break;
+        case AV_PIX_FMT_RGBA64LE:
+            c-&gt;chrToYV12 = rgb64LEToUV_c;
+            break;
+        case AV_PIX_FMT_BGRA64BE:
+            c-&gt;chrToYV12 = bgr64BEToUV_c;
+            break;
+        case AV_PIX_FMT_BGRA64LE:
+            c-&gt;chrToYV12 = bgr64LEToUV_c;
+            break;
+        case AV_PIX_FMT_RGB48BE:
+            c-&gt;chrToYV12 = rgb48BEToUV_c;
+            break;
+        case AV_PIX_FMT_RGB48LE:
+            c-&gt;chrToYV12 = rgb48LEToUV_c;
+            break;
+        case AV_PIX_FMT_BGR48BE:
+            c-&gt;chrToYV12 = bgr48BEToUV_c;
+            break;
+        case AV_PIX_FMT_BGR48LE:
+            c-&gt;chrToYV12 = bgr48LEToUV_c;
+            break;
+        case AV_PIX_FMT_RGB32:
+            c-&gt;chrToYV12 = bgr32ToUV_c;
+            break;
+        case AV_PIX_FMT_RGB32_1:
+            c-&gt;chrToYV12 = bgr321ToUV_c;
+            break;
+        case AV_PIX_FMT_BGR24:
+            c-&gt;chrToYV12 = bgr24ToUV_c;
+            break;
+        case AV_PIX_FMT_BGR565LE:
+            c-&gt;chrToYV12 = bgr16leToUV_c;
+            break;
+        case AV_PIX_FMT_BGR565BE:
+            c-&gt;chrToYV12 = bgr16beToUV_c;
+            break;
+        case AV_PIX_FMT_BGR555LE:
+            c-&gt;chrToYV12 = bgr15leToUV_c;
+            break;
+        case AV_PIX_FMT_BGR555BE:
+            c-&gt;chrToYV12 = bgr15beToUV_c;
+            break;
+        case AV_PIX_FMT_BGR444LE:
+            c-&gt;chrToYV12 = bgr12leToUV_c;
+            break;
+        case AV_PIX_FMT_BGR444BE:
+            c-&gt;chrToYV12 = bgr12beToUV_c;
+            break;
+        case AV_PIX_FMT_BGR32:
+            c-&gt;chrToYV12 = rgb32ToUV_c;
+            break;
+        case AV_PIX_FMT_BGR32_1:
+            c-&gt;chrToYV12 = rgb321ToUV_c;
+            break;
+        case AV_PIX_FMT_RGB24:
+            c-&gt;chrToYV12 = rgb24ToUV_c;
+            break;
+        case AV_PIX_FMT_RGB565LE:
+            c-&gt;chrToYV12 = rgb16leToUV_c;
+            break;
+        case AV_PIX_FMT_RGB565BE:
+            c-&gt;chrToYV12 = rgb16beToUV_c;
+            break;
+        case AV_PIX_FMT_RGB555LE:
+            c-&gt;chrToYV12 = rgb15leToUV_c;
+            break;
+        case AV_PIX_FMT_RGB555BE:
+            c-&gt;chrToYV12 = rgb15beToUV_c;
+            break;
+        case AV_PIX_FMT_RGB444LE:
+            c-&gt;chrToYV12 = rgb12leToUV_c;
+            break;
+        case AV_PIX_FMT_RGB444BE:
+            c-&gt;chrToYV12 = rgb12beToUV_c;
+            break;
+        }
+    }
+
+    c-&gt;lumToYV12 = NULL;
+    c-&gt;alpToYV12 = NULL;
+    switch (srcFormat) {
+    case AV_PIX_FMT_GBRP9LE:
+        c-&gt;readLumPlanar = planar_rgb9le_to_y;
+        break;
+    case AV_PIX_FMT_GBRP10LE:
+        c-&gt;readLumPlanar = planar_rgb10le_to_y;
+        break;
+    case AV_PIX_FMT_GBRP12LE:
+        c-&gt;readLumPlanar = planar_rgb12le_to_y;
+        break;
+    case AV_PIX_FMT_GBRP14LE:
+        c-&gt;readLumPlanar = planar_rgb14le_to_y;
+        break;
+    case AV_PIX_FMT_GBRAP16LE:
+    case AV_PIX_FMT_GBRP16LE:
+        c-&gt;readLumPlanar = planar_rgb16le_to_y;
+        break;
+    case AV_PIX_FMT_GBRP9BE:
+        c-&gt;readLumPlanar = planar_rgb9be_to_y;
+        break;
+    case AV_PIX_FMT_GBRP10BE:
+        c-&gt;readLumPlanar = planar_rgb10be_to_y;
+        break;
+    case AV_PIX_FMT_GBRP12BE:
+        c-&gt;readLumPlanar = planar_rgb12be_to_y;
+        break;
+    case AV_PIX_FMT_GBRP14BE:
+        c-&gt;readLumPlanar = planar_rgb14be_to_y;
+        break;
+    case AV_PIX_FMT_GBRAP16BE:
+    case AV_PIX_FMT_GBRP16BE:
+        c-&gt;readLumPlanar = planar_rgb16be_to_y;
+        break;
+    case AV_PIX_FMT_GBRAP:
+        c-&gt;readAlpPlanar = planar_rgb_to_a;
+    case AV_PIX_FMT_GBRP:
+        c-&gt;readLumPlanar = planar_rgb_to_y;
+        break;
+#if HAVE_BIGENDIAN
+    case AV_PIX_FMT_YUV444P9LE:
+    case AV_PIX_FMT_YUV422P9LE:
+    case AV_PIX_FMT_YUV420P9LE:
+    case AV_PIX_FMT_YUV444P10LE:
+    case AV_PIX_FMT_YUV422P10LE:
+    case AV_PIX_FMT_YUV420P10LE:
+    case AV_PIX_FMT_YUV444P12LE:
+    case AV_PIX_FMT_YUV422P12LE:
+    case AV_PIX_FMT_YUV420P12LE:
+    case AV_PIX_FMT_YUV444P14LE:
+    case AV_PIX_FMT_YUV422P14LE:
+    case AV_PIX_FMT_YUV420P14LE:
+    case AV_PIX_FMT_YUV420P16LE:
+    case AV_PIX_FMT_YUV422P16LE:
+    case AV_PIX_FMT_YUV444P16LE:
+
+    case AV_PIX_FMT_GRAY16LE:
+        c-&gt;lumToYV12 = bswap16Y_c;
+        break;
+    case AV_PIX_FMT_YUVA444P9LE:
+    case AV_PIX_FMT_YUVA422P9LE:
+    case AV_PIX_FMT_YUVA420P9LE:
+    case AV_PIX_FMT_YUVA444P10LE:
+    case AV_PIX_FMT_YUVA422P10LE:
+    case AV_PIX_FMT_YUVA420P10LE:
+    case AV_PIX_FMT_YUVA420P16LE:
+    case AV_PIX_FMT_YUVA422P16LE:
+    case AV_PIX_FMT_YUVA444P16LE:
+        c-&gt;lumToYV12 = bswap16Y_c;
+        c-&gt;alpToYV12 = bswap16Y_c;
+        break;
+#else
+    case AV_PIX_FMT_YUV444P9BE:
+    case AV_PIX_FMT_YUV422P9BE:
+    case AV_PIX_FMT_YUV420P9BE:
+    case AV_PIX_FMT_YUV444P10BE:
+    case AV_PIX_FMT_YUV422P10BE:
+    case AV_PIX_FMT_YUV420P10BE:
+    case AV_PIX_FMT_YUV444P12BE:
+    case AV_PIX_FMT_YUV422P12BE:
+    case AV_PIX_FMT_YUV420P12BE:
+    case AV_PIX_FMT_YUV444P14BE:
+    case AV_PIX_FMT_YUV422P14BE:
+    case AV_PIX_FMT_YUV420P14BE:
+    case AV_PIX_FMT_YUV420P16BE:
+    case AV_PIX_FMT_YUV422P16BE:
+    case AV_PIX_FMT_YUV444P16BE:
+
+    case AV_PIX_FMT_GRAY16BE:
+        c-&gt;lumToYV12 = bswap16Y_c;
+        break;
+    case AV_PIX_FMT_YUVA444P9BE:
+    case AV_PIX_FMT_YUVA422P9BE:
+    case AV_PIX_FMT_YUVA420P9BE:
+    case AV_PIX_FMT_YUVA444P10BE:
+    case AV_PIX_FMT_YUVA422P10BE:
+    case AV_PIX_FMT_YUVA420P10BE:
+    case AV_PIX_FMT_YUVA420P16BE:
+    case AV_PIX_FMT_YUVA422P16BE:
+    case AV_PIX_FMT_YUVA444P16BE:
+        c-&gt;lumToYV12 = bswap16Y_c;
+        c-&gt;alpToYV12 = bswap16Y_c;
+        break;
+#endif
+    case AV_PIX_FMT_YA16LE:
+        c-&gt;lumToYV12 = read_ya16le_gray_c;
+        c-&gt;alpToYV12 = read_ya16le_alpha_c;
+        break;
+    case AV_PIX_FMT_YA16BE:
+        c-&gt;lumToYV12 = read_ya16be_gray_c;
+        c-&gt;alpToYV12 = read_ya16be_alpha_c;
+        break;
+    case AV_PIX_FMT_YUYV422:
+    case AV_PIX_FMT_YVYU422:
+    case AV_PIX_FMT_YA8:
+        c-&gt;lumToYV12 = yuy2ToY_c;
+        break;
+    case AV_PIX_FMT_UYVY422:
+        c-&gt;lumToYV12 = uyvyToY_c;
+        break;
+    case AV_PIX_FMT_BGR24:
+        c-&gt;lumToYV12 = bgr24ToY_c;
+        break;
+    case AV_PIX_FMT_BGR565LE:
+        c-&gt;lumToYV12 = bgr16leToY_c;
+        break;
+    case AV_PIX_FMT_BGR565BE:
+        c-&gt;lumToYV12 = bgr16beToY_c;
+        break;
+    case AV_PIX_FMT_BGR555LE:
+        c-&gt;lumToYV12 = bgr15leToY_c;
+        break;
+    case AV_PIX_FMT_BGR555BE:
+        c-&gt;lumToYV12 = bgr15beToY_c;
+        break;
+    case AV_PIX_FMT_BGR444LE:
+        c-&gt;lumToYV12 = bgr12leToY_c;
+        break;
+    case AV_PIX_FMT_BGR444BE:
+        c-&gt;lumToYV12 = bgr12beToY_c;
+        break;
+    case AV_PIX_FMT_RGB24:
+        c-&gt;lumToYV12 = rgb24ToY_c;
+        break;
+    case AV_PIX_FMT_RGB565LE:
+        c-&gt;lumToYV12 = rgb16leToY_c;
+        break;
+    case AV_PIX_FMT_RGB565BE:
+        c-&gt;lumToYV12 = rgb16beToY_c;
+        break;
+    case AV_PIX_FMT_RGB555LE:
+        c-&gt;lumToYV12 = rgb15leToY_c;
+        break;
+    case AV_PIX_FMT_RGB555BE:
+        c-&gt;lumToYV12 = rgb15beToY_c;
+        break;
+    case AV_PIX_FMT_RGB444LE:
+        c-&gt;lumToYV12 = rgb12leToY_c;
+        break;
+    case AV_PIX_FMT_RGB444BE:
+        c-&gt;lumToYV12 = rgb12beToY_c;
+        break;
+    case AV_PIX_FMT_RGB8:
+    case AV_PIX_FMT_BGR8:
+    case AV_PIX_FMT_PAL8:
+    case AV_PIX_FMT_BGR4_BYTE:
+    case AV_PIX_FMT_RGB4_BYTE:
+        c-&gt;lumToYV12 = palToY_c;
+        break;
+    case AV_PIX_FMT_MONOBLACK:
+        c-&gt;lumToYV12 = monoblack2Y_c;
+        break;
+    case AV_PIX_FMT_MONOWHITE:
+        c-&gt;lumToYV12 = monowhite2Y_c;
+        break;
+    case AV_PIX_FMT_RGB32:
+        c-&gt;lumToYV12 = bgr32ToY_c;
+        break;
+    case AV_PIX_FMT_RGB32_1:
+        c-&gt;lumToYV12 = bgr321ToY_c;
+        break;
+    case AV_PIX_FMT_BGR32:
+        c-&gt;lumToYV12 = rgb32ToY_c;
+        break;
+    case AV_PIX_FMT_BGR32_1:
+        c-&gt;lumToYV12 = rgb321ToY_c;
+        break;
+    case AV_PIX_FMT_RGB48BE:
+        c-&gt;lumToYV12 = rgb48BEToY_c;
+        break;
+    case AV_PIX_FMT_RGB48LE:
+        c-&gt;lumToYV12 = rgb48LEToY_c;
+        break;
+    case AV_PIX_FMT_BGR48BE:
+        c-&gt;lumToYV12 = bgr48BEToY_c;
+        break;
+    case AV_PIX_FMT_BGR48LE:
+        c-&gt;lumToYV12 = bgr48LEToY_c;
+        break;
+    case AV_PIX_FMT_RGBA64BE:
+        c-&gt;lumToYV12 = rgb64BEToY_c;
+        break;
+    case AV_PIX_FMT_RGBA64LE:
+        c-&gt;lumToYV12 = rgb64LEToY_c;
+        break;
+    case AV_PIX_FMT_BGRA64BE:
+        c-&gt;lumToYV12 = bgr64BEToY_c;
+        break;
+    case AV_PIX_FMT_BGRA64LE:
+        c-&gt;lumToYV12 = bgr64LEToY_c;
+    }
+    if (c-&gt;alpPixBuf) {
+        if (is16BPS(srcFormat) || isNBPS(srcFormat)) {
+            if (HAVE_BIGENDIAN == !isBE(srcFormat))
+                c-&gt;alpToYV12 = bswap16Y_c;
+        }
+        switch (srcFormat) {
+        case AV_PIX_FMT_BGRA64LE:
+        case AV_PIX_FMT_BGRA64BE:
+        case AV_PIX_FMT_RGBA64LE:
+        case AV_PIX_FMT_RGBA64BE:  c-&gt;alpToYV12 = rgba64ToA_c; break;
+        case AV_PIX_FMT_BGRA:
+        case AV_PIX_FMT_RGBA:
+            c-&gt;alpToYV12 = rgbaToA_c;
+            break;
+        case AV_PIX_FMT_ABGR:
+        case AV_PIX_FMT_ARGB:
+            c-&gt;alpToYV12 = abgrToA_c;
+            break;
+        case AV_PIX_FMT_YA8:
+            c-&gt;alpToYV12 = uyvyToY_c;
+            break;
+        case AV_PIX_FMT_PAL8 :
+            c-&gt;alpToYV12 = palToA_c;
+            break;
+        }
+    }
+}
+</pre>
+    <br/>
+    ff_sws_init_input_funcs()根据输入像素格式的不同，对以下几个函数指针进行赋值：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     lumToYV12：转换得到Y分量。
+     <br/>
+     chrToYV12：转换得到UV分量。
+     <br/>
+     alpToYV12：转换得到Alpha分量。
+     <br/>
+     readLumPlanar：读取planar格式的数据转换为Y。
+     <br/>
+     readChrPlanar：读取planar格式的数据转换为UV。
+    </blockquote>
+    <p>
+     下面看几个例子。
+    </p>
+    当输入像素格式为AV_PIX_FMT_RGB24的时候，lumToYV12()指针指向的函数是rgb24ToY_c()，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_32_5511209">    case AV_PIX_FMT_RGB24:
+        c-&gt;lumToYV12 = rgb24ToY_c;
+        break;</pre>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     rgb24ToY_c()
+    </h4>
+    <p>
+     rgb24ToY_c()的定义如下。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_33_9259430">static void rgb24ToY_c(uint8_t *_dst, const uint8_t *src, const uint8_t *unused1, const uint8_t *unused2, int width,
+                       uint32_t *rgb2yuv)
+{
+    int16_t *dst = (int16_t *)_dst;
+    int32_t ry = rgb2yuv[RY_IDX], gy = rgb2yuv[GY_IDX], by = rgb2yuv[BY_IDX];
+    int i;
+    for (i = 0; i &lt; width; i++) {
+        int r = src[i * 3 + 0];
+        int g = src[i * 3 + 1];
+        int b = src[i * 3 + 2];
+
+        dst[i] = ((ry*r + gy*g + by*b + (32&lt;&lt;(RGB2YUV_SHIFT-1)) + (1&lt;&lt;(RGB2YUV_SHIFT-7)))&gt;&gt;(RGB2YUV_SHIFT-6));
+    }
+}
+</pre>
+    <br/>
+    从源代码中可以看出，该函数主要完成了以下三步：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     1.
+     <span style="white-space:pre">
+     </span>
+     取系数。通过读取rgb2yuv数组中存储的参数获得R，G，B每个分量的系数。
+     <br/>
+     2.
+     <span style="white-space:pre">
+     </span>
+     取像素值。分别读取R，G，B每个分量的像素值。
+     <br/>
+     3.
+     <span style="white-space:pre">
+     </span>
+     计算得到亮度值。根据R，G，B的系数和值，计算得到亮度值Y。
+    </blockquote>
+    <br/>
+    当输入像素格式为AV_PIX_FMT_RGB24的时候，chrToYV12 ()指针指向的函数是rgb24ToUV_half_c()，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_34_1371449">        case AV_PIX_FMT_RGB24:
+            c-&gt;chrToYV12 = rgb24ToUV_half_c;
+            break;</pre>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     rgb24ToUV_half_c()
+    </h4>
+    rgb24ToUV_half_c()定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_35_1913304">static void rgb24ToUV_half_c(uint8_t *_dstU, uint8_t *_dstV, const uint8_t *unused0, const uint8_t *src1,
+                             const uint8_t *src2, int width, uint32_t *rgb2yuv)
+{
+    int16_t *dstU = (int16_t *)_dstU;
+    int16_t *dstV = (int16_t *)_dstV;
+    int i;
+    int32_t ru = rgb2yuv[RU_IDX], gu = rgb2yuv[GU_IDX], bu = rgb2yuv[BU_IDX];
+    int32_t rv = rgb2yuv[RV_IDX], gv = rgb2yuv[GV_IDX], bv = rgb2yuv[BV_IDX];
+    av_assert1(src1 == src2);
+    for (i = 0; i &lt; width; i++) {
+        int r = src1[6 * i + 0] + src1[6 * i + 3];
+        int g = src1[6 * i + 1] + src1[6 * i + 4];
+        int b = src1[6 * i + 2] + src1[6 * i + 5];
+
+        dstU[i] = (ru*r + gu*g + bu*b + (256&lt;&lt;RGB2YUV_SHIFT) + (1&lt;&lt;(RGB2YUV_SHIFT-6)))&gt;&gt;(RGB2YUV_SHIFT-5);
+        dstV[i] = (rv*r + gv*g + bv*b + (256&lt;&lt;RGB2YUV_SHIFT) + (1&lt;&lt;(RGB2YUV_SHIFT-6)))&gt;&gt;(RGB2YUV_SHIFT-5);
+    }
+}
+</pre>
+    <br/>
+    rgb24ToUV_half_c()的过程相比rgb24ToY_c()要稍微复杂些。这主要是因为U，V取值的数量只有Y的一半。因此需要首先求出每2个像素点的平均值之后，再进行计算。
+    <br/>
+    当输入像素格式为AV_PIX_FMT_GBRP（注意这个是planar格式，三个分量分别为G，B，R）的时候，readLumPlanar指向的函数是planar_rgb_to_y()，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_36_3775717">    case AV_PIX_FMT_GBRP:
+        c-&gt;readLumPlanar = planar_rgb_to_y;
+        break;</pre>
+    <br/>
+    <h4>
+     planar_rgb_to_y()
+    </h4>
+    <p>
+     planar_rgb_to_y()定义如下。
+    </p>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_37_3412500">static void planar_rgb_to_y(uint8_t *_dst, const uint8_t *src[4], int width, int32_t *rgb2yuv)
+{
+    uint16_t *dst = (uint16_t *)_dst;
+    int32_t ry = rgb2yuv[RY_IDX], gy = rgb2yuv[GY_IDX], by = rgb2yuv[BY_IDX];
+    int i;
+    for (i = 0; i &lt; width; i++) {
+        int g = src[0][i];
+        int b = src[1][i];
+        int r = src[2][i];
+
+        dst[i] = (ry*r + gy*g + by*b + (0x801&lt;&lt;(RGB2YUV_SHIFT-7))) &gt;&gt; (RGB2YUV_SHIFT-6);
+    }
+}
+</pre>
+    <br/>
+    可以看出处理planar格式的GBR数据和处理packed格式的RGB数据的方法是基本一样的，在这里不再重复。
+    <br/>
+    <br/>
+    <h3>
+     ff_sws_init_range_convert()
+    </h3>
+    ff_sws_init_range_convert()用于初始化像素值范围转换的函数，它的定义位于libswscale\swscale.c，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_38_5906202">av_cold void ff_sws_init_range_convert(SwsContext *c)
+{
+    c-&gt;lumConvertRange = NULL;
+    c-&gt;chrConvertRange = NULL;
+    if (c-&gt;srcRange != c-&gt;dstRange &amp;&amp; !isAnyRGB(c-&gt;dstFormat)) {
+        if (c-&gt;dstBpc &lt;= 14) {
+            if (c-&gt;srcRange) {
+                c-&gt;lumConvertRange = lumRangeFromJpeg_c;
+                c-&gt;chrConvertRange = chrRangeFromJpeg_c;
+            } else {
+                c-&gt;lumConvertRange = lumRangeToJpeg_c;
+                c-&gt;chrConvertRange = chrRangeToJpeg_c;
+            }
+        } else {
+            if (c-&gt;srcRange) {
+                c-&gt;lumConvertRange = lumRangeFromJpeg16_c;
+                c-&gt;chrConvertRange = chrRangeFromJpeg16_c;
+            } else {
+                c-&gt;lumConvertRange = lumRangeToJpeg16_c;
+                c-&gt;chrConvertRange = chrRangeToJpeg16_c;
+            }
+        }
+    }
+}</pre>
+    <br/>
+    ff_sws_init_range_convert()包含了两种像素取值范围的转换：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     lumConvertRange：亮度分量取值范围的转换。
+     <br/>
+     chrConvertRange：色度分量取值范围的转换。
+    </blockquote>
+    <br/>
+    <p>
+     从JPEG标准转换为MPEG标准的函数有：lumRangeFromJpeg_c()和chrRangeFromJpeg_c()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     lumRangeFromJpeg_c()
+    </h4>
+    亮度转换（0-255转换为16-235）函数lumRangeFromJpeg_c()如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_39_6688819">static void lumRangeFromJpeg_c(int16_t *dst, int width)
+{
+    int i;
+    for (i = 0; i &lt; width; i++)
+        dst[i] = (dst[i] * 14071 + 33561947) &gt;&gt; 14;
+}</pre>
+    <br/>
+    可以简单代入一个数字验证一下上述函数的正确性。该函数将亮度值“0”映射成“16”，“255”映射成“235”，因此我们可以代入一个“255”看看转换后的数值是否为“235”。在这里需要注意，dst中存储的像素数值是15bit的亮度值。因此我们需要将8bit的数值“255”左移7位后带入。经过计算，255左移7位后取值为32640，计算后得到的数值为30080，右移7位后得到的8bit亮度值即为235。
+    <br/>
+    <p>
+     后续几个函数都可以用上面描述的方法进行验证，就不再重复了。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     chrRangeFromJpeg_c()
+    </h4>
+    色度转换（0-255转换为16-240）函数chrRangeFromJpeg_c()如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_40_6915029">static void chrRangeFromJpeg_c(int16_t *dstU, int16_t *dstV, int width)
+{
+    int i;
+    for (i = 0; i &lt; width; i++) {
+        dstU[i] = (dstU[i] * 1799 + 4081085) &gt;&gt; 11; // 1469
+        dstV[i] = (dstV[i] * 1799 + 4081085) &gt;&gt; 11; // 1469
+    }
+}</pre>
+    <br/>
+    <p>
+     从MPEG标准转换为JPEG标准的函数有：lumRangeToJpeg_c()和chrRangeToJpeg_c()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     lumRangeToJpeg_c()
+    </h4>
+    亮度转换（16-235转换为0-255）函数lumRangeToJpeg_c()定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_41_4948629">static void lumRangeToJpeg_c(int16_t *dst, int width)
+{
+    int i;
+    for (i = 0; i &lt; width; i++)
+        dst[i] = (FFMIN(dst[i], 30189) * 19077 - 39057361) &gt;&gt; 14;
+}</pre>
+    <br/>
+    <h4>
+     chrRangeToJpeg_c()
+    </h4>
+    色度转换（16-240转换为0-255）函数chrRangeToJpeg_c()定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="621402" name="code" snippet_file_name="blog_20150317_42_4269768">static void chrRangeToJpeg_c(int16_t *dstU, int16_t *dstV, int width)
+{
+    int i;
+    for (i = 0; i &lt; width; i++) {
+        dstU[i] = (FFMIN(dstU[i], 30775) * 4663 - 9289992) &gt;&gt; 12; // -264
+        dstV[i] = (FFMIN(dstV[i], 30775) * 4663 - 9289992) &gt;&gt; 12; // -264
+    }
+}</pre>
+    <br/>
+    至此sws_getContext()的源代码就基本上分析完毕了。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <strong>
+     <span style="color:#990000;">
+      雷霄骅
+      <br/>
+      leixiaohua1020@126.com
+      <br/>
+      http://blog.csdn.net/leixiaohua1020
+     </span>
+    </strong>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44305697
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=swscale&amp;t=blog" target="_blank">
+    swscale
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=YUV&amp;t=blog" target="_blank">
+    YUV
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=RGB&amp;t=blog" target="_blank">
+    RGB
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

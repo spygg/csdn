@@ -1,0 +1,1623 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffmpeg 源代码简单分析 ： av_read_frame() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_394">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffmpeg 源代码简单分析 ： av_read_frame()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月13日 15:58:49
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：61095
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     ffmpeg中的av_read_frame()的作用是读取码流中的音频若干帧或者视频一帧。例如，解码视频的时候，每解码一个视频帧，需要先调用 av_read_frame()获得一帧视频的压缩数据，然后才能对该数据进行解码（例如H.264中一帧压缩数据通常对应一个NAL）。
+    </p>
+    <p>
+     对该函数源代码的分析是很久之前做的了，现在翻出来，用博客记录一下。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     上代码之前，先参考了其他人对av_read_frame()的解释，在此做一个参考：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      <span style="font-family:'宋体', Arial;color:#666666;line-height:26px;">
+       通过av_read_packet(***)，读取一个包，需要说明的是此函数必须是包含整数帧的，不存在半帧的情况，以ts流为例，是读取一个完整的PES包（一个完整pes包包含若干视频或音频es包），读取完毕后，通过av_parser_parse2(***)分析出视频一帧（或音频若干帧），返回，下次进入循环的时候，如果上次的数据没有完全取完，则st = s-&gt;cur_st;不会是NULL，即再此进入av_parser_parse2(***)流程，而不是下面的av_read_packet（**）流程，这样就保证了，如果读取一次包含了N帧视频数据（以视频为例），则调用av_read_frame（***）N次都不会去读数据，而是返回第一次读取的数据，直到全部解析完毕。
+      </span>
+     </p>
+    </blockquote>
+    <p>
+     av_read_frame()的声明位于libavformat\avformat.h，如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * Return the next frame of a stream.
+ * This function returns what is stored in the file, and does not validate
+ * that what is there are valid frames for the decoder. It will split what is
+ * stored in the file into frames and return one for each call. It will not
+ * omit invalid data between valid frames so as to give the decoder the maximum
+ * information possible for decoding.
+ *
+ * If pkt-&gt;buf is NULL, then the packet is valid until the next
+ * av_read_frame() or until avformat_close_input(). Otherwise the packet
+ * is valid indefinitely. In both cases the packet must be freed with
+ * av_free_packet when it is no longer needed. For video, the packet contains
+ * exactly one frame. For audio, it contains an integer number of frames if each
+ * frame has a known fixed size (e.g. PCM or ADPCM data). If the audio frames
+ * have a variable size (e.g. MPEG audio), then it contains one frame.
+ *
+ * pkt-&gt;pts, pkt-&gt;dts and pkt-&gt;duration are always set to correct
+ * values in AVStream.time_base units (and guessed if the format cannot
+ * provide them). pkt-&gt;pts can be AV_NOPTS_VALUE if the video format
+ * has B-frames, so it is better to rely on pkt-&gt;dts if you do not
+ * decompress the payload.
+ *
+ * @return 0 if OK, &lt; 0 on error or end of file
+ */
+int av_read_frame(AVFormatContext *s, AVPacket *pkt);</pre>
+    <p>
+     av_read_frame()使用方法在注释中写得很详细，用中文简单描述一下它的两个参数：
+     <br/>
+    </p>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     <p>
+      s：输入的AVFormatContext
+     </p>
+     <p>
+      pkt：输出的AVPacket
+     </p>
+    </blockquote>
+    <p>
+     如果返回0则说明读取正常。
+    </p>
+    <h2>
+     函数调用结构图
+    </h2>
+    <p>
+     函数调用结构图如下所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312025330316"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <h2>
+     av_read_frame()
+    </h2>
+    <p>
+     av_read_frame()的定义位于libavformat\utils.c，如下所示：
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//获取一个AVPacket
+/*
+ * av_read_frame - 新版本的ffmpeg用的是av_read_frame，而老版本的是av_read_packet
+ * 。区别是av_read_packet读出的是包，它可能是半帧或多帧，不保证帧的完整性。av_read_frame对
+ * av_read_packet进行了封装，使读出的数据总是完整的帧
+ */
+int av_read_frame(AVFormatContext *s, AVPacket *pkt)
+{
+    const int genpts = s-&gt;flags &amp; AVFMT_FLAG_GENPTS;
+    int          eof = 0;
+
+    if (!genpts)
+    	/**
+    	 * This buffer is only needed when packets were already buffered but
+    	 * not decoded, for example to get the codec parameters in MPEG
+    	 * streams.
+    	 * 一般情况下会调用read_frame_internal(s, pkt)
+    	 * 直接返回
+    	 */
+        return s-&gt;packet_buffer ? read_from_packet_buffer(s, pkt) :
+                                  read_frame_internal(s, pkt);
+
+    for (;;) {
+        int ret;
+        AVPacketList *pktl = s-&gt;packet_buffer;
+
+        if (pktl) {
+            AVPacket *next_pkt = &amp;pktl-&gt;pkt;
+
+            if (next_pkt-&gt;dts != AV_NOPTS_VALUE) {
+                int wrap_bits = s-&gt;streams[next_pkt-&gt;stream_index]-&gt;pts_wrap_bits;
+                while (pktl &amp;&amp; next_pkt-&gt;pts == AV_NOPTS_VALUE) {
+                    if (pktl-&gt;pkt.stream_index == next_pkt-&gt;stream_index &amp;&amp;
+                        (av_compare_mod(next_pkt-&gt;dts, pktl-&gt;pkt.dts, 2LL &lt;&lt; (wrap_bits - 1)) &lt; 0) &amp;&amp;
+                         av_compare_mod(pktl-&gt;pkt.pts, pktl-&gt;pkt.dts, 2LL &lt;&lt; (wrap_bits - 1))) { //not b frame
+                        next_pkt-&gt;pts = pktl-&gt;pkt.dts;
+                    }
+                    pktl = pktl-&gt;next;
+                }
+                pktl = s-&gt;packet_buffer;
+            }
+
+            /* read packet from packet buffer, if there is data */
+            if (!(next_pkt-&gt;pts == AV_NOPTS_VALUE &amp;&amp;
+                  next_pkt-&gt;dts != AV_NOPTS_VALUE &amp;&amp; !eof))
+                return read_from_packet_buffer(s, pkt);
+        }
+
+        ret = read_frame_internal(s, pkt);
+        if (ret &lt; 0) {
+            if (pktl &amp;&amp; ret != AVERROR(EAGAIN)) {
+                eof = 1;
+                continue;
+            } else
+                return ret;
+        }
+
+        if (av_dup_packet(add_to_pktbuf(&amp;s-&gt;packet_buffer, pkt,
+                          &amp;s-&gt;packet_buffer_end)) &lt; 0)
+            return AVERROR(ENOMEM);
+    }
+}</pre>
+    可以从源代码中看出，av_read_frame()调用了read_frame_internal()。
+    <br/>
+    <h2>
+     read_frame_internal()
+    </h2>
+    <p>
+     read_frame_internal()代码如下所示：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//av_read_frame对他进行了封装
+static int read_frame_internal(AVFormatContext *s, AVPacket *pkt)
+{
+    int ret = 0, i, got_packet = 0;
+    AVDictionary *metadata = NULL;
+    //初始化
+    av_init_packet(pkt);
+
+    while (!got_packet &amp;&amp; !s-&gt;parse_queue) {
+        AVStream *st;
+        AVPacket cur_pkt;
+
+        /* read next packet */
+        ret = ff_read_packet(s, &amp;cur_pkt);
+        if (ret &lt; 0) {
+            if (ret == AVERROR(EAGAIN))
+                return ret;
+            /* flush the parsers */
+            for (i = 0; i &lt; s-&gt;nb_streams; i++) {
+                st = s-&gt;streams[i];
+            	//需要解析
+                if (st-&gt;parser &amp;&amp; st-&gt;need_parsing)
+                    parse_packet(s, NULL, st-&gt;index);
+            }
+            /* all remaining packets are now in parse_queue =&gt;
+             * really terminate parsing */
+            break;
+        }
+        ret = 0;
+        st  = s-&gt;streams[cur_pkt.stream_index];
+
+        if (cur_pkt.pts != AV_NOPTS_VALUE &amp;&amp;
+            cur_pkt.dts != AV_NOPTS_VALUE &amp;&amp;
+            cur_pkt.pts &lt; cur_pkt.dts) {
+            av_log(s, AV_LOG_WARNING,
+                   "Invalid timestamps stream=%d, pts=%s, dts=%s, size=%d\n",
+                   cur_pkt.stream_index,
+                   av_ts2str(cur_pkt.pts),
+                   av_ts2str(cur_pkt.dts),
+                   cur_pkt.size);
+        }
+        if (s-&gt;debug &amp; FF_FDEBUG_TS)
+            av_log(s, AV_LOG_DEBUG,
+                   "ff_read_packet stream=%d, pts=%s, dts=%s, size=%d, duration=%d, flags=%d\n",
+                   cur_pkt.stream_index,
+                   av_ts2str(cur_pkt.pts),
+                   av_ts2str(cur_pkt.dts),
+                   cur_pkt.size, cur_pkt.duration, cur_pkt.flags);
+
+        if (st-&gt;need_parsing &amp;&amp; !st-&gt;parser &amp;&amp; !(s-&gt;flags &amp; AVFMT_FLAG_NOPARSE)) {
+            st-&gt;parser = av_parser_init(st-&gt;codec-&gt;codec_id);
+            if (!st-&gt;parser) {
+                av_log(s, AV_LOG_VERBOSE, "parser not found for codec "
+                       "%s, packets or times may be invalid.\n",
+                       avcodec_get_name(st-&gt;codec-&gt;codec_id));
+                /* no parser available: just output the raw packets */
+                st-&gt;need_parsing = AVSTREAM_PARSE_NONE;
+            } else if (st-&gt;need_parsing == AVSTREAM_PARSE_HEADERS)
+                st-&gt;parser-&gt;flags |= PARSER_FLAG_COMPLETE_FRAMES;
+            else if (st-&gt;need_parsing == AVSTREAM_PARSE_FULL_ONCE)
+                st-&gt;parser-&gt;flags |= PARSER_FLAG_ONCE;
+            else if (st-&gt;need_parsing == AVSTREAM_PARSE_FULL_RAW)
+                st-&gt;parser-&gt;flags |= PARSER_FLAG_USE_CODEC_TS;
+        }
+        if (!st-&gt;need_parsing || !st-&gt;parser) {
+            /* no parsing needed: we just output the packet as is */
+            *pkt = cur_pkt;
+            compute_pkt_fields(s, st, NULL, pkt);
+            if ((s-&gt;iformat-&gt;flags &amp; AVFMT_GENERIC_INDEX) &amp;&amp;
+                (pkt-&gt;flags &amp; AV_PKT_FLAG_KEY) &amp;&amp; pkt-&gt;dts != AV_NOPTS_VALUE) {
+                ff_reduce_index(s, st-&gt;index);
+                av_add_index_entry(st, pkt-&gt;pos, pkt-&gt;dts,
+                                   0, 0, AVINDEX_KEYFRAME);
+            }
+            got_packet = 1;
+        } else if (st-&gt;discard &lt; AVDISCARD_ALL) {
+            if ((ret = parse_packet(s, &amp;cur_pkt, cur_pkt.stream_index)) &lt; 0)
+                return ret;
+        } else {
+            /* free packet */
+            av_free_packet(&amp;cur_pkt);
+        }
+        if (pkt-&gt;flags &amp; AV_PKT_FLAG_KEY)
+            st-&gt;skip_to_keyframe = 0;
+        if (st-&gt;skip_to_keyframe) {
+            av_free_packet(&amp;cur_pkt);
+            if (got_packet) {
+                *pkt = cur_pkt;
+            }
+            got_packet = 0;
+        }
+    }
+
+    if (!got_packet &amp;&amp; s-&gt;parse_queue)
+        ret = read_from_packet_buffer(&amp;s-&gt;parse_queue, &amp;s-&gt;parse_queue_end, pkt);
+
+    if (ret &gt;= 0) {
+        AVStream *st = s-&gt;streams[pkt-&gt;stream_index];
+        int discard_padding = 0;
+        if (st-&gt;first_discard_sample &amp;&amp; pkt-&gt;pts != AV_NOPTS_VALUE) {
+            int64_t pts = pkt-&gt;pts - (is_relative(pkt-&gt;pts) ? RELATIVE_TS_BASE : 0);
+            int64_t sample = ts_to_samples(st, pts);
+            int duration = ts_to_samples(st, pkt-&gt;duration);
+            int64_t end_sample = sample + duration;
+            if (duration &gt; 0 &amp;&amp; end_sample &gt;= st-&gt;first_discard_sample &amp;&amp;
+                sample &lt; st-&gt;last_discard_sample)
+                discard_padding = FFMIN(end_sample - st-&gt;first_discard_sample, duration);
+        }
+        if (st-&gt;skip_samples || discard_padding) {
+            uint8_t *p = av_packet_new_side_data(pkt, AV_PKT_DATA_SKIP_SAMPLES, 10);
+            if (p) {
+                AV_WL32(p, st-&gt;skip_samples);
+                AV_WL32(p + 4, discard_padding);
+                av_log(s, AV_LOG_DEBUG, "demuxer injecting skip %d\n", st-&gt;skip_samples);
+            }
+            st-&gt;skip_samples = 0;
+        }
+
+        if (st-&gt;inject_global_side_data) {
+            for (i = 0; i &lt; st-&gt;nb_side_data; i++) {
+                AVPacketSideData *src_sd = &amp;st-&gt;side_data[i];
+                uint8_t *dst_data;
+
+                if (av_packet_get_side_data(pkt, src_sd-&gt;type, NULL))
+                    continue;
+
+                dst_data = av_packet_new_side_data(pkt, src_sd-&gt;type, src_sd-&gt;size);
+                if (!dst_data) {
+                    av_log(s, AV_LOG_WARNING, "Could not inject global side data\n");
+                    continue;
+                }
+
+                memcpy(dst_data, src_sd-&gt;data, src_sd-&gt;size);
+            }
+            st-&gt;inject_global_side_data = 0;
+        }
+
+        if (!(s-&gt;flags &amp; AVFMT_FLAG_KEEP_SIDE_DATA))
+            av_packet_merge_side_data(pkt);
+    }
+
+    av_opt_get_dict_val(s, "metadata", AV_OPT_SEARCH_CHILDREN, &amp;metadata);
+    if (metadata) {
+        s-&gt;event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
+        av_dict_copy(&amp;s-&gt;metadata, metadata, 0);
+        av_dict_free(&amp;metadata);
+        av_opt_set_dict_val(s, "metadata", NULL, AV_OPT_SEARCH_CHILDREN);
+    }
+
+    if (s-&gt;debug &amp; FF_FDEBUG_TS)
+        av_log(s, AV_LOG_DEBUG,
+               "read_frame_internal stream=%d, pts=%s, dts=%s, "
+               "size=%d, duration=%d, flags=%d\n",
+               pkt-&gt;stream_index,
+               av_ts2str(pkt-&gt;pts),
+               av_ts2str(pkt-&gt;dts),
+               pkt-&gt;size, pkt-&gt;duration, pkt-&gt;flags);
+
+    return ret;
+}</pre>
+    <br/>
+    read_frame_internal()代码比较长，这里只简单看一下它前面的部分。它前面部分有2步是十分关键的：
+    <p>
+     （1）调用了ff_read_packet()从相应的AVInputFormat读取数据。
+    </p>
+    <p>
+     （2）如果媒体频流需要使用AVCodecParser，则调用parse_packet()解析相应的AVPacket。
+    </p>
+    <p>
+     下面我们分成分别看一下ff_read_packet()和parse_packet()的源代码。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     ff_read_packet()
+    </h3>
+    <p>
+     ff_read_packet()的代码比较长，如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">int ff_read_packet(AVFormatContext *s, AVPacket *pkt)
+{
+    int ret, i, err;
+    AVStream *st;
+
+    for (;;) {
+        AVPacketList *pktl = s-&gt;raw_packet_buffer;
+
+        if (pktl) {
+            *pkt = pktl-&gt;pkt;
+            st   = s-&gt;streams[pkt-&gt;stream_index];
+            if (s-&gt;raw_packet_buffer_remaining_size &lt;= 0)
+                if ((err = probe_codec(s, st, NULL)) &lt; 0)
+                    return err;
+            if (st-&gt;request_probe &lt;= 0) {
+                s-&gt;raw_packet_buffer                 = pktl-&gt;next;
+                s-&gt;raw_packet_buffer_remaining_size += pkt-&gt;size;
+                av_free(pktl);
+                return 0;
+            }
+        }
+
+        pkt-&gt;data = NULL;
+        pkt-&gt;size = 0;
+        av_init_packet(pkt);
+        //关键：读取Packet
+        ret = s-&gt;iformat-&gt;read_packet(s, pkt);
+        if (ret &lt; 0) {
+            if (!pktl || ret == AVERROR(EAGAIN))
+                return ret;
+            for (i = 0; i &lt; s-&gt;nb_streams; i++) {
+                st = s-&gt;streams[i];
+                if (st-&gt;probe_packets)
+                    if ((err = probe_codec(s, st, NULL)) &lt; 0)
+                        return err;
+                av_assert0(st-&gt;request_probe &lt;= 0);
+            }
+            continue;
+        }
+
+        if ((s-&gt;flags &amp; AVFMT_FLAG_DISCARD_CORRUPT) &amp;&amp;
+            (pkt-&gt;flags &amp; AV_PKT_FLAG_CORRUPT)) {
+            av_log(s, AV_LOG_WARNING,
+                   "Dropped corrupted packet (stream = %d)\n",
+                   pkt-&gt;stream_index);
+            av_free_packet(pkt);
+            continue;
+        }
+
+        if (pkt-&gt;stream_index &gt;= (unsigned)s-&gt;nb_streams) {
+            av_log(s, AV_LOG_ERROR, "Invalid stream index %d\n", pkt-&gt;stream_index);
+            continue;
+        }
+
+        st = s-&gt;streams[pkt-&gt;stream_index];
+
+        if (update_wrap_reference(s, st, pkt-&gt;stream_index, pkt) &amp;&amp; st-&gt;pts_wrap_behavior == AV_PTS_WRAP_SUB_OFFSET) {
+            // correct first time stamps to negative values
+            if (!is_relative(st-&gt;first_dts))
+                st-&gt;first_dts = wrap_timestamp(st, st-&gt;first_dts);
+            if (!is_relative(st-&gt;start_time))
+                st-&gt;start_time = wrap_timestamp(st, st-&gt;start_time);
+            if (!is_relative(st-&gt;cur_dts))
+                st-&gt;cur_dts = wrap_timestamp(st, st-&gt;cur_dts);
+        }
+
+        pkt-&gt;dts = wrap_timestamp(st, pkt-&gt;dts);
+        pkt-&gt;pts = wrap_timestamp(st, pkt-&gt;pts);
+
+        force_codec_ids(s, st);
+
+        /* TODO: audio: time filter; video: frame reordering (pts != dts) */
+        if (s-&gt;use_wallclock_as_timestamps)
+            pkt-&gt;dts = pkt-&gt;pts = av_rescale_q(av_gettime(), AV_TIME_BASE_Q, st-&gt;time_base);
+
+        if (!pktl &amp;&amp; st-&gt;request_probe &lt;= 0)
+            return ret;
+
+        add_to_pktbuf(&amp;s-&gt;raw_packet_buffer, pkt, &amp;s-&gt;raw_packet_buffer_end);
+        s-&gt;raw_packet_buffer_remaining_size -= pkt-&gt;size;
+
+        if ((err = probe_codec(s, st, pkt)) &lt; 0)
+            return err;
+    }
+}</pre>
+    <br/>
+    ff_read_packet()中最关键的地方就是调用了AVInputFormat的read_packet()方法。AVInputFormat的read_packet()是一个函数指针，指向当前的AVInputFormat的读取数据的函数。在这里我们以FLV封装格式对应的AVInputFormat为例，看看read_packet()的实现函数是什么样子的。
+    <br/>
+    <p>
+    </p>
+    <p>
+     FLV封装格式对应的AVInputFormat的定义位于libavformat\flvdec.c，如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">AVInputFormat ff_flv_demuxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .priv_data_size = sizeof(FLVContext),
+    .read_probe     = flv_probe,
+    .read_header    = flv_read_header,
+    .read_packet    = flv_read_packet,
+    .read_seek      = flv_read_seek,
+    .read_close     = flv_read_close,
+    .extensions     = "flv",
+    .priv_class     = &amp;flv_class,
+};</pre>
+    <br/>
+    从ff_flv_demuxer的定义可以看出，read_packet()对应的是flv_read_packet()函数。在看flv_read_packet()函数之前，我们先回顾一下FLV封装格式的结构，如下图所示。
+    <p>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312023125560?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     从图中可以看出，FLV文件体部分是由一个一个的Tag连接起来的（中间间隔着Previous Tag Size）。每个Tag包含了Tag Header和Tag Data两个部分。Tag Data根据Tag的Type不同而不同：可以分为音频Tag Data，视频Tag Data以及Script Tag Data。下面简述一下音频Tag Data和视频Tag Data。
+    </p>
+    <p>
+    </p>
+    <h4>
+     Audio Tag Data
+    </h4>
+    Audio Tag在官方标准中定义如下。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312023624519?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    Audio Tag开始的第1个字节包含了音频数据的参数信息，从第2个字节开始为音频流数据。
+    <br/>
+    第1个字节的前4位的数值表示了音频数据格式：
+    <br/>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     0 = Linear PCM, platform endian
+     <br/>
+     1 = ADPCM
+     <br/>
+     2 = MP3
+     <br/>
+     3 = Linear PCM, little endian
+     <br/>
+     4 = Nellymoser 16-kHz mono
+     <br/>
+     5 = Nellymoser 8-kHz mono
+     <br/>
+     6 = Nellymoser
+     <br/>
+     7 = G.711 A-law logarithmic PCM
+     <br/>
+     8 = G.711 mu-law logarithmic PCM
+     <br/>
+     9 = reserved
+     <br/>
+     10 = AAC
+     <br/>
+     14 = MP3 8-Khz
+     <br/>
+     15 = Device-specific sound
+    </blockquote>
+    第1个字节的第5-6位的数值表示采样率：0 = 5.5kHz，1 = 11KHz，2 = 22 kHz，3 = 44 kHz。
+    <br/>
+    第1个字节的第7位表示采样精度：0 = 8bits，1 = 16bits。
+    <br/>
+    第1个字节的第8位表示音频类型：0 = sndMono，1 = sndStereo。
+    <br/>
+    其中，当音频编码为AAC的时候，第一个字节后面存储的是AACAUDIODATA，格式如下所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312023528906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <h4>
+     Video Tag Data
+    </h4>
+    Video Tag在官方标准中的定义如下。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312023548671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </div>
+    Video Tag也用开始的第1个字节包含视频数据的参数信息，从第2个字节为视频流数据。
+    <br/>
+    第1个字节的前4位的数值表示帧类型（FrameType）：
+    <br/>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     1: keyframe (for AVC, a seekableframe)（关键帧）
+     <br/>
+     2: inter frame (for AVC, a nonseekableframe)
+     <br/>
+     3: disposable inter frame (H.263only)
+     <br/>
+     4: generated keyframe (reservedfor server use only)
+     <br/>
+     5: video info/command frame
+    </blockquote>
+    第1个字节的后4位的数值表示视频编码ID（CodecID）：
+    <br/>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     1: JPEG (currently unused)
+     <br/>
+     2: Sorenson H.263
+     <br/>
+     3: Screen video
+     <br/>
+     4: On2 VP6
+     <br/>
+     5: On2 VP6 with alpha channel
+     <br/>
+     6: Screen video version 2
+     <br/>
+     7: AVC
+    </blockquote>
+    其中，当音频编码为AVC（H.264）的时候，第一个字节后面存储的是AVCVIDEOPACKET，格式如下所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150312023714268?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <p>
+    </p>
+    <p>
+     了解了FLV的基本格式之后，就可以看一下FLV解析Tag的函数flv_read_packet()了。
+    </p>
+    <h3>
+     flv_read_packet()
+    </h3>
+    <p>
+     flv_read_packet()的定义位于libavformat\flvdec.c，如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">static int flv_read_packet(AVFormatContext *s, AVPacket *pkt)
+{
+    FLVContext *flv = s-&gt;priv_data;
+    int ret, i, type, size, flags;
+    int stream_type=-1;
+    int64_t next, pos, meta_pos;
+    int64_t dts, pts = AV_NOPTS_VALUE;
+    int av_uninit(channels);
+    int av_uninit(sample_rate);
+    AVStream *st    = NULL;
+
+    /* pkt size is repeated at end. skip it */
+    for (;; avio_skip(s-&gt;pb, 4)) {
+        pos  = avio_tell(s-&gt;pb);
+        //解析Tag Header==========
+        //Tag类型
+        type = (avio_r8(s-&gt;pb) &amp; 0x1F);
+        //Datasize数据大小
+        size = avio_rb24(s-&gt;pb);
+        //Timstamp时间戳
+        dts  = avio_rb24(s-&gt;pb);
+        dts |= avio_r8(s-&gt;pb) &lt;&lt; 24;
+        av_dlog(s, "type:%d, size:%d, dts:%"PRId64" pos:%"PRId64"\n", type, size, dts, avio_tell(s-&gt;pb));
+        if (avio_feof(s-&gt;pb))
+            return AVERROR_EOF;
+        //StreamID
+        avio_skip(s-&gt;pb, 3); /* stream id, always 0 */
+        flags = 0;
+        //========================
+        if (flv-&gt;validate_next &lt; flv-&gt;validate_count) {
+            int64_t validate_pos = flv-&gt;validate_index[flv-&gt;validate_next].pos;
+            if (pos == validate_pos) {
+                if (FFABS(dts - flv-&gt;validate_index[flv-&gt;validate_next].dts) &lt;=
+                    VALIDATE_INDEX_TS_THRESH) {
+                    flv-&gt;validate_next++;
+                } else {
+                    clear_index_entries(s, validate_pos);
+                    flv-&gt;validate_count = 0;
+                }
+            } else if (pos &gt; validate_pos) {
+                clear_index_entries(s, validate_pos);
+                flv-&gt;validate_count = 0;
+            }
+        }
+
+        if (size == 0)
+            continue;
+
+        next = size + avio_tell(s-&gt;pb);
+
+        if (type == FLV_TAG_TYPE_AUDIO) {
+        	//Type是音频
+            stream_type = FLV_STREAM_TYPE_AUDIO;
+            //Tag Data的第一个字节
+            flags    = avio_r8(s-&gt;pb);
+            size--;
+        } else if (type == FLV_TAG_TYPE_VIDEO) {
+        	//Type是音频
+            stream_type = FLV_STREAM_TYPE_VIDEO;
+            //Tag Data的第一个字节
+            flags    = avio_r8(s-&gt;pb);
+            size--;
+            if ((flags &amp; FLV_VIDEO_FRAMETYPE_MASK) == FLV_FRAME_VIDEO_INFO_CMD)
+                goto skip;
+        } else if (type == FLV_TAG_TYPE_META) {
+            stream_type=FLV_STREAM_TYPE_DATA;
+            if (size &gt; 13 + 1 + 4 &amp;&amp; dts == 0) { // Header-type metadata stuff
+                meta_pos = avio_tell(s-&gt;pb);
+                if (flv_read_metabody(s, next) &lt;= 0) {
+                    goto skip;
+                }
+                avio_seek(s-&gt;pb, meta_pos, SEEK_SET);
+            }
+        } else {
+            av_log(s, AV_LOG_DEBUG,
+                   "Skipping flv packet: type %d, size %d, flags %d.\n",
+                   type, size, flags);
+skip:
+            avio_seek(s-&gt;pb, next, SEEK_SET);
+            continue;
+        }
+
+        /* skip empty data packets */
+        if (!size)
+            continue;
+
+        /* now find stream */
+        for (i = 0; i &lt; s-&gt;nb_streams; i++) {
+            st = s-&gt;streams[i];
+            if (stream_type == FLV_STREAM_TYPE_AUDIO) {
+                if (st-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_AUDIO &amp;&amp;
+                    (s-&gt;audio_codec_id || flv_same_audio_codec(st-&gt;codec, flags)))
+                    break;
+            } else if (stream_type == FLV_STREAM_TYPE_VIDEO) {
+                if (st-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_VIDEO &amp;&amp;
+                    (s-&gt;video_codec_id || flv_same_video_codec(st-&gt;codec, flags)))
+                    break;
+            } else if (stream_type == FLV_STREAM_TYPE_DATA) {
+                if (st-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_DATA)
+                    break;
+            }
+        }
+        if (i == s-&gt;nb_streams) {
+            static const enum AVMediaType stream_types[] = {AVMEDIA_TYPE_VIDEO, AVMEDIA_TYPE_AUDIO, AVMEDIA_TYPE_DATA};
+            av_log(s, AV_LOG_WARNING, "Stream discovered after head already parsed\n");
+            st = create_stream(s, stream_types[stream_type]);
+            if (!st)
+                return AVERROR(ENOMEM);
+
+        }
+        av_dlog(s, "%d %X %d \n", stream_type, flags, st-&gt;discard);
+
+        if ((flags &amp; FLV_VIDEO_FRAMETYPE_MASK) == FLV_FRAME_KEY ||
+            stream_type == FLV_STREAM_TYPE_AUDIO)
+            av_add_index_entry(st, pos, dts, size, 0, AVINDEX_KEYFRAME);
+
+        if (  (st-&gt;discard &gt;= AVDISCARD_NONKEY &amp;&amp; !((flags &amp; FLV_VIDEO_FRAMETYPE_MASK) == FLV_FRAME_KEY || (stream_type == FLV_STREAM_TYPE_AUDIO)))
+            ||(st-&gt;discard &gt;= AVDISCARD_BIDIR  &amp;&amp;  ((flags &amp; FLV_VIDEO_FRAMETYPE_MASK) == FLV_FRAME_DISP_INTER &amp;&amp; (stream_type == FLV_STREAM_TYPE_VIDEO)))
+            || st-&gt;discard &gt;= AVDISCARD_ALL
+        ) {
+            avio_seek(s-&gt;pb, next, SEEK_SET);
+            continue;
+        }
+        break;
+    }
+
+    // if not streamed and no duration from metadata then seek to end to find
+    // the duration from the timestamps
+    if (s-&gt;pb-&gt;seekable &amp;&amp; (!s-&gt;duration || s-&gt;duration == AV_NOPTS_VALUE) &amp;&amp; !flv-&gt;searched_for_end) {
+        int size;
+        const int64_t pos   = avio_tell(s-&gt;pb);
+        // Read the last 4 bytes of the file, this should be the size of the
+        // previous FLV tag. Use the timestamp of its payload as duration.
+        int64_t fsize       = avio_size(s-&gt;pb);
+retry_duration:
+        avio_seek(s-&gt;pb, fsize - 4, SEEK_SET);
+        size = avio_rb32(s-&gt;pb);
+        // Seek to the start of the last FLV tag at position (fsize - 4 - size)
+        // but skip the byte indicating the type.
+        avio_seek(s-&gt;pb, fsize - 3 - size, SEEK_SET);
+        if (size == avio_rb24(s-&gt;pb) + 11) {
+            uint32_t ts = avio_rb24(s-&gt;pb);
+            ts         |= avio_r8(s-&gt;pb) &lt;&lt; 24;
+            if (ts)
+                s-&gt;duration = ts * (int64_t)AV_TIME_BASE / 1000;
+            else if (fsize &gt;= 8 &amp;&amp; fsize - 8 &gt;= size) {
+                fsize -= size+4;
+                goto retry_duration;
+            }
+        }
+
+        avio_seek(s-&gt;pb, pos, SEEK_SET);
+        flv-&gt;searched_for_end = 1;
+    }
+
+    if (stream_type == FLV_STREAM_TYPE_AUDIO) {
+        int bits_per_coded_sample;
+        channels = (flags &amp; FLV_AUDIO_CHANNEL_MASK) == FLV_STEREO ? 2 : 1;
+        sample_rate = 44100 &lt;&lt; ((flags &amp; FLV_AUDIO_SAMPLERATE_MASK) &gt;&gt;
+                                FLV_AUDIO_SAMPLERATE_OFFSET) &gt;&gt; 3;
+        bits_per_coded_sample = (flags &amp; FLV_AUDIO_SAMPLESIZE_MASK) ? 16 : 8;
+        if (!st-&gt;codec-&gt;channels || !st-&gt;codec-&gt;sample_rate ||
+            !st-&gt;codec-&gt;bits_per_coded_sample) {
+            st-&gt;codec-&gt;channels              = channels;
+            st-&gt;codec-&gt;channel_layout        = channels == 1
+                                               ? AV_CH_LAYOUT_MONO
+                                               : AV_CH_LAYOUT_STEREO;
+            st-&gt;codec-&gt;sample_rate           = sample_rate;
+            st-&gt;codec-&gt;bits_per_coded_sample = bits_per_coded_sample;
+        }
+        if (!st-&gt;codec-&gt;codec_id) {
+            flv_set_audio_codec(s, st, st-&gt;codec,
+                                flags &amp; FLV_AUDIO_CODECID_MASK);
+            flv-&gt;last_sample_rate =
+            sample_rate           = st-&gt;codec-&gt;sample_rate;
+            flv-&gt;last_channels    =
+            channels              = st-&gt;codec-&gt;channels;
+        } else {
+            AVCodecContext ctx = {0};
+            ctx.sample_rate = sample_rate;
+            ctx.bits_per_coded_sample = bits_per_coded_sample;
+            flv_set_audio_codec(s, st, &amp;ctx, flags &amp; FLV_AUDIO_CODECID_MASK);
+            sample_rate = ctx.sample_rate;
+        }
+    } else if (stream_type == FLV_STREAM_TYPE_VIDEO) {
+        size -= flv_set_video_codec(s, st, flags &amp; FLV_VIDEO_CODECID_MASK, 1);
+    }
+    //几种特殊的格式
+    if (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_AAC ||
+        st-&gt;codec-&gt;codec_id == AV_CODEC_ID_H264 ||
+        st-&gt;codec-&gt;codec_id == AV_CODEC_ID_MPEG4) {
+    	//对应AACPacketType或者AVCPacketType
+        int type = avio_r8(s-&gt;pb);
+        size--;
+        //H.264
+        if (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_H264 || st-&gt;codec-&gt;codec_id == AV_CODEC_ID_MPEG4) {
+            // sign extension
+        	//对应CompositionTime
+            int32_t cts = (avio_rb24(s-&gt;pb) + 0xff800000) ^ 0xff800000;
+            //计算PTS
+            pts = dts + cts;
+            if (cts &lt; 0) { // dts might be wrong
+                if (!flv-&gt;wrong_dts)
+                    av_log(s, AV_LOG_WARNING,
+                        "Negative cts, previous timestamps might be wrong.\n");
+                flv-&gt;wrong_dts = 1;
+            } else if (FFABS(dts - pts) &gt; 1000*60*15) {
+                av_log(s, AV_LOG_WARNING,
+                       "invalid timestamps %"PRId64" %"PRId64"\n", dts, pts);
+                dts = pts = AV_NOPTS_VALUE;
+            }
+        }
+        //如果编码器是AAC或者H.264
+        if (type == 0 &amp;&amp; (!st-&gt;codec-&gt;extradata || st-&gt;codec-&gt;codec_id == AV_CODEC_ID_AAC ||
+            st-&gt;codec-&gt;codec_id == AV_CODEC_ID_H264)) {
+            AVDictionaryEntry *t;
+
+            if (st-&gt;codec-&gt;extradata) {
+                if ((ret = flv_queue_extradata(flv, s-&gt;pb, stream_type, size)) &lt; 0)
+                    return ret;
+                ret = AVERROR(EAGAIN);
+                goto leave;
+            }
+            if ((ret = flv_get_extradata(s, st, size)) &lt; 0)
+                return ret;
+
+            /* Workaround for buggy Omnia A/XE encoder */
+            t = av_dict_get(s-&gt;metadata, "Encoder", NULL, 0);
+            if (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_AAC &amp;&amp; t &amp;&amp; !strcmp(t-&gt;value, "Omnia A/XE"))
+                st-&gt;codec-&gt;extradata_size = 2;
+            //AAC
+            if (st-&gt;codec-&gt;codec_id == AV_CODEC_ID_AAC &amp;&amp; 0) {
+                MPEG4AudioConfig cfg;
+
+                if (avpriv_mpeg4audio_get_config(&amp;cfg, st-&gt;codec-&gt;extradata,
+                                             st-&gt;codec-&gt;extradata_size * 8, 1) &gt;= 0) {
+                st-&gt;codec-&gt;channels       = cfg.channels;
+                st-&gt;codec-&gt;channel_layout = 0;
+                if (cfg.ext_sample_rate)
+                    st-&gt;codec-&gt;sample_rate = cfg.ext_sample_rate;
+                else
+                    st-&gt;codec-&gt;sample_rate = cfg.sample_rate;
+                av_dlog(s, "mp4a config channels %d sample rate %d\n",
+                        st-&gt;codec-&gt;channels, st-&gt;codec-&gt;sample_rate);
+                }
+            }
+
+            ret = AVERROR(EAGAIN);
+            goto leave;
+        }
+    }
+
+    /* skip empty data packets */
+    if (!size) {
+        ret = AVERROR(EAGAIN);
+        goto leave;
+    }
+
+    ret = av_get_packet(s-&gt;pb, pkt, size);
+    if (ret &lt; 0)
+        return ret;
+    //设置PTS、DTS等等
+    pkt-&gt;dts          = dts;
+    pkt-&gt;pts          = pts == AV_NOPTS_VALUE ? dts : pts;
+    pkt-&gt;stream_index = st-&gt;index;
+    if (flv-&gt;new_extradata[stream_type]) {
+        uint8_t *side = av_packet_new_side_data(pkt, AV_PKT_DATA_NEW_EXTRADATA,
+                                                flv-&gt;new_extradata_size[stream_type]);
+        if (side) {
+            memcpy(side, flv-&gt;new_extradata[stream_type],
+                   flv-&gt;new_extradata_size[stream_type]);
+            av_freep(&amp;flv-&gt;new_extradata[stream_type]);
+            flv-&gt;new_extradata_size[stream_type] = 0;
+        }
+    }
+    if (stream_type == FLV_STREAM_TYPE_AUDIO &amp;&amp;
+                    (sample_rate != flv-&gt;last_sample_rate ||
+                     channels    != flv-&gt;last_channels)) {
+        flv-&gt;last_sample_rate = sample_rate;
+        flv-&gt;last_channels    = channels;
+        ff_add_param_change(pkt, channels, 0, sample_rate, 0, 0);
+    }
+    //标记上Keyframe
+    if (    stream_type == FLV_STREAM_TYPE_AUDIO ||
+            ((flags &amp; FLV_VIDEO_FRAMETYPE_MASK) == FLV_FRAME_KEY) ||
+            stream_type == FLV_STREAM_TYPE_DATA)
+        pkt-&gt;flags |= AV_PKT_FLAG_KEY;
+
+leave:
+    avio_skip(s-&gt;pb, 4);
+    return ret;
+}</pre>
+    <br/>
+    flv_read_packet()的代码比较长，但是逻辑比较简单。它的主要功能就是根据FLV文件格式的规范，逐层解析Tag以及TagData，获取Tag以及TagData中的信息。比较关键的地方已经写上了注释，不再详细叙述。
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     parse_packet()
+    </h2>
+    <p>
+     parse_packet()给需要AVCodecParser的媒体流提供解析AVPacket的功能。它的代码如下所示：
+    </p>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * Parse a packet, add all split parts to parse_queue.
+ *
+ * @param pkt Packet to parse, NULL when flushing the parser at end of stream.
+ */
+static int parse_packet(AVFormatContext *s, AVPacket *pkt, int stream_index)
+{
+    AVPacket out_pkt = { 0 }, flush_pkt = { 0 };
+    AVStream *st = s-&gt;streams[stream_index];
+    uint8_t *data = pkt ? pkt-&gt;data : NULL;
+    int size      = pkt ? pkt-&gt;size : 0;
+    int ret = 0, got_output = 0;
+
+    if (!pkt) {
+        av_init_packet(&amp;flush_pkt);
+        pkt        = &amp;flush_pkt;
+        got_output = 1;
+    } else if (!size &amp;&amp; st-&gt;parser-&gt;flags &amp; PARSER_FLAG_COMPLETE_FRAMES) {
+        // preserve 0-size sync packets
+        compute_pkt_fields(s, st, st-&gt;parser, pkt);
+    }
+
+    while (size &gt; 0 || (pkt == &amp;flush_pkt &amp;&amp; got_output)) {
+        int len;
+
+        av_init_packet(&amp;out_pkt);
+        //解析
+        len = av_parser_parse2(st-&gt;parser, st-&gt;codec,
+                               &amp;out_pkt.data, &amp;out_pkt.size, data, size,
+                               pkt-&gt;pts, pkt-&gt;dts, pkt-&gt;pos);
+
+        pkt-&gt;pts = pkt-&gt;dts = AV_NOPTS_VALUE;
+        pkt-&gt;pos = -1;
+        /* increment read pointer */
+        data += len;
+        size -= len;
+
+        got_output = !!out_pkt.size;
+        //继续
+        if (!out_pkt.size)
+            continue;
+
+        if (pkt-&gt;side_data) {
+            out_pkt.side_data       = pkt-&gt;side_data;
+            out_pkt.side_data_elems = pkt-&gt;side_data_elems;
+            pkt-&gt;side_data          = NULL;
+            pkt-&gt;side_data_elems    = 0;
+        }
+
+        /* set the duration */
+        out_pkt.duration = 0;
+        if (st-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_AUDIO) {
+            if (st-&gt;codec-&gt;sample_rate &gt; 0) {
+                out_pkt.duration =
+                    av_rescale_q_rnd(st-&gt;parser-&gt;duration,
+                                     (AVRational) { 1, st-&gt;codec-&gt;sample_rate },
+                                     st-&gt;time_base,
+                                     AV_ROUND_DOWN);
+            }
+        }
+        //设置属性值
+        out_pkt.stream_index = st-&gt;index;
+        out_pkt.pts          = st-&gt;parser-&gt;pts;
+        out_pkt.dts          = st-&gt;parser-&gt;dts;
+        out_pkt.pos          = st-&gt;parser-&gt;pos;
+
+        if (st-&gt;need_parsing == AVSTREAM_PARSE_FULL_RAW)
+            out_pkt.pos = st-&gt;parser-&gt;frame_offset;
+
+        if (st-&gt;parser-&gt;key_frame == 1 ||
+            (st-&gt;parser-&gt;key_frame == -1 &amp;&amp;
+             st-&gt;parser-&gt;pict_type == AV_PICTURE_TYPE_I))
+            out_pkt.flags |= AV_PKT_FLAG_KEY;
+
+        if (st-&gt;parser-&gt;key_frame == -1 &amp;&amp; st-&gt;parser-&gt;pict_type ==AV_PICTURE_TYPE_NONE &amp;&amp; (pkt-&gt;flags&amp;AV_PKT_FLAG_KEY))
+            out_pkt.flags |= AV_PKT_FLAG_KEY;
+
+        compute_pkt_fields(s, st, st-&gt;parser, &amp;out_pkt);
+
+        if (out_pkt.data == pkt-&gt;data &amp;&amp; out_pkt.size == pkt-&gt;size) {
+            out_pkt.buf = pkt-&gt;buf;
+            pkt-&gt;buf    = NULL;
+#if FF_API_DESTRUCT_PACKET
+FF_DISABLE_DEPRECATION_WARNINGS
+            out_pkt.destruct = pkt-&gt;destruct;
+            pkt-&gt;destruct = NULL;
+FF_ENABLE_DEPRECATION_WARNINGS
+#endif
+        }
+        if ((ret = av_dup_packet(&amp;out_pkt)) &lt; 0)
+            goto fail;
+
+        if (!add_to_pktbuf(&amp;s-&gt;parse_queue, &amp;out_pkt, &amp;s-&gt;parse_queue_end)) {
+            av_free_packet(&amp;out_pkt);
+            ret = AVERROR(ENOMEM);
+            goto fail;
+        }
+    }
+
+    /* end of the stream =&gt; close and free the parser */
+    if (pkt == &amp;flush_pkt) {
+        av_parser_close(st-&gt;parser);
+        st-&gt;parser = NULL;
+    }
+
+fail:
+    av_free_packet(pkt);
+    return ret;
+}</pre>
+    <br/>
+    从代码中可以看出，最终调用了相应AVCodecParser的av_parser_parse2()函数，解析出来AVPacket。此后根据解析的信息还进行了一系列的赋值工作，不再详细叙述。
+    <p>
+    </p>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12678577
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=av_read_frame&amp;t=blog" target="_blank">
+    av_read_frame
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

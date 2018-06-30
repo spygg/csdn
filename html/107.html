@@ -1,0 +1,548 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于DirectShow的示例：视频播放器图形界面版 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_107">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于DirectShow的示例：视频播放器图形界面版
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年01月11日 11:22:30
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7337
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     最简单的基于DirectShow的示例文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42372419">
+      最简单的基于DirectShow的示例：视频播放器
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42372631">
+      最简单的基于DirectShow的示例：视频播放器图形界面版
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42394509">
+      最简单的基于DirectShow的示例：视频播放器自定义版
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42649379">
+      最简单的基于DirectShow的示例：获取Filter信息
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文记录一个最简单的基于DirectShow的图形界面的视频播放器。基于DirectShow的图形界面的播放器的例子还是比较多的，但是大部分都是“层层封装”的例子。“层层封装”的例子相对来说更加稳定，但是却不是很容易理解。因为DirectShow本身的接口函数的数量就比较多，如果再加上封装DirectShow的函数，合起来的函数数量是非常大的，很容易让人搞不清哪些才是真正的DirectShow接口函数。本播放器剥去了DirectShow例子中的“层层封装”，直接调用DirectShow的接口完成视频的播放工作，更加适合DirectShow入门使用。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103221635297"/>
+     <br/>
+    </p>
+    <h2>
+     几个功能的实现机制
+    </h2>
+    整个工程的代码比较多，不再详细记录。在这里简单记录一下代码中的几个关键点。
+    <br/>
+    <h3>
+     视频的播放/暂停/继续/停止
+    </h3>
+    <h4>
+     播放
+    </h4>
+    视频“播放”的源代码如下所示。简单来说，完成了以下视频播放的初始化工作：
+    <br/>
+    （1）
+    <span style="white-space:pre;">
+    </span>
+    输入的URL转换为Unicode编码（RenderFile()函数支持的输入是Unicode字符串）。
+    <br/>
+    （2）
+    <span style="white-space:pre;">
+    </span>
+    调用RenderFile()“智能”创建Filter Graph。
+    <br/>
+    （3）
+    <span style="white-space:pre;">
+    </span>
+    调用IMediaControl的Run()方法开始播放视频。
+    <br/>
+    （4）
+    <span style="white-space:pre;">
+    </span>
+    开启定时器，用于更新视频播放的进度（后文详细记录）
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnBnClickedStart()
+{
+	CStringA cstr_urla;
+	CStringW cstr_urlw;
+	HRESULT hr;
+
+	//Render
+#ifdef _UNICODE
+	m_url.GetWindowText(cstr_urlw);
+#else
+	USES_CONVERSION;
+	m_url.GetWindowText(cstr_urla);
+	cstr_urlw.Format(L"%s",A2W(cstr_urla));
+#endif
+	if(cstr_urlw.IsEmpty()){
+		AfxMessageBox(_T("Input URL is NULL!"));
+		return;
+	}
+
+	hr = pGraph-&gt;RenderFile(cstr_urlw, NULL);
+	if(FAILED(hr)){
+		AfxMessageBox(_T("Can't open input file!"));
+		return;
+	}
+
+	//Set Window
+	HWND screen_hwnd=NULL;
+	RECT windowRect;
+	screen_hwnd = this-&gt;GetDlgItem(IDC_SCREEN)-&gt;GetSafeHwnd(); 
+	::GetClientRect(screen_hwnd, &amp;windowRect);
+
+	pWindow-&gt;put_Visible(OAFALSE);
+	pWindow-&gt;put_Owner((OAHWND)screen_hwnd);
+	pWindow-&gt;put_Left(0);
+	pWindow-&gt;put_Top(0);
+	pWindow-&gt;put_Width(windowRect.right - windowRect.left);
+	pWindow-&gt;put_Height(windowRect.bottom - windowRect.top);
+	pWindow-&gt;put_WindowStyle(WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_THICKFRAME);
+	pWindow-&gt;put_MessageDrain((OAHWND) screen_hwnd);//Receive Message
+	pWindow-&gt;put_Visible(OATRUE);
+
+	pEvent-&gt;SetNotifyWindow((OAHWND)screen_hwnd, WM_GRAPHNOTIFY, 0);
+
+	// Run
+	hr = pControl-&gt;Run();
+
+	playerstate=STATE_PLAY;
+	SetBtn(STATE_PLAY);
+	SetTimer(1,1000,NULL);
+}</pre>
+    <br/>
+    <h4>
+     暂停/继续
+    </h4>
+    视频“暂停/继续”的源代码如下所示。其中调用了IMediaControl的Pause()和Run()设定“暂停”或者是“继续”。
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnBnClickedPause()
+{
+	HRESULT hr;
+	if(playerstate==STATE_PLAY){
+		hr=pControl-&gt;Pause();
+		playerstate=STATE_PAUSE;
+		GetDlgItem(ID_PAUSE)-&gt;SetWindowText(_T("Resume"));
+	}else if(playerstate==STATE_PAUSE){
+		hr=pControl-&gt;Run();
+		playerstate=STATE_PLAY;
+		GetDlgItem(ID_PAUSE)-&gt;SetWindowText(_T("Pause"));
+	}
+
+}</pre>
+    <br/>
+    <h4>
+     停止
+    </h4>
+    视频的“停止”的源代码如下所示。该部分代码完成了以下工作：
+    <br/>
+    （1）
+    <span style="white-space:pre;">
+    </span>
+    把播放的位置重新调整为0
+    <br/>
+    （2）
+    <span style="white-space:pre;">
+    </span>
+    调用IMediaControl的Pause()
+    <br/>
+    （3）
+    <span style="white-space:pre;">
+    </span>
+    关闭定时器
+    <br/>
+    （4）
+    <span style="white-space:pre;">
+    </span>
+    删除Filter Graph中的Filter
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnBnClickedStop()
+{
+	long long position = 0;
+	HRESULT hr;
+	hr = pSeeking-&gt;SetPositions(&amp;position, AM_SEEKING_AbsolutePositioning | AM_SEEKING_SeekToKeyFrame, 
+		0, AM_SEEKING_NoPositioning);
+	KillTimer(1);
+	hr=pControl-&gt;Stop();
+	
+	// Enumerate the filters And remove them
+	IEnumFilters *pEnum = NULL;
+	hr = pGraph-&gt;EnumFilters(&amp;pEnum);
+	if (SUCCEEDED(hr))
+	{
+		IBaseFilter *pFilter = NULL;
+		while (S_OK == pEnum-&gt;Next(1, &amp;pFilter, NULL))
+		{
+			// Remove the filter.
+			pGraph-&gt;RemoveFilter(pFilter);
+			// Reset the enumerator.
+			pEnum-&gt;Reset();
+			pFilter-&gt;Release();
+		}
+		pEnum-&gt;Release();
+	}
+
+	SystemClear();
+}</pre>
+    <br/>
+    <h3>
+     视频播放进度在时间轴的显示
+    </h3>
+    随着视频的播放，需要在视频播放进度的时间轴上更新播放进度信息。在程序中使用了一个定时器完成这个功能。
+    <br/>
+    在视频开始播放的时候，调用SetTimer()开启定时器。时间间隔设置为1000ms。
+    <br/>
+    <pre class="cpp">SetTimer(1,1000,NULL);</pre>
+    在视频停止播放的时候，调用KillTimer()结束定时器。
+    <br/>
+    <pre class="cpp">KillTimer(1);</pre>
+    在定时器的消息响应函数中，调用了IMediaSeeking的GetCurrentPosition()获取视频当前播放到的时间，调用了IMediaSeeking的GetDuration ()获取视频的时长。根据以上函数得到的数值，计算后把结果设置到相应的控件上。这部分的代码如下所示。
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == 1){
+		CString curtimestr,durationstr;
+		long long curtime;
+		long long duration;
+		int tns, thh, tmm, tss;
+		int progress;
+		//ms
+		pSeeking-&gt;GetCurrentPosition(&amp;curtime);
+		if(curtime!=0){
+			//change to second
+			tns = curtime/10000000;
+			thh  = tns / 3600;
+			tmm  = (tns % 3600) / 60;
+			tss  = (tns % 60);
+			curtimestr.Format(_T("%02d:%02d:%02d"),thh,tmm,tss);
+			m_curtime.SetWindowText(curtimestr);
+		}
+		pSeeking-&gt;GetDuration(&amp;duration);
+		if(duration!=0){
+			tns = duration/10000000;
+			thh  = tns / 3600;
+			tmm  = (tns % 3600) / 60;
+			tss  = (tns % 60);
+			durationstr.Format(_T("%02d:%02d:%02d"),thh,tmm,tss);
+			m_duration.SetWindowText(durationstr);
+
+			progress=curtime*100/duration;
+			m_progress.SetPos(progress);
+		}
+	}
+	CDialogEx::OnTimer(nIDEvent);
+}</pre>
+    <br/>
+    <br/>
+    <h3>
+     视频播放点的调整
+    </h3>
+    当鼠标拖动滑动控制条（Slider Control）控件上的滑块的时候，需要根据拖动的位置设置视频的播放进度。此时调用IMediaSeeking的SetPositions()设定视频的播放进度。消息响应函数中的代码如下所示。
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if (pScrollBar-&gt;GetSafeHwnd() == m_progress.GetSafeHwnd()){
+		float pos_bar=0.0;
+		long long duration=0.0;
+		long long pos_time=0.0;
+		if(nSBCode==SB_THUMBPOSITION){
+			pos_bar=(float)nPos/100.0;
+			pSeeking-&gt;GetDuration(&amp;duration);
+			pos_time=pos_bar*duration;
+
+			long long position = (long long)(pos_time);
+			HRESULT hr = pSeeking-&gt;SetPositions(&amp;position, AM_SEEKING_AbsolutePositioning | AM_SEEKING_SeekToKeyFrame, 
+				0, AM_SEEKING_NoPositioning);
+		}
+	}
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
+}</pre>
+    <br/>
+    <h3>
+     “全屏播放”的问题
+    </h3>
+    视频的全屏播放通过IVideoWindow的put_FullScreenMode()实现，代码如下所示。
+    <br/>
+    <pre class="cpp">void CplayerGUIDlg::OnBnClickedFullscreen()
+{
+	pWindow-&gt;put_FullScreenMode(OATRUE);
+}</pre>
+    <br/>
+    同时，在“全屏模式”启动后，如果按“ESC”键的话，可以关闭“全屏模式”。这部分的代码在PreTranslateMessage()中实现，如下所示。
+    <br/>
+    <pre class="cpp">//Exit Full Screen mode when push "ESC"
+BOOL CplayerGUIDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg-&gt;message == WM_KEYDOWN){
+		if (pMsg-&gt;wParam == VK_RETURN || pMsg-&gt;wParam == VK_ESCAPE){
+			// Restore form fullscreen mode
+			pWindow-&gt;put_FullScreenMode(OAFALSE);
+
+			return 1;
+		}
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}</pre>
+    <br/>
+    在这里有一点需要注意，IVideoWindow的put_FullScreenMode()在Win7下是有问题的。只有在设置窗口样式的的时候，在样式中指定WS_THICKFRAME后才可以正常使用。例如如下代码。
+    <br/>
+    <pre class="cpp">pWindow-&gt;put_WindowStyle(WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_THICKFRAME);</pre>
+    如果没有指定WS_THICKFRAME样式的话，在退出“全屏”模式之后，视频就显示不出来了，取而代之的是一片黑色。
+    <br/>
+    <p>
+     但是设定WS_THICKFRAME样式之后，视频窗口的外围会有一层“白边”，会影响到视频显示的美观。因此我们如果希望正常使用全屏的话，可能需要找一种更好的方法，在这里我就没有深入研究了。
+    </p>
+    <br/>
+    <h2>
+     运行结果
+    </h2>
+    <p>
+     这是使用DirectShow基于MFC开发的一个示例播放器。实现了一个播放器的基本功能：播放，暂停/继续，停止，播放时间轴的显示，以及从任一点开始播放媒体。并且支持将媒体文件拖拽至播放器进行播放。播放前将媒体文件的路径输入到“URL”栏中，然后单击“Start”即可开始播放。在软件下方包含了“start”，“Pause”，“Stop”等按钮用于控制媒体的播放。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103222041263?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     播放时候的效果截图如下所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103222049936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    单击“Full Screen”可以全屏播放。单击“Info”可以显示正在播放媒体的信息，包括以下两种信息：
+    <br/>
+    （1）
+    <span style="white-space:pre;">
+    </span>
+    该视频的相关信息
+    <br/>
+    （2）
+    <span style="white-space:pre;">
+    </span>
+    播放该视频的 Filter Graph中的Filter。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150103222101886?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    <h2>
+     下载
+    </h2>
+    <strong>
+     Simplest DirectShow Example
+    </strong>
+    <br/>
+    <br/>
+    <p style="margin:3pt 0cm;">
+     <strong>
+      <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+       <br/>
+      </span>
+      项目主页
+     </strong>
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+     </span>
+    </p>
+    <p>
+    </p>
+    <p style="margin:3pt 0cm;">
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+      SourceForge
+     </span>
+     <span style="font-size:9pt;">
+      ：
+     </span>
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+      <a href="https://sourceforge.net/projects/simplestdirectshowexample/">
+       https://sourceforge.net/projects/simplestdirectshowexample/
+      </a>
+     </span>
+    </p>
+    <p>
+    </p>
+    <p style="margin:3pt 0cm;">
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+      Github
+     </span>
+     <span style="font-size:9pt;">
+      ：
+     </span>
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+      <a href="https://github.com/leixiaohua1020/simplest_directshow_example">
+       https://github.com/leixiaohua1020/simplest_directshow_example
+      </a>
+     </span>
+    </p>
+    <p>
+    </p>
+    <p style="margin:3pt 0cm;">
+     <span style="font-size:9pt;">
+      开源中国：
+     </span>
+     <span lang="en-us" style="font-size:9pt;font-family:Arial, sans-serif;" xml:lang="en-us">
+      <a href="http://git.oschina.net/leixiaohua1020/simplest_directshow_example">
+       http://git.oschina.net/leixiaohua1020/simplest_directshow_example
+      </a>
+     </span>
+    </p>
+    <p>
+    </p>
+    <br/>
+    CDSN下载地址：
+    <a href="http://download.csdn.net/detail/leixiaohua1020/8348163">
+     http://download.csdn.net/detail/leixiaohua1020/8348163
+    </a>
+    <br/>
+    <br/>
+    本程序包含了DirectShow开发的示例程序。适合DirectShow初学者进行学习。
+    <br/>
+    它包含了以下几个子程序：
+    <br/>
+    simplest_directshow_player: 最简单的基于DirectShow的视频播放器。
+    <br/>
+    simplest_directshow_player_custom: 最简单的基于DirectShow的视频播放器（Custom）。
+    <br/>
+    <span style="color:#ff0000;">
+     playerGUI: 最简单的基于DirectShow的播放器-图形界面版。
+    </span>
+    <br/>
+    simplest_directshow_info: 最简单的Directshow信息显示例子。
+    <br/>
+    simplest_directshow_filter: 目前还未完成。
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/42372631
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=DirectShow&amp;t=blog" target="_blank">
+    DirectShow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=MFC&amp;t=blog" target="_blank">
+    MFC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645657" target="_blank">
+    DirectShow
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1843731" target="_blank">
+    我的开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

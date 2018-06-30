@@ -1,0 +1,236 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Web服务中延时对QoE（体验质量）的影响 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_228">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   Web服务中延时对QoE（体验质量）的影响
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月24日 14:31:07
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4299
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     S. Egger等人在论文《WAITING TIMES IN QUALITY OF EXPERIENCE FOR WEB BASED SERVICES》中，研究了Web服务中延时对主观感受的影响。在此记录一下其重点内容。
+    </p>
+    <p>
+     注：这篇文章很有参考价值。
+    </p>
+    <p>
+     首先需要明确的是，该论文所讨论的是关于web服务的（而不是针对视频的）。
+    </p>
+    <p>
+     web服务的原理如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173001765?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+    </p>
+    <p>
+     人的主观感受和客观的时间有的时候是不一致的。如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173006187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+    </p>
+    <p>
+     有关人类主观响应时间有如下研究成果：
+    </p>
+    <p>
+     0.1 s： 是用户感觉不到系统不连贯性的上限
+     <br/>
+     1.0 s： 是用户的思路不被打扰的上限，尽管用户会注意到延迟
+     <br/>
+     10  s： 是用户保持对对话框的注意力的上限
+    </p>
+    <p>
+     （怎么感觉翻译得怪怪的...）
+    </p>
+    <p>
+     <strong>
+      冲浪 VS. 等待： WEB QOE
+     </strong>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      页面加载时间 vs 带宽
+     </strong>
+    </p>
+    <p>
+     下图反映了页面加载时间和主观感受之间的关系。可以看出相同的页面加载时间的前提下，用户对不同服务的主观感受是不一样的。对于搜索，照片服务，用户可以忍受更长时间的等待。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173011890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     下图反映了带宽和主观感受之间的关系。可以看出，当带宽达到512kbps之后，用户主观感受的提升已经不明显了。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173014843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     这张图很有意思。纵坐标是实际页面加载时间与主观页面加载时间之间的比值。横坐标是不同的页面：一共6家服务提供商，每家选择了2-3个页面（例如对Amazon来说，就是首页, 搜索结果以及商品详细信息页面）。可以看出，不同的页面，这个比值是不同的，范围从1.3到3（按照常理说，这个值是1应该是最客观的）。
+    </p>
+    <p>
+     注：PTL —— Page Load Time
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173019437?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     下图显示了下载文件时间与主观感受之间的关系。这个实验在2009和2011年被做过两次。可以看出，在下载时间相同的情况下，小文件下载给用户的主观感受要差一些。其实这个结果是众所周知的，但是很少有人量化研究。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173022953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     下图显示了等待时间与主观感受之间的关系。横坐标是等待时间（单位是秒）。可以看出对于不同的Web服务，相同的等待时间可能给人的主观感受不一样。比如说同样等待8秒，Email附件的MOS值比较高，而网页服务的MOS值就比较低。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173025984?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     下图显示了影响Youtube的QoE最主要的一些因素。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173030203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     下图显示了Youtube视频播放过程中暂停（stalling）次数和主观感受之间的关系。黑色的线指的是暂停时长为1s的情况。黄色的线指的是暂停时长为3s的情况。
+    </p>
+    <p>
+     可以看出，用户对于暂停2次以上的情况都会比较不满意（MOS低于3.5），每次暂停的时间较长的话（3s）则会更加不满。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131108173034250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/14524659
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=web&amp;t=blog" target="_blank">
+    web
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=延时&amp;t=blog" target="_blank">
+    延时
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=qoe&amp;t=blog" target="_blank">
+    qoe
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=带宽&amp;t=blog" target="_blank">
+    带宽
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,245 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 开源视频质量评价工具： Evalvid - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_542">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   开源视频质量评价工具： Evalvid
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月16日 12:35:28
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：16102
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <div class="mod-top" id="card-container" style="margin-bottom:30px;font-size:14px;font-family:Arial;line-height:24px;">
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      Evalvid是一个对在真实或模拟的网络里传输的视频进行质量评价的框架和工具集。除了底层网络的QoS参数的测量，如丢包率，延迟，抖动，Evalvid还提供标准的视频质量评价算法如
+      <span style="color:#136ec2;">
+       PSNR
+      </span>
+      和
+      <span style="color:#136ec2;">
+       SSIM
+      </span>
+      。它视频编码方面支持
+      <span style="color:#136ec2;">
+       H.264
+      </span>
+      ，
+      <span style="color:#136ec2;">
+       MPEG-4
+      </span>
+      和
+      <span style="color:#136ec2;">
+       H.263
+      </span>
+      。音频编码方面支持
+      <span style="color:#136ec2;">
+       AAC
+      </span>
+      。Evalvid是开源的，由jirka klaue编写。
+     </div>
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      出品Evalvid的机构：TKN - the Telecommunication Networks Group，是
+      <span style="font-family:arial;font-size:14px;color:#333333;line-height:22px;text-indent:30px;">
+       柏林工业大学的
+      </span>
+      <span style="font-family:arial;font-size:14px;color:#333333;line-height:22px;">
+       电气工程和计算机科学
+      </span>
+      <span style="font-family:arial;font-size:14px;color:#333333;line-height:22px;">
+       学院。
+      </span>
+     </div>
+     <div align="center" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      <img alt="" src="https://img-blog.csdn.net/20140731194332777"/>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      Evalvid中的PSNR工具用于计算原始序列与受损序列之间的PSNR或者SSIM。
+      <br/>
+      PS：虽然名字叫“PSNR”，实际上是可以计算SSIM的，在命令行后面添加参数“ssim”即可。
+      <br/>
+      命令格式：
+      <br/>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      <pre class="plain">psnr x y &lt;YUV format&gt; &lt;src.yuv&gt; &lt;dst.yuv&gt; [multiplex] [ssim]
+x             视频宽度
+y             视频宽度
+YUV format    420, 422
+src.yuv      原始序列
+dst.yuv      受损序列
+[multiplex]   可选
+[ssim]       可选:计算SSIM而不是PSNR
+</pre>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      <br/>
+      使用示例（YUV格式：宽高为480x272，采样格式YUV420P，受损视频为src01_480x272_0.100.yuv，原始视频src01_480x272.yuv）：
+      <br/>
+      计算PSNR：
+      <br/>
+      psnr 480 272 420 src01_480x272_0.100.yuv src01_480x272.yuv &gt; ref_psnr.txt
+      <br/>
+      计算SSIM：
+      <br/>
+      psnr 480 272 420 src01_480x272_0.100.yuv src01_480x272.yuv ssim &gt; ref_ssim.txt
+      <br/>
+      计算PSNR截图：
+     </div>
+     <div align="center" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      <img alt="" src="https://img-blog.csdn.net/20140731193054117?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);clear:both;line-height:25px;text-indent:30px;">
+      计算SSIM截图：
+     </div>
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      <img alt="" src="https://img-blog.csdn.net/20140731193104756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      计算结果可以导入Excel进行处理。
+      <br/>
+      PSNR结果：
+     </div>
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      <img alt="" src="https://img-blog.csdn.net/20140731193741605?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </div>
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      SSIM结果：
+     </div>
+     <div class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      <img alt="" src="https://img-blog.csdn.net/20140731193753367?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+      <div align="left" class="para" style="margin-bottom:14px;text-align:center;text-indent:30px;">
+       网址：
+       <a href="http://www2.tkn.tu-berlin.de/research/evalvid/">
+        http://www2.tkn.tu-berlin.de/research/evalvid/
+       </a>
+      </div>
+      <div align="left" class="para" style="margin-bottom:14px;text-align:center;text-indent:30px;">
+       下载：
+       <a href="http://download.csdn.net/detail/leixiaohua1020/6374037">
+        http://download.csdn.net/detail/leixiaohua1020/6374037
+       </a>
+      </div>
+     </div>
+     <div align="left" class="para" style="margin-bottom:14px;color:rgb(51,51,51);text-align:center;clear:both;line-height:25px;text-indent:30px;">
+     </div>
+    </div>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/11729223
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频质量评价&amp;t=blog" target="_blank">
+    视频质量评价
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=evalvid&amp;t=blog" target="_blank">
+    evalvid
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=psnr&amp;t=blog" target="_blank">
+    psnr
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ssim&amp;t=blog" target="_blank">
+    ssim
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

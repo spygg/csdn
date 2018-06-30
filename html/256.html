@@ -1,0 +1,792 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffplay的快捷键以及选项 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_256">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffplay的快捷键以及选项
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月11日 00:03:44
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：30557
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     ffplay是ffmpeg工程中提供的播放器，功能相当的强大，凡是ffmpeg支持的视音频格式它基本上都支持。甚至连VLC不支持的一些流媒体都可以播放（比如说RTMP），但是它的缺点是其不是图形化界面的，必须通过键盘来操作。因此本文介绍一下它的快捷键以及选项。
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       快捷键
+      </span>
+     </strong>
+    </p>
+    <p>
+     播放视音频文件的时候，可以通过下列按键控制视音频的播放
+    </p>
+    <table border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         按键
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         作用
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         q, ESC
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         退出
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         f
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         全屏
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         p, 空格
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         暂停
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         w
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         显示音频波形
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         s
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         逐帧显示
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         左方向键/右方向键
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         向后10s/向前10s
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         上方向键/下方向键
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         向后1min/向前1min
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         page down/page up
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         向后10min/向前10min
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         鼠标点击屏幕
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         跳转到指定位置（根据鼠标位置相对屏幕的宽度计算）
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       选项
+      </span>
+     </strong>
+    </p>
+    <p>
+     在播放视频前，可以预设一些参数。
+    </p>
+    <p>
+     一般播放视频的时候，使用命令：
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay "林俊杰_江南.flv"</pre>
+    <p>
+    </p>
+    <p>
+     如果我们希望能在播放完成后自动退出，则可以使用命令：
+    </p>
+    <p>
+    </p>
+    <pre class="plain">ffplay -autoexit "林俊杰_江南.flv";</pre>
+    <p>
+    </p>
+    <p>
+     所有的命令如下列表所示。
+    </p>
+    <table border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         名称
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         有参数
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         作用
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         x
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         强制屏幕宽度
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         强制屏幕高度
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         s
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         强制屏幕大小
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         fs
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         全屏
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         an
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         关闭音频
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         vn
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         关闭视频
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         ast
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         设置想播放的音频流（需要指定流ID）
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         vst
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         设置想播放的视频流（需要指定流ID）
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         sst
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         设置想播放的字幕流（需要指定流ID）
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         ss
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         从指定位置开始播放，单位是秒
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         t
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         播放指定时长的视频
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         nodisp
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         无显示屏幕
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         f
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         强制封装格式
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         pix_fmt
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         指定像素格式
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         stats
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         显示统计信息
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         idct
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         IDCT算法
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         ec
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         错误隐藏方法
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         sync
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         视音频同步方式（type=audio/video/ext）
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         autoexit
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         播放完成自动退出
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         exitonkeydown
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         按下按键退出
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         exitonmousedown
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         按下鼠标退出
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         loop
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         指定循环次数
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         framedrop
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         N
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         CPU不够的时候丢帧
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         window_title
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         显示窗口的标题
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         rdftspeed
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Rdft速度
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         showmode
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         显示方式(0 = video, 1 = waves, 2 = RDFT)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         codec
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         Y
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         强制解码器
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/15186441
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffplay&amp;t=blog" target="_blank">
+    ffplay
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=快捷键&amp;t=blog" target="_blank">
+    快捷键
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=选项&amp;t=blog" target="_blank">
+    选项
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

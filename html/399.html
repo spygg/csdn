@@ -1,0 +1,748 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ C++下的DLL编程入门 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_399">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   C++下的DLL编程入门
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月12日 19:57:03
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：1949
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p align="center">
+     <strong>
+     </strong>
+    </p>
+    <p align="center">
+     <strong>
+      <span style="font-family:'Times New Roman';">
+      </span>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      一、   编写第一个入门级dll文件
+     </strong>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';">
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#000000;">
+       1.
+      </span>
+     </strong>
+     <span style="color:#000000;">
+      <span style="font-size:14px;">
+       新建一个dlltest
+      </span>
+     </span>
+     的dll工程，加入一源文件dlltest.cpp，包含add和subtract两个函数如下：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">_declspec(dllexport) int add(int a,int b)
+{
+    return a+b;
+}
+
+_declspec(dllexport) int subtract(int a,int b)
+{
+    return a-b;
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="color:#0000FF;">
+      <span style="font-size:14px;">
+       注意：
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      在函数名前加上
+      <span style="color:#FF0000;">
+       _declspec(dllexport)
+      </span>
+      <span style="color:#FF0000;">
+       ，
+      </span>
+      这样编译后在连接的时候才会生成dlltest.lib（引入库文件）和dlltest.exp（输出库文件），并且在命令提示符下用dumpbin命令可以看到导出了哪些函数。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      方法：在命令提示符下，转到dll文件所在目录下，输入dumpbin –exports dlltest.dll,列出导出函数如下：
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       <img alt="" src="https://img-blog.csdn.net/20131012195822421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       这里注意到函数名字已经被改成了
+      </span>
+      <span style="color:#FF0000;">
+       ?add@@YAHHH@Z
+      </span>
+      <span style="color:#000000;">
+       ,
+      </span>
+      <span style="color:#000000;">
+       这种现象叫做
+      </span>
+      <span style="color:#0000FF;">
+       名字粉碎
+      </span>
+      <span style="color:#000000;">
+       ，是为了支持函数重载而做的。
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="font-size:14px;">
+      </span>
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#000000;">
+       2.
+      </span>
+     </strong>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       编写一个基于对话框的MFC
+      </span>
+      程序测试DLL,工程名为calldll，放置两个按纽add和subtract,响应按纽消息，调用这个DLL的add和subtract函数。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       先添加响应按钮消息的函数
+      </span>
+      OnAdd和OnSubtract，然后在函数所在源文件中写完整函数体如下：
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <pre class="cpp">//extern int add(int,int);
+//extern int subtract(int,int);
+_declspec(dllimport) int add(int,int);
+_declspec(dllimport) int subtract(int,int);
+
+void CCalldllDlg::OnAdd() 
+{
+    // TODO: Add your control notification handler code here
+    CString str;
+    str.Format("2+3=%d",add(2,3));
+    MessageBox(str);
+}
+
+void CCalldllDlg::OnSubtract() 
+{
+    // TODO: Add your control notification handler code here
+    CString str;
+    str.Format("3-2=%d",subtract(3,2));
+    MessageBox(str);
+}</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      这里采用
+      <u>
+       <span style="color:#0000FF;">
+        隐式链接
+       </span>
+      </u>
+      的方式加载动态链接库：
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#0000FF;">
+       注意：
+      </span>
+      要用关键字extern先声明这两个函数，表明这两个函数是在外部定义的（不过程序中将它注释掉了）。最好是用
+      <span style="color:#3366ff;">
+       _declspec(dllimport)
+      </span>
+      表明函数是从动态链接库的lib文件中引入的，这样效率更高。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      将文件dlltest.lib拷贝到此工程目录下，并在Project Settings的Link标签下添加此文件：（否则编译会成功，但连接时会出错提示找不到函数的定义）
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <img alt="" height="445" src="https://img-blog.csdn.net/20131012195900484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="676"/>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      编译连接生成calldll.exe，这时
+      <span style="color:#000000;">
+       用Dumpbin -imports
+      </span>
+      calldll
+      <span style="color:#000000;">
+       .exe
+      </span>
+      <span style="color:#000000;">
+       查看它的输入信息，可以看到它加载了
+      </span>
+      dlltest
+      <span style="color:#000000;">
+       .dll
+      </span>
+      <span style="color:#000000;">
+       。
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="font-size:14px;">
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       运行
+      </span>
+      calldll.exe（要成功运行还需将dlltest
+      <span style="color:#000000;">
+       .dll
+      </span>
+      <span style="color:#000000;">
+       拷贝到工程目录或此exe
+      </span>
+      所在目录下）
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <img alt="" height="536" src="https://img-blog.csdn.net/20131012200045687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="764"/>
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      这样，最简单的第一个dll就完成了。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <p>
+     <strong>
+      二、   编写涉及到类和头文件的dll文件
+     </strong>
+    </p>
+    <p>
+     <strong>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      1.
+     </strong>
+     <span style="color:#000000;">
+      <span style="font-size:14px;">
+       新建一个dlltest
+      </span>
+     </span>
+     的dll工程，加入一头文件dlltest.h和一源文件dlltest.cpp。
+    </p>
+    <p>
+     <span style="color:#0000FF;">
+      <span style="font-size:14px;">
+       dlltest.h:
+      </span>
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">#ifdef DLL_API
+#else
+#define DLL_API _declspec(dllimport)
+#endif
+
+DLL_API int add(int,int);
+DLL_API int subtract(int,int);
+
+class DLL_API Point1               //将整个类导出
+{
+public:
+    void output(int x,int y);
+    void output1(int x,int y);
+};
+
+class Point2
+{
+public:
+    DLL_API void output(int x,int y);   //仅导出类中的一个函数
+    void output1(int x,int y);
+};</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#0000FF;">
+       dlltest.cpp
+      </span>
+      <span style="color:#0000FF;">
+       ：
+      </span>
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">#define DLL_API _declspec(dllexport)
+#include "dlltest.h"
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+int add(int a,int b)
+{
+    return a+b;
+}
+
+int subtract(int a,int b)
+{
+    return a-b;
+}
+
+void Point1::output(int x,int y)
+{
+    HWND hwnd=GetForegroundWindow();
+    HDC hdc=GetDC(hwnd);
+    char buf[50];
+    memset(buf,0,50);
+    sprintf(buf,"x=%d,y=%d",x,y);
+    TextOut(hdc,0,0,buf,strlen(buf));
+}
+
+void Point1::output1(int x,int y)
+{
+    HWND hwnd=GetForegroundWindow();
+    HDC hdc=GetDC(hwnd);
+    char buf[50];
+    memset(buf,0,50);
+    sprintf(buf,"x=%d,y=%d",x,y);
+    TextOut(hdc,0,0,buf,strlen(buf));
+}
+
+void Point2::output(int x,int y)
+{
+    HWND hwnd=GetForegroundWindow();
+    HDC hdc=GetDC(hwnd);
+    char buf[50];
+    memset(buf,0,50);
+    sprintf(buf,"x=%d,y=%d",x,y);
+    TextOut(hdc,0,20,buf,strlen(buf));
+}
+
+void Point2::output1(int x,int y)
+{
+    HWND hwnd=GetForegroundWindow();
+    HDC hdc=GetDC(hwnd);
+    char buf[50];
+    memset(buf,0,50);
+    sprintf(buf,"x=%d,y=%d",x,y);
+    TextOut(hdc,0,20,buf,strlen(buf));
+}</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <strong>
+      2.
+     </strong>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       编写一个基于对话框的MFC
+      </span>
+      程序测试DLL,此时在工程中包含上面这个头文件，不用在声明导入的类和函数了。
+     </span>
+    </p>
+    <p>
+     <strong>
+      三、   使用模块定义文件和动态加载动态链接库
+     </strong>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      1.
+     </span>
+     <span style="font-size:14px;">
+      新建dlltest.dll工程，
+      <span style="color:#000000;">
+       加入一源文件dlltest.cpp
+      </span>
+      ，包含add和subtract两个函数如下：
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+     </span>
+    </p>
+    <pre class="cpp">int add(int a,int b)
+{
+    return a+b;
+}
+
+int subtract(int a,int b)
+{
+    return a-b;
+}</pre>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      2.
+     </span>
+     <span style="font-size:14px;">
+      <span style="color:#000000;">
+       使用模块定义文件防止文件名改变，在目录中新建dlltest.def
+      </span>
+      文件，增加到工程。
+     </span>
+    </p>
+    <span style="font-size:14px;">
+    </span>
+    <pre class="plain">LIBRARY dlltest
+EXPORTS
+add
+subtract
+
+</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      注：
+      <span style="font-family:'Times New Roman';">
+       LIBRARY
+      </span>
+      和
+      <span style="font-family:'Times New Roman';">
+       EXPORTS
+      </span>
+      的用法参照
+      <span style="font-family:'Times New Roman';">
+       MSDN.
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      3.
+     </span>
+     <span style="font-size:14px;">
+      编译后用
+      <span style="font-family:'Times New Roman';">
+       dumpbin
+      </span>
+      查看到函数名没有改变。
+     </span>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <img alt="" src="https://img-blog.csdn.net/20131012200022859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      4.
+     </span>
+     <span style="font-size:14px;">
+      用动态加载的方法来调用
+      <span style="font-family:'Times New Roman';">
+       dll
+      </span>
+      文件。
+     </span>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">void CCalldllDlg::OnAdd() 
+{
+       // TODO: Add your control notification handler code here
+       HINSTANCE hInst;
+       hInst=LoadLibrary("dlltest.dll");
+       typedef int (/*_stdcall*/ *ADDPROC)(int a,int b);
+       //ADDPROC Add=(ADDPROC)GetProcAddress(hInst,"?add@@YAHHH@Z");
+       //ADDPROC Add=(ADDPROC)GetProcAddress(hInst,MAKEINTRESOURCE(1));
+       ADDPROC Add=(ADDPROC)GetProcAddress(hInst,"add");
+       if(!Add)
+       {
+              MessageBox("获取函数地址失败！");
+              return;
+       }
+       CString str;
+       str.Format("2+3=%d",Add(2,3));
+       MessageBox(str);
+       FreeLibrary(hInst);
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <span style="font-size:14px;">
+      <span style="color:#0000FF;">
+       注意：
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      1.
+     </span>
+     <span style="font-size:14px;">
+      这里调用的
+      <span style="font-family:'Times New Roman';">
+       GetProcAddress
+      </span>
+      函数中的第二个参数是动态链接库中导出的函数名，如果动态链接库中没有用模块定义文件防止函数名粉碎，则要用注释掉的
+      <span style="font-family:'Times New Roman';">
+       GetProcAddress(hInst,"
+       <span style="color:#0000FF;">
+        ?add@@YAHHH@Z
+       </span>
+       ")
+      </span>
+      ，另外也可按序号访问
+      <span style="font-family:'Times New Roman';">
+       GetProcAddress(hInst,
+       <span style="color:#0000FF;">
+        MAKEINTRESOURCE(1)
+       </span>
+       )
+      </span>
+      。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      2.
+     </span>
+     <span style="font-size:14px;">
+      使用模块定义文件后，如果改变调用约定为
+      <span style="font-family:'Times New Roman';">
+       _stdcall
+      </span>
+      ，函数名也不会被改变，但如果加上
+      <span style="font-family:'Times New Roman';">
+       _stdcall
+      </span>
+      定义函数，调用时也需要加上
+      <span style="font-family:'Times New Roman';">
+       _stdcall
+      </span>
+      ，否则会出错。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      3.
+     </span>
+     <span style="font-size:14px;">
+      动态加载不需要将文件dlltest.lib拷贝到此工程目录下，并在Project Settings的Link标签下添加此文件，只需将dll文件拷贝到工程目录下即可，并且通过dumpbin -imports calldll.exe查看它的输入信息时，可以看到它并没有加载dlltest.dll。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      4.
+     </span>
+     <span style="font-size:14px;">
+      动态加载的好处是需要时再加载，可以提高执行的效率。当不使用
+      <span style="font-family:'Times New Roman';">
+       DLL
+      </span>
+      时，调用
+      <span style="font-family:'Times New Roman';">
+       FreeLibrary
+      </span>
+      减少
+      <span style="font-family:'Times New Roman';">
+       DLL
+      </span>
+      的使用计数，释放
+      <span style="font-family:'Times New Roman';">
+       DLL
+      </span>
+      资源，减少系统负担。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+      5.
+     </span>
+     <span style="font-size:14px;">
+      不使用模块定义文件，也可用
+      <span style="color:#0000FF;">
+       <span style="font-family:'Times New Roman';">
+        extern "C"
+       </span>
+      </span>
+      使函数名保持不变，如
+      <span style="color:#0000FF;">
+       <span style="font-family:'Times New Roman';">
+        #define DLL1_API extern "C" _declspec(dllexport)
+       </span>
+      </span>
+      ，但它只能导出全局函数，不能导出类的成员函数，并且如果调用约定被改成了别的方式，此时函数名也被改变，所以一般不用这种方式。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:'Times New Roman';font-size:14px;">
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=C++&amp;t=blog" target="_blank">
+    C++
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=DLL&amp;t=blog" target="_blank">
+    DLL
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=入门&amp;t=blog" target="_blank">
+    入门
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

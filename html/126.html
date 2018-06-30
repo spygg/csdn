@@ -1,0 +1,473 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ SDL2源代码分析7：显示（SDL_RenderPresent()） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_126">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   SDL2源代码分析7：显示（SDL_RenderPresent()）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年11月09日 00:59:05
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：9787
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     SDL源代码分析系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40680907" target="_blank">
+      SDL2源代码分析1：初始化（SDL_Init()）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40701203" target="_blank">
+      SDL2源代码分析2：窗口（SDL_Window）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40723085" target="_blank">
+      SDL2源代码分析3：渲染器（SDL_Renderer）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40743061" target="_blank">
+      SDL2源代码分析4：纹理（SDL_Texture）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40876089" target="_blank">
+      SDL2源代码分析5：更新纹理（SDL_UpdateTexture()）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40895593" target="_blank">
+      SDL2源代码分析6：复制到渲染器（SDL_RenderCopy()）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/40895797" target="_blank">
+      SDL2源代码分析7：显示（SDL_RenderPresent()）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41207787" target="_blank">
+      SDL2源代码分析8：视频显示总结
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     上一篇文章分析了SDL纹理赋值给渲染目标的函数SDL_RenderCopy()。这篇文章分析SDL显示视频最后的一个函数：SDL_RenderPresent()。
+    </p>
+    <p style="text-align: center;">
+     <img alt="" src="http://img.blog.csdn.net/20141107171722706"/>
+     <br/>
+    </p>
+    <br/>
+    SDL播放视频的代码流程如下所示。
+    <br/>
+    <strong>
+     初始化:
+    </strong>
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     SDL_Init(): 初始化SDL。
+     <br/>
+     SDL_CreateWindow(): 创建窗口（Window）。
+     <br/>
+     SDL_CreateRenderer(): 基于窗口创建渲染器（Render）。
+     <br/>
+     SDL_CreateTexture(): 创建纹理（Texture）。
+    </blockquote>
+    <strong>
+     循环渲染数据:
+    </strong>
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     SDL_UpdateTexture(): 设置纹理的数据。
+     <br/>
+     SDL_RenderCopy(): 纹理复制给渲染器。
+     <br/>
+     SDL_RenderPresent(): 显示。
+    </blockquote>
+    <p>
+     上篇文章分析了该流程中的第6个函数SDL_RenderCopy()。本文继续分析该流程中的最后一个函数SDL_RenderPresent()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     SDL_RenderPresent()
+    </h2>
+    <h3>
+     函数简介
+    </h3>
+    <p>
+     SDL使用SDL_RenderPresent()显示画面。SDL_RenderPresent()的原型如下。
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_1_1515672">void SDLCALL SDL_RenderPresent(SDL_Renderer * renderer);</pre>
+    <span style="white-space:pre">
+    </span>
+    参数renderer用于指定渲染器。
+    <br/>
+    <br/>
+    <h3>
+     函数调用关系图
+    </h3>
+    <p>
+     SDL_RenderPresent()关键函数的调用关系可以用下图表示。
+    </p>
+    <div style="text-align: center;">
+     <a href="http://my.csdn.net/leixiaohua1020/album/detail/1794103" target="_blank">
+      <img alt="" src="http://img.blog.csdn.net/20141107172233131?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </a>
+    </div>
+    <p>
+     上面的图片不太清晰，更清晰的图片上传到了相册里面：
+    </p>
+    <p>
+     <a href="http://my.csdn.net/leixiaohua1020/album/detail/1794103" target="_blank">
+      http://my.csdn.net/leixiaohua1020/album/detail/1794103
+     </a>
+     <br/>
+    </p>
+    <p>
+     把相册里面的图片保存下来就可以得到清晰的图片了。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     源代码分析
+    </h3>
+    <p>
+     SDL_RenderPresent()的源代码位于render\SDL_render.c中。如下所示。
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_2_9258587">void SDL_RenderPresent(SDL_Renderer * renderer)
+{
+    CHECK_RENDERER_MAGIC(renderer, );
+
+
+    /* Don't draw while we're hidden */
+    if (renderer-&gt;hidden) {
+        return;
+    }
+    renderer-&gt;RenderPresent(renderer);
+}</pre>
+    <br/>
+    <p>
+     从源代码中可以看出，SDL_RenderPresent()调用了SDL_Render的RenderPresent()方法显示图像。
+    </p>
+    <p>
+     下面我们详细看一下几种不同的渲染器的RenderPresent()的方法。
+    </p>
+    <br/>
+    <br/>
+    <h4>
+     1.
+     <span style="white-space:pre">
+     </span>
+     Direct3D
+    </h4>
+    <p>
+     Direct3D 渲染器中对应RenderPresent()的函数是D3D_RenderPresent()，它的源代码如下所示（位于render\direct3d\SDL_render_d3d.c）。
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_3_3511730">static void D3D_RenderPresent(SDL_Renderer * renderer)
+{
+    D3D_RenderData *data = (D3D_RenderData *) renderer-&gt;driverdata;
+    HRESULT result;
+
+
+    if (!data-&gt;beginScene) {
+        IDirect3DDevice9_EndScene(data-&gt;device);
+        data-&gt;beginScene = SDL_TRUE;
+    }
+
+
+    result = IDirect3DDevice9_TestCooperativeLevel(data-&gt;device);
+    if (result == D3DERR_DEVICELOST) {
+        /* We'll reset later */
+        return;
+    }
+    if (result == D3DERR_DEVICENOTRESET) {
+        D3D_Reset(renderer);
+    }
+    result = IDirect3DDevice9_Present(data-&gt;device, NULL, NULL, NULL, NULL);
+    if (FAILED(result)) {
+        D3D_SetError("Present()", result);
+    }
+}</pre>
+    <br/>
+    从代码中可以看出，该函数调用了2个最关键Direct3D的API：
+    <br/>
+    IDirect3DDevice9_EndScene()：结束一个场景。
+    <br/>
+    IDirect3DDevice9_Present()：显示。
+    <br/>
+    <br/>
+    <br/>
+    <h4>
+     2.
+     <span style="white-space:pre">
+     </span>
+     OpenGL
+    </h4>
+    <p>
+     OpenGL渲染器中对应RenderPresent()的函数是GL_RenderPresent()，它的源代码如下所示（位于render\opengl\SDL_render_gl.c）。
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_4_5256616">static void GL_RenderPresent(SDL_Renderer * renderer)
+{
+GL_ActivateRenderer(renderer);
+
+
+    SDL_GL_SwapWindow(renderer-&gt;window);
+}</pre>
+    <br/>
+    代码比较简单，只有两行。关键的显示函数位于SDL_GL_SwapWindow()函数中。下面看一下SDL_GL_SwapWindow()的代码（位于video\SDL_video.c。感觉这里调用关系稍微有点乱…）。
+    <br/>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_5_3588177">void SDL_GL_SwapWindow(SDL_Window * window)
+{
+    CHECK_WINDOW_MAGIC(window, );
+
+
+    if (!(window-&gt;flags &amp; SDL_WINDOW_OPENGL)) {
+        SDL_SetError("The specified window isn't an OpenGL window");
+        return;
+    }
+
+
+    if (SDL_GL_GetCurrentWindow() != window) {
+        SDL_SetError("The specified window has not been made current");
+        return;
+    }
+
+
+    _this-&gt;GL_SwapWindow(_this, window);
+}</pre>
+    <br/>
+    从上述代码中可以看出，SDL_GL_SwapWindow()调用了SDL_VideoDevice的GL_SwapWindow()函数。我们看一下在“Windows视频驱动”的情况下，该函数的代码。在“Windows视频驱动”的情况下，调用GL_SwapWindow()实际上是调用了WIN_GL_SwapWindow()函数。看一下WIN_GL_SwapWindow()函数的代码（位于video\windows\SDL_windowsopengl.c）。
+    <br/>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_6_6412859">void WIN_GL_SwapWindow(_THIS, SDL_Window * window)
+{
+    HDC hdc = ((SDL_WindowData *) window-&gt;driverdata)-&gt;hdc;
+
+
+    SwapBuffers(hdc);
+}</pre>
+    <br/>
+    <p>
+     代码中调用了简单的一个函数SwapBuffers()，完成了显示功能。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h4>
+     3.
+     <span style="white-space:pre">
+     </span>
+     Software
+    </h4>
+    <p>
+     Software渲染器中对应RenderPresent()的函数是SW_RenderPresent()，它的源代码如下所示（位于render\software\SDL_render_sw.c）。
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_7_4254051">static void SW_RenderPresent(SDL_Renderer * renderer)
+{
+    SDL_Window *window = renderer-&gt;window;
+
+
+    if (window) {
+        SDL_UpdateWindowSurface(window);
+    }
+}</pre>
+    <br/>
+    <p>
+     从代码中可以看出，SW_RenderPresent()调用了一个函数SDL_UpdateWindowSurface()。我们看一下SDL_UpdateWindowSurface()的代码（位于video\SDL_video.c）。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_8_9553968">int SDL_UpdateWindowSurface(SDL_Window * window)
+{
+    SDL_Rect full_rect;
+
+
+    CHECK_WINDOW_MAGIC(window, -1);
+
+
+    full_rect.x = 0;
+    full_rect.y = 0;
+    full_rect.w = window-&gt;w;
+    full_rect.h = window-&gt;h;
+    return SDL_UpdateWindowSurfaceRects(window, &amp;full_rect, 1);
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     SDL_UpdateWindowSurface()又调用了另一个函数SDL_UpdateWindowSurfaceRects()。继续看SDL_UpdateWindowSurfaceRects()的代码。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_9_2378651">int SDL_UpdateWindowSurfaceRects(SDL_Window * window, const SDL_Rect * rects,
+                             int numrects)
+{
+    CHECK_WINDOW_MAGIC(window, -1);
+
+
+    if (!window-&gt;surface_valid) {
+        return SDL_SetError("Window surface is invalid, please call SDL_GetWindowSurface() to get a new surface");
+    }
+
+
+    return _this-&gt;UpdateWindowFramebuffer(_this, window, rects, numrects);
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p>
+     SDL_UpdateWindowSurfaceRects()调用了SDL_VideoDevice的UpdateWindowFramebuffer()函数。在“Windows视频驱动”的情况下，相当于调用了WIN_UpdateWindowFramebuffer()。我们看一下该函数的代码（位于video\windows\SDL_windowsframebuffer.c）
+    </p>
+    <p>
+    </p>
+    <pre class="cpp" code_snippet_id="512935" name="code" snippet_file_name="blog_20141109_10_4995590">int WIN_UpdateWindowFramebuffer(_THIS, SDL_Window * window, const SDL_Rect * rects, int numrects)
+{
+    SDL_WindowData *data = (SDL_WindowData *) window-&gt;driverdata;
+
+
+    BitBlt(data-&gt;hdc, 0, 0, window-&gt;w, window-&gt;h, data-&gt;mdc, 0, 0, SRCCOPY);
+    return 0;
+}</pre>
+    <br/>
+    <p>
+    </p>
+    经过一系列的寻找之后，终于找到了Software渲染器显示视频的“源头”：BitBlt()函数。
+    <br/>
+    <br/>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/40895797
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=SDL&amp;t=blog" target="_blank">
+    SDL
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Direct3D&amp;t=blog" target="_blank">
+    Direct3D
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=OpenGL&amp;t=blog" target="_blank">
+    OpenGL
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=GDI&amp;t=blog" target="_blank">
+    GDI
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=显示&amp;t=blog" target="_blank">
+    显示
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2619497" target="_blank">
+    SDL
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

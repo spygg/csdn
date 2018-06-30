@@ -1,0 +1,342 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFMPEG结构体分析：AVPacket - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_261">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFMPEG结构体分析：AVPacket
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月10日 00:38:47
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：54040
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     注：写了一系列的结构体的分析的文章，在这里列一个列表：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14214577" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVFrame
+     </a>
+     <br/>
+    </span>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14214705" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVFormatContext
+     </a>
+     <br/>
+    </span>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14214859" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVCodecContext
+     </a>
+     <br/>
+    </span>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14215369" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVIOContext
+     </a>
+     <br/>
+    </span>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14215833" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVCodec
+     </a>
+     <br/>
+    </span>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+    </blockquote>
+    <span style="color:#993300;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14215821" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVStream
+     </a>
+     <br/>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/14215755" style="line-height:30px;font-family:Arial;text-decoration:none;">
+      FFMPEG结构体分析：AVPacket
+     </a>
+    </span>
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     FFMPEG有几个最重要的结构体，包含了解协议，解封装，解码操作，此前已经进行过分析：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/11693997">
+      FFMPEG中最关键的结构体之间的关系
+     </a>
+     <br/>
+    </p>
+    <p>
+     在此不再详述，其中AVPacket是存储压缩编码数据相关信息的结构体。本文将会详细分析一下该结构体里重要变量的含义和作用。
+    </p>
+    <p>
+     首先看一下结构体的定义（位于avcodec.h文件中）：
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/* 雷霄骅
+ * 中国传媒大学/数字电视技术
+ * leixiaohua1020@126.com
+ *
+ */
+typedef struct AVPacket {
+    /**
+     * Presentation timestamp in AVStream-&gt;time_base units; the time at which
+     * the decompressed packet will be presented to the user.
+     * Can be AV_NOPTS_VALUE if it is not stored in the file.
+     * pts MUST be larger or equal to dts as presentation cannot happen before
+     * decompression, unless one wants to view hex dumps. Some formats misuse
+     * the terms dts and pts/cts to mean something different. Such timestamps
+     * must be converted to true pts/dts before they are stored in AVPacket.
+     */
+    int64_t pts;
+    /**
+     * Decompression timestamp in AVStream-&gt;time_base units; the time at which
+     * the packet is decompressed.
+     * Can be AV_NOPTS_VALUE if it is not stored in the file.
+     */
+    int64_t dts;
+    uint8_t *data;
+    int   size;
+    int   stream_index;
+    /**
+     * A combination of AV_PKT_FLAG values
+     */
+    int   flags;
+    /**
+     * Additional packet data that can be provided by the container.
+     * Packet can contain several types of side information.
+     */
+    struct {
+        uint8_t *data;
+        int      size;
+        enum AVPacketSideDataType type;
+    } *side_data;
+    int side_data_elems;
+
+    /**
+     * Duration of this packet in AVStream-&gt;time_base units, 0 if unknown.
+     * Equals next_pts - this_pts in presentation order.
+     */
+    int   duration;
+    void  (*destruct)(struct AVPacket *);
+    void  *priv;
+    int64_t pos;                            ///&lt; byte position in stream, -1 if unknown
+
+    /**
+     * Time difference in AVStream-&gt;time_base units from the pts of this
+     * packet to the point at which the output from the decoder has converged
+     * independent from the availability of previous frames. That is, the
+     * frames are virtually identical no matter if decoding started from
+     * the very first frame or from this keyframe.
+     * Is AV_NOPTS_VALUE if unknown.
+     * This field is not the display duration of the current packet.
+     * This field has no meaning if the packet does not have AV_PKT_FLAG_KEY
+     * set.
+     *
+     * The purpose of this field is to allow seeking in streams that have no
+     * keyframes in the conventional sense. It corresponds to the
+     * recovery point SEI in H.264 and match_time_delta in NUT. It is also
+     * essential for some types of subtitle streams to ensure that all
+     * subtitles are correctly displayed after seeking.
+     */
+    int64_t convergence_duration;
+} AVPacket;</pre>
+    <br/>
+    <p>
+     在AVPacket结构体中，重要的变量有以下几个：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      <span style="color:#990000;">
+       uint8_t *data：压缩编码的数据。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       例如对于H.264来说。1个AVPacket的data通常对应一个NAL。
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       注意：在这里只是对应，而不是一模一样。他们之间有微小的差别：
+       <a href="http://blog.csdn.net/leixiaohua1020/article/details/11800877">
+        使用FFMPEG类库分离出多媒体文件中的H.264码流
+       </a>
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       因此在使用FFMPEG进行视音频处理的时候，常常可以将得到的AVPacket的data数据直接写成文件，从而得到视音频的码流文件。
+      </span>
+     </p>
+     <p>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       int   size：data的大小
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       int64_t pts：显示时间戳
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       int64_t dts：解码时间戳
+      </span>
+     </p>
+     <p>
+      <span style="color:#990000;">
+       int   stream_index：标识该AVPacket所属的视频/音频流。
+      </span>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <p>
+     这个结构体虽然比较简单，但是非常的常用。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/14215755
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=avpacket&amp;t=blog" target="_blank">
+    avpacket
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=解码&amp;t=blog" target="_blank">
+    解码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=结构体&amp;t=blog" target="_blank">
+    结构体
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

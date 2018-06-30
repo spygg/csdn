@@ -1,0 +1,268 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ITU-T Technical Paper： NP, QoS 和 QoE的框架以及它们的区别 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_304">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   ITU-T Technical Paper： NP, QoS 和 QoE的框架以及它们的区别
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月29日 14:11:15
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4874
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     本文翻译自ITU-T的Technical Paper：《How to increase QoS/QoE of IP-based platform(s) to regionally agreed standards》(2013/3/1)。这是其第四章的一部分，区别了QoS 和 QoE的定义。PS：在此感谢一位师弟的翻译。
+    </p>
+    <p>
+    </p>
+    <p>
+     服务质量（QoS）这个术语被广泛地应用，并且随着新的通信环境的不断出现，其本身的应用范围也越来越广，比如有关于宽带网、无线网以及新兴的各种多媒体服务的内容。此外，体验质量（QoE）这个术语也被广泛用于描述用户对于所交付服务的满意度。但是，这两个术语常常被滥用和错用，正确地理解QoS和QoE至关重要。因此本部分内容将介绍有助于更好理解QoS和QoE所需的背景信息，同样是基于ITU-T给出的建议。
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     <strong>
+      <span style="font-size:18px">
+       NP, QoS 和 QoE
+      </span>
+     </strong>
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     <strong>
+      <span style="font-size:18px">
+      </span>
+      <br/>
+      网络性能 (NP)
+     </strong>
+     <br/>
+     定义“网络性能”是研究QoS和QoE的第一步。这一术语在ITU-T E.800建议中被定义为“一个网络或网络部分提供与用户间通信相关的功能的能力”，而在ITU-T E.417建议中则稍有改变，被定义为“一个通信网络的一部分的性能，可以通过在一对网络用户或网络-网络接口之间使用被客观定义和观测的性能参数进行测量得到。”这两个定义看起来稍有不同，但其中的关键点却是一样的，即提供用户间通信功能的网络部分。用来测量网络性能的参数应该对网络供应商有意义，并且可以用于系统的设计、配置、操作和维护，同时也应是独立于终端性能和用户操作的。
+     <br/>
+     网络性能可以影响用户/客户感知到的QoS。网络性能也可能并非基于端到端的。比如，在操作单IP网络时，接入性能往往是与核心网络性能相分离的，而互联网性能往往反映了多个自治网络的综合性能。[b-ITU-T G.1000]
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     <br/>
+     <strong>
+      服务质量 (QoS)
+     </strong>
+     <br/>
+     ITU-T E.800建议中将QoS定义为“服务表现的总体影响，决定了一项服务的用户满意度。”因而，QoS应该是从为用户提供服务的相关功能的性能表现派生出的结果，而这种表现就是我们所说的“网络性能”。
+     <br/>
+     QoS的组成部分既包括网络性能也包括与网络无关的性能。这里提到的NP可以是误比特率、延迟时间等等，而与网络无关的性能可以是供应时间，维修时间，收费范围和投诉解决时间等等。对于一项特定服务来说，其QoS指标列表取决于服务本身，而两者之间的相关性也会因用户群体的不同而改变。[b-ITU-T E.800]图1展示了QoS与网络性能（NP）之间的关系。
+    </p>
+    <p align="center" dir="ltr" style="margin-right:0px">
+     <img alt="" src="http://img.blog.csdn.net/20131029140145890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p align="center" dir="ltr" style="margin-right:0px">
+     <br/>
+     <br/>
+     图 1 –NP和 QoS之间的关系
+    </p>
+    <p align="left" dir="ltr" style="margin-right:0px">
+     <br/>
+     我们可以站在不同的角度来看QoS，由此来判断提供服务的相关功能的质量。ITU-T建议E.800和G.1000介绍了如下4种不同的角度，图2则展示了这4种角度之间的关系：
+    </p>
+    <ul dir="ltr" style="margin-right:0px">
+     <ul dir="ltr">
+      <li>
+       <div style="margin-right:0px">
+        用户的QoS要求
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        服务供应商提供的QoS（或计划的/定向的的QoS）
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        最终实现或交付的QoS
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        通过客户调查获得的QoS评级
+       </div>
+      </li>
+     </ul>
+    </ul>
+    <p align="center">
+     <img alt="" src="http://img.blog.csdn.net/20131029140204296?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+     图 2 –QoS的四种角度
+    </p>
+    <p>
+     <br/>
+     值得注意的是，如果任何一个QoS框架想要足够有用且具可操作性，进而在整个行业中得到应用的话，它必须在这四个角度下都有所意义。下面指出了每个角度的特点和要求：
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     用户的QoS要求：阐明了一项特定服务要求的质量水平。用户既不关心一项服务是如何提供的，也不关心网络内部设计的任何方面，他们只关心端到端服务的最终质量。从用户角度出发的服务质量需要用具有以下特点的参数来表达：
+    </p>
+    <ul dir="ltr" style="margin-right:0px">
+     <ul dir="ltr">
+      <li>
+       <div style="margin-right:0px">
+        关注于用户感知到的效果，而非它们的起因
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        在定义上不依赖于网络内部设计
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        考虑到用户角度的各方面服务
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        可以由服务供应商向用户做出担保，比如在合同条款中
+       </div>
+      </li>
+      <li>
+       <div style="margin-right:0px">
+        用非网络术语来描述，创建一种用户和服务供应商都能理解的共同语言
+       </div>
+      </li>
+     </ul>
+    </ul>
+    <p dir="ltr" style="margin-right:0px">
+     <br/>
+     服务供应商提供的QoS：阐明了预计中由服务供应商提供给用户的质量水平（通过QoS参数描述）。每项服务都有它自己的QoS指标。服务供应商提供的QoS可以用在规划文件中，用来指定测量系统，也可以用来形成服务水平协议（SLA）的基础。
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     <br/>
+     服务供应商最终实现或交付的QoS：阐述了最终实现的并交付到用户的质量水平，用QoS参数描述。这些参数应和所提供的QoS参数相同，从而可以将两者进行对比来判断真正实现的内容，进而评估实际的性能水平。这些性能指标在特定时间段后进行总结，比如以一个月为周期。
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+     <br/>
+     用户感知到的QoS：阐释用户实际体验到的质量水平，往往用满意度表示，而不用技术名词表述。感知到的QoS通过用户调查来进行评估，也可以通过用户自己对服务水平做出的评论进行评估。感知到的QoS可以给服务供应商用来判断用户对服务质量的满意度。在理想情况下，实际交付的QoS和感知到的QoS之间应该具备1:1的关系。
+    </p>
+    <p dir="ltr" style="margin-right:0px">
+    </p>
+    <p>
+     <strong>
+      体验质量 (QoE)
+     </strong>
+     <br/>
+     QoE与QoS和NP之间有很大不同，正如其定义“一个应用或一项服务的总体可接受性，由终端用户的主观感知决定”所言，它具有明显的主观特性。QoE既取决于终端用户的感知，也依赖于服务本身的特性，所以指定其值的方法会有很大不同。考虑到这些特点，NP，QoS和QoE之间的关系可用下面的图3表示。
+    </p>
+    <p align="center">
+     <img alt="" src="http://img.blog.csdn.net/20131029140232859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+     CN: 核心网, AN:接入网, CPN: 用户驻地网, TE: 终端设备
+     <br/>
+     图 3 –NP, QoS 和 QoE之间的关系
+    </p>
+    <p align="left">
+     <br/>
+     考虑到NP，QoS和QoE定义中的区别，根据ITU-T  I.350建议，可将三者的关键特性总结如下表1。QoE和QoS具有面向用户的角度而NP具有面向供应商的角度，而且QoS具有服务特性而QoE具有用户主观特性。
+    </p>
+    <p align="center">
+     <br/>
+     <img alt="" src="http://img.blog.csdn.net/20131029140345656?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=NP&amp;t=blog" target="_blank">
+    NP
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoS&amp;t=blog" target="_blank">
+    QoS
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoE&amp;t=blog" target="_blank">
+    QoE
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=网络&amp;t=blog" target="_blank">
+    网络
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

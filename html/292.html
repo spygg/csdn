@@ -1,0 +1,3570 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Lucene 学习资料 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_292">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   Lucene 学习资料
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月31日 23:34:15
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：3730
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      是一个基于
+     </span>
+     <span style="color:#333333;">
+      Java
+     </span>
+     <span style="color:#333333;">
+      的全文索引工具包。
+     </span>
+    </p>
+    <p align="left">
+     <br/>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      另外，如果是在选择全文引擎，现在也许是试试
+     </span>
+     <a href="http://www.sphinxsearch.com/">
+      <span style="color:#3165ce;">
+       Sphinx
+      </span>
+     </a>
+     <span style="color:#333333;">
+      的时候了：相比
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      速度更快，
+     </span>
+     <span style="color:#333333;">
+      <a href="http://www.coreseek.com/">
+       <span style="color:#3165ce;">
+        有中文分词的支持
+       </span>
+      </a>
+     </span>
+     <span style="color:#333333;">
+      ，而且内置了对简单的分布式检索的支持；
+     </span>
+    </p>
+    <p align="left">
+     <a name="intro">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       基于
+      </span>
+      <span style="color:#333333;">
+       Java
+      </span>
+      <span style="color:#333333;">
+       的全文索引
+      </span>
+      <span style="color:#333333;">
+       /
+      </span>
+      <span style="color:#333333;">
+       检索引擎
+      </span>
+      <span style="color:#333333;">
+       ——Lucene
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      不是一个完整的全文索引应用，而是是一个用
+     </span>
+     <span style="color:#333333;">
+      Java
+     </span>
+     <span style="color:#333333;">
+      写的全文索引引擎工具包，它可以方便的嵌入到各种应用中实现针对应用的全文索引
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      检索功能。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的作者：
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的贡献者
+     </span>
+     <span style="color:#333333;">
+      <a href="http://www.nutch.org/blog/cutting.html">
+       <span style="color:#3165ce;">
+        DougCutting
+       </span>
+      </a>
+     </span>
+     <span style="color:#333333;">
+      是一位资深全文索引
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      检索专家，曾经是
+     </span>
+     <span style="color:#333333;">
+      V-Twin
+     </span>
+     <span style="color:#333333;">
+      搜索引擎
+     </span>
+     <span style="color:#333333;">
+      (Apple
+     </span>
+     <span style="color:#333333;">
+      的
+     </span>
+     <span style="color:#333333;">
+      Copland
+     </span>
+     <span style="color:#333333;">
+      操作系统的成就之一
+     </span>
+     <span style="color:#333333;">
+      )
+     </span>
+     <span style="color:#333333;">
+      的主要开发者，后在
+     </span>
+     <span style="color:#333333;">
+      Excite
+     </span>
+     <span style="color:#333333;">
+      担任高级系统架构设计师，目前从事于一些
+     </span>
+     <span style="color:#333333;">
+      INTERNET
+     </span>
+     <span style="color:#333333;">
+      底层架构的研究。他贡献出的
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的目标是为各种中小型应用程序加入全文检索功能。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的发展历程：早先发布在作者自己的
+     </span>
+     <span style="color:#333333;">
+      <a href="http://www.lucene.com/">
+       <span style="color:#3165ce;">
+        www.lucene.com
+       </span>
+      </a>
+     </span>
+     <span style="color:#333333;">
+      ，后来发布在
+     </span>
+     <span style="color:#333333;">
+      <a href="http://sourceforge.net/projects/lucene/">
+       <span style="color:#3165ce;">
+        SourceForge
+       </span>
+      </a>
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      2001
+     </span>
+     <span style="color:#333333;">
+      年年底成为
+     </span>
+     <span style="color:#333333;">
+      APACHE
+     </span>
+     <span style="color:#333333;">
+      基金会
+     </span>
+     <span style="color:#333333;">
+      jakarta
+     </span>
+     <span style="color:#333333;">
+      的一个子项目：
+     </span>
+     <span style="color:#333333;">
+      <a href="http://jakarta.apache.org/lucene/">
+       <span style="color:#3165ce;">
+        http://jakarta.apache.org/lucene/
+       </span>
+      </a>
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      已经有很多
+     </span>
+     <span style="color:#333333;">
+      Java
+     </span>
+     <span style="color:#333333;">
+      项目都使用了
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      作为其后台的全文索引引擎，比较著名的有：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <a href="http://www.jivesoftware.com/">
+      <span style="color:#3165ce;">
+       J
+      </span>
+     </a>
+     <a href="http://www.jivesoftware.com/">
+      <span style="color:#3165ce;">
+       ive
+      </span>
+     </a>
+     <span style="color:#333333;">
+      ：
+     </span>
+     <span style="color:#333333;">
+      WEB
+     </span>
+     <span style="color:#333333;">
+      论坛系统；
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <a href="http://eyebrowse.tigris.org/">
+      <span style="color:#3165ce;">
+       Eyebrows
+      </span>
+     </a>
+     <span style="color:#333333;">
+      ：邮件列表
+     </span>
+     <span style="color:#333333;">
+      HTML
+     </span>
+     <span style="color:#333333;">
+      归档
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      浏览
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      查询系统，本文的主要参考文档
+     </span>
+     <span style="color:#333333;">
+      “
+      <a href="http://www.javaworld.com/javaworld/jw-09-2000/jw-0915-lucene_p.html">
+       <span style="color:#3165ce;">
+        TheLucene search engine: Powerful, flexible, and free
+       </span>
+      </a>
+      ”
+     </span>
+     <span style="color:#333333;">
+      作者就是
+     </span>
+     <span style="color:#333333;">
+      EyeBrows
+     </span>
+     <span style="color:#333333;">
+      系统的主要开发者之一，而
+     </span>
+     <span style="color:#333333;">
+      EyeBrows
+     </span>
+     <span style="color:#333333;">
+      已经成为目前
+     </span>
+     <span style="color:#333333;">
+      APACHE
+     </span>
+     <span style="color:#333333;">
+      项目的主要邮件列表归档系统。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <a href="http://xml.apache.org/cocoon/index.html">
+      <span style="color:#3165ce;">
+       Cocoon
+      </span>
+     </a>
+     <span style="color:#333333;">
+      :
+     </span>
+     <span style="color:#333333;">
+      基于
+     </span>
+     <span style="color:#333333;">
+      XML
+     </span>
+     <span style="color:#333333;">
+      的
+     </span>
+     <span style="color:#333333;">
+      web
+     </span>
+     <span style="color:#333333;">
+      发布框架，全文检索部分使用了
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <a href="http://www.eclipse.org/">
+      <span style="color:#3165ce;">
+       Eclipse
+      </span>
+     </a>
+     <span style="color:#333333;">
+      :
+     </span>
+     <span style="color:#333333;">
+      基于
+     </span>
+     <span style="color:#333333;">
+      Java
+     </span>
+     <span style="color:#333333;">
+      的开放开发平台，帮助部分的全文索引使用了
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      对于中文用户来说，最关心的问题是其是否支持中文的全文检索。但通过后面对于
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的结构的介绍，你会了解到由于
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      良好架构设计，对中文的支持只需对其语言词法分析接口进行扩展就能实现对中文检索的支持。
+     </span>
+    </p>
+    <p align="left">
+     <a name="compare">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       全文检索的实现机制
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的
+     </span>
+     <span style="color:#333333;">
+      API
+     </span>
+     <span style="color:#333333;">
+      接口设计的比较通用，输入输出结构都很像数据库的表
+     </span>
+     <span style="color:#333333;">
+      ==&gt;
+     </span>
+     <span style="color:#333333;">
+      记录
+     </span>
+     <span style="color:#333333;">
+      ==&gt;
+     </span>
+     <span style="color:#333333;">
+      字段，所以很多传统的应用的文件、数据库等都可以比较方便的映射到
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的存储结构
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      接口中。总体上看：可以先把
+     </span>
+     <strong>
+      <span style="color:#333333;">
+       Lucene
+      </span>
+      <span style="color:#333333;">
+       当成一个支持全文索引的数据库系统
+      </span>
+     </strong>
+     <span style="color:#333333;">
+      。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      比较一下
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      和数据库：
+     </span>
+    </p>
+    <table border="1" cellpadding="0" width="100%">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Lucene
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          数据库
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引数据源：doc(field1,field2...) doc(field1,field2...)
+          <br/>
+          \  indexer /
+          <br/>
+          _____________
+          <br/>
+          | Lucene Index|
+          <br/>
+          --------------
+          <br/>
+          / searcher \
+          <br/>
+         </span>
+         结果输出：Hits(doc(field1,field2) doc(field1...))
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+         </span>
+         <span style="color:#333333;">
+          索引数据源：record(field1,field2...) record(field1..)
+          <br/>
+          \  SQL: insert/
+          <br/>
+          _____________
+          <br/>
+          | DB  Index   |
+          <br/>
+          -------------
+          <br/>
+          / SQL: select \
+          <br/>
+         </span>
+         结果输出：results(record(field1,field2..) record(field1...))
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Document
+         </span>
+         <span style="color:#333333;">
+          ：一个需要进行索引的
+         </span>
+         <span style="color:#333333;">
+          “
+         </span>
+         <span style="color:#333333;">
+          单元
+         </span>
+         <span style="color:#333333;">
+          ”
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          一个
+         </span>
+         <span style="color:#333333;">
+          Document
+         </span>
+         <span style="color:#333333;">
+          由多个字段组成
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Record
+         </span>
+         <span style="color:#333333;">
+          ：记录，包含多个字段
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field
+         </span>
+         <span style="color:#333333;">
+          ：字段
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field
+         </span>
+         <span style="color:#333333;">
+          ：字段
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Hits
+         </span>
+         <span style="color:#333333;">
+          ：查询结果集，由匹配的
+         </span>
+         <span style="color:#333333;">
+          Document
+         </span>
+         <span style="color:#333333;">
+          组成
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          RecordSet
+         </span>
+         <span style="color:#333333;">
+          ：查询结果集，由多个
+         </span>
+         <span style="color:#333333;">
+          Record
+         </span>
+         <span style="color:#333333;">
+          组成
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       全文检索
+      </span>
+      <span style="color:#333333;">
+       ≠ like "%keyword%"
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      通常比较厚的书籍后面常常附关键词索引表（比如：北京：
+     </span>
+     <span style="color:#333333;">
+      12, 34
+     </span>
+     <span style="color:#333333;">
+      页，
+     </span>
+     <span style="color:#333333;">
+      上海：
+     </span>
+     <span style="color:#333333;">
+      3,77
+     </span>
+     <span style="color:#333333;">
+      页
+     </span>
+     <span style="color:#333333;">
+      ……
+     </span>
+     <span style="color:#333333;">
+      ），它能够帮助读者比较快地找到相关内容的页码。而数据库索引能够大大提高查询的速度原理也是一样，想像一下通过书后面的索引查找的速度要比一页一页地翻内容高多少倍
+     </span>
+     <span style="color:#333333;">
+      ……
+     </span>
+     <span style="color:#333333;">
+      而索引之所以效率高，另外一个原因是它是排好序的。
+      <strong>
+       对于检索系统来说核心是一个排序问题
+      </strong>
+      。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      由于数据库索引不是为全文索引设计的，因此，
+      <strong>
+       使用
+      </strong>
+     </span>
+     <strong>
+      <span style="color:#333333;">
+       like "%keyword%"
+      </span>
+      <span style="color:#333333;">
+       时，数据库索引是不起作用的
+      </span>
+     </strong>
+     <span style="color:#333333;">
+      ，在使用
+     </span>
+     <span style="color:#333333;">
+      like
+     </span>
+     <span style="color:#333333;">
+      查询时，搜索过程又变成类似于一页页翻书的遍历过程了，所以对于含有模糊查询的数据库服务来说，
+     </span>
+     <span style="color:#333333;">
+      LIKE
+     </span>
+     <span style="color:#333333;">
+      对性能的危害是极大的。如果是需要对多个关键词进行模糊匹配：
+     </span>
+     <span style="color:#333333;">
+      like"%keyword1%" and like "%keyword2%" ...
+     </span>
+     <span style="color:#333333;">
+      其效率也就可想而知了。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      所以建立一个高效检索系统的关键是建立一个类似于科技索引一样的反向索引机制，将数据源（比如多篇文章）排序顺序存储的同时，有另外一个排好序的关键词列表，用于存储关键词
+     </span>
+     <span style="color:#333333;">
+      ==&gt;
+     </span>
+     <span style="color:#333333;">
+      文章映射关系，利用这样的映射关系索引：
+     </span>
+     <span style="color:#333333;">
+      [
+     </span>
+     <span style="color:#333333;">
+      关键词
+     </span>
+     <span style="color:#333333;">
+      ==&gt;
+     </span>
+     <span style="color:#333333;">
+      出现关键词的文章编号，出现次数（甚至包括位置：起始偏移量，结束偏移量），出现频率
+     </span>
+     <span style="color:#333333;">
+      ]
+     </span>
+     <span style="color:#333333;">
+      ，检索过程就是把
+      <strong>
+       模糊查询变成多个可以利用索引的精确查询的逻辑组合的过程
+      </strong>
+      。从而大大提高了多关键词查询的效率，所以，全文检索问题归结到最后是一个排序问题。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      由此可以看出模糊查询相对数据库的精确查询是一个非常不确定的问题，这也是大部分数据库对全文检索支持有限的原因。
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      最核心的特征是通过特殊的索引结构实现了传统数据库不擅长的全文索引机制，并提供了扩展接口，以方便针对不同应用的定制。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      可以通过一下表格对比一下数据库的模糊查询：
+     </span>
+    </p>
+    <table border="1" cellpadding="0" width="100%">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Lucene
+         </span>
+         <span style="color:#333333;">
+          全文索引引擎
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          数据库
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          将数据源中的数据都通过全文索引一一建立反向索引
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          对于
+         </span>
+         <span style="color:#333333;">
+          LIKE
+         </span>
+         <span style="color:#333333;">
+          查询来说，数据传统的索引是根本用不上的。数据需要逐个便利记录进行
+         </span>
+         <span style="color:#333333;">
+          GREP
+         </span>
+         <span style="color:#333333;">
+          式的模糊匹配，比有索引的搜索速度要有多个数量级的下降。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          匹配效果
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          通过词元
+         </span>
+         <span style="color:#333333;">
+          (term)
+         </span>
+         <span style="color:#333333;">
+          进行匹配，通过语言分析接口的实现，可以实现对中文等非英语的支持。
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          使用：
+         </span>
+         <span style="color:#333333;">
+          like "%net%"
+         </span>
+         <span style="color:#333333;">
+          会把
+         </span>
+         <span style="color:#333333;">
+          netherlands
+         </span>
+         <span style="color:#333333;">
+          也匹配出来，
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          多个关键词的模糊匹配：使用
+         </span>
+         <span style="color:#333333;">
+          like "%com%net%"
+         </span>
+         <span style="color:#333333;">
+          ：就不能匹配词序颠倒的
+         </span>
+         <span style="color:#333333;">
+          xxx.net..xxx.com
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          匹配度
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          有匹配度算法，将匹配程度（相似度）比较高的结果排在前面。
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          没有匹配程度的控制：比如有记录中
+         </span>
+         <span style="color:#333333;">
+          net
+         </span>
+         <span style="color:#333333;">
+          出现
+         </span>
+         <span style="color:#333333;">
+          5
+         </span>
+         <span style="color:#333333;">
+          词和出现
+         </span>
+         <span style="color:#333333;">
+          1
+         </span>
+         <span style="color:#333333;">
+          次的，结果是一样的。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          结果输出
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          通过特别的算法，将最匹配度最高的头
+         </span>
+         <span style="color:#333333;">
+          100
+         </span>
+         <span style="color:#333333;">
+          条结果输出，结果集是缓冲式的小批量读取的。
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          返回所有的结果集，在匹配条目非常多的时候（比如上万条）需要大量的内存存放这些临时结果集。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          可定制性
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          通过不同的语言分析接口实现，可以方便的定制出符合应用需要的索引规则（包括对中文的支持）
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          没有接口或接口复杂，无法定制
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          结论
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          高负载的模糊查询应用，需要负责的模糊查询的规则，索引的资料量比较大
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          使用率低，模糊匹配规则简单或者需要模糊查询的资料量少
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       全文检索和数据库应用最大的不同在于：让最相关的头
+      </span>
+      <span style="color:#333333;">
+       100
+      </span>
+      <span style="color:#333333;">
+       条结果满足
+      </span>
+      <span style="color:#333333;">
+       98%
+      </span>
+      <span style="color:#333333;">
+       以上用户的需求
+      </span>
+      <span style="color:#333333;">
+       <br/>
+      </span>
+     </strong>
+     <span style="color:#333333;">
+      <br/>
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的创新之处：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      大部分的搜索（数据库）引擎都是用
+     </span>
+     <span style="color:#333333;">
+      B
+     </span>
+     <span style="color:#333333;">
+      树结构来维护索引，索引的更新会导致大量的
+     </span>
+     <span style="color:#333333;">
+      IO
+     </span>
+     <span style="color:#333333;">
+      操作，
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      在实现中，对此稍微有所改进：不是维护一个索引文件，而是在扩展索引的时候不断创建新的索引文件，然后定期的把这些新的小索引文件合并到原先的大索引中（针对不同的更新策略，批次的大小可以调整），这样在不影响检索的效率的前提下，提高了索引的效率。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      和其他一些全文检索系统
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      应用的比较：
+     </span>
+    </p>
+    <table border="1" cellpadding="0" width="100%">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Lucene
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          其他开源全文检索系统
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          增量索引和批量索引
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          可以进行增量的索引
+         </span>
+         <span style="color:#333333;">
+          (Append)
+         </span>
+         <span style="color:#333333;">
+          ，可以对于大量数据进行批量索引，并且接口设计用于优化批量索引和小批量的增量索引。
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          很多系统只支持批量的索引，有时数据源有一点增加也需要重建索引。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          数据源
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Lucene
+         </span>
+         <span style="color:#333333;">
+          没有定义具体的数据源，而是一个文档的结构，因此可以非常灵活的适应各种应用（只要前端有合适的转换器把数据源转换成相应结构），
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          很多系统只针对网页，缺乏其他格式文档的灵活性。
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引内容抓取
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Lucene
+         </span>
+         <span style="color:#333333;">
+          的文档是由多个字段组成的，甚至可以控制那些字段需要进行索引，那些字段不需要索引，近一步索引的字段也分为需要分词和不需要分词的类型：
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          需要进行分词的索引，比如：标题，文章内容字段
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          不需要进行分词的索引，比如：作者
+         </span>
+         <span style="color:#333333;">
+          /
+         </span>
+         <span style="color:#333333;">
+          日期字段
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          缺乏通用性，往往将文档整个索引了
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          语言分析
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          通过语言分析器的不同扩展实现：
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          可以过滤掉不需要的词：
+         </span>
+         <span style="color:#333333;">
+          an the of
+         </span>
+         <span style="color:#333333;">
+          等，
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          西文语法分析：将
+         </span>
+         <span style="color:#333333;">
+          jumps jumped jumper
+         </span>
+         <span style="color:#333333;">
+          都归结成
+         </span>
+         <span style="color:#333333;">
+          jump
+         </span>
+         <span style="color:#333333;">
+          进行索引
+         </span>
+         <span style="color:#333333;">
+          /
+         </span>
+         <span style="color:#333333;">
+          检索
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          非英文支持：对亚洲语言，阿拉伯语言的索引支持
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          缺乏通用接口实现
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          查询分析
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          通过查询分析接口的实现，可以定制自己的查询语法规则：
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          比如：
+         </span>
+         <span style="color:#333333;">
+          多个关键词之间的
+         </span>
+         <span style="color:#333333;">
+          + - and or
+         </span>
+         <span style="color:#333333;">
+          关系等
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          并发访问
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          能够支持多用户的使用
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+     <span style="color:#333333;">
+     </span>
+    </p>
+    <p align="left">
+     <a name="segment">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       关于亚洲语言的的切分词问题
+      </span>
+      <span style="color:#333333;">
+       (Word Segment)
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      对于中文来说，全文索引首先还要解决一个语言分析的问题，对于英文来说，语句中单词之间是天然通过空格分开的，但亚洲语言的中日韩文语句中的字是一个字挨一个，所有，首先要把语句中按
+     </span>
+     <span style="color:#333333;">
+      “
+     </span>
+     <span style="color:#333333;">
+      词
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      进行索引的话，这个词如何切分出来就是一个很大的问题。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      首先，肯定不能用单个字符作
+     </span>
+     <span style="color:#333333;">
+      (si-gram)
+     </span>
+     <span style="color:#333333;">
+      为索引单元，否则查
+     </span>
+     <span style="color:#333333;">
+      “
+     </span>
+     <span style="color:#333333;">
+      上海
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      时，不能让含有
+     </span>
+     <span style="color:#333333;">
+      “
+     </span>
+     <span style="color:#333333;">
+      海上
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      也匹配。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      但一句话：
+     </span>
+     <span style="color:#333333;">
+      “
+     </span>
+     <span style="color:#333333;">
+      北京天安门
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      ，计算机如何按照中文的语言习惯进行切分呢？
+     </span>
+     <span style="color:#333333;">
+      <br/>
+      “
+     </span>
+     <span style="color:#333333;">
+      北京
+     </span>
+     <span style="color:#333333;">
+      天安门
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      还是
+     </span>
+     <span style="color:#333333;">
+      “
+     </span>
+     <span style="color:#333333;">
+      北
+     </span>
+     <span style="color:#333333;">
+      京
+     </span>
+     <span style="color:#333333;">
+      天安门
+     </span>
+     <span style="color:#333333;">
+      ”
+     </span>
+     <span style="color:#333333;">
+      ？让计算机能够按照语言习惯进行切分，往往需要机器有一个比较丰富的词库才能够比较准确的识别出语句中的单词。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      另外一个解决的办法是采用自动切分算法：将单词按照
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      元语法
+     </span>
+     <span style="color:#333333;">
+      (bigram)
+     </span>
+     <span style="color:#333333;">
+      方式切分出来，比如：
+     </span>
+     <span style="color:#333333;">
+      <br/>
+      "
+     </span>
+     <span style="color:#333333;">
+      北京天安门
+     </span>
+     <span style="color:#333333;">
+      " ==&gt; "
+     </span>
+     <span style="color:#333333;">
+      北京
+     </span>
+     <span style="color:#333333;">
+      京天
+     </span>
+     <span style="color:#333333;">
+      天安
+     </span>
+     <span style="color:#333333;">
+      安门
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      这样，在查询的时候，无论是查询
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      北京
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      还是查询
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      天安门
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      ，将查询词组按同样的规则进行切分：
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      北京
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      天安安门
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      ，多个关键词之间按与
+     </span>
+     <span style="color:#333333;">
+      "and"
+     </span>
+     <span style="color:#333333;">
+      的关系组合，同样能够正确地映射到相应的索引中。这种方式对于其他亚洲语言：韩文，日文都是通用的。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      基于自动切分的最大优点是没有词表维护成本，实现简单，缺点是索引效率低，但对于中小型应用来说，基于
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      元语法的切分还是够用的。基于
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      元切分后的索引一般大小和源文件差不多，而对于英文，索引文件一般只有原文件的
+     </span>
+     <span style="color:#333333;">
+      30%-40%
+     </span>
+     <span style="color:#333333;">
+      不同，
+     </span>
+    </p>
+    <table border="1" cellpadding="0" width="100%">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          自动切分
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          词表切分
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          实现
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          实现非常简单
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          实现复杂
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          查询
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          增加了查询分析的复杂程度，
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          适于实现比较复杂的查询语法规则
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          存储效率
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引冗余大，索引几乎和原文一样大
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引效率高，为原文大小的
+         </span>
+         <span style="color:#333333;">
+          30
+         </span>
+         <span style="color:#333333;">
+          ％左右
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          维护成本
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          无词表维护成本
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          词表维护成本非常高：中日韩等语言需要分别维护。
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          还需要包括词频统计等内容
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          适用领域
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          嵌入式系统：运行环境资源有限
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          分布式系统：无词表同步问题
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          多语言环境：无词表维护成本
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          对查询和存储效率要求高的专业搜索引擎
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+     <span style="color:#333333;">
+      目前比较大的搜索引擎的语言分析算法一般是基于以上
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个机制的结合。关于中文的语言分析算法，大家可以在
+     </span>
+     <span style="color:#333333;">
+      Google
+     </span>
+     <span style="color:#333333;">
+      查关键词
+     </span>
+     <span style="color:#333333;">
+      "wordsegment search"
+     </span>
+     <span style="color:#333333;">
+      能找到更多相关的资料。
+     </span>
+    </p>
+    <p align="left">
+     <a name="demo">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       安装和使用
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      下载：
+     </span>
+     <span style="color:#333333;">
+      <a href="http://jakarta.apache.org/lucene/">
+       <span style="color:#3165ce;">
+        http://jakarta.apache.org/lucene/
+       </span>
+      </a>
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      注意：
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      中的一些比较复杂的词法分析是用
+     </span>
+     <span style="color:#333333;">
+      JavaCC
+     </span>
+     <span style="color:#333333;">
+      生成的（
+     </span>
+     <span style="color:#333333;">
+      JavaCC
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+     <span style="color:#333333;">
+      JavaCompilerCompiler
+     </span>
+     <span style="color:#333333;">
+      ，纯
+     </span>
+     <span style="color:#333333;">
+      Java
+     </span>
+     <span style="color:#333333;">
+      的词法分析生成器），所以如果从源代码编译或需要修改其中的
+     </span>
+     <span style="color:#333333;">
+      QueryParser
+     </span>
+     <span style="color:#333333;">
+      、定制自己的词法分析器，还需要从
+     </span>
+     <span style="color:#333333;">
+      <a href="https://javacc.dev.java.net/">
+       <span style="color:#3165ce;">
+        https://javacc.dev.java.net/
+       </span>
+      </a>
+     </span>
+     <span style="color:#333333;">
+      下载
+     </span>
+     <span style="color:#333333;">
+      javacc
+     </span>
+     <span style="color:#333333;">
+      。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      的组成结构：对于外部应用来说索引模块
+     </span>
+     <span style="color:#333333;">
+      (index)
+     </span>
+     <span style="color:#333333;">
+      和检索模块
+     </span>
+     <span style="color:#333333;">
+      (search)
+     </span>
+     <span style="color:#333333;">
+      是主要的外部应用入口
+     </span>
+    </p>
+    <table border="1" cellpadding="0" width="100%">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.search/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          搜索入口
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.index/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          索引入口
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.analysis/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          语言分析器
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.queryParser/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          查询分析器
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.document/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          存储结构
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.store/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          底层
+         </span>
+         <span style="color:#333333;">
+          IO/
+         </span>
+         <span style="color:#333333;">
+          存储结构
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          org.apache.Lucene.util/
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          一些公用的数据结构
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+     <span style="color:#333333;">
+      简单的例子演示一下
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的使用方法：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      索引过程：从命令行读取文件名（多个），将文件分路径
+     </span>
+     <span style="color:#333333;">
+      (path
+     </span>
+     <span style="color:#333333;">
+      字段
+     </span>
+     <span style="color:#333333;">
+      )
+     </span>
+     <span style="color:#333333;">
+      和内容
+     </span>
+     <span style="color:#333333;">
+      (body
+     </span>
+     <span style="color:#333333;">
+      字段
+     </span>
+     <span style="color:#333333;">
+      )2
+     </span>
+     <span style="color:#333333;">
+      个字段进行存储，并对内容进行全文索引：索引的单位是
+     </span>
+     <span style="color:#333333;">
+      Document
+     </span>
+     <span style="color:#333333;">
+      对象，每个
+     </span>
+     <span style="color:#333333;">
+      Document
+     </span>
+     <span style="color:#333333;">
+      对象包含多个字段
+     </span>
+     <span style="color:#333333;">
+      Field
+     </span>
+     <span style="color:#333333;">
+      对象，针对不同的字段属性和数据输出的需求，对字段还可以选择不同的索引
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      存储字段规则，列表如下：
+     </span>
+    </p>
+    <table border="1" cellpadding="0">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center">
+         <strong>
+          <span style="color:#333333;">
+           方法
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <strong>
+          <span style="color:#333333;">
+           切词
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <strong>
+          <span style="color:#333333;">
+           索引
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <strong>
+          <span style="color:#333333;">
+           存储
+          </span>
+         </strong>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <strong>
+          <span style="color:#333333;">
+           用途
+          </span>
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field.Text(String name, String value)
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <span style="color:#333333;">
+          切分词索引并存储，比如：标题，内容字段
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field.Text(String name, Reader value)
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          No
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <span style="color:#333333;">
+          切分词索引不存储，比如：
+         </span>
+         <span style="color:#333333;">
+          META
+         </span>
+         <span style="color:#333333;">
+          信息，
+         </span>
+         <span style="color:#333333;">
+          <br/>
+         </span>
+         <span style="color:#333333;">
+          不用于返回显示，但需要进行检索内容
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field.Keyword(String name, String value)
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          No
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <span style="color:#333333;">
+          不切分索引并存储，比如：日期字段
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field.UnIndexed(String name, String value)
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          No
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          No
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <span style="color:#333333;">
+          不索引，只存储，比如：文件路径
+         </span>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Field.UnStored(String name, String value)
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          Yes
+         </span>
+        </p>
+       </td>
+       <td>
+        <p align="center">
+         <span style="color:#333333;">
+          No
+         </span>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <span style="color:#333333;">
+          只全文索引，不存储
+         </span>
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p align="left">
+    </p>
+    <pre class="java">public classIndexFiles { 
+  //使用方法：: IndexFiles [索引输出目录] [索引的文件列表] ...
+  public static void main(String[] args)throws Exception {
+    String indexPath = args[0];
+    IndexWriter writer;
+    //用指定的语言分析器构造一个新的写索引器（第3个参数表示是否为追加索引）
+    writer = new IndexWriter(indexPath,new SimpleAnalyzer(), false);
+
+    for (int i=1; i&lt;args.length; i++){
+      System.out.println("Indexingfile " + args[i]);
+      InputStream is = new FileInputStream(args[i]);
+
+      //构造包含2个字段Field的Document对象
+      //一个是路径path字段，不索引，只存储
+      //一个是内容body字段，进行全文索引，并存储
+      Document doc = new Document();
+     doc.add(Field.UnIndexed("path", args[i]));
+     doc.add(Field.Text("body", (Reader) new InputStreamReader(is)));
+      //将文档写入索引
+      writer.addDocument(doc);
+      is.close();
+    };
+    //关闭写索引器
+    writer.close();
+  }
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      索引过程中可以看到：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      语言分析器提供了抽象的接口，因此语言分析
+     </span>
+     <span style="color:#333333;">
+      (Analyser)
+     </span>
+     <span style="color:#333333;">
+      是可以定制的，虽然
+     </span>
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      缺省提供了
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个比较通用的分析器
+     </span>
+     <span style="color:#333333;">
+      SimpleAnalyser
+     </span>
+     <span style="color:#333333;">
+      和
+     </span>
+     <span style="color:#333333;">
+      StandardAnalyser
+     </span>
+     <span style="color:#333333;">
+      ，这
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个分析器缺省都不支持中文，所以要加入对中文语言的切分规则，需要修改这
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个分析器。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      并没有规定数据源的格式，而只提供了一个通用的结构（
+     </span>
+     <span style="color:#333333;">
+      Document
+     </span>
+     <span style="color:#333333;">
+      对象）来接受索引的输入，因此输入的数据源可以是：数据库，
+     </span>
+     <span style="color:#333333;">
+      WORD
+     </span>
+     <span style="color:#333333;">
+      文档，
+     </span>
+     <span style="color:#333333;">
+      PDF
+     </span>
+     <span style="color:#333333;">
+      文档，
+     </span>
+     <span style="color:#333333;">
+      HTML
+     </span>
+     <span style="color:#333333;">
+      文档
+     </span>
+     <span style="color:#333333;">
+      ……
+     </span>
+     <span style="color:#333333;">
+      只要能够设计相应的解析转换器将数据源构造成成
+     </span>
+     <span style="color:#333333;">
+      Docuement
+     </span>
+     <span style="color:#333333;">
+      对象即可进行索引。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      对于大批量的数据索引，还可以通过调整
+     </span>
+     <span style="color:#333333;">
+      IndexerWrite
+     </span>
+     <span style="color:#333333;">
+      的文件合并频率属性（
+     </span>
+     <span style="color:#333333;">
+      mergeFactor
+     </span>
+     <span style="color:#333333;">
+      ）来提高批量索引的效率。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      检索过程和结果显示：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      搜索结果返回的是
+     </span>
+     <span style="color:#333333;">
+      Hits
+     </span>
+     <span style="color:#333333;">
+      对象，可以通过它再访问
+     </span>
+     <span style="color:#333333;">
+      Document==&gt;Field
+     </span>
+     <span style="color:#333333;">
+      中的内容。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      假设根据
+     </span>
+     <span style="color:#333333;">
+      body
+     </span>
+     <span style="color:#333333;">
+      字段进行全文检索，可以将查询结果的
+     </span>
+     <span style="color:#333333;">
+      path
+     </span>
+     <span style="color:#333333;">
+      字段和相应查询的匹配度
+     </span>
+     <span style="color:#333333;">
+      (score)
+     </span>
+     <span style="color:#333333;">
+      打印出来，
+     </span>
+    </p>
+    <p align="left">
+    </p>
+    <pre class="java">public class Search{ 
+  public static void main(String[] args)throws Exception {
+    String indexPath = args[0],queryString = args[1];
+    //指向索引目录的搜索器
+    Searcher searcher = newIndexSearcher(indexPath);
+    //查询解析器：使用和索引同样的语言分析器
+    Query query =QueryParser.parse(queryString, "body", 
+                              newSimpleAnalyzer());
+    //搜索结果使用Hits存储
+    Hits hits = searcher.search(query);
+    //通过hits可以访问到相应字段的数据和查询的匹配度
+    for (int i=0; i&lt;hits.length();i++) {
+     System.out.println(hits.doc(i).get("path") + "; Score:" + 
+                         hits.score(i));
+    };
+  }
+}</pre>
+    <br/>
+    <p>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      在整个检索过程中，语言分析器，查询分析器，甚至搜索器（
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      ）都是提供了抽象的接口，可以根据需要进行定制。
+     </span>
+    </p>
+    <p align="left">
+     <a name="hacking">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       Hacking Lucene
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       简化的查询分析器
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      个人感觉
+     </span>
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      成为
+     </span>
+     <span style="color:#333333;">
+      JAKARTA
+     </span>
+     <span style="color:#333333;">
+      项目后，画在了太多的时间用于调试日趋复杂
+     </span>
+     <span style="color:#333333;">
+      QueryParser
+     </span>
+     <span style="color:#333333;">
+      ，而其中大部分是大多数用户并不很熟悉的，目前
+     </span>
+     <span style="color:#333333;">
+      LUCENE
+     </span>
+     <span style="color:#333333;">
+      支持的语法：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Query ::= ( Clause )*
+      <br/>
+      Clause ::= ["+", "-"] [&lt;TERM&gt; ":"] (&lt;TERM&gt; | "(" Query ")")
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      中间的逻辑包括：
+     </span>
+     <span style="color:#333333;">
+      and or + - &amp;&amp;||
+     </span>
+     <span style="color:#333333;">
+      等符号，而且还有
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      短语查询
+     </span>
+     <span style="color:#333333;">
+      "
+     </span>
+     <span style="color:#333333;">
+      和针对西文的前缀
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      模糊查询等，个人感觉对于一般应用来说，这些功能有一些华而不实，其实能够实现目前类似于
+     </span>
+     <span style="color:#333333;">
+      Google
+     </span>
+     <span style="color:#333333;">
+      的查询语句分析功能其实对于大多数用户来说已经够了。所以，
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      早期版本的
+     </span>
+     <span style="color:#333333;">
+      QueryParser
+     </span>
+     <span style="color:#333333;">
+      仍是比较好的选择。
+     </span>
+    </p>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       添加修改删除指定记录（
+      </span>
+      <span style="color:#333333;">
+       Document
+      </span>
+      <span style="color:#333333;">
+       ）
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      提供了索引的扩展机制，因此索引的动态扩展应该是没有问题的，而指定记录的修改也似乎只能通过记录的删除，然后重新加入实现。如何删除指定的记录呢？删除的方法也很简单，只是需要在索引时根据数据源中的记录
+     </span>
+     <span style="color:#333333;">
+      ID
+     </span>
+     <span style="color:#333333;">
+      专门另建索引，然后利用
+     </span>
+     <span style="color:#333333;">
+      IndexReader.delete(Termterm)
+     </span>
+     <span style="color:#333333;">
+      方法通过这个记录
+     </span>
+     <span style="color:#333333;">
+      ID
+     </span>
+     <span style="color:#333333;">
+      删除相应的
+     </span>
+     <span style="color:#333333;">
+      Document
+     </span>
+     <span style="color:#333333;">
+      。
+     </span>
+    </p>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       根据某个字段值的排序功能
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      缺省是按照自己的相关度算法（
+     </span>
+     <span style="color:#333333;">
+      score
+     </span>
+     <span style="color:#333333;">
+      ）进行结果排序的，但能够根据其他字段进行结果排序是一个在
+     </span>
+     <span style="color:#333333;">
+      LUCENE
+     </span>
+     <span style="color:#333333;">
+      的开发邮件列表中经常提到的问题，很多原先基于数据库应用都需要除了基于匹配度（
+     </span>
+     <span style="color:#333333;">
+      score
+     </span>
+     <span style="color:#333333;">
+      ）以外的排序功能。而从全文检索的原理我们可以了解到，任何不基于索引的搜索过程效率都会导致效率非常的低，如果基于其他字段的排序需要在搜索过程中访问存储字段，速度回大大降低，因此非常是不可取的。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      但这里也有一个折中的解决方法：在搜索过程中能够影响排序结果的只有索引中已经存储的
+     </span>
+     <span style="color:#333333;">
+      docID
+     </span>
+     <span style="color:#333333;">
+      和
+     </span>
+     <span style="color:#333333;">
+      score
+     </span>
+     <span style="color:#333333;">
+      这
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个参数，所以，基于
+     </span>
+     <span style="color:#333333;">
+      score
+     </span>
+     <span style="color:#333333;">
+      以外的排序，其实可以通过将数据源预先排好序，然后根据
+     </span>
+     <span style="color:#333333;">
+      docID
+     </span>
+     <span style="color:#333333;">
+      进行排序来实现。这样就避免了在
+     </span>
+     <span style="color:#333333;">
+      LUCENE
+     </span>
+     <span style="color:#333333;">
+      搜索结果外对结果再次进行排序和在搜索过程中访问不在索引中的某个字段值。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      这里需要修改的是
+     </span>
+     <span style="color:#333333;">
+      IndexSearcher
+     </span>
+     <span style="color:#333333;">
+      中的
+     </span>
+     <span style="color:#333333;">
+      HitCollector
+     </span>
+     <span style="color:#333333;">
+      过程：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ...
+      <br/>
+     </span>
+    </p>
+    <pre class="java">　scorer.score(newHitCollector() {
+        private float minScore = 0.0f;
+        public final void collect(int doc,float score) {
+         if (score &gt; 0.0f &amp;&amp;                   // ignore zeroed buckets
+              (bits==null || bits.get(doc))) {         // skip docs not in bits
+           totalHits[0]++;
+           if (score &gt;= minScore) {
+              /* 原先：Lucene将docID和相应的匹配度score例入结果命中列表中：
+               *hq.put(new ScoreDoc(doc, score));      // update hit queue
+               * 如果用doc 或 1/doc 代替 score，就实现了根据docID顺排或逆排
+               * 假设数据源索引时已经按照某个字段排好了序，而结果根据docID排序也就实现了
+               * 针对某个字段的排序，甚至可以实现更复杂的score和docID的拟合。
+               */
+              hq.put(new ScoreDoc(doc, (float) 1/doc )); 
+              if (hq.size() &gt; nDocs) {         // if hit queue overfull
+               hq.pop();                        // remove lowest in hit queue
+               minScore =((ScoreDoc)hq.top()).score; // reset minScore
+              }
+           }
+         }
+        }
+      }, reader.maxDoc());</pre>
+    <br/>
+    <p>
+    </p>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       更通用的输入输出接口
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      虽然
+     </span>
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      没有定义一个确定的输入文档格式，但越来越多的人想到使用一个标准的中间格式作为
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的数据导入接口，然后其他数据，比如
+     </span>
+     <span style="color:#333333;">
+      PDF
+     </span>
+     <span style="color:#333333;">
+      只需要通过解析器转换成标准的中间格式就可以进行数据索引了。这个中间格式主要以
+     </span>
+     <span style="color:#333333;">
+      XML
+     </span>
+     <span style="color:#333333;">
+      为主，类似实现已经不下
+     </span>
+     <span style="color:#333333;">
+      4
+     </span>
+     <span style="color:#333333;">
+      ，
+     </span>
+     <span style="color:#333333;">
+      5
+     </span>
+     <span style="color:#333333;">
+      个：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      数据源: WORD       PDF    HTML    DB       other
+      <br/>
+      \          |       |     |         /
+      <br/>
+      XML
+     </span>
+     中间格式
+     <br/>
+     |
+     <br/>
+     Lucene INDEX
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      目前还没有针对
+     </span>
+     <span style="color:#333333;">
+      MSWord
+     </span>
+     <span style="color:#333333;">
+      文档的解析器，因为
+     </span>
+     <span style="color:#333333;">
+      Word
+     </span>
+     <span style="color:#333333;">
+      文档和基于
+     </span>
+     <span style="color:#333333;">
+      ASCII
+     </span>
+     <span style="color:#333333;">
+      的
+     </span>
+     <span style="color:#333333;">
+      RTF
+     </span>
+     <span style="color:#333333;">
+      文档不同，需要使用
+     </span>
+     <span style="color:#333333;">
+      COM
+     </span>
+     <span style="color:#333333;">
+      对象机制解析。这个是我在
+     </span>
+     <span style="color:#333333;">
+      Google
+     </span>
+     <span style="color:#333333;">
+      上查的相关资料：
+     </span>
+     <span style="color:#333333;">
+      <a href="http://www.intrinsyc.com/products/enterprise_applications.asp">
+       <span style="color:#3165ce;">
+        http://www.intrinsyc.com/products/enterprise_applications.asp
+       </span>
+      </a>
+      <br/>
+     </span>
+     <span style="color:#333333;">
+      另外一个办法就是把
+     </span>
+     <span style="color:#333333;">
+      Word
+     </span>
+     <span style="color:#333333;">
+      文档转换成
+     </span>
+     <span style="color:#333333;">
+      text
+     </span>
+     <span style="color:#333333;">
+      ：
+     </span>
+     <span style="color:#333333;">
+      <a href="http://www.winfield.demon.nl/index.html">
+       <span style="color:#3165ce;">
+        http://www.winfield.demon.nl/index.html
+       </span>
+      </a>
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      <br/>
+     </span>
+     <strong>
+      <span style="color:#333333;">
+       索引过程优化
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      索引一般分
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      种情况，一种是小批量的索引扩展，一种是大批量的索引重建。在索引过程中，并不是每次新的
+     </span>
+     <span style="color:#333333;">
+      DOC
+     </span>
+     <span style="color:#333333;">
+      加入进去索引都重新进行一次索引文件的写入操作（文件
+     </span>
+     <span style="color:#333333;">
+      I/O
+     </span>
+     <span style="color:#333333;">
+      是一件非常消耗资源的事情）。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      先在内存中进行索引操作，并根据一定的批量进行文件的写入。这个批次的间隔越大，文件的写入次数越少，但占用内存会很多。反之占用内存少，但文件
+     </span>
+     <span style="color:#333333;">
+      IO
+     </span>
+     <span style="color:#333333;">
+      操作频繁，索引速度会很慢。在
+     </span>
+     <span style="color:#333333;">
+      IndexWriter
+     </span>
+     <span style="color:#333333;">
+      中有一个
+     </span>
+     <span style="color:#333333;">
+      MERGE_FACTOR
+     </span>
+     <span style="color:#333333;">
+      参数可以帮助你在构造索引器后根据应用环境的情况充分利用内存减少文件的操作。根据我的使用经验：缺省
+     </span>
+     <span style="color:#333333;">
+      Indexer
+     </span>
+     <span style="color:#333333;">
+      是每
+     </span>
+     <span style="color:#333333;">
+      20
+     </span>
+     <span style="color:#333333;">
+      条记录索引后写入一次，每将
+     </span>
+     <span style="color:#333333;">
+      MERGE_FACTOR
+     </span>
+     <span style="color:#333333;">
+      增加
+     </span>
+     <span style="color:#333333;">
+      50
+     </span>
+     <span style="color:#333333;">
+      倍，索引速度可以提高
+     </span>
+     <span style="color:#333333;">
+      1
+     </span>
+     <span style="color:#333333;">
+      倍左右。
+     </span>
+    </p>
+    <p align="left">
+     <strong>
+      <span style="color:#333333;">
+       搜索过程优化
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      lucene
+     </span>
+     <span style="color:#333333;">
+      支持内存索引：这样的搜索比基于文件的
+     </span>
+     <span style="color:#333333;">
+      I/O
+     </span>
+     <span style="color:#333333;">
+      有数量级的速度提升。
+     </span>
+     <span style="color:#333333;">
+      <br/>
+     </span>
+     <a href="http://www.onjava.com/lpt/a/3273">
+      <span style="color:#3165ce;">
+       http://www.onjava.com/lpt/a/3273
+      </span>
+     </a>
+     <span style="color:#333333;">
+      <br/>
+     </span>
+     <span style="color:#333333;">
+      而尽可能减少
+     </span>
+     <span style="color:#333333;">
+      IndexSearcher
+     </span>
+     <span style="color:#333333;">
+      的创建和对搜索结果的前台的缓存也是必要的。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      面向全文检索的优化在于首次索引检索后，并不把所有的记录（
+     </span>
+     <span style="color:#333333;">
+      Document
+     </span>
+     <span style="color:#333333;">
+      ）具体内容读取出来，而起只将所有结果中匹配度最高的头
+     </span>
+     <span style="color:#333333;">
+      100
+     </span>
+     <span style="color:#333333;">
+      条结果（
+     </span>
+     <span style="color:#333333;">
+      TopDocs
+     </span>
+     <span style="color:#333333;">
+      ）的
+     </span>
+     <span style="color:#333333;">
+      ID
+     </span>
+     <span style="color:#333333;">
+      放到结果集缓存中并返回，这里可以比较一下数据库检索：如果是一个
+     </span>
+     <span style="color:#333333;">
+      10,000
+     </span>
+     <span style="color:#333333;">
+      条的数据库检索结果集，数据库是一定要把所有记录内容都取得以后再开始返回给应用结果集的。所以即使检索匹配总数很多，
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的结果集占用的内存空间也不会很多。对于一般的模糊检索应用是用不到这么多的结果的，头
+     </span>
+     <span style="color:#333333;">
+      100
+     </span>
+     <span style="color:#333333;">
+      条已经可以满足
+     </span>
+     <span style="color:#333333;">
+      90%
+     </span>
+     <span style="color:#333333;">
+      以上的检索需求。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      如果首批缓存结果数用完后还要读取更后面的结果时
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      会再次检索并生成一个上次的搜索缓存数大
+     </span>
+     <span style="color:#333333;">
+      1
+     </span>
+     <span style="color:#333333;">
+      倍的缓存，并再重新向后抓取。所以如果构造一个
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      去查
+     </span>
+     <span style="color:#333333;">
+      1
+     </span>
+     <span style="color:#333333;">
+      －
+     </span>
+     <span style="color:#333333;">
+      120
+     </span>
+     <span style="color:#333333;">
+      条结果，
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      其实是进行了
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      次搜索过程：头
+     </span>
+     <span style="color:#333333;">
+      100
+     </span>
+     <span style="color:#333333;">
+      条取完后，缓存结果用完，
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      重新检索再构造一个
+     </span>
+     <span style="color:#333333;">
+      200
+     </span>
+     <span style="color:#333333;">
+      条的结果缓存，依此类推，
+     </span>
+     <span style="color:#333333;">
+      400
+     </span>
+     <span style="color:#333333;">
+      条缓存，
+     </span>
+     <span style="color:#333333;">
+      800
+     </span>
+     <span style="color:#333333;">
+      条缓存。由于每次
+     </span>
+     <span style="color:#333333;">
+      Searcher
+     </span>
+     <span style="color:#333333;">
+      对象消失后，这些缓存也访问那不到了，你有可能想将结果记录缓存下来，缓存数尽量保证在
+     </span>
+     <span style="color:#333333;">
+      100
+     </span>
+     <span style="color:#333333;">
+      以下以充分利用首次的结果缓存，不让
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      浪费多次检索，而且可以分级进行结果缓存。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的另外一个特点是在收集结果的过程中将匹配度低的结果自动过滤掉了。这也是和数据库应用需要将搜索的结果全部返回不同之处。
+     </span>
+    </p>
+    <p align="left">
+     <a href="http://sourceforge.net/projects/weblucene/">
+      <strong>
+       <span style="color:#3165ce;">
+        我的一些尝试
+       </span>
+      </strong>
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       ：
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      支持中文的
+     </span>
+     <span style="color:#333333;">
+      Tokenizer
+     </span>
+     <span style="color:#333333;">
+      ：这里有
+     </span>
+     <span style="color:#333333;">
+      2
+     </span>
+     <span style="color:#333333;">
+      个版本，一个是通过
+     </span>
+     <span style="color:#333333;">
+      JavaCC
+     </span>
+     <span style="color:#333333;">
+      生成的，对
+     </span>
+     <span style="color:#333333;">
+      CJK
+     </span>
+     <span style="color:#333333;">
+      部分按一个字符一个
+     </span>
+     <span style="color:#333333;">
+      TOKEN
+     </span>
+     <span style="color:#333333;">
+      索引，另外一个是从
+     </span>
+     <span style="color:#333333;">
+      SimpleTokenizer
+     </span>
+     <span style="color:#333333;">
+      改写的，对英文支持数字和字母
+     </span>
+     <span style="color:#333333;">
+      TOKEN
+     </span>
+     <span style="color:#333333;">
+      ，对中文按迭代索引。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      基于
+     </span>
+     <span style="color:#333333;">
+      XML
+     </span>
+     <span style="color:#333333;">
+      数据源的索引器：
+     </span>
+     <span style="color:#333333;">
+      XMLIndexer
+     </span>
+     <span style="color:#333333;">
+      ，因此所有数据源只要能够按照
+     </span>
+     <span style="color:#333333;">
+      DTD
+     </span>
+     <span style="color:#333333;">
+      转换成指定的
+     </span>
+     <span style="color:#333333;">
+      XML
+     </span>
+     <span style="color:#333333;">
+      ，就可以用
+     </span>
+     <span style="color:#333333;">
+      XMLIndxer
+     </span>
+     <span style="color:#333333;">
+      进行索引了。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      根据某个字段排序：按记录索引顺序排序结果的搜索器：
+     </span>
+     <span style="color:#333333;">
+      IndexOrderSearcher
+     </span>
+     <span style="color:#333333;">
+      ，因此如果需要让搜索结果根据某个字段排序，可以让数据源先按某个字段排好序（比如：
+     </span>
+     <span style="color:#333333;">
+      PriceField
+     </span>
+     <span style="color:#333333;">
+      ），这样索引后，然后在利用这个按记录的
+     </span>
+     <span style="color:#333333;">
+      ID
+     </span>
+     <span style="color:#333333;">
+      顺序检索的搜索器，结果就是相当于是那个字段排序的结果了。
+     </span>
+    </p>
+    <p align="left">
+     <a name="learn">
+     </a>
+     <strong>
+      <span style="color:#333333;">
+       从
+      </span>
+      <span style="color:#333333;">
+       Lucene
+      </span>
+      <span style="color:#333333;">
+       学到更多
+      </span>
+     </strong>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      Luene
+     </span>
+     <span style="color:#333333;">
+      的确是一个面对对象设计的典范
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      所有的问题都通过一个额外抽象层来方便以后的扩展和重用：你可以通过重新实现来达到自己的目的，而对其他模块而不需要；
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      简单的应用入口
+     </span>
+     <span style="color:#333333;">
+      Searcher, Indexer
+     </span>
+     <span style="color:#333333;">
+      ，并调用底层一系列组件协同的完成搜索任务；
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      所有的对象的任务都非常专一：比如搜索过程：
+     </span>
+     <span style="color:#333333;">
+      QueryParser
+     </span>
+     <span style="color:#333333;">
+      分析将查询语句转换成一系列的精确查询的组合
+     </span>
+     <span style="color:#333333;">
+      (Query),
+     </span>
+     <span style="color:#333333;">
+      通过底层的索引读取结构
+     </span>
+     <span style="color:#333333;">
+      IndexReader
+     </span>
+     <span style="color:#333333;">
+      进行索引的读取，并用相应的打分器给搜索结果进行打分
+     </span>
+     <span style="color:#333333;">
+      /
+     </span>
+     <span style="color:#333333;">
+      排序等。所有的功能模块原子化程度非常高，因此可以通过重新实现而不需要修改其他模块。
+     </span>
+     <span style="color:#333333;">
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      除了灵活的应用接口设计，
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      还提供了一些适合大多数应用的语言分析器实现（
+     </span>
+     <span style="color:#333333;">
+      SimpleAnalyser,StandardAnalyser
+     </span>
+     <span style="color:#333333;">
+      ），这也是新用户能够很快上手的重要原因之一。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      这些优点都是非常值得在以后的开发中学习借鉴的。作为一个通用工具包，
+     </span>
+     <span style="color:#333333;">
+      Lunece
+     </span>
+     <span style="color:#333333;">
+      的确给予了需要将全文检索功能嵌入到应用中的开发者很多的便利。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      此外，通过对
+     </span>
+     <span style="color:#333333;">
+      Lucene
+     </span>
+     <span style="color:#333333;">
+      的学习和使用，我也更深刻地理解了为什么很多数据库优化设计中要求，比如：
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      尽可能对字段进行索引来提高查询速度，但过多的索引会对数据库表的更新操作变慢，而对结果过多的排序条件，实际上往往也是性能的杀手之一。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      很多商业数据库对大批量的数据插入操作会提供一些优化参数，这个作用和索引器的
+     </span>
+     <span style="color:#333333;">
+      merge_factor
+     </span>
+     <span style="color:#333333;">
+      的作用是类似的，
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      20%/80%
+     </span>
+     <span style="color:#333333;">
+      原则：查的结果多并不等于质量好，尤其对于返回结果集很大，如何优化这头几十条结果的质量往往才是最重要的。
+     </span>
+    </p>
+    <p align="left">
+     <span style="color:#333333;">
+      ·
+     </span>
+     <span style="color:#333333;">
+      尽可能让应用从数据库中获得比较小的结果集，因为即使对于大型数据库，对结果集的随机访问也是一个非常消耗资源的操作。
+     </span>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Lucene&amp;t=blog" target="_blank">
+    Lucene
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=索引&amp;t=blog" target="_blank">
+    索引
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=数据库&amp;t=blog" target="_blank">
+    数据库
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=java&amp;t=blog" target="_blank">
+    java
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2643601" target="_blank">
+    LIRe
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

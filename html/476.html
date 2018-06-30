@@ -1,0 +1,237 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ IPTV 质量评价方法已经不适用于 OTT TV 质量评价 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_476">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   IPTV 质量评价方法已经不适用于 OTT TV 质量评价
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月24日 15:00:35
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6237
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    OTT TV一般情况下使用HTTP传输视音频内容，而IPTV一般情况下使用RTP传输视音频内容。HTTP是基于TCP的，因此不会出现丢包情况。而RTP是基于UDP的，因而会出现丢包状况。正是因为这点不同导致IPTV 质量评价方法已经不适用于 OTT TV 质量评价。
+    <br/>
+    <br/>
+    HTTP 是以HTTP/TCP协议进行无损传输，与传统的UDP承载或广电广播网络承载的有损传输视频业务有很大区别。在网络性能变化，如路由器拥塞丢包时，传统的MOS-V等图像质量指标对于HTTP 却保持不变，失去了指标的意义。因此HTTP业务需要全新的一套测量体系来进行视频传输质量测量。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     <strong>
+      为什么传统的IPTV视频质量分析方法不适用于HTTP视频业务？
+     </strong>
+    </h3>
+    有损传输的视频与HTTP视频视频对比
+    <br/>
+    传统的网络视频IPTV业务主要是基于UDP承载视频流的，UDP承载的特点是实时性好，但出现丢包则不会重传，抖动和时延过大的包会被丢弃，对视频流而言是一种有损传输。所以当网络损伤出现时，解码后视频质量会出现劣化，导致马赛克、图像模糊等问题，见下图。
+    <br/>
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20130924145653687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+    </div>
+    <div style="text-align:center;">
+     图1、UDP承载视频流出现马赛克和图像模糊
+    </div>
+    HTTP视频业务是基于TCP承载视频流的，TCP承载的特点是可靠连接，无损传输。丢包后会进行重传，抖动和延时会被客户端的下载缓冲所消化，一般情况下客户不会感知。只有缓冲区的视频播放完又没有及时下载到新的视频片段时，才会出现画面等待并缓冲，见下图。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20130924145746015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+    </div>
+    <div style="text-align:center;">
+     图2、TCP承载视频流
+    </div>
+    传统的网络视频质量分析指标是针对视频画面损伤时对视频质量评估的，而当网络性能劣化，例如有路由器出现拥塞导致丢包时，HTTP承载的视频业务是不会丢失媒体包的，画面质量跟发送端是完全一致的。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     <strong>
+      有损传输的视频质量常用测量指标是否适用HTTP业务？
+     </strong>
+    </h3>
+    基于UDP的IPTV视频业务，或广电广播网络的视频业务常用于衡量视频质量的指标常用有如下几种：
+    <br/>
+    <h4>
+     <strong>
+      MOS-V
+     </strong>
+    </h4>
+    MOS-V原本是指通过观测者人眼观察视频质量，进行主观1-5分的打分，参见ITU-T P.910（04/2008）。目前广泛在视频质量测试中所使用的MOS-V指标，即通过算法分析客户端所收到的视频编码、帧率、丢包分布、以及图像组结构等，通过算法换算得出等效于人眼主观评价测量的MOS-V得分。
+    <br/>
+    MOS-V适用于HTTP视频业务吗？
+    <br/>
+    只适用于进行实时视频编码阶段，对于网络传输则失去意义。
+    <br/>
+    如前所分析的，HTTP业务采用TCP无损传输，已编好码的视频流（如H.264码流）进入网络（如CDN）后，发送端发出的媒体片段和接收端收到的片段是完全一致的。传输过程中TCP丢包会重传，对于视频流而言即不存在丢包，所以MOS算法所计算的丢包分布是无意义的。即在出现网络层面的丢包时，对于TCP承载的视频业务而言，MOS值是不会改变的。所以MOS在视频业务中，充其量只能适用于视频发送前进行视频编码的阶段，即做初步的编码器编码质量对比。
+    <br/>
+    在某些特殊场合，在传输网络中有实时视频转码的网元情况下，MOS也可用于单独衡量转码设备的编码质量。但对于HTTP 视频业务而言，本身就具备提供多种不同的码率码流，适应不同的用户情况，客户端自动选择下载码率，在网络上再做实时转码并不经济，所以该场景在HTTP  业务中并不常见。
+    <br/>
+    要特别指出的是，视频传输质量测量目的是以仪表模拟大量用户访问，衡量网络在大流量情况下的服务质量。而编码质量则取决于编码算法，与用户量或网络状态是无关的。例如VOD业务，它是编码软件离线编码后，把文件以非实时的方式送入网络存储（如CDN），再由网络向用户提供服务的。
+    <br/>
+    关键是，对于运营者最关心的传输网络上各个网元的服务质量，例如出现丢包、抖动、延时等，由于不存在视频损伤，MOS指标保持不变。即网络质量变化，用户感知发生变化时，MOS指标无法反应，失去了指标的意义。
+    <br/>
+    <h4>
+     <strong>
+      MDI
+     </strong>
+    </h4>
+    MDI:DF延迟因素指标，指示被测试视频流的延迟和抖动状况。DF单位是ms。DF将视频流抖动的变化换算为对视频传输和解码设备缓冲的需求。
+    <br/>
+    MDI:MLR媒体丢包率指标，网络传输过程中每秒媒体包丢失数，指示媒体包丢失情况。
+    <br/>
+    MDI适用于HTTP视频业务吗？
+    <br/>
+    完全不适用。
+    <br/>
+    MDI:DF本意是为了指示对解码设备缓冲的需求，特别是电视机顶盒的缓冲有限，缓冲时间通常是毫秒级的。而对于HTTP视频业务而言解码设备主要是PC和手机等智能终端，它是下载媒体片段的，终端本身就要求有容纳大量文件的缓冲空间，缓冲时间起码是分钟级。MDI:DF指标失去意义了。而TCP的重传机制本身保证了不会有媒体层面的丢包， MDI:MLR必然为0，失去意义。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    <h4>
+     <strong>
+      VSTQ
+     </strong>
+    </h4>
+    <span style="white-space:pre;">
+    </span>
+    视频服务传输质量指标。伴随MOS而出现的，重点关注网络传输中的视频质量，对于TCP无损传输而言是不适用的。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    另外还有PSNR峰值信噪比，也是同样，不再累述。
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    I/B/P帧统计
+    <br/>
+    <span style="white-space:pre;">
+    </span>
+    本意是统计在网络损伤下，视频编码的I/B/P帧分别的接收和丢失情况。同样由于TCP的重传机制，视频编码的I/B/P帧都是100%传送，不会丢失，统计失去意义。
+    <br/>
+    <br/>
+    <br/>
+    <h3>
+     小结
+    </h3>
+    传统的视频质量分析是基于有损传输的，MOS等指标本意是进行初步的综合的视频质量指示，以便做服务质量对比，再进一步做深入的指标分析，例如分析媒体流损伤情况、网络层丢包、抖动、延时等问题，最终找到影响用户体验的原因，并予以解决。
+    <br/>
+    但由于HTTP视频的特殊性，不存在图像损伤，网络丢包、抖动、延时等网络问题都无法影响到MOS指标，而HTTP视频业务中，由于网络损伤而真正影响用户体验的主要问题，缓冲等待时间、等待次数、视频码率降低等都无法反应出来。
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ott&amp;t=blog" target="_blank">
+    ott
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=iptv&amp;t=blog" target="_blank">
+    iptv
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频质量评价&amp;t=blog" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638143" target="_blank">
+    IPTV
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638177" target="_blank">
+    OTT TV
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

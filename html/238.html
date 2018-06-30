@@ -1,0 +1,637 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ jQuery 学习笔记 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_238">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   jQuery 学习笔记
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月22日 00:19:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：2844
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     本文存下来作为备忘。
+     <br/>
+     1,更改css样式四种情况：
+     <br/>
+     A，$(“p”).(“background-color”,”red”);
+     <br/>
+     B，var nome = {
+     <br/>
+     background:’red’,
+     <br/>
+     margin:’10px 0 0’
+     <br/>
+     };
+     <br/>
+     $(“p”).css(nome);
+     <br/>
+     C，$(“p”).css(red);(此情况仅为具体的颜色)
+     <br/>
+     D，$(“p”).css({“background”:”red”,”color”:”white”})
+     <br/>
+     2，css若写在head部分：
+     <br/>
+     &lt;script type=”text/javascript”&gt;
+     <br/>
+     $(function{
+     <br/>
+     …
+     <br/>
+     })
+     <br/>
+     &lt;/script&gt;
+     <br/>
+     3,jquery替代$符号
+     <br/>
+     Var jq = jQuery.noConflict();
+     <br/>
+     jq(focument).ready(function(){
+     <br/>
+     …
+     <br/>
+     })
+     <br/>
+     4,fadeTo淡出：
+     <br/>
+     $(“p“).fadeTo(“slow”,0.6);
+     <br/>
+     5,animate:
+     <br/>
+     $(“p”).animate({height:”70%”,weight:100,marginLeft:”0.6in”},”slow”)
+     <br/>
+     6,输出属性：
+     <br/>
+     ${“button”}.click(function(){
+     <br/>
+     $(“p”).text($(this).css(“background-color”));
+     <br/>
+     })
+     <br/>
+     7,页面加载完毕即运行：
+     <br/>
+     $(function(){
+     <br/>
+     Function div(){
+     <br/>
+     $(“p”).animate({width:100},”slow”);
+     <br/>
+     $(“p”).animate({width:300},”slow”);
+     <br/>
+     };
+     <br/>
+     Div();
+     <br/>
+     })
+     <br/>
+     8所有带*属性的选择
+     <br/>
+     $(“[id]”).css(“red”);选区所有有id属性的
+     <br/>
+     $(“[id=main]”).css(“red”);选取id为main的
+     <br/>
+     9,选取文件夹为file属性
+     <br/>
+     10 注意空格
+     <br/>
+     $(“div#demo”)选取id为demo的div
+     <br/>
+     $(“div#demo”)选区div下id为demo的
+     <br/>
+     11 bind 绑定格式
+     <br/>
+     $(“p”).bind(“click”,function(){
+     <br/>
+     });
+     <br/>
+     $(“p”).bind(
+     <br/>
+     {clcik:function(){…}},
+     <br/>
+     {clcik:function(){…}},
+     <br/>
+     )
+     <br/>
+     12,设置并触发
+     <br/>
+     $(“input”).focus(function(){
+     <br/>
+     $(“input”).css(“background-color”,”#fff”);
+     <br/>
+     $(“btn”).click(function(){
+     <br/>
+     $(“input”).focus();
+     <br/>
+     })
+     <br/>
+     })
+     <br/>
+     13,change事件仅适用于text textarea select中
+     <br/>
+     14，$(“button”).click(function(){
+     <br/>
+     $(“p”).slideToggle();
+     <br/>
+     });
+     <br/>
+     $(“p”).dbclick(function(){
+     <br/>
+     $(“button”).click();
+     <br/>
+     })
+     <br/>
+     15,delegate
+     <br/>
+     $(“div”).delegate(“button”,”click”,function(){
+     <br/>
+     $(“p”).slideToggle();
+     <br/>
+     });
+     <br/>
+     16,图片未加载-error
+     <br/>
+     $(“img”).error(function(){
+     <br/>
+     $(“img”).replaceWith(“&lt;p&gt;图片未加载&lt;/p&gt;”)
+     <br/>
+     })
+     <br/>
+     17，阻止链接打开——preventDefault
+     <br/>
+     $(“a”).click(function(event){
+     <br/>
+     Event.preventDefault();
+     <br/>
+     Alert(“Defaultprevent:” + event.isDefaultPrevented ());
+     <br/>
+     })
+     <br/>
+     效果是 a无法打开，并且弹出消息框 Default prevent：true;
+     <br/>
+     18,输出鼠标指针位置
+     <br/>
+     $(document).mouseover(function(e){
+     <br/>
+     $(“span”).text(“X:”+e.pageX+”,Y:”+e.pageY);
+     <br/>
+     })
+     <br/>
+     19,event.target.nodeName为获得当前触发元素
+     <br/>
+     20，输出为自1970年1月1日至今的毫秒数
+     <br/>
+     $(“btn”).click(function(e){
+     <br/>
+     $(“p”).text(e.timeStamp);
+     <br/>
+     })
+     <br/>
+     21,event.type表示事件类型
+     <br/>
+     $(“p”).bind(‘clickdbclick mouseover’,function(event){
+     <br/>
+     $(“div”).text(“事件:”+event.type);
+     <br/>
+     })  当鼠标经过时 会出现结果事件：mouseover
+     <br/>
+     22，键盘值
+     <br/>
+     $(“input”).keydown(function(event){
+     <br/>
+     $(“div”).text(“Key:”+event.which)
+     <br/>
+     })
+     <br/>
+     23,区分mouseover与mouseenter事件对应于
+     <br/>
+     无论鼠标指针是经过被选元素还是其子元素都会触发mouseover事件 mouseout同
+     <br/>
+     只有鼠标指针经过被选元素时才会触发mouseenter    mouseleave同；
+     <br/>
+     Varx = 0;
+     <br/>
+     $(“p”).mouseover(function(){
+     <br/>
+     $(“div”).text(x+=1);
+     <br/>
+     });结果为不断累加
+     <br/>
+     $(“p”).click(function(){
+     <br/>
+     $(this).(fontSize:”+=6px”);字体不断增大6px；
+     <br/>
+     }}
+     <br/>
+     24，ready()函数不与body onload=“”一起使用；
+     <br/>
+     25，resize 调整窗口大触发；
+     <br/>
+     26，阻止表单提交
+     <br/>
+     $(“button”).submit(function(e){
+     <br/>
+     e.preventDaulted();
+     <br/>
+     })
+     <br/>
+     27,$(button).toggle(
+     <br/>
+     Function(){$(“p”).css(“red”)},
+     <br/>
+     Function(){$(“p”).css(“red”)},
+     <br/>
+     <br/>
+     Function(){$(“p”).css(“red”)}
+     <br/>
+     );
+     <br/>
+     27,$(“p”).toggle(true),元素一直显示；若为false则为隐藏
+     <br/>
+     28，trigger(“select”)触发select事件
+     <br/>
+     它能匹配所有元素 而triggerHandler只会影响第一个匹配元素；
+     <br/>
+     29,循环两次结束：
+     <br/>
+     $(function(){
+     <br/>
+     Varx = 0;
+     <br/>
+     $(“p”).click(function(e){
+     <br/>
+     $(“p”).animate({fontSize:”+=6px”});
+     <br/>
+     x++;
+     <br/>
+     If(x&gt;2){
+     <br/>
+     $(this).unbind(e);
+     <br/>
+     }
+     <br/>
+     });
+     <br/>
+     })
+     <br/>
+     30,取消绑定特定函数
+     <br/>
+     Function   alertMe(){
+     <br/>
+     Alert(“123”)
+     <br/>
+     };
+     <br/>
+     $(function(){
+     <br/>
+     $(“p”).click(alertMe);
+     <br/>
+     $(“button”).click(function(){
+     <br/>
+     $(“p”).unblind(“click”,alertMe);
+     <br/>
+     });
+     <br/>
+     });
+     <br/>
+     31，addClass 返回函数
+     <br/>
+     $(“p”).addClass(function(n){
+     <br/>
+     Return‘par’ + n;
+     <br/>
+     });
+     <br/>
+     添加两个类
+     <br/>
+     $(“p”).addClass(“class1class2”)
+     <br/>
+     32,宽度减去50
+     <br/>
+     $(“img”).attr(“width”,function(n,v){
+     <br/>
+     Returnv – 50;
+     <br/>
+     })
+     <br/>
+     V为属性值()width的，n为index；
+     <br/>
+     33，clone
+     <br/>
+     $(“p”).append($(“p”).clone());
+     <br/>
+     $(“p”).append($(“p”).clone(true));表示事件处理器也被同样复制；
+     <br/>
+     34，$(“p”).deatch();删除p元素；(并不是彻底删除)
+     <br/>
+     <br/>
+     Varx;
+     <br/>
+     $(“btn1”).click(function(){
+     <br/>
+     X=$(“p”).deatch();
+     <br/>
+     });删除p
+     <br/>
+     $(“btn2”).click(function(){
+     <br/>
+     $(body).append(x);
+     <br/>
+     });添加p；
+     <br/>
+     <br/>
+     Empty()是指移除内容；
+     <br/>
+     35，hasClass()指被选元素是否包括*元素
+     <br/>
+     $(“button”).click(function(){
+     <br/>
+     Alert($(“p”).hasClass(“into”));
+     <br/>
+     });输出结果为true或者false;
+     <br/>
+     36,html()返回结果为()内容；
+     <br/>
+     37，document.createElement(“div”)表示新创建div
+     <br/>
+     38，toggleClass()对类  进行切换
+     <br/>
+     39,css增加div宽度
+     <br/>
+     $(“div”).css(“width”,function(index,value){returnparseFloat(value)*1.2;})
+     <br/>
+     40,stop()只适用于动画，而clearQueue适用于任何排队函数。
+     <br/>
+     41，$(“#stop”).click(function(){
+     <br/>
+     $(“#box”).stop(true);
+     <br/>
+     });动画依然能完成；
+     <br/>
+     $(“#stop”).click(function(){
+     <br/>
+     $(“#box”).stop(true，true);
+     <br/>
+     });动画不能完成；
+     <br/>
+     42，toggle(),进行显示和消失的切换，toggle(true)，只能显示，不能消失；
+     <br/>
+     43,$(“p”).height(50),或者height(“20%”)；
+     <br/>
+     44,$(“p”).size();元素个数=”.length”;
+     <br/>
+     45,每次增加10px宽度；
+     <br/>
+     $(“p”).height(function(n,c){
+     <br/>
+     Returnc+10；
+     <br/>
+     })；
+     <br/>
+     46，offset表示文档相对位置；
+     <br/>
+     X=$(“p”).offset();position也可以这样用；
+     <br/>
+     x.left表示距离左边的距离；
+     <br/>
+     $(“p”).offset({top:100,left:0});重新设置距离
+     <br/>
+     <br/>
+     $(“p”).offset(function(n,c){
+     <br/>
+     newPos=newObject();
+     <br/>
+     newPos.left= c.left+100;
+     <br/>
+     returnnewPos;
+     <br/>
+     });
+     <br/>
+     <br/>
+     NewPos= new Object();
+     <br/>
+     newPos.left=100;
+     <br/>
+     $(function(){
+     <br/>
+     $(“button”).click(function(){
+     <br/>
+     $(“p”).offset(newPos);
+     <br/>
+     });
+     <br/>
+     });
+     <br/>
+     <br/>
+     $(“p”).offset($(“img”).offset())
+     <br/>
+     47，$(“P”).scrollLeft(100),把滚动条的位置设置为100px；
+     <br/>
+     48，closest() 方法获得匹配选择器的第一个祖先元素，从当前元素开始沿 DOM 树向上。
+     <br/>
+     Addself包括当前元素；
+     <br/>
+     end() 方法结束当前链条中的最近的筛选操作，并将匹配元素集还原为之前的状态。
+     <br/>
+     filter() 方法将匹配元素集合缩减为匹配指定选择器的元素。
+     <br/>
+     49var item1 =$('li.item-1')[0];{_?
+     <br/>
+     50,$(“p”).has(“li”).length? “Yes”:”No”  判断P元素是否含有li元素，有则返回Yes;
+     <br/>
+     51,.is(“p”)判断是否含有P；
+     <br/>
+     52，$(“ul”).click(function(event){
+     <br/>
+     <br/>
+     Var$target=$(event.target);
+     <br/>
+     If($target.is(“li”)){
+     <br/>
+     $(“target”).css(“background”,”red”);
+     <br/>
+     }
+     <br/>
+     });点击一个列表，若含有li则当前点击列表变为红色；
+     <br/>
+     <br/>
+     53，$(“li”).click(function(){
+     <br/>
+     Var$li=$(this),
+     <br/>
+     isWithTwo=$li.is(function(){
+     <br/>
+     return$(“strong”,this).length===2;
+     <br/>
+     });
+     <br/>
+     If(isWithTwo){
+     <br/>
+     $li.css(“background”,”green”)
+     <br/>
+     }else{
+     <br/>
+     $li.css(“background”,”red”)
+     <br/>
+     };
+     <br/>
+     })若当前li元素内有两个“strong”元素时，点击则为绿色；
+     <br/>
+     <br/>
+     54，map() 把每个元素通过函数传递到当前匹配集合中，生成包含返回值的新的 jQuery 对象
+     <br/>
+     $(“p”).append(
+     <br/>
+     $(“:checkbox”).map(function(){
+     <br/>
+     Returnthis.id;
+     <br/>
+     });
+     <br/>
+     );输出选框的id；
+     <br/>
+     <br/>
+     55，$(“ul”).nextUntil(“li”)    ul下的所有元素知道li；
+     <br/>
+     56，offsetParent()获得被定位的最近祖先元素。
+     <br/>
+     57，$(“p”).parentsUntil(“span”,”.yes”)选择p的类名为”.yes”父级元素知道“span”
+     <br/>
+     58.$(“p”).slice(0,2)选取的为第2个；
+     <br/>
+     59, $(selector).data(name,value)向name添加数据；
+     <br/>
+     60;function runIt(){
+     <br/>
+     $(“div”).show(1000);
+     <br/>
+     $(“div”).hide(1000);
+     <br/>
+     };
+     <br/>
+     runIt();循环播放；
+     <br/>
+     61，dequeue()方法为匹配元素执行序列中的下一个函数。
+     <br/>
+     ShowIt()表示一直显示，setTimeOut(showIt,100)表示没100毫秒更新次；
+     <br/>
+     62，get()方法获得由选择器指定的 DOM 元素。
+     <br/>
+     $(“button”).click(function(){
+     <br/>
+     X = $(“p”).get(0);
+     <br/>
+     $(“div”).text(x.nodeName+”:”+x.interHtml)
+     <br/>
+     });          表示P              p的内容；
+     <br/>
+     63，$(“span”,this)等于$(this).find(“span”)
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=jquery&amp;t=blog" target="_blank">
+    jquery
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=javascript&amp;t=blog" target="_blank">
+    javascript
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=css&amp;t=blog" target="_blank">
+    css
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=html&amp;t=blog" target="_blank">
+    html
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=动画&amp;t=blog" target="_blank">
+    动画
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1678189" target="_blank">
+    HTML和Javascript
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

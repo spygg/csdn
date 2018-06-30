@@ -1,0 +1,2247 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ITU-T G.1080 IPTV的体验质量(QoE)要求 (Quality of experience requirements for IPTV services) - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_274">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   ITU-T G.1080 IPTV的体验质量(QoE)要求 (Quality of experience requirements for IPTV services)
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月04日 16:46:37
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6443
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     IPTV的服务质量(QoE)要求 Quality of experience requirements for IPTV services
+    </p>
+    <p>
+     <strong>
+      Summary
+     </strong>
+    </p>
+    <p>
+     This Recommendation defines user requirements for Quality ofExperience for IPTV services. The QoE requirements are defined from an end userperspective and are agnostic to network deployment architectures and transportprotocols. The QoE requirements are specified
+ as end-to-end and information isprovided on how they influence network transport and application layerbehaviour. QoE requirements for video, audio, text, graphics, control functionsand meta-data are provided. Compression coding schemes addressed in this Recommendation
+ are examples,and detailed numeric values as performance targets, e.g. bit rate, packet lossrate, are also examples. The readers may appropriately choose or replace these parameters values in order to be consistent with therequirements of each IPTV service
+ context to which they are intended to be applied.
+    </p>
+    <p>
+     <strong>
+      Keywords
+     </strong>
+    </p>
+    <p>
+     IPTV, QoE, QoS
+    </p>
+    <p>
+    </p>
+    <p>
+    </p>
+    <h1>
+     1 范围 (Scope)
+    </h1>
+    <p>
+     This Recommendation defines userrequirements for Quality of Experience (QoE) for IPTV services. The QoErequirements are defined from an end-user perspective and are agnostic tonetwork deployment architectures and transport protocols. The QoE requirementsare
+ specified for the end-to-end service and information is provided on howthey influence network transport and application layer behaviour. Compression coding schemesaddressed in this Recommendation are examples, and detailed numeric values givenas performance
+ targets, e.g. bit rate, packet loss rate, are also examples. Thereaders mayappropriately choose or replace these parameters values in order to be consistent with therequirements of each IPTV service context to which they are intended to be applied.
+    </p>
+    <h1>
+     2  参考(References)
+    </h1>
+    <p>
+     The following ITU-T Recommendations and other references containprovisions which, through reference in this text, constitute provisions of thisRecommendation. At the time of publication, the editions indicated were valid.All Recommendations and other references
+ are subject to revision; users of thisRecommendation are therefore encouraged to investigate the possibility ofapplying the most recent edition of the Recommendations and other referenceslisted below. A list of the currently valid ITU-T Recommendations is
+ publishedregularly. The reference to a document within this Recommendation does not giveit, as a stand-alone document, the status of a Recommendation.
+    </p>
+    <p>
+    </p>
+    <p>
+     [ITU-TE.800]                        ITU-TRecommendation E.800 (1994),
+     <em>
+      Terms and Definitions Related to Quality ofService and Network Performance Including Dependability
+     </em>
+    </p>
+    <p>
+     [ITU-T F.700]                        ITU-TF.700 (2000),
+     <em>
+      Framework recommendation for multimedia services
+     </em>
+     ,
+    </p>
+    <p>
+     [ITU-T H.262]                        ITU-TRecommendation H.262 (2000),
+     <em>
+      Informationtechnology - Generic coding of moving pictures and associated audioinformation: Video
+     </em>
+    </p>
+    <p>
+     [ITU-TH.264]                      ITU-TRecommendation H.264 (2005),
+     <em>
+      Advanced video coding for generic audiovisualservices
+     </em>
+    </p>
+    <p>
+     [ITU-T P.10/G.100]               ITU-T Recommendation P.10/G.100, Amd 1 (2007), New
+     <em>
+      AppendixI, Definition of Quality of Experience (QoE)
+     </em>
+    </p>
+    <p>
+     [ITU-T P.800]                         ITU-TRecommendation P.800 (1996),
+     <em>
+      Methods for Subjective Determination of TransmissionQuality
+     </em>
+    </p>
+    <p>
+     [ITU-TT.140]                         ITU-TRecommendation T.140 (1998),
+     <em>
+      Protocol for Multimedia Application TextConversatio
+     </em>
+     n
+    </p>
+    <p>
+     [ITU-TY.1541]                      ITU-TRecommendation Y.1541 (2006),
+     <em>
+      Network Performance Objectives for IP-based Services
+     </em>
+    </p>
+    <p>
+     [ITU-R BT.500-11]                 Recommendation ITU-R BT.500-11 (2002),
+     <em>
+      Methodology for the subjective assessment of the quality of televisionpictures
+     </em>
+    </p>
+    <p>
+     [ITU-R BT.601-6]                   Recommendation ITU-R BT.601-6(2007),
+     <em>
+      Studio encoding parameters of digital television for standard 4:3and wide-screen 16:9 aspect ratios
+     </em>
+    </p>
+    <p>
+     [ITU-RBT.1359-1]                 RecommendationITU-R BT.1359-1 (1998),
+     <em>
+      Relativetiming of sound and vision for broadcasting
+     </em>
+    </p>
+    <h1>
+     3  定义(Definitions)
+    </h1>
+    <h2>
+     3.1        Termsdefined elsewhere
+    </h2>
+    <p>
+     This Recommendation uses the followingterms defined elsewhere:
+    </p>
+    <p>
+     <strong>
+      3.1.1    Quality of experience (QoE) [ITU-TP.10/G.100]:
+     </strong>
+     The overall acceptability of an application or service, as perceivedsubjectively by the end-user.
+    </p>
+    <p>
+     NOTE 1 – Quality ofExperience includes the complete end-to-end system effects (client, terminal,network, services infrastructure, etc.).
+    </p>
+    <p>
+     NOTE 2 – Overallacceptability may be influenced by user expectations and context.
+    </p>
+    <h2>
+     3.2        Terms defined in this recommendation
+    </h2>
+    <p>
+     This recommendation defines the followingterms:
+    </p>
+    <p>
+     <strong>
+      3.2.1    Channel zapping:
+     </strong>
+     The act of quickly changingfrom one channel to another
+    </p>
+    <p>
+     <strong>
+      3.2.2    Group of Pictures:
+     </strong>
+     The Group ofPictures (GOP) is a group of successive pictures within a MPEG-coded filmand/or video stream. Each MPEG-coded film and/or video stream consists ofsuccessive GOPs. From the MPEG pictures contained in
+ it, the visible frames aregenerated.
+    </p>
+    <p>
+     <strong>
+      3.2.3    VoD Trick Modes:
+     </strong>
+     Download and streamingvideo on demand (VoD) systems provide the user with a large subset of
+     <a href="http://en.wikipedia.org/wiki/Video_cassette_recorder" title="Video cassette recorder">
+      <span style="color:#000000;">
+       VCR
+      </span>
+     </a>
+     functionality
+ including
+     <a href="http://en.wikipedia.org/wiki/Pause" title="Pause">
+      <span style="color:#000000;">
+       pause
+      </span>
+     </a>
+     ,
+     <a href="http://en.wikipedia.org/wiki/Fast_forward" title="Fast forward">
+      <span style="color:#000000;">
+       fast forward
+      </span>
+     </a>
+     , fast
+     <a href="http://en.wikipedia.org/wiki/Rewind" title="Rewind">
+      <span style="color:#000000;">
+       rewind
+      </span>
+     </a>
+     , slow forward, slow rewind, jump toprevious/future frame etc. These functions are usually referred to as"trick modes".
+    </p>
+    <p>
+     <strong>
+      3.2.4    Triple Play Services:
+     </strong>
+     Services that include IPTV, VoIP, andInternet Access
+    </p>
+    <p>
+     <strong>
+      3.2.5   Clean Audio:
+     </strong>
+     Audiotrack of an IPTV Service with background sounds removed.
+    </p>
+    <h1>
+     4  缩写和首字母缩略词(Abbreviationsand acronyms)
+    </h1>
+    <p>
+     This Recommendation uses the following abbreviations and acronyms:
+    </p>
+    <p>
+     AAC              Advanced Audio Coding 高级音频编码
+    </p>
+    <p>
+     AC-3               Dolby Digital Audio (Advanced Codec 3)AC-3杜比数字音频
+    </p>
+    <p>
+     ARQ               Automatic Repeat reQuest 自动重发请求
+    </p>
+    <p>
+     ATIS               Alliancefor Telecommunications Industry Solutions
+    </p>
+    <p>
+     ATSC             Advanced Television Systems Committee 先进电视系统委员会
+    </p>
+    <p>
+     A/V                 Audio Video 音频视频
+    </p>
+    <p>
+     AVC               Advanced Video Codec 高级视频编解码器
+    </p>
+    <p>
+     AVS                Audio and Video coding Standard (Chinese) AVS音视频编码标准（中国）
+    </p>
+    <p>
+     BER                Bit Error Rate 误比特率
+    </p>
+    <p>
+     BML               Broadcast Markup Language
+    </p>
+    <p>
+     CBR                Constant Bit Rate
+    </p>
+    <p>
+     CPU                Central Processing Unit
+    </p>
+    <p>
+     DCT                Discrete Cosine Transform
+    </p>
+    <p>
+     DSCQS           Double Stimulus Continuous Quality Scale
+    </p>
+    <p>
+     DSL                Digital Subscriber Line
+    </p>
+    <p>
+     DVB               Digital Video Broadcast
+    </p>
+    <p>
+     DVD               Digital Video Disk
+    </p>
+    <p>
+     ECG                Electronic Content Guide
+    </p>
+    <p>
+     EPG                Electronic Program Guide
+    </p>
+    <p>
+     FEC                 ForwardError Correction
+    </p>
+    <p>
+     FFW                FastForWard
+    </p>
+    <p>
+     fps                   framesper second
+    </p>
+    <p>
+     GOP                Groupof Pictures
+    </p>
+    <p>
+     GWR               GateWayRouter
+    </p>
+    <p>
+     HDTV             HighDefinition TeleVision
+    </p>
+    <p>
+     HG                 HomeGateway
+    </p>
+    <p>
+     HTML             HyperTextMarkup Language
+    </p>
+    <p>
+     IETF                TheInternet Engineering Task Force
+    </p>
+    <p>
+     IGMP              InternetGroup Management Protocol
+    </p>
+    <p>
+     IGP                 InteractiveGateway Protocol
+    </p>
+    <p>
+     IPG                 InteractiveProgram Guide
+    </p>
+    <p>
+     ITU-R
+     <a href="http://rds.yahoo.com/_ylt=A0oGklmxx6lGiyMAb11XNyoA;_ylu=X3oDMTE4NDNrazgxBHNlYwNzcgRwb3MDMgRjb2xvA3NrMQR2dGlkA0Y5NzRfODYEbANXUzE-/SIG=117sc7iep/EXP=1185618225/**http%3A/www.itu.int/">
+      <span>
+       InternationalTelecommunication Union
+      </span>
+     </a>
+     RadiocommunicationSector
+    </p>
+    <p>
+     ITU-T
+     <a href="http://rds.yahoo.com/_ylt=A0oGklmxx6lGiyMAb11XNyoA;_ylu=X3oDMTE4NDNrazgxBHNlYwNzcgRwb3MDMgRjb2xvA3NrMQR2dGlkA0Y5NzRfODYEbANXUzE-/SIG=117sc7iep/EXP=1185618225/**http%3A/www.itu.int/">
+      <span>
+       InternationalTelecommunication Union
+      </span>
+     </a>
+     TelecommunicationStandardization Sector
+    </p>
+    <p>
+     IP                    InternetProtocol
+    </p>
+    <p>
+     IPTV               InternetProtocol TeleVision
+    </p>
+    <p>
+     MOS               MeanOpinion Score
+    </p>
+    <p>
+     MP                  MeasuredPoint
+    </p>
+    <p>
+     MP-3               MPEG-1Audio Layer 3
+    </p>
+    <p>
+     MPEG             MovingPictures Expert Group
+    </p>
+    <p>
+     MPLS              MultiProtocolLabel Switching
+    </p>
+    <p>
+     NICAM          NearInstantaneous Companded Audio Multiplex
+    </p>
+    <p>
+     NTSC              NationalTelevision Standards Committee
+    </p>
+    <p>
+     PAL                PhaseAlternating Line
+    </p>
+    <p>
+     PC                   PersonalComputer
+    </p>
+    <p>
+     PDV                PacketDelay Variation
+    </p>
+    <p>
+     PHB                Per-Hop Behaviour
+    </p>
+    <p>
+     PLR                 Packet Loss Ratio
+    </p>
+    <p>
+     PTD                 PacketTransfer Delay
+    </p>
+    <p>
+     QoE                 Qualityof Experience
+    </p>
+    <p>
+     QoS                 Qualityof Service
+    </p>
+    <p>
+     RFC                RequestFor Comments
+    </p>
+    <p>
+     SDH                SynchronousDigital Hierarchy
+    </p>
+    <p>
+     SDTV              StandardDefinition TeleVision
+    </p>
+    <p>
+     SECAM          SEquentielCouleur A Mémoire, French for "Sequential Color with Memory"
+    </p>
+    <p>
+     SMPTE           Societyof Motion Picture and Television Engineers
+    </p>
+    <p>
+     SONET           SynchronousOptical NETwork
+    </p>
+    <p>
+     STB                 Set-TopBox
+    </p>
+    <p>
+     TS                    TransportStream
+    </p>
+    <p>
+     VBR                VariableBit Rate
+    </p>
+    <p>
+     VoD                Video on Demand
+    </p>
+    <p>
+     VoIP               Voice over IP
+    </p>
+    <p>
+     VCR                Video Cassette Recorder
+    </p>
+    <h1>
+     5  介绍QoE (Introduction to QoE)
+    </h1>
+    <p>
+     QoE is defined in [ITU-T P.10/G.100] in Appendix I as the overallacceptability of an application or service, as perceived subjectively by theend-user. It includes the complete end-to-end system effects (client, terminal,network, services infrastructure,
+ etc) and may be influenced by userexpectations and context. Hence in principle, QoE is measured subjectively by the end-user and may differ from oneuser to the other. However, it is often estimated using objective measurements.
+    </p>
+    <p>
+     Differencesin perceptual acuity and preference mean that QoE judgments obtained fromdifferent people may vary.  Therefore,measurements of QoE are generally made using group data.  Where the necessary studies have been done tocalibrate the relationship with
+ QoE, it may also be estimated using objectivemeasurements.
+    </p>
+    <p>
+     A numberof system performance characteristics contribute to QoE of the mediastream.  For example, the codec and theencoding bit rate used, media resolution in the source and at the display,corruption or loss of information, and delay. Interactions among
+ video content,the codec and bit rate used, and the specific bits corrupted and/or packetslost contribute to a high variability in the perceived quality of the videooutput.
+     <span style="color:#800080;">
+     </span>
+    </p>
+    <p>
+     There are additional factors that can influence the viewer's response.  Some of these affect the perception ofquality, such as the context of the judgment (a particular image will be ratedone way in the context of standard definition TV (SDTV), another in
+ the contextof high definition TV (HDTV), and still differently in the context of a videoclip on Internet), cultural background, motivation, attention related factors,emotional state, and so on.  (Directevaluations of QoE are designed to exclude these factors,
+ since they are notgenerally under the control of a network operator and so do not contribute toequipment requirements.)
+    </p>
+    <p>
+     Other factors influence the viewer's judgment of acceptability.  These include things like previous experiencewith the specific communication mode or related modes (for instance, experiencewith DVD quality will influence how acceptable one finds IPTV or
+ VoD), how muchone is paying for the service, and what special benefits the service provides(mobility, time independence, exceptionally large program library), and soon.
+    </p>
+    <p>
+     Acceptability is not equivalent toQoE.  A low resolution video image willhave a lower QoE than a high resolution image, but it may be completelyacceptable for certain applications and services, depending on the end device,the physical size of the display,
+ and the purpose for which it is being used.
+    </p>
+    <p>
+     Figure 5-1 shows factors contributing to QoE. These factors areorganised as those related to quality of service and those that can beclassified as human components.
+    </p>
+    <p>
+     QoE for video is often measured via carefully controlled subjectivetests [b ITU-R BT.500-11], [ITU-T P.800], where video samples are played toviewers, who are asked to rate them on a scale, typically consisting of fivepoints. The rating assigned to each
+ case are averaged together to yield a meanrating or mean opinion score (MOS).
+    </p>
+    <p>
+     Quality of service (QoS, see ITU-T E.800) involves the totality ofcharacteristics of a telecommunications service that bear on its ability tosatisfy stated and implied needs of the user of the service. In general,network performance is a major component
+ of QoS, and so network mechanisms forQoS are an important consideration. QoS mechanisms include any mechanism thatcontributes to improvement of the overall performance of the system and henceto improving end-user experience. QoS mechanisms can be implemented
+ atdifferent levels. For example at the network level it includes trafficmanagement mechanisms such as buffering and scheduling employed todifferentiate between traffic belonging to different applications. QoSmechanisms at levels other than the transport include
+ loss concealment,application forward error correction (FEC), etc.
+    </p>
+    <p>
+     Related to QoS are the QoS performance parameters. Similar to theQoS mechanisms QoS parameters can be defined for different layers. At thenetwork layer those parameters usually include packet loss rate, delay anddelay variation.
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131104153707843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" style="font-weight:bold;"/>
+     <span style="font-weight:bold;">
+     </span>
+    </p>
+    <p style="text-align:center;">
+     Figure 5-1/G.1080 - QoE Dimension
+    </p>
+    <p>
+     Note that in this Figure, service billingrelates to the “value for money” perceived by the user for the particularservice.
+    </p>
+    <p>
+     Typicallythere will be multiple service level performance (QoS) metrics that impactoverall QoE. Thereare a number of service level performance characteristics (that is, objectiveparameters of service performance such as encoding bit rate, packet loss, delay,availability,
+ etc.) that affect QoE.  Ingeneral, these are correlated with QoE as measured by the MOS. The relation between QoE andservice performance (QoS) metrics is typically estimated empirically.  Having identified the QoE/QoS relationship,it can be used in two ways:
+    </p>
+    <ol start="1" type="a">
+     <li>
+      Given a QoS measurement, one could in principle predict the expected QoE for a user, with appropriate assumptions.
+     </li>
+     <li>
+      Given a target QoE for a user, one could in principle deduce the net required service layer performance, with appropriate assumptions.
+     </li>
+    </ol>
+    <p>
+     Toensure that the appropriate service quality is delivered, QoE targets should beestablished for each service and be included early on in system design andengineering processes where they are translated into objective service levelperformance metrics. Quality
+ of Experience will be an important factor in themarketplace success of triple-play services and is expected to be a keydifferentiator with respect to competing service offerings.  Subscribers to network services do not carehow service quality is achieved. 
+ Whatmatters to them is how well a service meets their expectations foreffectiveness, operability, availability, and ease of use.
+    </p>
+    <h1>
+     6  视频和音频的QoE (QoE for video and audio)
+    </h1>
+    <p>
+     QoE requirements for video and audiomay be based on QoE scales such as the Mean Opinion Score (MOS) and DoubleStimulus Continuous Quality Scale (DSCQS) [b ITU-RBT.500-11]. However,conducting subjective tests is difficult because they are time consuming andexpensive.
+ Moreover, reliable objective quality assessment methods have notbeen established for transmitted video and audio. Therefore, this clauseprovides provisional QoE requirements on the basis of the objective parametersthat are correlated to the subjective QoE.
+    </p>
+    <p>
+     This Recommendation addresses QoEtargets and shows how to express QoE requirements in the context of numericalparameters such as bit rate or packet loss rate. The process of determining QoEperformance targets  must consider anumber of issues for example:
+ the purpose of the IPTV service, QoE level of thecurrent broadcasting systems (which sets user expectation), compression codingscheme to be used for the service, content characteristics, content provider requirements,customer satisfactions. While the requirement
+ values shown in the tables in thisclause are NOT generically applicable to any specific or all IPTV services,they are to be understood as provisional values which are subject to change. Readersof this Recommendation are invited to replace the numerical values
+ shown in the tables in this clause withappropriate ones that conform to the requirements required by a specific  IPTV service context.
+    </p>
+    <h2>
+     6.1        媒体压缩和同步要求 Requirements for media compression and synchronization
+    </h2>
+    <p>
+     One of the main components of QoE for video and audio is digitization andcompression of video and audio source materials and the various settings andparameters selected. Since video compression schemes such as those defined bythe Moving Picture Expert Group
+ (MPEG) are not lossless and an identical copyof the original source material cannot be recovered, there are potentiallynegative impacts on video picture quality and therefore on viewer QoE. The mainfactors influencing video QoE at the application layer due
+ to compression are:
+    </p>
+    <p>
+    </p>
+    <p>
+     • Quality of source material
+    </p>
+    <p>
+     – the quality of the delivered mediadepends on the quality of the source material.
+    </p>
+    <p>
+     • The baseline quality (no network impairments) of the codec.
+    </p>
+    <p>
+     Note: A partial list of video codecs is provided in Appendix II.
+    </p>
+    <p>
+    </p>
+    <p>
+     • Resolution
+    </p>
+    <p>
+     – Some systems reduce the horizontal resolution to achieve the target bitrates, for example in standard definition television (SDTV) the resolutionmaybe reduced to ‘Half’ or “Three Quarters” which produces a less sharp picturethan ‘Full’ resolution
+    </p>
+    <p>
+    </p>
+    <p>
+     • Bit rate
+    </p>
+    <p>
+     – During periods of high complexity (entropy) compression may leave visibleartefacts if the bit rate is not sufficient
+    </p>
+    <p>
+    </p>
+    <p>
+     • Application layer video encoding - constant bit rate (CBR) vs. variable bitrate (VBR) at the encoder output
+    </p>
+    <p>
+     – Video encoding is naturally variable bit rate but to simplify networkengineering for Telco delivery systems, the video encoders are set to provide aconstant bit rate (as averaged over some specified time period in the order ofseconds).
+    </p>
+    <p>
+     – VBR streams such as those used in DVD encoding have constant qualitysince the bit rate is allowed to vary to accommodate varying complexity of thesource material
+    </p>
+    <p>
+     – CBR streams have variable quality since there may be times when the bitrate is insufficient to accommodate the video complexity but CBR steams allowstraightforward traffic engineering and system design
+    </p>
+    <p>
+    </p>
+    <p>
+     • Group of Pictures (GOP) structure
+    </p>
+    <p>
+     –Shorter GOPs improve quality in terms of performance of random accessibilityand error recovery, but reduce the maximum compression ratio.
+    </p>
+    <p>
+     –Longer GOPs improve maximum compression ratio, but increase channel change timeand the amount of damage a lost packet will cause.
+    </p>
+    <p>
+     –Dynamic GOPs can be used to better handle scene changes and other effects butare not always implemented on STBs. In addition, dynamic GOPs can causevariability in zapping latency and may complicate mechanisms intended toincrease zapping speed.
+    </p>
+    <p>
+     • Motion Vector Search Range
+    </p>
+    <p>
+     - Wider searches provideimproved quality but at increased complexity and encoder delay
+    </p>
+    <p>
+     - Large search ranges arerequired for high motion content such as sports
+    </p>
+    <p>
+     • Rate Control
+    </p>
+    <p>
+     - Mode decisions greatly affectthe bit rate
+    </p>
+    <p>
+     - Proprietary schemes arecommonly used to gain competitive advantage
+    </p>
+    <p>
+     • Pre-processing (such as noise reduction)
+    </p>
+    <p>
+     – Usually proprietary and non-standard butcan improve bit rate / quality trade-off
+    </p>
+    <p>
+     • Tandem encoding and rate shaping (e.g. digital turnaround)
+    </p>
+    <p>
+    </p>
+    <p>
+     <em>
+      Video Compression Artefact Examples
+     </em>
+    </p>
+    <p>
+     Figure 6-１ illustratesseveral kinds of compression artefacts that are largely due to insufficientbits allocated resulting in too coarse quantization of DCT coefficients ormotion vectors and/or otherwise poor motion estimation. Additionional detailsof compression
+ artefacts may be found in [b
+     <span style="color:#333333;">
+      NTIA264
+     </span>
+     ].
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131104153712250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p align="center">
+    </p>
+    <p style="text-align:center;">
+     Figure 6-1/G.1080 - Compression Artefacts
+     <a title="">
+      <span style="color:#000000;">
+       [1]
+      </span>
+     </a>
+     ]
+    </p>
+    <p>
+     <strong>
+     </strong>
+    </p>
+    <p>
+     Similarly, there are similar parameter implications on the audio side.
+    </p>
+    <p>
+     Note: A partial list of audio codecs is provided in Appendix II
+    </p>
+    <p>
+    </p>
+    <p>
+     In additionto the separate audio and video application layer impairments, thesynchronization between audio and video components must be maintained to ensuresatisfactory QoE. There has been a great deal of research on A/Vsynchronization requirements in video
+ conferencing and analogue broadcastsystems and specifications in such bodies as ITU-R [b ITU-RBT.1359-1].
+    </p>
+    <p>
+     Because audio that appears before video is very unnatural (sound takeslonger to propagate than light so sound lagging visual is normal) some bodiesspecifying television specific A/V synchronization have recommended tightertolerances than typically used for
+ video conferencing applications.
+    </p>
+    <p>
+    </p>
+    <p>
+     Recommended provisional minimum engineering objectives for applicationlayer, data plane parameters are presented in the following sub- clauses forvarious video services.
+    </p>
+    <p>
+    </p>
+    <p>
+     Note: Appendix III provides supplementary information related to thefollowing sub-clauses.
+    </p>
+    <p>
+    </p>
+    <h3>
+     6.1.1     标清电视：一般最低要求 Standard definition TV (SDTV):General minimum objectives
+    </h3>
+    <p>
+    </p>
+    <p>
+     Table 6-1 provides provisional video application layer performanceobjectives at the MPEG elementary stream level, prior to IP encapsulation forbroadcast SDTV (480i / 576i). The objectives for audio elementary stream bitrates are additionally specified below.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-1/G.1080 - Provisional Application LayerPerformance requirements for Standard Definition Broadcast Program Sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0" width="656">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          Video Codec standard
+         </strong>
+        </p>
+        <p>
+         <strong>
+          (non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Minimum Bit Rate (video elementary stream level)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Pre-processing Enabled
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         H.262 - Main profile at Main level (MP@ML)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         2.5 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         H.264 (Main profile at Level 3.0)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         1.75 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         SMPTE 421M
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         1.75 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         AVS
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         1.75 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+     <strong>
+     </strong>
+    </p>
+    <p>
+     Table 6-2 provides provisional audio application layer performance requirementsfor standard definition audio sources.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-2/G.1080 - Provisional Audio Application LayerPerformance requirements for Standard Definition Sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          Audio Codec Standard
+         </strong>
+        </p>
+        <p>
+         <strong>
+          (Non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Number of Channels
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Minimum Bit Rate (audio elementary stream level, in kbit/s)
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         MPEG-1 Audio Layer II
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Mono or stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         128 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         Dolby Digital (AC-3)
+        </p>
+       </td>
+       <td valign="top">
+        <p>
+         5.1 if available, else
+        </p>
+        <p align="center">
+         left/right stereo pair
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         384 for 5.1ch / 128 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         AAC
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         96 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         MPEG-1 Audio Layer III (MP3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         128
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         MPEG-2 Audio Layer III (MP3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         For further study
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+     <em>
+     </em>
+    </p>
+    <p>
+     In general, audio codecs chosen should align with industry standards in thegeography of deployment to ensure maximum compatibility with consumerreceivers. Bit rates should be aligned with original source material qualityand transcoding between formats should
+ be avoided if possible.
+    </p>
+    <p>
+    </p>
+    <p>
+     Table 6-3 provides provisional audio-video synchronization requirements.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-3/G.1080 - Provisional SDTV Audio – VideoSynchronization Requirement
+     </strong>
+    </p>
+    <div align="center">
+     <table align="center" border="1" cellpadding="0" cellspacing="0">
+      <tbody>
+       <tr>
+        <td rowspan="2" valign="top">
+         <p>
+          Audio – Video
+         </p>
+         <p>
+          Synchronization
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Audio Lead Video
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          Audio Lag Video
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          15 ms maximum
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          45 ms maximum
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p align="center">
+    </p>
+    <p>
+     Inconsistent loudness levels between channels can negatively impact QoE. Itis recommended that equipment be used in the service provider head-end toensure similar loudness levels across the range of channels provided to theuser.
+    </p>
+    <p>
+    </p>
+    <p>
+     Another audio quality issue beyond the scope of this document is thedynamic range compression for links between the STB and TV.
+    </p>
+    <h3>
+     6.1.2     标清电视：点播和优质内容的要求 Standard definition (SD) TV: VoD and PremiumContent Objectives
+    </h3>
+    <p>
+     Video on demand (VoD) and other premium content such as pay per view instandard definition format will have similar application layer performance factorsas regular broadcast materials. However, subscriber expectation may be higherbecause of additional fees
+ paid to access the content and comparison toalternative delivery options. In the case of VoD, users may compare to VoDmaterials delivered over digital cable systems or even contained in DVDs.
+    </p>
+    <p>
+    </p>
+    <p>
+     Table 6-4 provides recommended video encoding bit rates for standarddefinition, VoD and other premium content.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+     </strong>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-4/G.1080 - Provisional ApplicationLayer Performance requirements for H.262 Standard Definition VoD and PremiumProgram Sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p align="left">
+         <strong>
+          Video Codec standard
+         </strong>
+        </p>
+        <p align="left">
+         <strong>
+          (Non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         <strong>
+          Minimum Bit Rate (video elementary stream level)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         <strong>
+          Pre-processing Enabled
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p align="left">
+         H.262 - Main profile at Main level (MP@ML)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         3.18 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p align="left">
+         H.264 (Main profile at Level 3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         2.1 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p align="left">
+         SMPTE 421M
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         2.1 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p align="left">
+         AVS
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         2.1 Mbits/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="left">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+    </p>
+    <p>
+     Table 6-5 provides provisional recommended audio codec bit rates for VoDand premium content.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-5/G.1080 - Provisional Audio Application LayerPerformance for VoD and Premium Standard Definition sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          Audio Codec Standard
+         </strong>
+        </p>
+        <p>
+         <strong>
+          (non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Number of Channels
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Minimum Bit Rate (audio elementary stream level, in kbit/s)
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         Dolby Digital (AC-3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         5.1 if available, else
+        </p>
+        <p align="center">
+         left/right stereo pair
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         384 for 5.1ch / 192 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         AAC
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         5.1 if available, else
+        </p>
+        <p align="center">
+         left/right stereo pair
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         384 for 5.1ch / 192 for stereo
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+     <strong>
+     </strong>
+    </p>
+    <h3>
+     6.1.3     高清电视 High definition TV (HDTV):
+    </h3>
+    <p>
+    </p>
+    <p>
+     Table 6-6 provides provisional video application layer performanceobjectives for broadcast HDTV (720p / 1080i).
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-6/G.1080 - Provisional Application LayerPerformance requirements for High Definition (HD) Broadcast Program Sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          Video Codec standard
+         </strong>
+        </p>
+        <p>
+         <strong>
+          (non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Minimum Bit Rate (video elementary stream level)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Pre-processing Enabled
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         H.262 - Main profile at Main level (MP@ML)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         15 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         H.264 (Main profile at Level 4)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         10 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         SMPTE 421M
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         10 Mbit/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         AVS
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         10 Mbits/s CBR
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Yes (if available)
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+    </p>
+    <p>
+     Table 6-7 provides provisional audio application layer performance requirementsfor high definition audio sources.
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <strong>
+      Table 6-7/G.1080 - Provisional MinimumAudio Application Layer Performance requirements for High Definition Sources
+     </strong>
+    </p>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr>
+       <td valign="top">
+        <p>
+         <strong>
+          Audio Codec standard
+         </strong>
+        </p>
+        <p>
+         <strong>
+          (non-inclusive list)
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Number of Channels
+         </strong>
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         <strong>
+          Minimum Bit Rate
+         </strong>
+        </p>
+        <p align="center">
+         <strong>
+          (Audio elementary stream level, in kbit/s)
+         </strong>
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         MPEG-1 Audio Layer II
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Mono or stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         128 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         Dolby Digital (AC-3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         5.1 if available, else
+        </p>
+        <p align="center">
+         left/right stereo pair
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         384 for 5.1ch /
+        </p>
+        <p align="center">
+         128 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         AAC
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         5.1 if available, else left/right stereo pair
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         384 for 5.1ch /
+        </p>
+        <p align="center">
+         128 for stereo
+        </p>
+       </td>
+      </tr>
+      <tr>
+       <td valign="top">
+        <p>
+         MPEG-1/2 Audio Layer III(MP3)
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         Stereo
+        </p>
+       </td>
+       <td valign="top">
+        <p align="center">
+         128
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <p>
+     <em>
+     </em>
+    </p>
+    <h2>
+     6.2       网络传输性能的影响 Impactof network transmission on performance
+    </h2>
+    <p>
+     Key criteria for network transmission include loss, latency and jitter (seeAppendix I). In general, reasonable end-to-end delay and jitter values are notproblematic due to STB de-jitter buffers, provided the de-jitter buffer size isprovisioned to match network
+ and video element performance. Video streamshowever are highly sensitive to information loss and the QoE impact is in turncorrelated to a number of variables including:
+    </p>
+    <ul type="disc">
+     <li>
+      Highly dependent on type of data lost
+     </li>
+    </ul>
+    <p>
+     -         System information and header lossesproduce different impairments
+    </p>
+    <p>
+     -         Lost data from I and P frames producedifferent impairments than B frame packet losses due to temporal errorpropagation
+    </p>
+    <ul type="disc">
+     <li>
+      Dependent on codec used
+     </li>
+     <li>
+      Dependent on MPEG transport stream packetization used
+     </li>
+     <li>
+      Loss distance and loss profile
+     </li>
+     <li>
+      With high encoding bit rates, the stream is more vulnerable to packet loss impairments
+     </li>
+    </ul>
+    <p>
+     -         For the same packet loss ratio,impairments due to loss on a higher rate video stream occur more frequently(i.e. there are more visible errors per unit time) simply because there aremore packets per second transmitted and each one has the same probability
+ to beaffected.
+    </p>
+    <ul type="disc">
+     <li>
+      Decoder concealment algorithms can mitigate perceptual impact of some losses.
+     </li>
+    </ul>
+    <p>
+    </p>
+    <p>
+     An error or sequence of errors in a video bit stream can cause effectsranging from no noticeable audio or video impact to the user to complete lossof the video or audio signal depending on what was lost and the robustness ofthe implementation.
+    </p>
+    <p>
+    </p>
+    <p>
+     Appendix IV provides additional information as to how transmissionimpairments can affect quality.
+    </p>
+    <p>
+    </p>
+    <p>
+    </p>
+    <p>
+     The video application should be able to operate normally in the presence ofnormal operational defects. One such normal operational consideration is theoperation of protection switching mechanisms in the network. SONET/SDHprotection switching mechanisms may
+ result in a potential packet loss duration inthe order of, for example, 50ms. For some other protection mechanisms (e.g.MPLS fast reroute, fast IGP convergence) the potential packet loss duration canbe longer, for example, on the order of 250ms. Service providers
+ are encouragedto add mechanisms to minimize or eliminate the visible effect of suchprotection mechanisms as these events cascade to a large number of subscribers.
+    </p>
+    <p>
+    </p>
+    <p>
+     Considering some other protection mechanisms the potential packet lossduration can be longer. For example, a complete reconvergence of the IP (IGP) routingtable would imply potential packet loss bursts in the order of 30 sec. An IPTVsystem would not be expected
+ to maintain normal service through such an event.Such events can be considered a service outage rather than an in servicequality defect.
+    </p>
+    <p>
+    </p>
+    <p>
+     The goal is to minimize visible artefacts to as few as possible using acombination of network performance requirements, loss recovery mechanisms (e.g.FEC, interleaver) and loss mitigation mechanisms (e.g. decoder lossconcealment).
+    </p>
+    <p>
+     <span style="color:#0000FF;">
+     </span>
+    </p>
+    <h1>
+     7  文字和显示的QoE (QoE for text and graphics)
+    </h1>
+    <p>
+     Informationin this clause is taken from [ITU-T F.700].
+    </p>
+    <h2>
+     7.1        Media component text
+    </h2>
+    <h3>
+     7.1.1     定义 Definition
+    </h3>
+    <p>
+     The media component text allows for the capture and representation of information,its transfer from originating user(s) to destination user(s), its presentation to human user(s), processing, filing and retrieval.
+    </p>
+    <h3>
+     7.1.2     描述 Description
+    </h3>
+    <h4>
+     7.1.2.1      General description
+    </h4>
+    <p>
+     Textis a representation medium consisting of formatted characters. It is stored andtransmitted as a sequence of codes. Although it may be displayed on the samescreen as video and still pictures, it requires decoding into specific fontsfor presentation to
+ the user, whether on the screen or on paper. The input isthrough a keyboard. The output may be presented by a printer or on a screen.
+    </p>
+    <p>
+     Thefollowing levels of quality are defined:
+    </p>
+    <p>
+     T0:        minimum quality, basic alphabet andpunctuation, no formatting or choice of font;
+    </p>
+    <p>
+     T0
+     <em>
+      bis
+     </em>
+     :   videotex quality, basic alphabet andpunctuation, basic graphic character set, no formatting or choice of font;
+    </p>
+    <p>
+     T1:        Usable text conversation qualitycharacterized by:
+    </p>
+    <p>
+     ·        Font support for [b_ISO-10646] Languagearea Latin-1 plus the target language area for the implementation.
+    </p>
+    <p>
+     ·        No more than 1 corrupted,dropped or marked missing character per 100.
+    </p>
+    <p>
+     ·        Delay from character input inthe transmitter to display in the receiver shorter than 2 s.
+    </p>
+    <p>
+     T2:        Good text conversation qualitycharacterized by:
+    </p>
+    <p>
+     ·        Font support for all charactersin [b_ISO-10646].
+    </p>
+    <p>
+     ·        No more than 1 corrupted,dropped or marked missing character per 500.
+    </p>
+    <p>
+     ·        Delay from character input inthe transmitter to display in the receiver shorter than 1 s.
+    </p>
+    <h4>
+     7.1.2.2      Additional facilities
+    </h4>
+    <p>
+     Theuser may be given control over text through editing and presentation functions.He may also be able to insert graphics, still pictures or animated pictures withinthe text.
+    </p>
+    <h4>
+     7.1.2.3      Requirements forvarious audiovisual services
+    </h4>
+    <p>
+     Whentext is for the support of conversational services, the timing aspects of textentry and display are critical. Text may be transmitted and displayed in nearreal time, as text is entered. It may also be transmitted only after specificend-of-sentence action
+ or on a specific send request. In a conversation betweentwo users, the near real-time conversation is important for optimized benefitof the conversation. For multi-user conferences, a sentence based transmissionmay be more relevant in an open discussion, while
+ for a subtitled speech, thereal-time text transmission is preferred.
+    </p>
+    <p>
+     Forretrieval services, it may be accepted to transmit and display a whole page oftext in one operation.
+    </p>
+    <p>
+     Forconversation, editing may be reduced to "new line", "erase lastcharacter", while the editing for information retrieval should contain apossibility to replace text anywhere on the page and add various formattingeffects to any part of text. Annotations
+ that stand out distinctly are alsodesirable.
+    </p>
+    <p>
+     The levels of text qualityrequired for various services are the following (marked by X):
+    </p>
+    <p align="center">
+     <strong>
+      Table 7-1/G.1080 - Levels of TextRequirements
+     </strong>
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0">
+      <tbody>
+       <tr>
+        <td rowspan="2" valign="top">
+         <p>
+          Service
+         </p>
+        </td>
+        <td colspan="4" valign="top" width="302">
+         <p>
+          Quality level
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          T0
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          T0
+          <em>
+           bis
+          </em>
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          T1
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          T2
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Telex
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Videotex
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Text telephony
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Total Conversation
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Messaging services
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          Retrieval services
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+        <td valign="top">
+         <p align="center">
+          X
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+     <strong>
+     </strong>
+    </p>
+    <h3>
+     7.1.3     质量方面 Quality Aspects
+    </h3>
+    <p>
+     Thequality of text depends mainly upon the capabilities for formatting and usingdifferent types of fonts and special characters. When no error correction ismade, for instance in conversation, text quality is also measured in terms ofcorrupted characters,
+ dropped characters and characters replaced by the missingtext marker [ITU-T T.140].
+    </p>
+    <h3>
+     7.1.4     Intercommunication
+    </h3>
+    <p>
+     Thecharacters with their formatting may be decoded and assembled into bit mapswhich can then be handled as still pictures, e.g. as facsimile pages.
+    </p>
+    <h2>
+     7.2        Media component graphics
+    </h2>
+    <h3>
+     7.2.1     定义 Definition
+    </h3>
+    <p>
+     Themedia component graphics allows for the capture and representation of information,its transfer from originating user(s) to destination user(s), its presentation to human user(s), processing, filing and retrieval. This media component allowsgraphic pictures
+ to be captured and transmitted as geometrical objects whosepositions, shapes and colours are coded so that they can be reproduced in adistant terminal.
+    </p>
+    <h3>
+     7.2.2     描述 Description
+    </h3>
+    <h4>
+     7.2.2.1      General description
+    </h4>
+    <p>
+     Graphicsis a representation medium consisting of geometrical objects featured by theirpositions, shapes and colours. It is stored and transmitted as a set of codesand parameters. Although it may be displayed on the same screen as video andstill pictures,
+ it requires decoding into specific geometrical figures forpresentation to the user, whether on a screen or on paper.
+    </p>
+    <p>
+     Theinput may be through a graphics tablet, an electronic pencil, some other two‑dimensionaltransducer or dedicated graphic software on a microcomputer or workstation. Theoutput device may be a printer or a screen.
+    </p>
+    <h3>
+     7.2.3     Quality aspects
+    </h3>
+    <p>
+     Theintrinsic quality of the graphic depends on the number and the complexity ofthe objects that can be generated, the precision of their dimensions andpositions, the number of possible colours. The overall quality perceived by theuser depends also on the
+ resolution of the input and output systems.
+    </p>
+    <h3>
+     7.2.4     Intercommunication
+    </h3>
+    <p>
+     Thegraphic objects may be decoded and assembled into bit maps which can then behandled as still pictures.
+    </p>
+    <h1>
+     8  控制功能的QoE (QoE for control functions)
+    </h1>
+    <h2>
+     8.1      频道切换时间的QoE要求 QoE requirements for channel zapping time
+    </h2>
+    <p>
+     Channelzapping time (channelswitching time) hasstrong relationship with end user experience of service quality. Generally, itis primarily determined by the time required to have a proper frame at the STBto start decode processing for the new channel. Channel
+ zapping requests canoccur when
+    </p>
+    <p>
+     -       Meta datarequest in EPG or IPG
+    </p>
+    <p>
+     -       Random selecting channel by entering channel numberusing remote control
+    </p>
+    <p>
+     -       ChannelUp/Down button using remote control
+    </p>
+    <p>
+     -       Channel Up/Down button using STB front panel
+    </p>
+    <p>
+     -       Selecting a channel on IPG application menu
+    </p>
+    <p>
+     -       Powering on STB/TV and tuning to initial channelassigned by IPG
+    </p>
+    <p>
+     Asa QoEparameter, channel zapping time can be described by three components: IGMPdelay, buffering delay, and decoding delay, as shown in the Figure below (notethat the timings are not necessarily to scale).
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131104153715953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p align="center">
+    </p>
+    <p align="center">
+     <strong>
+      Figure 8-1/G.1080 - Components that contributeto Channel Zapping Time
+     </strong>
+    </p>
+    <p align="center">
+     <strong>
+     </strong>
+    </p>
+    <h3>
+     8.1.1     频道切换时间的分类 Classification of channel zapping time
+    </h3>
+    <p>
+     <strong>
+      8.1.1.1
+      <strong>
+       IGMP延时
+      </strong>
+      IGMP delay
+     </strong>
+    </p>
+    <p>
+     A channel zaprequest is triggered by a channel change which is mapped by the STB to amulticast group address carried in the IGMP message. The IGMP message, whichincludes join message, is sent to the homegate (HG). The HG, playing an IGMPproxy role, will
+ process the IGMP message and send an IGMP request to theGateway Router (GWR). After the IGMP message is sent towards the rendezvouspoint by the GWR, the corresponding channel data should be delivered to the endpoint at some point. The time to get the content
+ data after sending the firstIGMP message is called the IGMP delay.
+    </p>
+    <p>
+     <strong>
+      8.1.1.2            缓冲延时 Buffering delay
+     </strong>
+    </p>
+    <p>
+     While the STB receives IPTV multicasttraffic, it stacks the packets in a buffer. Buffering delay is the time betweenthe arrival of the first multicast traffic in the buffer and when the STB hassufficient data for playing to the screen.
+    </p>
+    <p>
+     <strong>
+      8.1.1.3
+      <strong>
+       解码延时
+      </strong>
+      Decoding delay
+     </strong>
+    </p>
+    <p>
+     After STB starts to receive andbuffers multicast stream, decoding delay processes buffered data and renderthem to TV screen. This type of delay includes both codec decoding delay, whichintends to program-specific information frames in order to decide the
+ targetchannel and I-frame acquisition delay, which is for reduction of bandwidthrequired for digital video transmission.
+    </p>
+    <h3>
+     8.1.2     频道切换时间的要求 Requirements for Channel Zapping Time
+    </h3>
+    <p>
+     One of the key elements involved in validating Qualityof Experience (QoE) in IPTV service is how quickly users can change TVchannels, which is often referred to as Channel Zapping Time. However, theexplicit relation between Channel Zapping Time and the user
+ perceived quality as expressed asa Mean Opinion Score (MOS) is still under study [b_CZT_TNO].
+    </p>
+    <h2>
+     8.2        视频点播控制功能的QoE要求 QoE requirements VoD trick mode
+    </h2>
+    <p>
+     Video on Demand (VoD) trick mode provides VCR-likefeatures in VoD services. When a subscriber desires a video content through STB, the subscriber accesses the video content from the EPG which supports thecontents-search engine to help access of content information.
+ To guarantee VCR-like flexibility, this mode provides the trick ability to handle pause,play, rewind, fast forward, and stop entries for these control features.
+    </p>
+    <p>
+    </p>
+    <h3>
+     8.2.1     控制的延迟 Trick Latency
+    </h3>
+    <p>
+     Correspondently,each control function (video selection, play, pause, rewind, FFW, stop) has itsown delay. QoE metrics for VoD transaction quality are expressed by thefollowing indicators:
+    </p>
+    <p>
+     -         Videoselection process delay: Timing period from the time when the subject isselected to the time when content is displayed.
+    </p>
+    <p>
+     -         Play Delay:Timing period from the time when the Play entry was selected to the time thecontent is displayed.
+    </p>
+    <p>
+     -         Stop Delay:Timing period from the time when the Stop play video entry was selected to thetime the content is stopped playing as indicated by video content display.
+    </p>
+    <p>
+     -         Rewind Delay:Timing period from the time when the Rewind video entry was selected to thetime the rewind action is executed as indicated on display device.
+    </p>
+    <p>
+     -         Pause Delay: Timingperiod from the time when the Pause video entry was selected to the time thepause action is executed as indicated on display device.
+    </p>
+    <p>
+     -         FFW Delay:Timing period from the time when the Fast Forward video entry was selected tothe time the FFW action is executed as indicated on display device.
+    </p>
+    <p>
+    </p>
+    <h3>
+     8.2.2     控制的QoE要求 Requirements for VoD Trick Features
+    </h3>
+    <p>
+     From a QoE perspective, trick feature latency is oneof the most important issues to guarantee satisfaction of subscribers. As eachtrick feature latency directly affects QoE, the latency is required to besufficiently low to meet user’s requirement for QoE
+ relating to VoD trickfeatures.
+    </p>
+    <h1>
+     9  其他IPTV服务的QoE (QoE for other IPTV services)
+    </h1>
+    <h2>
+     9.1       元数据的QoE要求 QoE requirements for Metadata
+    </h2>
+    <p>
+     Figure 9-1 shows the componentsof Metadata.
+    </p>
+    <p>
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131104153720640?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <p>
+    </p>
+    <div style="text-align:center;">
+    </div>
+    <p align="center">
+     <strong>
+      Figure 9-1/G.1080 - Components of Metadata
+     </strong>
+    </p>
+    <p>
+    </p>
+    <p>
+     (1) Availability
+    </p>
+    <p>
+     High availability is recommended to be ensured in transmitting themetadata on network.
+    </p>
+    <p>
+     (2) Data size
+    </p>
+    <p>
+     Metadata is recommended to be transported in such a way that the size ofthe transported data would be sufficiently small, relative to such factors asthe number of the total services, the number of the contents, and networkbandwidth.
+    </p>
+    <p>
+     (3) Correctness
+    </p>
+    <p>
+     The service provider should ensure themetadata tagged to a particular content is correct.
+    </p>
+    <p>
+     An example to illustrate the importance ofmetadata is the correctness of “rating” of content. The correct rating oncontent is directly related to what the customer expects. An incorrect parentalrating e.g. a “family” rating for an adult movie can have serious
+ implicationsfor the customer experience and business of the service provider.
+    </p>
+    <h3>
+     9.1.1     EPG的QoE要求 QoE requirements for EPG
+    </h3>
+    <p>
+     The following items are recommended to be considered aspart of the definition of QoE for IPTV services.
+    </p>
+    <p>
+     (1) User-friendliness
+    </p>
+    <p>
+     EPG user interface  is recommended to be designed for ease of use.
+    </p>
+    <p>
+     (2) Response time to display EPG page
+    </p>
+    <p>
+     The response time - the interval from pushing the EPG button of remotecontrol to the display of the EPG page - is recommended to sufficiently short.
+    </p>
+    <h2>
+     9.2        浏览器的QoE要求 QoE requirements for Browser
+    </h2>
+    <p>
+     If abrowser, such as those for BML or HTML, is used to provide the user aninteractive content from the service provider, the following points arerecommended to be taken into account.
+    </p>
+    <p>
+     (1) Characteristics of a television set
+    </p>
+    <p>
+     The IPTV QoErequirements on browsers are recommended to take intoaccount that the behavioural patterns and expectations of television userstypically differ from those of PC users.
+    </p>
+    <p>
+     Moreover the differences in the capacities oftypical TVs (and STBs), on one hand, and PCs, on the other, should be takeninto account.  For example, as the CPUperformance of a television set is usually inferior to that of PC, the contentsdesigned for PC-use
+ does not necessarily work in the TV environment, making itnecessary to set up QoE measures taking into account the difference in CPUperformance between PC and television. It should be stressed that the browseron an IPTV service may not have the same capacity
+ as the browser on a PC has.
+    </p>
+    <p>
+     (2) TV-like display
+    </p>
+    <p>
+     Some features of TV-like display is recommended to be considered necessary for browser QoE, for such are commonly imposedby content providers. Examples are:
+    </p>
+    <p>
+     - Overlay function,
+    </p>
+    <p>
+     -Consistency of displayed pictures across terminals.
+    </p>
+    <p>
+     (3) Character size
+    </p>
+    <p>
+     The character size is recommended to be sufficientlylarge.
+    </p>
+    <p>
+     (4) Navigation
+    </p>
+    <p>
+     The navigation function is recommended to be considered forincreasing the level of convenience and operability.
+    </p>
+    <p>
+     (5) Cookie
+    </p>
+    <p>
+     The use of Cookies is recommended to be done with carebecause of the possible limitation on the nonvolatile memory capacity of theterminal. The number, the size and the expiration date of cookies may need tobe clearly specified.
+    </p>
+    <h2>
+     9.3       内容导航的QoE要求 QoE requirements for Content Navigation
+    </h2>
+    <p>
+     Contentnavigation is defined as functions for contents discovery and selection. So,content  navigation is provided byvarious methods such as direct channel selection, EPG, recommendation. QoErequirements according to navigation methods are described in the
+ followingsections.
+    </p>
+    <h3>
+     9.3.1 内容导航通过直接的选择，通过向上/向下按钮 Contents navigation by directchannel selection, by up/down button
+    </h3>
+    <p>
+     Ease ofcontents selection, especially under numerous contents condition, isrecommended to be considered. For that sake, the elapsed time for selectingcontents and subjective evaluations of ease of use (e.g. MOS) are recommendedto be considered.
+    </p>
+    <h3>
+     9.3.2 内容导航通过EPG/ECG Contents navigation by EPG/ECG
+    </h3>
+    <p>
+     EPG/ECG isone of the most useful ways of contents navigation. The elapsed time fordiscovering and selecting contents, and subjective evaluations of ease of use(e.g. MOS) are recommended to be considered.
+    </p>
+    <h3>
+     9.3.3 内容导航通过内容推荐 Contents navigation by contents recommendation
+    </h3>
+    <p>
+     Effectivecontents recommendation is useful for users. For example, IPTV service providerrecommends contents to the user according to his/her preferences. And, contentsrecommendation from his/her friends is also effective.
+    </p>
+    <p>
+     Forcontents recommendation, recommendation accuracy and security of personalinformation are recommended to be considered. If the recommended contentsinclude many preferring contents, the QoE of recommendation would be high. Obviously,the security of personal
+ information affects QoE. And communication functionsuch as obtaining the 3rd parties’ metadata is recommended to be considered.
+    </p>
+    <h1>
+     10  可达性的要求 (Accessibility requirements)
+    </h1>
+    <p>
+     The intentof thisclause is to capture specific performance requirements for IPTV servicesrelated to accessibility. This is for further study, but will encompass thefollowing areas:
+    </p>
+    <p>
+     ·        Audio quality (including the provision of clean audio)
+    </p>
+    <p>
+     ·        Video quality (including sufficient frame rate and resolution for signlanguage, lip reading etc [b_ITU-T HSup1])
+    </p>
+    <p>
+     ·        Audio/video synchronisation
+    </p>
+    <p>
+    </p>
+    <h1>
+     11  安全性考虑 (Security considerations)
+    </h1>
+    <p>
+     Securityaspects have not been addressed in this Recommendation.
+    </p>
+    <br clear="all"/>
+    <div>
+     <br clear="all"/>
+    </div>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=iptv&amp;t=blog" target="_blank">
+    iptv
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=质量评价&amp;t=blog" target="_blank">
+    质量评价
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoS&amp;t=blog" target="_blank">
+    QoS
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoE&amp;t=blog" target="_blank">
+    QoE
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=标准&amp;t=blog" target="_blank">
+    标准
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638143" target="_blank">
+    IPTV
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

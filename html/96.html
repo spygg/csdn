@@ -1,0 +1,940 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：内存的分配和释放（av_malloc()、av_free()等） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_96">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：内存的分配和释放（av_malloc()、av_free()等）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月03日 15:24:48
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：27941
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单记录一下FFmpeg中内存操作的函数。
+    </p>
+    <p>
+     内存操作的常见函数位于libavutil\mem.c中。本文记录FFmpeg开发中最常使用的几个函数：av_malloc()，av_realloc()，av_mallocz()，av_calloc()，av_free()，av_freep()。
+    </p>
+    <h3>
+     av_malloc()
+    </h3>
+    <p>
+     av_malloc()是FFmpeg中最常见的内存分配函数。它的定义如下。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">#define FF_MEMORY_POISON 0x2a
+
+#define ALIGN (HAVE_AVX ? 32 : 16)
+
+static size_t max_alloc_size= INT_MAX;
+
+void *av_malloc(size_t size)
+{
+    void *ptr = NULL;
+#if CONFIG_MEMALIGN_HACK
+    long diff;
+#endif
+
+
+    /* let's disallow possibly ambiguous cases */
+    if (size &gt; (max_alloc_size - 32))
+        return NULL;
+
+
+#if CONFIG_MEMALIGN_HACK
+    ptr = malloc(size + ALIGN);
+    if (!ptr)
+        return ptr;
+    diff              = ((~(long)ptr)&amp;(ALIGN - 1)) + 1;
+    ptr               = (char *)ptr + diff;
+    ((char *)ptr)[-1] = diff;
+#elif HAVE_POSIX_MEMALIGN
+    if (size) //OS X on SDK 10.6 has a broken posix_memalign implementation
+    if (posix_memalign(&amp;ptr, ALIGN, size))
+        ptr = NULL;
+#elif HAVE_ALIGNED_MALLOC
+    ptr = _aligned_malloc(size, ALIGN);
+#elif HAVE_MEMALIGN
+#ifndef __DJGPP__
+    ptr = memalign(ALIGN, size);
+#else
+    ptr = memalign(size, ALIGN);
+#endif
+    /* Why 64?
+     * Indeed, we should align it:
+     *   on  4 for 386
+     *   on 16 for 486
+     *   on 32 for 586, PPro - K6-III
+     *   on 64 for K7 (maybe for P3 too).
+     * Because L1 and L2 caches are aligned on those values.
+     * But I don't want to code such logic here!
+     */
+    /* Why 32?
+     * For AVX ASM. SSE / NEON needs only 16.
+     * Why not larger? Because I did not see a difference in benchmarks ...
+     */
+    /* benchmarks with P3
+     * memalign(64) + 1          3071, 3051, 3032
+     * memalign(64) + 2          3051, 3032, 3041
+     * memalign(64) + 4          2911, 2896, 2915
+     * memalign(64) + 8          2545, 2554, 2550
+     * memalign(64) + 16         2543, 2572, 2563
+     * memalign(64) + 32         2546, 2545, 2571
+     * memalign(64) + 64         2570, 2533, 2558
+     *
+     * BTW, malloc seems to do 8-byte alignment by default here.
+     */
+#else
+    ptr = malloc(size);
+#endif
+    if(!ptr &amp;&amp; !size) {
+        size = 1;
+        ptr= av_malloc(1);
+    }
+#if CONFIG_MEMORY_POISONING
+    if (ptr)
+        memset(ptr, FF_MEMORY_POISON, size);
+#endif
+    return ptr;
+}</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+    如果不考虑上述代码中的一大堆宏定义（即类似CONFIG_MEMALIGN_HACK这类的宏都采用默认值0），av_malloc()的代码可以简化成如下形式。
+    <br/>
+    <pre class="cpp">void *av_malloc(size_t size)
+{
+    void *ptr = NULL;
+    /* let's disallow possibly ambiguous cases */
+    if (size &gt; (max_alloc_size - 32))
+        return NULL;
+    ptr = malloc(size);
+    if(!ptr &amp;&amp; !size) {
+        size = 1;
+        ptr= av_malloc(1);
+    }
+    return ptr;
+}</pre>
+    <br/>
+    可以看出，此时的av_malloc()就是简单的封装了系统函数malloc()，并做了一些错误检查工作。
+    <br/>
+    <h4>
+     关于size_t
+    </h4>
+    size _t 这个类型在FFmpeg中多次出现，简单解释一下其作用。size _t是为了增强程序的可移植性而定义的。不同系统上，定义size_t可能不一样。它实际上就是unsigned int。
+    <br/>
+    <h4>
+     为什么要内存对齐？
+    </h4>
+    FFmpeg内存分配方面多次涉及到“内存对齐”（memory alignment）的概念。
+    <br/>
+    这方面内容在IBM的网站上有一篇文章，讲的挺通俗易懂的，在此简单转述一下。
+    <br/>
+    <p>
+     程序员通常认为内存就是一个字节数组，每次可以一个一个字节存取内存。例如在C语言中使用char *指代“一块内存”，Java中使用byte[]指代一块内存。如下所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141116213746581"/>
+     <br/>
+    </p>
+    <p>
+     但那实际上计算机处理器却不是这样认为的。处理器相对比较“懒惰”，它会以2字节，4字节，8字节，16字节甚至32字节来存取内存。例如下图显示了以4字节为单位读写内存的处理器“看待”上述内存的方式。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141116213757782"/>
+     <br/>
+    </p>
+    上述的存取单位的大小称之为内存存取粒度。
+    <br/>
+    下面看一个实例，分别从地址0，和地址1读取4个字节到寄存器。
+    <br/>
+    <p>
+     从程序员的角度来看，读取方式如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141116213810231"/>
+     <br/>
+    </p>
+    <p>
+     而2字节存取粒度的处理器的读取方式如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141116213947169"/>
+     <br/>
+    </p>
+    可以看出2字节存取粒度的处理器从地址0读取4个字节一共读取2次；从地址1读取4个字节一共读取了3次。由于每次读取的开销是固定的，因此从地址1读取4字节的效率有所下降。
+    <br/>
+    <p>
+     4字节存取粒度的处理器的读取方式如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141116213956545"/>
+     <br/>
+    </p>
+    <p>
+     可以看出4字节存取粒度的处理器从地址0读取4个字节一共读取1次；从地址1读取4个字节一共读取了2次。从地址1读取的开销比从地址0读取多了一倍。由此可见内存不对齐对CPU的性能是有影响的。
+    </p>
+    <br/>
+    <h3>
+     av_realloc()
+    </h3>
+    <p>
+     av_realloc()用于对申请的内存的大小进行调整。它的定义如下。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">void *av_realloc(void *ptr, size_t size)
+{
+#if CONFIG_MEMALIGN_HACK
+    int diff;
+#endif
+
+
+    /* let's disallow possibly ambiguous cases */
+    if (size &gt; (max_alloc_size - 32))
+        return NULL;
+
+
+#if CONFIG_MEMALIGN_HACK
+    //FIXME this isn't aligned correctly, though it probably isn't needed
+    if (!ptr)
+        return av_malloc(size);
+    diff = ((char *)ptr)[-1];
+    av_assert0(diff&gt;0 &amp;&amp; diff&lt;=ALIGN);
+    ptr = realloc((char *)ptr - diff, size + diff);
+    if (ptr)
+        ptr = (char *)ptr + diff;
+    return ptr;
+#elif HAVE_ALIGNED_MALLOC
+    return _aligned_realloc(ptr, size + !size, ALIGN);
+#else
+    return realloc(ptr, size + !size);
+#endif
+}</pre>
+    <br/>
+    <p>
+    </p>
+    默认情况下（CONFIG_MEMALIGN_HACK这些宏使用默认值0）的代码：
+    <br/>
+    <pre class="cpp">void *av_realloc(void *ptr, size_t size)
+{
+    /* let's disallow possibly ambiguous cases */
+    if (size &gt; (max_alloc_size - 32))
+        return NULL;
+    return realloc(ptr, size + !size);
+}</pre>
+    <br/>
+    可以看出av_realloc()简单封装了系统的realloc()函数。
+    <br/>
+    <br/>
+    <br/>
+    <h3>
+     av_mallocz()
+    </h3>
+    av_mallocz()可以理解为av_malloc()+zeromemory。代码如下。
+    <br/>
+    <pre class="cpp">void *av_mallocz(size_t size)
+{
+    void *ptr = av_malloc(size);
+    if (ptr)
+        memset(ptr, 0, size);
+    return ptr;
+}</pre>
+    <br/>
+    <p>
+     从源代码可以看出av_mallocz()中调用了av_malloc()之后，又调用memset()将分配的内存设置为0。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_calloc()
+    </h3>
+    av_calloc()则是简单封装了av_mallocz()，定义如下所示。
+    <br/>
+    <pre class="cpp">void *av_calloc(size_t nmemb, size_t size)
+{
+    if (size &lt;= 0 || nmemb &gt;= INT_MAX / size)
+        return NULL;
+    return av_mallocz(nmemb * size);
+}</pre>
+    <br/>
+    从代码中可以看出，它调用av_mallocz()分配了nmemb*size个字节的内存。
+    <br/>
+    <br/>
+    <br/>
+    <h3>
+     av_free()
+    </h3>
+    <p>
+     av_free()用于释放申请的内存。它的定义如下。
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">void av_free(void *ptr)
+{
+#if CONFIG_MEMALIGN_HACK
+    if (ptr) {
+        int v= ((char *)ptr)[-1];
+        av_assert0(v&gt;0 &amp;&amp; v&lt;=ALIGN);
+        free((char *)ptr - v);
+    }
+#elif HAVE_ALIGNED_MALLOC
+    _aligned_free(ptr);
+#else
+    free(ptr);
+#endif
+}</pre>
+    <br/>
+    <p>
+    </p>
+    默认情况下（CONFIG_MEMALIGN_HACK这些宏使用默认值0）的代码：
+    <br/>
+    <pre class="cpp">void av_free(void *ptr)
+{
+    free(ptr);
+}</pre>
+    可以看出av_free()简单的封装了free()。
+    <br/>
+    <br/>
+    <h3>
+     av_freep()
+    </h3>
+    <p>
+     av_freep()简单封装了av_free()。并且在释放内存之后将目标指针设置为NULL。
+    </p>
+    <pre class="cpp">void av_freep(void *arg)
+{
+    void **ptr = (void **)arg;
+    av_free(*ptr);
+    *ptr = NULL;
+}</pre>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#660000;">
+       雷霄骅 (Lei Xiaohua)
+       <br/>
+       leixiaohua1020@126.com
+       <br/>
+       http://blog.csdn.net/leixiaohua1020
+      </span>
+     </strong>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/41176777
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=malloc&amp;t=blog" target="_blank">
+    malloc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=free&amp;t=blog" target="_blank">
+    free
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=calloc&amp;t=blog" target="_blank">
+    calloc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=内存分配&amp;t=blog" target="_blank">
+    内存分配
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

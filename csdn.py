@@ -45,6 +45,7 @@ class CSDN(object):
 
         self.articleNumber = 0
         self.merge = PdfFileWriter()
+        self.catlogPageNum = 0
 
     def __del__(self):
         print('结束了')
@@ -86,8 +87,7 @@ class CSDN(object):
             self.cursor.execute('''select count(*) from "%s" where url = "%s"''' % (self.username, href))
             if not self.cursor.fetchone()[0]:
                 srcHtml = self.getArticleByUrl(href, title)
-                cleanedData = ''#self.cleanHtmlData(srcHtml)
-
+                cleanedData = ''
                 self.insert2Db(href, title, srcHtml, cleanedData)
             else:
                 #print('文章"%s"已经存在' % (title, ))
@@ -133,7 +133,7 @@ class CSDN(object):
             return True;
 
 
-    def cleanHtmlData(self, html):
+    def cleanHtmlData(self, html, id):
         cleanedData = ''
         soup = BeautifulSoup(html, "lxml")
         # article_title_box = soup.find(class_='article-title-box')
@@ -206,15 +206,23 @@ class CSDN(object):
 
         cleanedData = cleanedData.replace('class="hide-article-box', 'style="display:none;" class="hide-article-box')
         cleanedData = cleanedData.replace('class="float-right', '')
+        #生成锚链接
+        cleanedData = cleanedData.replace('class="article-title-box"', 'class="article-title-box" id="article_anchors_%d"' % (id))
+
+
+        if not os.path.exists('html'):
+            os.mkdir('html')
+        with open('html/%d.html' % id, "w") as f:
+            f.write(cleanedData)
         return cleanedData
 
 
-    def doConvert(self, id, html):
+    def doConvert(self, id, html, forceUpdate=False):
         #pdfkit.from_file("dhtml/%s.html" % fileName, 'pdf/%s.pdf' % fileName) 
         if not os.path.exists('pdf'):
             os.mkdir('pdf')
 
-        if not os.path.exists('pdf/%d.pdf' % id ):
+        if forceUpdate or (not os.path.exists('pdf/%d.pdf' % id )) :
             print("正在生成第%d篇pdf (%d of %d)" % (id, id, self.articleNumber))
             ts = 0
             while True:
@@ -267,8 +275,13 @@ class CSDN(object):
         size = 1024
 
 
-    def generateCatlog(self):
-        print('正在生成目录....')
+    def generateCatlog(self, forceUpdate = False):
+        
+        if not forceUpdate:
+            print('正在生成目录....')
+        else:
+            print("正在更新目录页码!")
+
         articleIndex = 1
         pageIndex = 0
 
@@ -288,10 +301,13 @@ class CSDN(object):
                             <div style="max-width:100%;line-height:1.8em;margin-top:5px;background-color:#ccc;">
                             <span class="start">
                         '''
-            pdfcontent = pdfcontent +  "%d.%s</span>" % (articleIndex, title)
+
+            #序号,标题
+            pdfcontent = pdfcontent +  '''%d.<a href='javascript:{document.getElementById("article_anchors_%d").scrollIntoView()};'>%s</a></span>''' % (articleIndex, articleIndex, title)
             pdfcontent = pdfcontent + '''<span class='middle' style="max-height:25px;overflow:hidden;display:inline-block"></span>'''
             pdfcontent = pdfcontent +   ''' <span class="end" style="float:right;">'''
-            pdfcontent = pdfcontent +  '%d' % (pageIndex + 1)
+            #页码.....
+            pdfcontent = pdfcontent +  '%d' % (pageIndex + 1 + self.catlogPageNum)
             pdfcontent = pdfcontent + '</span></div>'
 
 
@@ -341,13 +357,35 @@ class CSDN(object):
     
         pdfcontent = pdfcontent +  '</body></html>'
 
-        # with open('mm.html', "w") as f:
-        #     f.write(pdfcontent)
 
-        self.articleNumber = self.articleNumber + 1
-        self.doConvert(self.articleNumber, pdfcontent)
-        print('目录生成完成....')
+        if not os.path.exists('html'):
+            os.mkdir('html')
 
+        with open('catlog.html', "w") as f:
+            f.write(pdfcontent)
+
+        if forceUpdate:
+            self.articleNumber = self.articleNumber + 1
+
+        if not forceUpdate:
+            self.doConvert(self.articleNumber + 1, pdfcontent, True)
+        else:
+            self.doConvert(self.articleNumber, pdfcontent, True)
+
+        #获取目录页码
+        if forceUpdate:
+            print('目录生成完成....')
+
+
+    def generateCatlogAndUpdate(self):
+        #第一次生成目录
+        self.generateCatlog()
+
+        pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber + 1), "rb"))
+        self.catlogPageNum = pdf.getNumPages()
+
+        #重新生成目录
+        self.generateCatlog(True)
 
 
     def startThreadPool(self):
@@ -364,7 +402,8 @@ class CSDN(object):
         for (id, srcHtml) in result:
             #process = multiprocessing.Process(target = self.doConvert, args = (id, cleanedHtml))
             if not os.path.exists('pdf/%d.pdf' % id ):
-                cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'))
+                cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'), id)
+
                 process = threading.Thread(target = self.doConvert, args = (id, cleanedHtml))
                 processList.append(process)
 
@@ -407,7 +446,7 @@ if __name__ == '__main__':
 
 
     csdn.startThreadPool()
-    csdn.generateCatlog()
+    csdn.generateCatlogAndUpdate()
     csdn.doMerge()
 
     

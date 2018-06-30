@@ -1,0 +1,703 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于FFmpeg的内存读写的例子：内存转码器 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_146">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于FFmpeg的内存读写的例子：内存转码器
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年10月05日 13:30:35
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：18391
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     最简单的基于FFmpeg的内存读写的例子系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39759163">
+      最简单的基于FFmpeg的内存读写的例子：内存播放器
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39759623">
+      最简单的基于FFmpeg的内存读写的例子：内存转码器
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <p>
+     上篇文章记录了一个基于FFmpeg的内存播放器，可以使用FFmpeg读取并播放内存中的数据。这篇文章记录一个基于FFmpeg的内存转码器。该转码器可以使用FFmpeg读取内存中的数据，转码为H.264之后再将数据输出到内存。
+    </p>
+    关于如何从内存读取数据，以及如何将数据输出到内存，可以参考文章：
+    <br/>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12980423">
+      ffmpeg 从内存中读取数据(或将数据输出到内存)
+     </a>
+    </p>
+    FFmpeg读写内存的关键点有2个：
+    <br/>
+    1.       初始化自定义的AVIOContext，指定自定义的回调函数。
+    <br/>
+    2.       自己写回调函数。注意函数的参数和返回值（尤其是返回值）。
+    <br/>
+    <br/>
+    <br/>
+    转码实际上就是解码和编码的结合。该方面的知识可以参考文章：
+    <p>
+     解码：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8652605">
+      100行代码实现最简单的基于FFMPEG+SDL的视频播放器（SDL1.x）
+     </a>
+     <br/>
+    </p>
+    <p>
+     编码：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/25430425">
+      最简单的基于FFMPEG的视频编码器（YUV编码为H.264）
+     </a>
+     <br/>
+    </p>
+    <p>
+     转码：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/26838535">
+      最简单的基于FFMPEG的转码程序
+     </a>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <h2>
+     流程
+    </h2>
+    程序的流程图如下图所示。从图中可以看出，首先分别初始化了输入和输出的AVFormatContext。然后首先解码输入的AVPacket，得到存储像素数据（YUV420P格式）的AVFrame，然后编码AVFrame为H.264的AVPacket，最后将编码后的AVPacket输出。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141003213852609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    <h2>
+     代码
+    </h2>
+    下面直接贴上代码：
+    <br/>
+    <br/>
+    <pre class="cpp">/**
+ * 最简单的基于FFmpeg的内存读写例子（内存转码器）
+ * Simplest FFmpeg mem Transcoder
+ *
+ * 雷霄骅，张晖
+ * leixiaohua1020@126.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ * 本程序实现了任意格式视频数据（例如MPEG2）转码为H.264码流数据。
+ * 本程序并不是对文件进行处理，而是对内存中的视频数据进行处理。
+ * 它从内存读取数据，并且将转码后的数据输出到内存中。
+ * 是最简单的使用FFmpeg读写内存的例子。
+ *
+ * This software convert video bitstream (Such as MPEG2) to H.264
+ * bitstream. It read video bitstream from memory (not from a file),
+ * convert it to H.264 bitstream, and finally output to another memory.
+ * It's the simplest example to use FFmpeg to read (or write) from 
+ * memory.
+ *
+ */
+#include &lt;stdio.h&gt;
+
+extern "C"
+{
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavutil/avutil.h"
+#include "libavutil/opt.h"
+#include "libavutil/pixdesc.h"
+};
+
+FILE *fp_open;
+FILE *fp_write;
+
+//Read File
+int read_buffer(void *opaque, uint8_t *buf, int buf_size){
+	if(!feof(fp_open)){
+		int true_size=fread(buf,1,buf_size,fp_open);
+		return true_size;
+	}else{
+		return -1;
+	}
+}
+
+//Write File
+int write_buffer(void *opaque, uint8_t *buf, int buf_size){
+	if(!feof(fp_write)){
+		int true_size=fwrite(buf,1,buf_size,fp_write);
+		return true_size;
+	}else{
+		return -1;
+	}
+}
+
+
+
+int flush_encoder(AVFormatContext *fmt_ctx,unsigned int stream_index)
+{
+    int ret;
+    int got_frame;
+	AVPacket enc_pkt;
+    if (!(fmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;codec-&gt;capabilities &amp;
+                CODEC_CAP_DELAY))
+        return 0;
+    while (1) {
+        av_log(NULL, AV_LOG_INFO, "Flushing stream #%u encoder\n", stream_index);
+        //ret = encode_write_frame(NULL, stream_index, &amp;got_frame);
+        enc_pkt.data = NULL;
+		enc_pkt.size = 0;
+		av_init_packet(&amp;enc_pkt);
+		ret = avcodec_encode_video2 (fmt_ctx-&gt;streams[stream_index]-&gt;codec, &amp;enc_pkt,
+				NULL, &amp;got_frame);
+		av_frame_free(NULL);
+		if (ret &lt; 0)
+			break;
+		if (!got_frame)
+		{ret=0;break;}
+		/* prepare packet for muxing */
+		enc_pkt.stream_index = stream_index;
+		enc_pkt.dts = av_rescale_q_rnd(enc_pkt.dts,
+				fmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				fmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+				(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		enc_pkt.pts = av_rescale_q_rnd(enc_pkt.pts,
+				fmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				fmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+				(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		enc_pkt.duration = av_rescale_q(enc_pkt.duration,
+				fmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				fmt_ctx-&gt;streams[stream_index]-&gt;time_base);
+		av_log(NULL, AV_LOG_DEBUG, "Muxing frame\n");
+		/* mux encoded frame */
+		ret = av_write_frame(fmt_ctx, &amp;enc_pkt);
+		if (ret &lt; 0)
+            break;
+    }
+    return ret;
+}
+
+
+int main(int argc, char* argv[])
+{
+	int ret;
+	AVFormatContext* ifmt_ctx=NULL;
+	AVFormatContext* ofmt_ctx=NULL;
+	AVPacket packet,enc_pkt;
+	AVFrame *frame = NULL;
+	enum AVMediaType type;
+	unsigned int stream_index;
+	unsigned int i=0;
+	int got_frame,enc_got_frame;
+
+	AVStream *out_stream;
+	AVStream *in_stream;
+	AVCodecContext *dec_ctx, *enc_ctx;
+	AVCodec *encoder;
+
+	fp_open = fopen("cuc60anniversary_start.ts", "rb");	//视频源文件 
+	fp_write=fopen("cuc60anniversary_start.h264","wb+"); //输出文件
+
+	av_register_all();
+	ifmt_ctx=avformat_alloc_context();
+	avformat_alloc_output_context2(&amp;ofmt_ctx, NULL, "h264", NULL);
+
+	unsigned char* inbuffer=NULL;
+	unsigned char* outbuffer=NULL;
+	inbuffer=(unsigned char*)av_malloc(32768);
+	outbuffer=(unsigned char*)av_malloc(32768);
+
+	/*open input file*/
+	AVIOContext *avio_in =avio_alloc_context(inbuffer, 32768,0,NULL,read_buffer,NULL,NULL);  
+	if(avio_in==NULL)
+		goto end;
+	ifmt_ctx-&gt;pb=avio_in; 
+	ifmt_ctx-&gt;flags=AVFMT_FLAG_CUSTOM_IO;
+	if ((ret = avformat_open_input(&amp;ifmt_ctx, "whatever", NULL, NULL)) &lt; 0) {
+		av_log(NULL, AV_LOG_ERROR, "Cannot open input file\n");
+		return ret;
+	}
+	if ((ret = avformat_find_stream_info(ifmt_ctx, NULL)) &lt; 0) {
+		av_log(NULL, AV_LOG_ERROR, "Cannot find stream information\n");
+		return ret;
+	}
+	for (i = 0; i &lt; ifmt_ctx-&gt;nb_streams; i++) {
+		AVStream *stream;
+		AVCodecContext *codec_ctx;
+		stream = ifmt_ctx-&gt;streams[i];
+		codec_ctx = stream-&gt;codec;
+		/* Reencode video &amp; audio and remux subtitles etc. */
+		if (codec_ctx-&gt;codec_type == AVMEDIA_TYPE_VIDEO){
+			/* Open decoder */
+			ret = avcodec_open2(codec_ctx,
+				avcodec_find_decoder(codec_ctx-&gt;codec_id), NULL);
+			if (ret &lt; 0) {
+				av_log(NULL, AV_LOG_ERROR, "Failed to open decoder for stream #%u\n", i);
+				return ret;
+			}
+		}
+	}
+	//av_dump_format(ifmt_ctx, 0, "whatever", 0);
+
+	/*open output file*/
+	AVIOContext *avio_out =avio_alloc_context(outbuffer, 32768,1,NULL,NULL,write_buffer,NULL);  
+	if(avio_out==NULL)
+		goto end;
+	//avio_out-&gt;write_packet=write_packet;
+	ofmt_ctx-&gt;pb=avio_out; 
+	ofmt_ctx-&gt;flags=AVFMT_FLAG_CUSTOM_IO;
+	for (i = 0; i &lt; 1; i++) {
+		out_stream = avformat_new_stream(ofmt_ctx, NULL);
+		if (!out_stream) {
+			av_log(NULL, AV_LOG_ERROR, "Failed allocating output stream\n");
+			return AVERROR_UNKNOWN;
+		}
+		in_stream = ifmt_ctx-&gt;streams[i];
+		dec_ctx = in_stream-&gt;codec;
+		enc_ctx = out_stream-&gt;codec;
+		if (dec_ctx-&gt;codec_type == AVMEDIA_TYPE_VIDEO)
+		{
+			encoder = avcodec_find_encoder(AV_CODEC_ID_H264);
+			enc_ctx-&gt;height = dec_ctx-&gt;height;
+			enc_ctx-&gt;width = dec_ctx-&gt;width;
+			enc_ctx-&gt;sample_aspect_ratio = dec_ctx-&gt;sample_aspect_ratio;
+			enc_ctx-&gt;pix_fmt = encoder-&gt;pix_fmts[0];
+			enc_ctx-&gt;time_base = dec_ctx-&gt;time_base;
+			//enc_ctx-&gt;time_base.num = 1;
+			//enc_ctx-&gt;time_base.den = 25;
+			//H264的必备选项，没有就会错
+			enc_ctx-&gt;me_range=16;
+			enc_ctx-&gt;max_qdiff = 4;
+			enc_ctx-&gt;qmin = 10;
+			enc_ctx-&gt;qmax = 51;
+			enc_ctx-&gt;qcompress = 0.6; 
+			enc_ctx-&gt;refs=3;
+			enc_ctx-&gt;bit_rate = 500000;
+
+			ret = avcodec_open2(enc_ctx, encoder, NULL);
+			if (ret &lt; 0) {
+				av_log(NULL, AV_LOG_ERROR, "Cannot open video encoder for stream #%u\n", i);
+				return ret;
+			}
+		}
+		else if (dec_ctx-&gt;codec_type == AVMEDIA_TYPE_UNKNOWN) {
+			av_log(NULL, AV_LOG_FATAL, "Elementary stream #%d is of unknown type, cannot proceed\n", i);
+			return AVERROR_INVALIDDATA;
+		} else {
+			/* if this stream must be remuxed */
+			ret = avcodec_copy_context(ofmt_ctx-&gt;streams[i]-&gt;codec,
+				ifmt_ctx-&gt;streams[i]-&gt;codec);
+			if (ret &lt; 0) {
+				av_log(NULL, AV_LOG_ERROR, "Copying stream context failed\n");
+				return ret;
+			}
+		}
+		if (ofmt_ctx-&gt;oformat-&gt;flags &amp; AVFMT_GLOBALHEADER)
+			enc_ctx-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;
+	}
+	//av_dump_format(ofmt_ctx, 0, "whatever", 1);
+	/* init muxer, write output file header */
+	ret = avformat_write_header(ofmt_ctx, NULL);
+	if (ret &lt; 0) {
+		av_log(NULL, AV_LOG_ERROR, "Error occurred when opening output file\n");
+		return ret;
+	}
+
+	i=0;
+	/* read all packets */
+	while (1) {
+		i++;
+		if ((ret = av_read_frame(ifmt_ctx, &amp;packet)) &lt; 0)
+			break;
+		stream_index = packet.stream_index;
+		if(stream_index!=0)
+			continue;
+		type = ifmt_ctx-&gt;streams[packet.stream_index]-&gt;codec-&gt;codec_type;
+		av_log(NULL, AV_LOG_DEBUG, "Demuxer gave frame of stream_index %u\n",
+			stream_index);
+
+		av_log(NULL, AV_LOG_DEBUG, "Going to reencode the frame\n");
+		frame = av_frame_alloc();
+		if (!frame) {
+			ret = AVERROR(ENOMEM);
+			break;
+		}
+		packet.dts = av_rescale_q_rnd(packet.dts,
+			ifmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+			ifmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+			(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		packet.pts = av_rescale_q_rnd(packet.pts,
+			ifmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+			ifmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+			(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+		ret = avcodec_decode_video2(ifmt_ctx-&gt;streams[stream_index]-&gt;codec, frame,
+			&amp;got_frame, &amp;packet);
+		printf("Decode 1 Packet\tsize:%d\tpts:%d\n",packet.size,packet.pts);
+
+		if (ret &lt; 0) {
+			av_frame_free(&amp;frame);
+			av_log(NULL, AV_LOG_ERROR, "Decoding failed\n");
+			break;
+		}
+		if (got_frame) {
+			frame-&gt;pts = av_frame_get_best_effort_timestamp(frame);
+			frame-&gt;pict_type=AV_PICTURE_TYPE_NONE;
+
+			enc_pkt.data = NULL;
+			enc_pkt.size = 0;
+			av_init_packet(&amp;enc_pkt);
+			ret = avcodec_encode_video2 (ofmt_ctx-&gt;streams[stream_index]-&gt;codec, &amp;enc_pkt,
+				frame, &amp;enc_got_frame);
+
+			printf("Encode 1 Packet\tsize:%d\tpts:%d\n",enc_pkt.size,enc_pkt.pts);
+
+			av_frame_free(&amp;frame);
+			if (ret &lt; 0)
+				goto end;
+			if (!enc_got_frame)
+				continue;
+			/* prepare packet for muxing */
+			enc_pkt.stream_index = stream_index;
+			enc_pkt.dts = av_rescale_q_rnd(enc_pkt.dts,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+				(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+			enc_pkt.pts = av_rescale_q_rnd(enc_pkt.pts,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;time_base,
+				(AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+			enc_pkt.duration = av_rescale_q(enc_pkt.duration,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;time_base,
+				ofmt_ctx-&gt;streams[stream_index]-&gt;time_base);
+			av_log(NULL, AV_LOG_INFO, "Muxing frame %d\n",i);
+			/* mux encoded frame */
+			av_write_frame(ofmt_ctx,&amp;enc_pkt);
+			if (ret &lt; 0)
+				goto end;
+		} else {
+			av_frame_free(&amp;frame);
+		}
+
+		av_free_packet(&amp;packet);
+	}
+
+	/* flush encoders */
+	for (i = 0; i &lt; 1; i++) {
+		/* flush encoder */
+		ret = flush_encoder(ofmt_ctx,i);
+		if (ret &lt; 0) {
+			av_log(NULL, AV_LOG_ERROR, "Flushing encoder failed\n");
+			goto end;
+		}
+	}
+	av_write_trailer(ofmt_ctx);
+end:
+	av_freep(avio_in);
+	av_freep(avio_out);
+	av_free(inbuffer);
+	av_free(outbuffer);
+	av_free_packet(&amp;packet);
+	av_frame_free(&amp;frame);
+	avformat_close_input(&amp;ifmt_ctx);
+	avformat_free_context(ofmt_ctx);
+
+	fcloseall();
+
+	if (ret &lt; 0)
+		av_log(NULL, AV_LOG_ERROR, "Error occurred\n");
+	return (ret? 1:0);
+}
+</pre>
+    <br/>
+    <h2>
+     结果
+    </h2>
+    <p>
+     程序运行的结果如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141004170528078?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     转码前的视频信息使用MediaInfo查看如下图所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141004170557843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     转码后的视频信息使用MediaInfo查看如下图所示。
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141004170540671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <h2>
+     下载
+    </h2>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      simplest ffmpeg mem handler
+     </strong>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      项目主页
+     </strong>
+    </p>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestffmpegmemhandler/">
+      https://sourceforge.net/projects/simplestffmpegmemhandler/
+     </a>
+    </p>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_ffmpeg_mem_handler">
+      https://github.com/leixiaohua1020/simplest_ffmpeg_mem_handler
+     </a>
+    </p>
+    <p>
+     开源中国：
+     <a href="http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_mem_handler">
+      http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_mem_handler
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    CSDN下载地址：
+    <br/>
+    <a href="http://download.csdn.net/detail/leixiaohua1020/8003731">
+     http://download.csdn.net/detail/leixiaohua1020/8003731
+    </a>
+    <br/>
+    <br/>
+    本工程包含两个FFmpeg读写内存的例子：
+    <br/>
+    simplest_ffmpeg_mem_player：基于FFmpeg的内存播放器。
+    <br/>
+    simplest_ffmpeg_mem_transcoder：基于FFmpeg的内存转码器。
+    <br/>
+    <p>
+    </p>
+    <br/>
+    <p>
+     <strong>
+      更新-1.1 (2015.2.13)=========================================
+     </strong>
+    </p>
+    <p>
+     这次考虑到了跨平台的要求，调整了源代码。经过这次调整之后，源代码可以在以下平台编译通过：
+     <br/>
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     <p>
+      <em>
+       VC++：打开sln文件即可编译，无需配置。
+      </em>
+     </p>
+    </blockquote>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     <p>
+      <em>
+       cl.exe：打开compile_cl.bat即可命令行下使用cl.exe进行编译，注意可能需要按照VC的安装路径调整脚本里面的参数。编译命令如下。
+      </em>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <pre class="plain">::VS2010 Environment
+call "D:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+::include
+@set INCLUDE=include;%INCLUDE%
+::lib
+@set LIB=lib;%LIB%
+::compile and link
+cl simplest_ffmpeg_mem_transcoder.cpp /link avcodec.lib avformat.lib avutil.lib ^
+avdevice.lib avfilter.lib postproc.lib swresample.lib swscale.lib /OPT:NOREF</pre>
+    <p>
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     <p>
+      <em>
+       MinGW：MinGW命令行下运行compile_mingw.sh即可使用MinGW的g++进行编译。编译命令如下。
+      </em>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <pre class="plain">g++ simplest_ffmpeg_mem_transcoder.cpp -g -o simplest_ffmpeg_mem_transcoder.exe \
+-I /usr/local/include -L /usr/local/lib \
+-lavcodec -lavformat -lavutil -lavdevice -lavfilter -lpostproc -lswresample -lswscale</pre>
+    <p>
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;border:none;padding:0px;">
+     <p>
+      <em>
+       GCC：Linux或者MacOS命令行下运行compile_gcc.sh即可使用GCC进行编译。编译命令如下。
+      </em>
+     </p>
+    </blockquote>
+    <p>
+    </p>
+    <pre class="plain">gcc simplest_ffmpeg_mem_transcoder.cpp -g -o simplest_ffmpeg_mem_transcoder.out \
+-I /usr/local/include -L /usr/local/lib \
+-lavcodec -lavformat -lavutil -lavdevice -lavfilter -lpostproc -lswresample -lswscale</pre>
+    <br/>
+    PS：相关的编译命令已经保存到了工程文件夹中
+    <br/>
+    <br/>
+    CSDN下载地址：
+    <a href="http://download.csdn.net/detail/leixiaohua1020/8445795">
+     http://download.csdn.net/detail/leixiaohua1020/8445795
+    </a>
+    <p>
+    </p>
+    <p>
+     SourceForge上已经更新。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/39759623
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=内存&amp;t=blog" target="_blank">
+    内存
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=转码&amp;t=blog" target="_blank">
+    转码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=H.264&amp;t=blog" target="_blank">
+    H.264
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1843731" target="_blank">
+    我的开源项目
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

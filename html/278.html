@@ -1,0 +1,218 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ITU-T Technical Paper： IP网络测量模型 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_278">
+  <span class="article-type type-4 float-left">
+   译
+  </span>
+  <h1 class="title-article">
+   ITU-T Technical Paper： IP网络测量模型
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月04日 13:39:52
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：2773
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      本文翻译自ITU-T的Technical Paper：《How to increase QoS/QoE of IP-based platform(s) to regionally agreed standards》(2013/3/1)。这是其第八章的一部分，给出了IP网络测量模型。PS：在此感谢一位师弟的翻译。
+     </span>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <br/>
+     </span>
+    </p>
+    <p>
+     为了对包括NGN在内的基于IP的平台进行质量测量，需要建立适当的模型来应用可能的方法。为了达到这一目的，可以使用图12中介绍的基本网络模型进行测量。测量网络模型应该包括如下三种情况，它们都是由供应商提供的，用于保证不同端点之间的交付服务。[13]
+     <br/>
+     *边到边(Edge-Edge)： 扩展到供应商网络的边缘；
+     <br/>
+     *站点到站点(Site-Site)： 扩展到客户端的边缘（也被称作端到端）；
+     <br/>
+     *终端到终端(TE-TE)：扩展到客户终端。
+     <br/>
+     边到边 (Edge-Edge)模型
+     <br/>
+     图17展示了一个边到边模型，其中的服务保证交付到最靠近客户的PE，客户终端之间的服务或CE到PE的交付并不被保证。得到保证的网络性能特点包含有入口段、出口段和传输段的性能特点集合。
+    </p>
+    <p align="center">
+     <br/>
+     <img alt="" height="362" src="https://img-blog.csdn.net/20131029161321531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="767"/>
+     <br/>
+     图 17 – 边到边(Edge-Edge)模型
+    </p>
+    <p>
+     <br/>
+     入口和出口段包括供应商边缘路由以及区域交换和传输，但是不包括CE-PE链路。传输段的测量从入口区域服务供应商的边界POP延伸到出口区域服务供应商的边界POP。从地理上来说传输段可能横跨一座城市或一个国家/州，甚至是一块或多块大陆，因此根据覆盖范围不同，这一网段可能包含有独立的骨干服务供应商。传输段可能包含部分入口和出口区域网络、区域和骨干供应商之间的链接以及跨越任何骨干网的传输服务。在这一情况下，骨干网的传输服务应该由整个传输服务的子段组成。测量责任的分区可能会按照网络边界进行，但是，在任何配置中测量责任都可以跨越边界以完善测量范围（例如，一个单一测量系统的测量点可能覆盖两个或多个网络）。
+     <br/>
+     域间QoS依赖于持续收集服务供应商之间统计信息的能力，并且可以被服务供应商用于解决性能不达标的原因。服务供应商应该支持以下内容来支持这种监控和故障排除要求：
+     <br/>
+     *每个参与的供应商都必须提供作为性能特性测试点的测量点，并且可供其他SP作限制性使用；
+     <br/>
+     *测试点必须位于任何参与的服务供应商的主要互连对等POP上；
+     <br/>
+     *区域供应商应该提供支持每个参与的客户站点的测量点（边界POP）。
+     <br/>
+     *如果这种范围的性能保证能够得到支持，那么应该有一个位于PE，也可能位于CE和/或客户TE的依赖于服务的测量点。
+     <br/>
+     站点到站点 (Site-Site)模型
+     <br/>
+     图18展示了一个保证服务交付到客户CE的站点到站点模型。
+    </p>
+    <p align="center">
+     <br/>
+     <img alt="" height="373" src="https://img-blog.csdn.net/20131029161330156?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="754"/>
+     <br/>
+     图 18 – 站点到站点(Site-Site)模型
+    </p>
+    <p>
+     <br/>
+     在站点到站点模型中，服务供应商并不保证客户终端到CE的服务，而是把这变为客户的责任。得到保证的网络性能特点包含有入口段、出口段和传输段的性能特点总和。
+     <br/>
+     入口和出口段包含有一个接入段（DSL、线缆、SONET/SDH、以太网等），接入段中包含客户边缘（CE）路由以及区域交换和传输。
+    </p>
+    <p>
+     终端到终端 (TE-TE)模型
+     <br/>
+     图19展示了一个TE-TE模型，其中得到保证的网络性能特点包含有入口段、出口段、传输段和用户段的性能特点集合。这一模型中，用户段包括CE和客户TE之间的网络，这一网络可能还包括连接LAN、电脑和电器用品所用的家庭网络安排。
+    </p>
+    <p align="center">
+     <br/>
+     <img alt="" height="426" src="https://img-blog.csdn.net/20131029161337062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="749"/>
+     <br/>
+     图 19 –终端到终端 (TE-TE)模型
+    </p>
+    <p>
+     <br/>
+     选择用于测量的客户TE时应考虑到如下因素：
+     <br/>
+     *稳定性：
+     <br/>
+     *静态地址或目录查找；
+     <br/>
+     *平稳而非移动；
+     <br/>
+     *保持在线。
+     <br/>
+     *性能：探针响应不受其他应用影响；
+     <br/>
+     *时钟同步： 在单向延迟和延迟百分比的测量中需要用到；
+     <br/>
+     *代表许多其他的TE：通过分析或测量可以发现，在一个CE和一个特定TE之间得到的测试结果可以代表许多其他的TE，这一特定TE被称为“地标”TE。
+     <br/>
+     *被测试的TE数:
+     <br/>
+     *用于最小化探针数，应该使用最少的地标TE
+     <br/>
+     *用于最小化需要处理和报告的数据的复杂度，应该使用最少的地标TE
+    </p>
+    <p>
+     从CE到TE的通信可能需要遍历NAT。因此可能需要使用NAT遍历协议或者预配置。作为一种选择，NAT设备可能被当作TE代理来作为测试点。也可能会发生这样的情况：在客户网络中只有极小的性能变动，这时可能会使用固定的损伤值而非操作测量。
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=网络&amp;t=blog" target="_blank">
+    网络
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=QoS&amp;t=blog" target="_blank">
+    QoS
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=测量&amp;t=blog" target="_blank">
+    测量
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=模型&amp;t=blog" target="_blank">
+    模型
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=终端&amp;t=blog" target="_blank">
+    终端
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,613 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Mplayer 的编译 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_246">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   Mplayer 的编译
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月20日 15:52:04
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4686
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <span style="font-size:12px;">
+     由于项目要用到mplayer，所以要对mplayer进行编译，首先我的平台如下：
+    </span>
+    <p>
+     系统：windows xp2
+    </p>
+    <p>
+     安装好mingw+msys，目录为c:/mingw，其中装的gcc是4.3.2版本的。
+    </p>
+    <p>
+     好了，开始我们windows下的编译之旅。
+    </p>
+    <p>
+     首先，感谢网络上面的资料，各位前辈辛辛苦苦写的blog和上传的资料。大家都为开源而努力吧~~！本文遵循GPL/LGPL协议，欢迎自由转载，但请注明作者出处。
+    </p>
+    <p>
+     关于directx的头文件，我是直接将我机子上安装的dx的include中的所以头文件都复制到了c:/mingw/include中。大家可以单独下载dx7或者dx9，最好去网上搜搜资源。我打开了很多网页，里面有下载链接，不过好像很多都挂掉了，回头有时间自己上传一个吧。
+    </p>
+    <p>
+     开始下载安装一些MPlayer编译所依赖的软件和lib等东东。
+    </p>
+    <p>
+     <span style="color:#009900;">
+      注：这些库也可以不编译安装，并不影响MPlayer的使用，只是会少一些功能。
+     </span>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      1、freetype（OSD字幕用）
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      软件主页：
+     </span>
+     <span style="color:#000000;">
+      <a href="http://www.gnu.org/software/libiconv/">
+       http://www.gnu.org/software/libiconv/
+      </a>
+     </span>
+     <br/>
+     下载版本为：libiconv-1.13.1.tar.gz
+    </p>
+    <p>
+     解压后吧libiconv-1.13.1文件放到c盘下，然后通过msys的终端，cd c:/libiconv-1.13.1。
+    </p>
+    <p>
+     接着输入： ./configure --prefix=c:/mingw --disable-shared
+    </p>
+    <p>
+     注：配置代码命令，其中--prefix=c:/mingw为指定目录命令， --disable-shared为取消共享。回车，等待执行完毕后，输入：
+     <br/>
+     make
+     <br/>
+     注：编译命令。回车，等待执行完毕后，输入：
+     <br/>
+     make install
+     <br/>
+     注：编译安装命令。等待执行完毕后，如果一切顺利，没有报错。那么到此就算完成了一个软件的安装。与下面的各个步骤大同小异，下面我就写的简单一些了。
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#000000;">
+     </span>
+     <span style="color:#990000;">
+      2、freetype2
+     </span>
+     <span style="color:#000000;">
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      软件主页：
+     </span>
+     <span style="color:#000000;">
+      <a href="http://sourceforge.net/project/showfiles.php?group_id=3157">
+       http://sourceforge.net/project/showfiles.php?group_id=3157
+      </a>
+     </span>
+     <br/>
+     <span style="color:#000000;">
+      需要文件：
+     </span>
+     <span style="color:#000000;">
+      freetype-2.1.9.tar.bz2
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      同上一样，解压，然后
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      cd freetype-2.1.9
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      ./configure --prefix=c:/mingw
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      make
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      make install
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      3.zlib
+     </span>
+    </p>
+    <p>
+     软件主页：
+     <a href="http://www.zlib.net/">
+      http://www.zlib.net/
+     </a>
+    </p>
+    <p>
+     下载文件：zlib-1.2.5.tar.gz2
+    </p>
+    <p>
+     cd zlib-1.2.5
+    </p>
+    <p>
+     ./configure --prefix=c:/mingw
+    </p>
+    <p>
+     make
+    </p>
+    <p>
+     make install
+    </p>
+    <p>
+     ps:网上有的没有./configure，应该要有，不然后面编译的时候会出现找不到zlib.h的error。另外，网上有的教程是针对zlib-1.2.3版本的，这个可以在csdn上搜索到，如果1.2.5本版不行的话，可以用那个。
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      4.libpng
+     </span>
+    </p>
+    <p>
+     软件主页：
+     <a href="http://sourceforge.net/project/showfiles.php?group_id=5624">
+      http://sourceforge.net/project/showfiles.php?group_id=5624
+     </a>
+     <br/>
+     所需文件：libpng-1.2.8-config.tar.gz
+     <br/>
+     解压
+     <br/>
+     cd libpng-1.2.8-config
+     <br/>
+     ./configure --prefix=c:/mingw --disable-shared
+     <br/>
+     make
+     <br/>
+     make install
+    </p>
+    <p>
+     <br/>
+     <span style="color:#990000;">
+      5、libjpeg
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      软件主页：
+     </span>
+     <span style="color:#000000;">
+      <a href="http://www.ijg.org/">
+       http://www.ijg.org/
+      </a>
+     </span>
+     <br/>
+     <span style="color:#000000;">
+      所需文件：
+     </span>
+     <span style="color:#000000;">
+      jpegsrc.v8b.tar.gz
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      解压
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      cd jpeg-8b
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      ./configure --prefix=c:/mingw --enable-static
+     </span>
+     <span style="color:#000000;">
+      <br/>
+     </span>
+     cp .libs/libjpeg.a c:/mingw/lib/
+     <br/>
+     cp jpeglib.h jconfig.h jmorecfg.h c:/mingw/include/
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      6、libregif
+     </span>
+     <span style="color:#000000;">
+      <span style="color:#000000;">
+       <br/>
+      </span>
+      <span style="color:#000000;">
+       软件主页：
+      </span>
+      <a href="http://oss.netfarm.it/mplayer-win32.php">
+       http://oss.netfarm.it/mplayer-win32.php
+      </a>
+     </span>
+     <span style="color:#000000;">
+      <a href="http://armory.nicewarrior.org/projects/libregif/">
+      </a>
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      所需文件：libregif-4.1.7-ac.tar.bz2（附：在[Misc Files]标签下）
+     </span>
+     <span style="color:#000000;">
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      解压
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="color:#000000;">
+       cd libregif-4.1.7
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="color:#000000;">
+       ./configure --prefix=c:/mingw
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="color:#000000;">
+       make
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      <span style="color:#000000;">
+       make install
+      </span>
+     </span>
+     <span style="color:#000000;">
+      <br/>
+     </span>
+     <span style="color:#000000;">
+     </span>
+    </p>
+    <p dir="ltr" style="margin-right:0px;">
+     <span style="color:#000000;">
+      <span style="color:#990000;">
+       7
+       <span style="color:#990000;">
+        、
+       </span>
+       nasm
+      </span>
+      <br/>
+      软件主页：
+     </span>
+     <a href="http://sourceforge.net/projects/nasm/files/">
+      http://sourceforge.net/projects/nasm/files/
+     </a>
+    </p>
+    <blockquote dir="ltr" style="margin-right:0px;">
+     <p dir="ltr" style="margin-right:0px;">
+      <span style="color:#000000;">
+       所需文件：nasm-2.07.tar.bz2
+       <br/>
+       解压
+       <br/>
+       cd nasm-2.07
+      </span>
+     </p>
+    </blockquote>
+    <span style="color:#000000;">
+    </span>
+    <blockquote dir="ltr" style="margin-right:0px;">
+     <p dir="ltr" style="margin-right:0px;">
+      ./configure --prefix=c:/mingw
+      <br/>
+      make
+      <br/>
+      <span style="color:#FF0000;">
+       mkdir c:/mingw/man/man1(这句要加~~，不过可能你的已经存在这个目录了，那就没事了。)
+      </span>
+      <br/>
+      make install
+      <br/>
+     </p>
+    </blockquote>
+    <p>
+     <span style="color:#000000;">
+     </span>
+     <span style="color:#000000;">
+     </span>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      8、lame
+     </span>
+     <br/>
+     软件主页：
+     <a href="http://lame.sourceforge.net/download/download.html">
+      http://lame.sourceforge.net/download/download.html
+     </a>
+     <br/>
+     所需文件：lame3.98.4.tar.gz
+     <br/>
+     解压
+     <br/>
+     cd lame-3.98.4
+     <br/>
+     ./configure --prefix=c:/mingw --disable-shared --disable-decoder
+     <br/>
+     make
+     <br/>
+     make install
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      9、xvid
+     </span>
+     <br/>
+     软件主页：
+     <a href="http://www.xvid.org/downloads.html">
+      http://www.xvid.org/downloads.html
+     </a>
+     <br/>
+     所需文件：xvidcore-1.2.2.tar.bz2
+     <br/>
+     cd xvidcore-1.2.2/build/generic
+     <br/>
+     ./configure --prefix=c:/mingw --disable-shared
+     <br/>
+     make
+     <br/>
+     make install
+     <br/>
+     mv c:/mingw/lib/xvidcore.a c:/mingw/lib/libxvidcore.a
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      10.svn
+     </span>
+    </p>
+    <p>
+     软件主页：
+     <a href="http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=11149&amp;expandFolder=11149&amp;folderID=0">
+      http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=11149&amp;expandFolder=11149&amp;folderID=0
+     </a>
+    </p>
+    <p>
+     打开subversion-》Releases-》Windows Binaries
+    </p>
+    <p>
+     下载文件：
+     <a href="http://blog.csdn.net/moodytong/article/details/files/documents/15/47778/svn-win32-1.4.6.zip">
+      svn-win32-1.4.6.zip
+     </a>
+     （最后一个）
+    </p>
+    <p>
+     解压后将 /bin 文件夹内的所有文件复制到C:/mingw/bin文件夹内。
+    </p>
+    <p>
+    </p>
+    <p>
+     <span style="color:#990000;">
+      11、live555
+      <br/>
+     </span>
+     <span style="color:#000000;">
+      下载地址：
+     </span>
+     <span style="color:#000000;">
+      <a href="http://www.live555.com/liveMedia/public/">
+       http://www.live555.com/liveMedia/public/
+      </a>
+     </span>
+     <br/>
+     <span style="color:#000000;">
+      所需文件：
+     </span>
+     <a href="http://blog.csdn.net/moodytong/article/details/live555-latest.tar.gz">
+      live555-latest.tar.gz
+     </a>
+    </p>
+    <p>
+     <span style="color:#000000;">
+      解压
+     </span>
+     <span style="color:#000000;">
+      <br/>
+      cd live
+      <br/>
+      genMakefiles mingw
+      <br/>
+      make
+     </span>
+    </p>
+    <p>
+    </p>
+    <p>
+     mplayer的初步编译：
+    </p>
+    <p>
+     下载版本为Player-1.0rc3.tar.bz
+    </p>
+    <p>
+     cd c/mplayer/1.0rc3
+    </p>
+    <p>
+     ./configure --prefix=/usr --enable-static --enable-qtx --enable-real --enable-freetype --enable-png --enable-jpeg --enable-gif --enable-tga --disable-mencoder --enable-runtime-cpudetection --disable-ssse3 --extra-libs="-mwindows"
+    </p>
+    <p>
+     make
+    </p>
+    <p>
+     make install
+    </p>
+    <p>
+     成功之后：
+    </p>
+    <p>
+    </p>
+    <p align="center">
+     <img alt="" height="715" src="https://img-blog.csdn.net/20131120154455281" width="801"/>
+    </p>
+    <p>
+    </p>
+    <p>
+     其它可参考文档：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/li_007/archive/2008/01/21/2057382.aspx">
+      http://blog.csdn.net/li_007/archive/2008/01/21/2057382.aspx
+     </a>
+    </p>
+    <p>
+     <a href="http://kb.cnblogs.com/a/1426019/">
+      http://kb.cnblogs.com/a/1426019/
+     </a>
+    </p>
+    <p>
+     <a href="http://www.gaia-gis.it/spatialite-2.4.0/mingw_how_to.html">
+      http://www.gaia-gis.it/spatialite-2.4.0/mingw_how_to.html
+     </a>
+    </p>
+    <p>
+     <a href="http://www.linuxdiyf.com/bbs/thread-22266-1-1.html">
+      http://www.linuxdiyf.com/bbs/thread-22266-1-1.html
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+     转载自：
+     <a href="http://blog.csdn.net/moodytong/article/details/5895632">
+      http://blog.csdn.net/moodytong/article/details/5895632
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mplayer&amp;t=blog" target="_blank">
+    mplayer
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=编译&amp;t=blog" target="_blank">
+    编译
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=MinGW&amp;t=blog" target="_blank">
+    MinGW
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286593" target="_blank">
+    Mplayer
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

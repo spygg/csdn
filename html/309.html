@@ -1,0 +1,393 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Media Player Classic - HC 源代码分析 1：整体结构 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_309">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   Media Player Classic - HC 源代码分析 1：整体结构
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月28日 00:26:06
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：17622
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      =====================================================
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      Media Player Classic - HC 源代码分析系列文章列表：
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13280659">
+       Media Player Classic - HC 源代码分析 1：整体结构
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13290345">
+       Media Player Classic - HC 源代码分析 2：核心类 （CMainFrame）（1）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297291">
+       Media Player Classic - HC 源代码分析 3：核心类 （CMainFrame）（2）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13298397">
+       Media Player Classic - HC 源代码分析 4：核心类 （CMainFrame）（3）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297555">
+       Media Player Classic - HC 源代码分析 5：关于对话框 （CAboutDlg）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297589">
+       Media Player Classic - HC 源代码分析 6：MediaInfo选项卡 （CPPageFileMediaInfo）
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/13297621">
+       Media Player Classic - HC 源代码分析 7：详细信息选项卡（CPPageFileInfoDetails）
+      </a>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);font-family:Arial;font-size:14px;line-height:26px;">
+      =====================================================
+     </span>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <img alt="" src="https://img-blog.csdn.net/20140616104406062"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      Media Player Classic - Home Cinema (mpc-hc)播放器一个经典的影音播放器，可播放CD、VCD、DVD、及MP3、MP4、AVI、AAC等多种影音格式。与此同时，它还是开源的。很多知名的视频播放器都是在它的基础上建立起来的，在这里就不例举了。本文将会对其源代码进行简要的分析。
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      之前一篇博客中曾经介绍了它的编译过程：
+      <a href="http://blog.csdn.net/leixiaohua1020/article/details/11694711">
+       VC2010 编译 Media Player Classic - Home Cinema (mpc-hc)
+      </a>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      在这里就不再重复说明了，直入主题，看看它的工程是什么样子：
+     </span>
+    </p>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131028000023140?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      相信大部分人看到这个工程的第一反应就是：好大啊！确实，我看到这个工程的时候也是这个反应。
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       mpc-hc总体上分为3个部分：Apps，Filters，Libraries。其中Apps是其主程序；Filters是其附带的一些directshow filter，比如说AVI分离器，FLV分离器等等；
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        Libraries则是其依赖的一些库：像Zlib这类的。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+      <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        来细看看
+        <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+         mpc-hc都有什么
+         <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+          directshow filter吧（截图都放不下了...）
+         </span>
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131028000615062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+    </span>
+    <p>
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p>
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      Filters分为以下几种：
+     </span>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        Muxer（封装），Parser（解封装，或称为分离器），Reader（读取），Renderer（显示），Source（源），Switcher（这个我不懂），Transform（处理）
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        在这里就不一一例举各种Filter了，因为数量实在太多，大部分Filter工程都可以通过名称来判断其功能。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        再看看主程序Apps工程吧：
+       </span>
+      </span>
+     </span>
+    </p>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131028001204375?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        可见主程序包含了巨量的代码，截图也只能显示其中的一部分。因此在代码分析的时候，不可能做到面面俱到，只能选择其中的重点部分进行详细的分析。
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        mpc-hc的对话框数量也很惊人：
+       </span>
+      </span>
+     </span>
+    </p>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+    </span>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131028001430812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       在这里就不再花篇幅形容mpc-hc工程的巨大了。赶紧说说如何来研究分析它的代码。本文主要分析它的主程序即在Apps目录下的工程。先介绍一下我总结出来的一些规则：
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       1.以PPage开头的.cpp或.h文件通常是一些属性选项卡的对话框对应的类。随后会详细介绍一个“视频信息”选项卡的代码（在这里用到了开源库MediaInfo）
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       2.主框架所在的位置是Mainfrm.cpp
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="font-family:Arial;color:#333333;">
+      <span style="font-size:14px;line-height:26px;">
+       目前只有这两条规则，以后会随着研究的不断深入，进一步完善这些规则。
+      </span>
+     </span>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/13280659
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mpc-hc&amp;t=blog" target="_blank">
+    mpc-hc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=开源&amp;t=blog" target="_blank">
+    开源
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=directshow&amp;t=blog" target="_blank">
+    directshow
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286581" target="_blank">
+    MPC-HC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

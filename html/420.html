@@ -1,0 +1,841 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 编译运行Red5源代码 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_420">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   编译运行Red5源代码
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月09日 23:52:31
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7035
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <strong>
+      <span style="color:#303030;">
+       1.
+      </span>
+      <span style="color:#303030;">
+       安装
+      </span>
+      <span style="color:#303030;">
+       Eclipse3.3.2
+      </span>
+     </strong>
+     <span style="color:#303030;">
+      <br/>
+      a.
+      <a href="http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops/R-3.3.2-200802211800/eclipse-SDK-3.3.2-win32.zip&amp;url=http://download.actuatechina.com/eclipse/eclipse/downloads/drops/R-3.3.2-200802211800/eclipse-SDK-3.3.2-win32.zip&amp;mirror_id=385">
+       <strong>
+        <span style="color:#366900;">
+         点这里从官方网站下载
+        </span>
+       </strong>
+      </a>
+     </span>
+     <span style="color:#366900;">
+      <br/>
+     </span>
+     b.
+     <span style="color:#303030;">
+      解压缩到
+     </span>
+     <span style="color:#303030;">
+      D:\red5
+      <br/>
+      c.
+     </span>
+     <span style="color:#303030;">
+      进入
+     </span>
+     <span style="color:#303030;">
+      D:\red5\eclipse
+     </span>
+     <span style="color:#303030;">
+      ，双击
+     </span>
+     <span style="color:#303030;">
+      eclipse.exe
+      <br/>
+      d.
+     </span>
+     <span style="color:#303030;">
+      选择工程存放目录，设置在
+     </span>
+     <span style="color:#303030;">
+      D:\red5\code
+     </span>
+     <span style="color:#303030;">
+      ，勾选
+     </span>
+     <span style="color:#303030;">
+      "Use this as the default and do not ask again"
+     </span>
+     <span style="color:#303030;">
+      。
+     </span>
+    </p>
+    <strong>
+     <span style="color:#303030;">
+      2.
+     </span>
+     <span style="color:#303030;">
+      安装
+     </span>
+     <span style="color:#303030;">
+      Subclipse(Eclipse
+     </span>
+     <span style="color:#303030;">
+      上的
+     </span>
+     <span style="color:#303030;">
+      SVN
+     </span>
+     <span style="color:#303030;">
+      插件
+     </span>
+     <span style="color:#303030;">
+      )
+     </span>
+    </strong>
+    <span style="color:#303030;">
+     <br/>
+     a.
+     <a href="http://subclipse.tigris.org/files/documents/906/43484/site-1.4.4.zip">
+      <strong>
+       <span style="color:#366900;">
+        点这里从官方网站下载
+       </span>
+      </strong>
+     </a>
+    </span>
+    <br/>
+    b.
+    <span style="color:#303030;">
+     选择
+    </span>
+    <span style="color:#303030;">
+     Eclipse
+    </span>
+    <span style="color:#303030;">
+     主菜单中
+    </span>
+    <span style="color:#303030;">
+     Help-&gt;Software Updates-&gt;Find and Install...
+     <br/>
+     c.
+    </span>
+    <span style="color:#303030;">
+     选择
+    </span>
+    <span style="color:#303030;">
+     Search for new features toinstall,
+    </span>
+    <span style="color:#303030;">
+     单击
+    </span>
+    <span style="color:#303030;">
+     next
+    </span>
+    <span style="color:#303030;">
+     ，进入插件安装界面
+    </span>
+    <span style="color:#303030;">
+     <br/>
+     d.
+    </span>
+    <span style="color:#303030;">
+     单击
+    </span>
+    <span style="color:#303030;">
+     New Archived Site...
+    </span>
+    <span style="color:#303030;">
+     打开文件选取界面，找到刚才下载的
+    </span>
+    <span style="color:#303030;">
+     site-1.4.4.zip
+    </span>
+    <span style="color:#303030;">
+     双击。弹出
+    </span>
+    <span style="color:#303030;">
+     Edit
+ Local Site
+    </span>
+    <span style="color:#303030;">
+     界面，单击
+    </span>
+    <span style="color:#303030;">
+     OK
+     <br/>
+     e.
+    </span>
+    <span style="color:#303030;">
+     回到
+    </span>
+    <span style="color:#303030;">
+     c
+    </span>
+    <span style="color:#303030;">
+     画面，单击
+    </span>
+    <span style="color:#303030;">
+     Finish
+     <br/>
+     f.
+    </span>
+    <span style="color:#303030;">
+     进入
+    </span>
+    <span style="color:#303030;">
+     Updates
+    </span>
+    <span style="color:#303030;">
+     界面，勾选
+    </span>
+    <span style="color:#303030;">
+     "JavaHL Adapter(recommended)"
+    </span>
+    <span style="color:#303030;">
+     ，
+    </span>
+    <span style="color:#303030;">
+     "Subclipse(required)"
+    </span>
+    <span style="color:#303030;">
+     ，单击
+    </span>
+    <span style="color:#303030;">
+     next
+     <br/>
+    </span>
+    <p>
+     <span style="color:#303030;">
+      <img alt="" src="https://img-blog.csdn.net/20131009235010687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#303030;">
+     </span>
+    </p>
+    <p>
+     <span style="color:#303030;">
+      g.
+     </span>
+     <span style="color:#303030;">
+      进入
+     </span>
+     <span style="color:#303030;">
+      Install
+     </span>
+     <span style="color:#303030;">
+      界面，选中
+     </span>
+     <span style="color:#303030;">
+      "I accept the terms in the license agreements"
+     </span>
+     <span style="color:#303030;">
+      ，单击
+     </span>
+     <span style="color:#303030;">
+      next
+      <br/>
+      h.
+     </span>
+     <span style="color:#303030;">
+      单击
+     </span>
+     <span style="color:#303030;">
+      Finish
+     </span>
+     <span style="color:#303030;">
+      ，弹出新界面单击
+     </span>
+     <span style="color:#303030;">
+      Install All
+     </span>
+     <span style="color:#303030;">
+      ，再弹出新界面单击
+     </span>
+     <span style="color:#303030;">
+      Yes
+     </span>
+     <span style="color:#303030;">
+      ，
+     </span>
+     <span style="color:#303030;">
+      Eclipse
+     </span>
+     <span style="color:#303030;">
+      重新启动，此时
+     </span>
+     <span style="color:#303030;">
+      Subclipse
+     </span>
+     <span style="color:#303030;">
+      安装完毕。
+     </span>
+    </p>
+    <strong>
+     <span style="color:#303030;">
+      3.
+     </span>
+     <span style="color:#303030;">
+      从
+     </span>
+     <span style="color:#303030;">
+      red5
+     </span>
+     <span style="color:#303030;">
+      的
+     </span>
+     <span style="color:#303030;">
+      svn
+     </span>
+     <span style="color:#303030;">
+      上取出源代码
+     </span>
+    </strong>
+    <span style="color:#303030;">
+     <br/>
+     a.
+    </span>
+    <span style="color:#303030;">
+     选择
+    </span>
+    <span style="color:#303030;">
+     Eclipse
+    </span>
+    <span style="color:#303030;">
+     主菜单中
+    </span>
+    <span style="color:#303030;">
+     Window-&gt;Open Perspective-&gt;Other
+    </span>
+    <span style="color:#303030;">
+     ，弹出
+    </span>
+    <span style="color:#303030;">
+     "Open
+ Perspective"
+    </span>
+    <span style="color:#303030;">
+     界面，选择
+    </span>
+    <span style="color:#303030;">
+     "SVN
+    </span>
+    <span style="color:#303030;">
+     资源库研究
+    </span>
+    <span style="color:#303030;">
+     "
+    </span>
+    <span style="color:#303030;">
+     ，单击
+    </span>
+    <span style="color:#303030;">
+     OK
+     <br/>
+     <br/>
+    </span>
+    <img alt="" src="https://img-blog.csdn.net/20131009235015187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    <br/>
+    <p>
+     <span style="color:#303030;">
+      <span style="color:#303030;">
+       b.
+      </span>
+      <span style="color:#303030;">
+       在
+      </span>
+      <span style="color:#303030;">
+       Eclipse
+      </span>
+      <span style="color:#303030;">
+       左侧，单击右键弹出菜单，选择
+      </span>
+      <span style="color:#303030;">
+       "
+      </span>
+      <span style="color:#303030;">
+       新建
+      </span>
+      <span style="color:#303030;">
+       "-&gt;"
+      </span>
+      <span style="color:#303030;">
+       资源库位置
+      </span>
+      <span style="color:#303030;">
+       ..."
+       <br/>
+       c.
+      </span>
+      <span style="color:#303030;">
+       进入
+      </span>
+      <span style="color:#303030;">
+       "
+      </span>
+      <span style="color:#303030;">
+       添加
+      </span>
+      <span style="color:#303030;">
+       SVN
+      </span>
+      <span style="color:#303030;">
+       资源库
+      </span>
+      <span style="color:#303030;">
+       "
+      </span>
+      <span style="color:#303030;">
+       界面，在
+      </span>
+      <span style="color:#303030;">
+       URL
+      </span>
+      <span style="color:#303030;">
+       中填入：
+      </span>
+      <span style="color:#303030;">
+       http://red5.googlecode.com/svn/java/server/tags/0_9rc1/
+      </span>
+      <span style="color:#303030;">
+       ，单击
+      </span>
+      <span style="color:#303030;">
+       Finish
+       <br/>
+       d.
+      </span>
+      <span style="color:#303030;">
+       在
+      </span>
+      <span style="color:#303030;">
+       Eclipse
+      </span>
+      <span style="color:#303030;">
+       左侧，出现一个条目
+      </span>
+      <span style="color:#303030;">
+       "
+      </span>
+      <span style="color:#303030;">
+       http://red5.googlecode.com/svn/java/server/tags/0_9rc1/"
+      </span>
+      <span style="color:#303030;">
+       ，右键点击，弹出菜单选择
+      </span>
+      <span style="color:#303030;">
+       "
+      </span>
+      <span style="color:#303030;">
+       检出为
+      </span>
+      <span style="color:#303030;">
+       ..."
+       <br/>
+       <br/>
+      </span>
+      <img alt="" src="https://img-blog.csdn.net/20131009235011156?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    <p>
+     <span style="color:#303030;">
+     </span>
+    </p>
+    <p>
+     <span style="color:#303030;">
+      e.
+     </span>
+     <span style="color:#303030;">
+      等待片刻，弹出
+     </span>
+     <span style="color:#303030;">
+      "
+     </span>
+     <span style="color:#303030;">
+      从
+     </span>
+     <span style="color:#303030;">
+      SVN
+     </span>
+     <span style="color:#303030;">
+      检出
+     </span>
+     <span style="color:#303030;">
+      "
+     </span>
+     <span style="color:#303030;">
+      界面，选中
+     </span>
+     <span style="color:#303030;">
+      "
+     </span>
+     <span style="color:#303030;">
+      做为工作空间中的项目检出
+     </span>
+     <span style="color:#303030;">
+      "
+     </span>
+     <span style="color:#303030;">
+      ，单击
+     </span>
+     <span style="color:#303030;">
+      Finish
+      <br/>
+      f.
+     </span>
+     <span style="color:#303030;">
+      弹出
+     </span>
+     <span style="color:#303030;">
+      "SVN
+     </span>
+     <span style="color:#303030;">
+      检出
+     </span>
+     <span style="color:#303030;">
+      "
+     </span>
+     <span style="color:#303030;">
+      界面，此时正在从远程
+     </span>
+     <span style="color:#303030;">
+      SVN
+     </span>
+     <span style="color:#303030;">
+      服务器取回源代码，等待
+     </span>
+     <span style="color:#303030;">
+      1
+     </span>
+     <span style="color:#303030;">
+      ～
+     </span>
+     <span style="color:#303030;">
+      N
+     </span>
+     <span style="color:#303030;">
+      分钟（视你的网速）
+     </span>
+     <span style="color:#303030;">
+      <br/>
+      g.
+     </span>
+     <span style="color:#303030;">
+      下载完毕，选择
+     </span>
+     <span style="color:#303030;">
+      Eclipse
+     </span>
+     <span style="color:#303030;">
+      主菜单中
+     </span>
+     <span style="color:#303030;">
+      Window-&gt;Open Perspective-&gt;Java
+     </span>
+     <span style="color:#303030;">
+      ，进入
+     </span>
+     <span style="color:#303030;">
+      Java
+     </span>
+     <span style="color:#303030;">
+      编辑视图
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#303030;">
+       4.
+      </span>
+      <span style="color:#303030;">
+       编译
+      </span>
+      <span style="color:#303030;">
+       red5
+      </span>
+      <span style="color:#303030;">
+       源代码
+      </span>
+     </strong>
+     <span style="color:#303030;">
+      <br/>
+      a.
+     </span>
+     <span style="color:#303030;">
+      打开
+     </span>
+     <span style="color:#303030;">
+      red5_server
+     </span>
+     <span style="color:#303030;">
+      工程，找到
+     </span>
+     <span style="color:#303030;">
+      build.xml
+     </span>
+     <span style="color:#303030;">
+      ，右键单击，选择
+     </span>
+     <span style="color:#303030;">
+      Run As-&gt;Ant
+ Build
+      <br/>
+      b.
+     </span>
+     <span style="color:#303030;">
+      在
+     </span>
+     <span style="color:#303030;">
+      Ant
+     </span>
+     <span style="color:#303030;">
+      引导的编译过程中会利用
+     </span>
+     <span style="color:#303030;">
+      Ivy
+     </span>
+     <span style="color:#303030;">
+      下载相关依赖的
+     </span>
+     <span style="color:#303030;">
+      jar
+     </span>
+     <span style="color:#303030;">
+      文件
+     </span>
+     <span style="color:#303030;">
+      (
+     </span>
+     <span style="color:#303030;">
+      入门推荐学习
+     </span>
+     <span style="color:#303030;">
+      <a href="http://www.ibm.com/developerworks/cn/java/j-ap05068/?S_TACT=105AGX52&amp;S_CMP=NL&amp;ca=dnl-cn-06112008">
+       这篇文章
+      </a>
+     </span>
+     <span style="color:#303030;">
+      及
+     </span>
+     <span style="color:#303030;">
+      <a href="http://ant.apache.org/ivy">
+       官方教程
+      </a>
+     </span>
+     )
+     <br/>
+     c.
+     <span style="color:#303030;">
+      看到
+     </span>
+     <span style="color:#303030;">
+      BUILD SUCCESSFUL
+     </span>
+     <span style="color:#303030;">
+      。打开
+     </span>
+     <span style="color:#303030;">
+      lib
+     </span>
+     <span style="color:#303030;">
+      文件夹，所有依赖的
+     </span>
+     <span style="color:#303030;">
+      jar
+     </span>
+     <span style="color:#303030;">
+      文件都放在里边了。打开工程属性，选择
+     </span>
+     <span style="color:#303030;">
+      Java
+ Build Path
+     </span>
+     <span style="color:#303030;">
+      ，打开
+     </span>
+     <span style="color:#303030;">
+      Libraries
+     </span>
+     <span style="color:#303030;">
+      选项卡，单击
+     </span>
+     <span style="color:#303030;">
+      Add JARs
+     </span>
+     <span style="color:#303030;">
+      ，选取
+     </span>
+     <span style="color:#303030;">
+      lib
+     </span>
+     <span style="color:#303030;">
+      文件夹里所有的
+     </span>
+     <span style="color:#303030;">
+      jar
+     </span>
+     <span style="color:#303030;">
+      ，单击
+     </span>
+     <span style="color:#303030;">
+      OK
+     </span>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#303030;">
+       5.
+      </span>
+      <span style="color:#303030;">
+       运行
+      </span>
+      <span style="color:#303030;">
+       red5 Standalone
+      </span>
+     </strong>
+     <span style="color:#303030;">
+      <br/>
+      a.
+     </span>
+     <span style="color:#303030;">
+      找到
+     </span>
+     <span style="color:#303030;">
+      org.red5.server.Standalone
+     </span>
+     <span style="color:#303030;">
+      ，运行之。
+     </span>
+     <span style="color:#303030;">
+      <br/>
+      b.
+     </span>
+     <span style="color:#303030;">
+      日志系统使用
+     </span>
+     <span style="color:#303030;">
+      <a href="http://logback.qos.ch/">
+       LogBack
+      </a>
+     </span>
+    </p>
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=red5&amp;t=blog" target="_blank">
+    red5
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=服务器&amp;t=blog" target="_blank">
+    服务器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362940" target="_blank">
+    J2EE
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362938" target="_blank">
+    开源多媒体系统
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

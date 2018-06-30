@@ -1,0 +1,1088 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：avformat_alloc_output_context2() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_94">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：avformat_alloc_output_context2()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月03日 22:13:57
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：23196
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文简单分析FFmpeg中常用的一个函数：avformat_alloc_output_context2()。在基于FFmpeg的视音频编码器程序中，该函数通常是第一个调用的函数（除了组件注册函数av_register_all()）。avformat_alloc_output_context2()函数可以初始化一个用于输出的AVFormatContext结构体。它的声明位于libavformat\avformat.h，如下所示。
+    </p>
+    <pre class="cpp">/**
+ * Allocate an AVFormatContext for an output format.
+ * avformat_free_context() can be used to free the context and
+ * everything allocated by the framework within it.
+ *
+ * @param *ctx is set to the created format context, or to NULL in
+ * case of failure
+ * @param oformat format to use for allocating the context, if NULL
+ * format_name and filename are used instead
+ * @param format_name the name of output format to use for allocating the
+ * context, if NULL filename is used instead
+ * @param filename the name of the filename to use for allocating the
+ * context, may be NULL
+ * @return &gt;= 0 in case of success, a negative AVERROR code in case of
+ * failure
+ */
+int avformat_alloc_output_context2(AVFormatContext **ctx, AVOutputFormat *oformat,
+                                   const char *format_name, const char *filename);</pre>
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+    </blockquote>
+    代码中的英文注释写的已经比较详细了，在这里拿中文简单叙述一下。
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     ctx：函数调用成功之后创建的AVFormatContext结构体。
+     <br/>
+     oformat：指定AVFormatContext中的AVOutputFormat，用于确定输出格式。如果指定为NULL，可以设定后两个参数（format_name或者filename）由FFmpeg猜测输出格式。
+     <br/>
+     <span style="font-family:'FangSong_GB2312';">
+      PS：使用该参数需要自己手动获取AVOutputFormat，相对于使用后两个参数来说要麻烦一些。
+      <br/>
+     </span>
+     format_name：指定输出格式的名称。根据格式名称，FFmpeg会推测输出格式。输出格式可以是“flv”，“mkv”等等。
+     <br/>
+     filename：指定输出文件的名称。根据文件名称，FFmpeg会推测输出格式。文件名称可以是“xx.flv”，“yy.mkv”等等。
+     <br/>
+     <p>
+      函数执行成功的话，其返回值大于等于0。
+     </p>
+    </blockquote>
+    <p>
+     该函数最典型的例子可以参考：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/25430425">
+      最简单的基于FFMPEG的视频编码器（YUV编码为H.264）
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     函数调用结构图
+    </h2>
+    <p>
+     首先贴出来最终分析得出的函数调用结构图，如下所示。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1804803">
+      <img alt="" src="https://img-blog.csdn.net/20150303220720490"/>
+     </a>
+    </div>
+    <div style="text-align:center;">
+     <a href="https://my.csdn.net/leixiaohua1020/album/detail/1804803">
+      单击查看更清晰图片
+     </a>
+    </div>
+    <div style="text-align:left;">
+     <br/>
+    </div>
+    <h2>
+     avformat_alloc_output_context2()
+    </h2>
+    下面看一下avformat_alloc_output_context2()的函数定义。该函数的定义位于libavformat\mux.c中，如下所示。
+    <br/>
+    <pre class="cpp">int avformat_alloc_output_context2(AVFormatContext **avctx, AVOutputFormat *oformat,
+                                   const char *format, const char *filename)
+{
+    AVFormatContext *s = avformat_alloc_context();
+    int ret = 0;
+
+
+    *avctx = NULL;
+    if (!s)
+        goto nomem;
+
+
+    if (!oformat) {
+        if (format) {
+            oformat = av_guess_format(format, NULL, NULL);
+            if (!oformat) {
+                av_log(s, AV_LOG_ERROR, "Requested output format '%s' is not a suitable output format\n", format);
+                ret = AVERROR(EINVAL);
+                goto error;
+            }
+        } else {
+            oformat = av_guess_format(NULL, filename, NULL);
+            if (!oformat) {
+                ret = AVERROR(EINVAL);
+                av_log(s, AV_LOG_ERROR, "Unable to find a suitable output format for '%s'\n",
+                       filename);
+                goto error;
+            }
+        }
+    }
+
+
+    s-&gt;oformat = oformat;
+    if (s-&gt;oformat-&gt;priv_data_size &gt; 0) {
+        s-&gt;priv_data = av_mallocz(s-&gt;oformat-&gt;priv_data_size);
+        if (!s-&gt;priv_data)
+            goto nomem;
+        if (s-&gt;oformat-&gt;priv_class) {
+            *(const AVClass**)s-&gt;priv_data= s-&gt;oformat-&gt;priv_class;
+            av_opt_set_defaults(s-&gt;priv_data);
+        }
+    } else
+        s-&gt;priv_data = NULL;
+
+
+    if (filename)
+        av_strlcpy(s-&gt;filename, filename, sizeof(s-&gt;filename));
+    *avctx = s;
+    return 0;
+nomem:
+    av_log(s, AV_LOG_ERROR, "Out of memory\n");
+    ret = AVERROR(ENOMEM);
+error:
+    avformat_free_context(s);
+    return ret;
+}</pre>
+    <br/>
+    从代码中可以看出，avformat_alloc_output_context2()的流程如要包含以下2步：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1)
+     <span style="white-space:pre;">
+     </span>
+     调用avformat_alloc_context()初始化一个默认的AVFormatContext。
+     <p>
+      2)
+      <span style="white-space:pre;">
+      </span>
+      如果指定了输入的AVOutputFormat，则直接将输入的AVOutputFormat赋值给AVOutputFormat的oformat。如果没有指定输入的AVOutputFormat，就需要根据文件格式名称或者文件名推测输出的AVOutputFormat。无论是通过文件格式名称还是文件名推测输出格式，都会调用一个函数av_guess_format()。
+     </p>
+    </blockquote>
+    <p>
+     下面我们分别看看上文步骤中提到的两个重要的函数：avformat_alloc_context()和av_guess_format()。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     avformat_alloc_context()
+    </h2>
+    avformat_alloc_context()的是一个FFmpeg的API，它的定义如下。
+    <br/>
+    <pre class="cpp">AVFormatContext *avformat_alloc_context(void)
+{
+    AVFormatContext *ic;
+    ic = av_malloc(sizeof(AVFormatContext));
+    if (!ic) return ic;
+    avformat_get_context_defaults(ic);
+
+
+    ic-&gt;internal = av_mallocz(sizeof(*ic-&gt;internal));
+    if (!ic-&gt;internal) {
+        avformat_free_context(ic);
+        return NULL;
+    }
+
+
+    return ic;
+}</pre>
+    <br/>
+    从代码中可以看出，avformat_alloc_context()首先调用av_malloc()为AVFormatContext分配一块内存。然后调用了一个函数avformat_get_context_defaults()用于给AVFormatContext设置默认值。avformat_get_context_defaults()的定义如下。
+    <br/>
+    <pre class="cpp">static void avformat_get_context_defaults(AVFormatContext *s)
+{
+    memset(s, 0, sizeof(AVFormatContext));
+
+
+    s-&gt;av_class = &amp;av_format_context_class;
+
+
+    av_opt_set_defaults(s);
+}</pre>
+    <br/>
+    <p>
+     从代码中可以看出，avformat_alloc_context()首先调用memset()将AVFormatContext的内存置零；然后指定它的AVClass（指定了AVClass之后，该结构体就支持和AVOption相关的功能）；最后调用av_opt_set_defaults()给AVFormatContext的成员变量设置默认值（av_opt_set_defaults()就是和AVOption有关的一个函数，专门用于给指定的结构体设定默认值，此处暂不分析）。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     av_guess_format()
+    </h2>
+    <p>
+     av_guess_format()是FFmpeg的一个API。它的声明如下。
+    </p>
+    <pre class="cpp">/**
+ * Return the output format in the list of registered output formats
+ * which best matches the provided parameters, or return NULL if
+ * there is no match.
+ *
+ * @param short_name if non-NULL checks if short_name matches with the
+ * names of the registered formats
+ * @param filename if non-NULL checks if filename terminates with the
+ * extensions of the registered formats
+ * @param mime_type if non-NULL checks if mime_type matches with the
+ * MIME type of the registered formats
+ */
+AVOutputFormat *av_guess_format(const char *short_name,
+                                const char *filename,
+                                const char *mime_type);</pre>
+    <br/>
+    拿中文简单解释一下参数。
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     short_name：格式的名称。
+     <br/>
+     filename：文件的名称。
+     <br/>
+     mime_type：MIME类型。
+    </blockquote>
+    <p>
+     返回最匹配的AVOutputFormat。如果没有很匹配的AVOutputFormat，则返回NULL。
+    </p>
+    <p>
+     av_guess_format()的代码如下所示。
+    </p>
+    <pre class="cpp">AVOutputFormat *av_guess_format(const char *short_name, const char *filename,
+                                const char *mime_type)
+{
+    AVOutputFormat *fmt = NULL, *fmt_found;
+    int score_max, score;
+
+
+    /* specific test for image sequences */
+#if CONFIG_IMAGE2_MUXER
+    if (!short_name &amp;&amp; filename &amp;&amp;
+        av_filename_number_test(filename) &amp;&amp;
+        ff_guess_image2_codec(filename) != AV_CODEC_ID_NONE) {
+        return av_guess_format("image2", NULL, NULL);
+    }
+#endif
+    /* Find the proper file type. */
+    fmt_found = NULL;
+    score_max = 0;
+    while ((fmt = av_oformat_next(fmt))) {
+        score = 0;
+        if (fmt-&gt;name &amp;&amp; short_name &amp;&amp; av_match_name(short_name, fmt-&gt;name))
+            score += 100;
+        if (fmt-&gt;mime_type &amp;&amp; mime_type &amp;&amp; !strcmp(fmt-&gt;mime_type, mime_type))
+            score += 10;
+        if (filename &amp;&amp; fmt-&gt;extensions &amp;&amp;
+            av_match_ext(filename, fmt-&gt;extensions)) {
+            score += 5;
+        }
+        if (score &gt; score_max) {
+            score_max = score;
+            fmt_found = fmt;
+        }
+    }
+    return fmt_found;
+}</pre>
+    <br/>
+    从代码中可以看出，av_guess_format()中使用一个整型变量score记录每种输出格式的匹配程度。函数中包含了一个while()循环，该循环利用函数av_oformat_next()遍历FFmpeg中所有的AVOutputFormat，并逐一计算每个输出格式的score。具体的计算过程分成如下几步：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1)
+     <span style="white-space:pre;">
+     </span>
+     如果封装格式名称匹配，score增加100。匹配中使用了函数av_match_name()。
+     <br/>
+     2)
+     <span style="white-space:pre;">
+     </span>
+     如果mime类型匹配，score增加10。匹配直接使用字符串比较函数strcmp()。
+     <br/>
+     3)
+     <span style="white-space:pre;">
+     </span>
+     如果文件名称的后缀匹配，score增加5。匹配中使用了函数av_match_ext()。
+    </blockquote>
+    <p>
+     while()循环结束后，得到得分最高的格式，就是最匹配的格式。
+    </p>
+    <p>
+     下面看一下一个AVOutputFormat的实例，就可以理解“封装格式名称”，“mine类型”，“文件名称后缀”这些概念了。下面是flv格式的视音频复用器（Muxer）对应的AVOutputFormat格式的变量ff_flv_muxer。
+    </p>
+    <pre class="cpp">AVOutputFormat ff_flv_muxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .mime_type      = "video/x-flv",
+    .extensions     = "flv",
+    .priv_data_size = sizeof(FLVContext),
+    .audio_codec    = CONFIG_LIBMP3LAME ? AV_CODEC_ID_MP3 : AV_CODEC_ID_ADPCM_SWF,
+    .video_codec    = AV_CODEC_ID_FLV1,
+    .write_header   = flv_write_header,
+    .write_packet   = flv_write_packet,
+    .write_trailer  = flv_write_trailer,
+    .codec_tag      = (const AVCodecTag* const []) {
+                          flv_video_codec_ids, flv_audio_codec_ids, 0
+                      },
+    .flags          = AVFMT_GLOBALHEADER | AVFMT_VARIABLE_FPS |
+                      AVFMT_TS_NONSTRICT,
+};</pre>
+    <br/>
+    <p>
+     下面看看av_guess_format()匹配最佳格式的过程中涉及到的几个函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_oformat_next()
+    </h3>
+    <p>
+     av_oformat_next()是个API函数，声明如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * If f is NULL, returns the first registered output format,
+ * if f is non-NULL, returns the next registered output format after f
+ * or NULL if f is the last one.
+ */
+AVOutputFormat *av_oformat_next(const AVOutputFormat *f);</pre>
+    <p>
+    </p>
+    <p>
+     av_oformat_next()参数不为NULL的时候用于获得下一个AVOutputFormat，否则获得第一个AVOutputFormat。定义如下。
+    </p>
+    <pre class="cpp">AVOutputFormat *av_oformat_next(const AVOutputFormat *f)
+{
+    if (f)
+        return f-&gt;next;
+    else
+        return first_oformat;
+}</pre>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_match_name()
+    </h3>
+    <p>
+     av_match_name()是一个API函数，声明如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * Match instances of a name in a comma-separated list of names.
+ * @param name  Name to look for.
+ * @param names List of names.
+ * @return 1 on match, 0 otherwise.
+ */
+int av_match_name(const char *name, const char *names);</pre>
+    <p>
+    </p>
+    <p>
+     av_match_name()用于比较两个格式的名称。简单地说就是比较字符串。注意该函数的字符串是不区分大小写的：字符都转换为小写进行比较。
+    </p>
+    <pre class="cpp">int av_match_name(const char *name, const char *names)
+{
+    const char *p;
+    int len, namelen;
+
+
+    if (!name || !names)
+        return 0;
+
+
+    namelen = strlen(name);
+    while ((p = strchr(names, ','))) {
+        len = FFMAX(p - names, namelen);
+        if (!av_strncasecmp(name, names, len))
+            return 1;
+        names = p + 1;
+    }
+    return !av_strcasecmp(name, names);
+}</pre>
+    <br/>
+    上述函数还有一点需要注意，其中使用了一个while()循环，用于搜索“,”。这是因为FFmpeg中有些格式是对应多种格式名称的，例如MKV格式的解复用器（Demuxer）的定义如下。
+    <br/>
+    <pre class="cpp">AVInputFormat ff_matroska_demuxer = {
+    .name           = "matroska,webm",
+    .long_name      = NULL_IF_CONFIG_SMALL("Matroska / WebM"),
+    .extensions     = "mkv,mk3d,mka,mks",
+    .priv_data_size = sizeof(MatroskaDemuxContext),
+    .read_probe     = matroska_probe,
+    .read_header    = matroska_read_header,
+    .read_packet    = matroska_read_packet,
+    .read_close     = matroska_read_close,
+    .read_seek      = matroska_read_seek,
+    .mime_type      = "audio/webm,audio/x-matroska,video/webm,video/x-matroska"
+};</pre>
+    <br/>
+    <p>
+     从代码可以看出，ff_matroska_demuxer中的name字段对应“matroska,webm”。av_match_name()函数对于这样的字符串，会把它按照“,”截断成一个个封装格式名称，然后一一进行比较。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     av_match_ext()
+    </h3>
+    <p>
+     av_match_ext()是一个API函数，声明如下所示。
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/**
+ * Return a positive value if the given filename has one of the given
+ * extensions, 0 otherwise.
+ *
+ * @param filename   file name to check against the given extensions
+ * @param extensions a comma-separated list of filename extensions
+ */
+int av_match_ext(const char *filename, const char *extensions);</pre>
+    <p>
+    </p>
+    <p>
+     av_match_ext()用于比较文件的后缀。该函数首先通过反向查找的方式找到输入文件名中的“.”，就可以通过获取“.”后面的字符串来得到该文件的后缀。然后调用av_match_name()，采用和比较格式名称的方法比较两个后缀。
+    </p>
+    <pre class="cpp">int av_match_ext(const char *filename, const char *extensions)
+{
+    const char *ext;
+
+
+    if (!filename)
+        return 0;
+
+
+    ext = strrchr(filename, '.');
+    if (ext)
+        return av_match_name(ext + 1, extensions);
+    return 0;
+}</pre>
+    <br/>
+    经过以上几步之后，av_guess_format()最终可以得到最合适的AVOutputFormat并且返回给avformat_alloc_output_context2()。avformat_alloc_output_context2()接下来将获得的AVOutputFormat赋值给刚刚新建的AVFormatContext，即可完成初始化工作。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#660000;">
+       雷霄骅 (Lei Xiaohua)
+       <br/>
+       leixiaohua1020@126.com
+       <br/>
+       http://blog.csdn.net/leixiaohua1020
+      </span>
+     </strong>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/41198929
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFMpeg&amp;t=blog" target="_blank">
+    FFMpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=输出&amp;t=blog" target="_blank">
+    输出
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码分析&amp;t=blog" target="_blank">
+    源代码分析
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=初始化&amp;t=blog" target="_blank">
+    初始化
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVFormatContext&amp;t=blog" target="_blank">
+    AVFormatContext
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

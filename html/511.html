@@ -1,0 +1,572 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffmpeg源码分析：transcode_init()函数 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_511">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   ffmpeg源码分析：transcode_init()函数
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月20日 17:36:06
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6776
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <div class="article_content" id="article_content" style="margin:20px 0px 0px;color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     <div>
+      <p>
+       transcode_init()函数是在转换前做准备工作的.此处看一下它的真面目,不废话,看注释吧:
+      </p>
+      <p>
+      </p>
+      <pre class="cpp">//为转换过程做准备  
+static int transcode_init(OutputFile *output_files,  
+        int nb_output_files,  
+        InputFile *input_files,  
+        int nb_input_files)  
+{  
+    int ret = 0, i, j, k;  
+    AVFormatContext *oc;  
+    AVCodecContext *codec, *icodec;  
+    OutputStream *ost;  
+    InputStream *ist;  
+    char error[1024];  
+    int want_sdp = 1;  
+  
+    /* init framerate emulation */  
+    //初始化帧率仿真(转换时是不按帧率来的,但如果要求帧率仿真,就可以做到)  
+    for (i = 0; i &lt; nb_input_files; i++)  
+    {  
+        InputFile *ifile = &amp;input_files[i];  
+        //如果一个输入文件被要求帧率仿真(指的是即使是转换也像播放那样按照帧率来进行),  
+        //则为这个文件中所有流记录下开始时间  
+        if (ifile-&gt;rate_emu)  
+            for (j = 0; j &lt; ifile-&gt;nb_streams; j++)  
+                input_streams[j + ifile-&gt;ist_index].start = av_gettime();  
+    }  
+  
+    /* output stream init */  
+    for (i = 0; i &lt; nb_output_files; i++)  
+    {  
+        //什么也没做,只是做了个判断而已  
+        oc = output_files[i].ctx;  
+        if (!oc-&gt;nb_streams &amp;&amp; !(oc-&gt;oformat-&gt;flags &amp; AVFMT_NOSTREAMS))  
+        {  
+            av_dump_format(oc, i, oc-&gt;filename, 1);  
+            av_log(NULL, AV_LOG_ERROR,  
+                    "Output file #%d does not contain any stream\n", i);  
+            return AVERROR(EINVAL);  
+        }  
+    }  
+  
+    //轮循所有的输出流,跟据对应的输入流,设置其编解码器的参数  
+    for (i = 0; i &lt; nb_output_streams; i++)  
+    {  
+        //轮循所有的输出流  
+        ost = &amp;output_streams[i];  
+        //输出流对应的FormatContext  
+        oc = output_files[ost-&gt;file_index].ctx;  
+        //取得输出流对应的输入流  
+        ist = &amp;input_streams[ost-&gt;source_index];  
+  
+        //attachment_filename是不是这样的东西:一个文件,它单独容纳一个输出流?此处不懂  
+        if (ost-&gt;attachment_filename)  
+            continue;  
+  
+        codec = ost-&gt;st-&gt;codec;//输出流的编解码器结构  
+        icodec = ist-&gt;st-&gt;codec;//输入流的编解码器结构  
+  
+        //先把能复制的复制一下  
+        ost-&gt;st-&gt;disposition = ist-&gt;st-&gt;disposition;  
+        codec-&gt;bits_per_raw_sample = icodec-&gt;bits_per_raw_sample;  
+        codec-&gt;chroma_sample_location = icodec-&gt;chroma_sample_location;  
+  
+        //如果只是复制一个流(不用解码后再编码),则把输入流的编码参数直接复制给输出流  
+        //此时是不需要解码也不需要编码的，所以不需打开解码器和编码器  
+        if (ost-&gt;stream_copy)  
+        {  
+            //计算输出流的编解码器的extradata的大小,然后分配容纳extradata的缓冲  
+            //然后把输入流的编解码器的extradata复制到输出流的编解码器中  
+            uint64_t extra_size = (uint64_t) icodec-&gt;extradata_size  
+                    + FF_INPUT_BUFFER_PADDING_SIZE;  
+  
+            if (extra_size &gt; INT_MAX)    {  
+                return AVERROR(EINVAL);  
+            }  
+  
+            /* if stream_copy is selected, no need to decode or encode */  
+            codec-&gt;codec_id = icodec-&gt;codec_id;  
+            codec-&gt;codec_type = icodec-&gt;codec_type;  
+  
+            if (!codec-&gt;codec_tag){  
+                if (!oc-&gt;oformat-&gt;codec_tag  
+                    ||av_codec_get_id(oc-&gt;oformat-&gt;codec_tag,icodec-&gt;codec_tag) == codec-&gt;codec_id  
+                    ||av_codec_get_tag(oc-&gt;oformat-&gt;codec_tag,icodec-&gt;codec_id) &lt;= 0)  
+                    codec-&gt;codec_tag = icodec-&gt;codec_tag;  
+            }  
+  
+            codec-&gt;bit_rate = icodec-&gt;bit_rate;  
+            codec-&gt;rc_max_rate = icodec-&gt;rc_max_rate;  
+            codec-&gt;rc_buffer_size = icodec-&gt;rc_buffer_size;  
+            codec-&gt;extradata = av_mallocz(extra_size);  
+            if (!codec-&gt;extradata){  
+                return AVERROR(ENOMEM);  
+            }  
+            memcpy(codec-&gt;extradata, icodec-&gt;extradata, icodec-&gt;extradata_size);  
+            codec-&gt;extradata_size = icodec-&gt;extradata_size;  
+  
+            //重新鼓捣一下time base(这家伙就是帧率)  
+            codec-&gt;time_base = ist-&gt;st-&gt;time_base;  
+            //如果输出文件是avi,做一点特殊处理  
+            if (!strcmp(oc-&gt;oformat-&gt;name, "avi"))    {  
+                if (copy_tb &lt; 0  
+                        &amp;&amp; av_q2d(icodec-&gt;time_base) * icodec-&gt;ticks_per_frame    &gt;  
+                            2 * av_q2d(ist-&gt;st-&gt;time_base)  
+                        &amp;&amp; av_q2d(ist-&gt;st-&gt;time_base) &lt; 1.0 / 500  
+                        || copy_tb == 0)  
+                {  
+                    codec-&gt;time_base = icodec-&gt;time_base;  
+                    codec-&gt;time_base.num *= icodec-&gt;ticks_per_frame;  
+                    codec-&gt;time_base.den *= 2;  
+                }  
+            }  
+            else if (!(oc-&gt;oformat-&gt;flags &amp; AVFMT_VARIABLE_FPS))  
+            {  
+                if (copy_tb &lt; 0  
+                        &amp;&amp; av_q2d(icodec-&gt;time_base) * icodec-&gt;ticks_per_frame  
+                                &gt; av_q2d(ist-&gt;st-&gt;time_base)  
+                        &amp;&amp; av_q2d(ist-&gt;st-&gt;time_base) &lt; 1.0 / 500  
+                        || copy_tb == 0)  
+                {  
+                    codec-&gt;time_base = icodec-&gt;time_base;  
+                    codec-&gt;time_base.num *= icodec-&gt;ticks_per_frame;  
+                }  
+            }  
+  
+            //再修正一下帧率  
+            av_reduce(&amp;codec-&gt;time_base.num, &amp;codec-&gt;time_base.den,  
+                    codec-&gt;time_base.num, codec-&gt;time_base.den, INT_MAX);  
+  
+            //单独复制各不同媒体自己的编码参数  
+            switch (codec-&gt;codec_type)  
+            {  
+            case AVMEDIA_TYPE_AUDIO:  
+                //音频的  
+                if (audio_volume != 256){  
+                    av_log( NULL,AV_LOG_FATAL,  
+                            "-acodec copy and -vol are incompatible (frames are not decoded)\n");  
+                    exit_program(1);  
+                }  
+                codec-&gt;channel_layout = icodec-&gt;channel_layout;  
+                codec-&gt;sample_rate = icodec-&gt;sample_rate;  
+                codec-&gt;channels = icodec-&gt;channels;  
+                codec-&gt;frame_size = icodec-&gt;frame_size;  
+                codec-&gt;audio_service_type = icodec-&gt;audio_service_type;  
+                codec-&gt;block_align = icodec-&gt;block_align;  
+                break;  
+            case AVMEDIA_TYPE_VIDEO:  
+                //视频的  
+                codec-&gt;pix_fmt = icodec-&gt;pix_fmt;  
+                codec-&gt;width = icodec-&gt;width;  
+                codec-&gt;height = icodec-&gt;height;  
+                codec-&gt;has_b_frames = icodec-&gt;has_b_frames;  
+                if (!codec-&gt;sample_aspect_ratio.num){  
+                    codec-&gt;sample_aspect_ratio = ost-&gt;st-&gt;sample_aspect_ratio =  
+                            ist-&gt;st-&gt;sample_aspect_ratio.num ?ist-&gt;st-&gt;sample_aspect_ratio :  
+                                    ist-&gt;st-&gt;codec-&gt;sample_aspect_ratio.num ?ist-&gt;st-&gt;codec-&gt;sample_aspect_ratio :(AVRational){0, 1};  
+                }  
+                ost-&gt;st-&gt;avg_frame_rate = ist-&gt;st-&gt;avg_frame_rate;  
+                break;  
+            case AVMEDIA_TYPE_SUBTITLE:  
+                //字幕的  
+                codec-&gt;width  = icodec-&gt;width;  
+                codec-&gt;height = icodec-&gt;height;  
+                break;  
+            case AVMEDIA_TYPE_DATA:  
+            case AVMEDIA_TYPE_ATTACHMENT:  
+                //??的  
+                break;  
+            default:  
+                abort();  
+            }  
+    }  
+    else  
+    {  
+        //如果不是复制,就麻烦多了  
+  
+        //获取编码器  
+        if (!ost-&gt;enc)  
+            ost-&gt;enc = avcodec_find_encoder(ost-&gt;st-&gt;codec-&gt;codec_id);  
+  
+        //因为需要转换,所以既需解码又需编码  
+        ist-&gt;decoding_needed = 1;  
+        ost-&gt;encoding_needed = 1;  
+  
+        switch(codec-&gt;codec_type)  
+        {  
+        case AVMEDIA_TYPE_AUDIO:  
+            //鼓捣音频编码器的参数,基本上是把一些不合适的参数替换掉  
+            ost-&gt;fifo = av_fifo_alloc(1024);//音频数据所在的缓冲  
+            if (!ost-&gt;fifo)  {  
+                return AVERROR(ENOMEM);  
+            }  
+  
+            //采样率  
+            if (!codec-&gt;sample_rate)  
+                codec-&gt;sample_rate = icodec-&gt;sample_rate;  
+            choose_sample_rate(ost-&gt;st, ost-&gt;enc);  
+            codec-&gt;time_base = (AVRational){1, codec-&gt;sample_rate};  
+  
+            //样点格式  
+            if (codec-&gt;sample_fmt == AV_SAMPLE_FMT_NONE)  
+                codec-&gt;sample_fmt = icodec-&gt;sample_fmt;  
+            choose_sample_fmt(ost-&gt;st, ost-&gt;enc);  
+  
+            //声道  
+            if (ost-&gt;audio_channels_mapped)  {  
+                /* the requested output channel is set to the number of 
+                 * -map_channel only if no -ac are specified */  
+                if (!codec-&gt;channels)    {  
+                    codec-&gt;channels = ost-&gt;audio_channels_mapped;  
+                    codec-&gt;channel_layout = av_get_default_channel_layout(codec-&gt;channels);  
+                    if (!codec-&gt;channel_layout)  {  
+                        av_log(NULL, AV_LOG_FATAL, "Unable to find an appropriate channel layout for requested number of channel\n);  
+                        exit_program(1);  
+                    }  
+                }  
+                /* fill unused channel mapping with -1 (which means a muted 
+                 * channel in case the number of output channels is bigger 
+                 * than the number of mapped channel) */  
+                for (j = ost-&gt;audio_channels_mapped; j &lt; FF_ARRAY_ELEMS(ost-&gt;audio_channels_map); j++)  
+                &lt;span&gt;  &lt;/span&gt;ost-&gt;audio_channels_map[j] = -1;  
+            }else if (!codec-&gt;channels){  
+                codec-&gt;channels = icodec-&gt;channels;  
+                codec-&gt;channel_layout = icodec-&gt;channel_layout;  
+            }  
+            if (av_get_channel_layout_nb_channels(codec-&gt;channel_layout) != codec-&gt;channels)  
+                codec-&gt;channel_layout = 0;  
+  
+            //是否需要重采样  
+            ost-&gt;audio_resample = codec-&gt;sample_rate != icodec-&gt;sample_rate || audio_sync_method &gt; 1;  
+            ost-&gt;audio_resample |= codec-&gt;sample_fmt != icodec-&gt;sample_fmt ||  
+                    codec-&gt;channel_layout != icodec-&gt;channel_layout;  
+            icodec-&gt;request_channels = codec-&gt;channels;  
+            ost-&gt;resample_sample_fmt = icodec-&gt;sample_fmt;  
+            ost-&gt;resample_sample_rate = icodec-&gt;sample_rate;  
+            ost-&gt;resample_channels = icodec-&gt;channels;  
+            break;  
+        case AVMEDIA_TYPE_VIDEO:  
+            //鼓捣视频编码器的参数,基本上是把一些不合适的参数替换掉  
+            if (codec-&gt;pix_fmt == PIX_FMT_NONE)  
+                codec-&gt;pix_fmt = icodec-&gt;pix_fmt;  
+            choose_pixel_fmt(ost-&gt;st, ost-&gt;enc);  
+            if (ost-&gt;st-&gt;codec-&gt;pix_fmt == PIX_FMT_NONE){  
+                av_log(NULL, AV_LOG_FATAL, "Video pixel format is unknown, stream cannot be encoded\n");  
+                exit_program(1);  
+            }  
+  
+            //宽高  
+            if (!codec-&gt;width || !codec-&gt;height){  
+                codec-&gt;width = icodec-&gt;width;  
+                codec-&gt;height = icodec-&gt;height;  
+            }  
+  
+            //视频是否需要重采样  
+            ost-&gt;video_resample = codec-&gt;width != icodec-&gt;width ||  
+                    codec-&gt;height != icodec-&gt;height ||  
+                    codec-&gt;pix_fmt != icodec-&gt;pix_fmt;  
+            if (ost-&gt;video_resample){  
+                codec-&gt;bits_per_raw_sample= frame_bits_per_raw_sample;  
+            }  
+  
+            ost-&gt;resample_height = icodec-&gt;height;  
+            ost-&gt;resample_width = icodec-&gt;width;  
+            ost-&gt;resample_pix_fmt = icodec-&gt;pix_fmt;  
+  
+            //计算帧率  
+            if (!ost-&gt;frame_rate.num)  
+                ost-&gt;frame_rate = ist-&gt;st-&gt;r_frame_rate.num ?  
+                        ist-&gt;st-&gt;r_frame_rate : (AVRational){25,1};  
+            if (ost-&gt;enc &amp;&amp; ost-&gt;enc-&gt;supported_framerates &amp;&amp; !ost-&gt;force_fps)  {  
+                int idx = av_find_nearest_q_idx(ost-&gt;frame_rate,ost-&gt;enc-&gt;supported_framerates);  
+                ost-&gt;frame_rate = ost-&gt;enc-&gt;supported_framerates[idx];  
+            }  
+            codec-&gt;time_base = (AVRational)  {ost-&gt;frame_rate.den, ost-&gt;frame_rate.num};  
+            if( av_q2d(codec-&gt;time_base) &lt; 0.001 &amp;&amp;  
+                    video_sync_method &amp;&amp;  
+                    (video_sync_method==1 ||  
+                        (video_sync_method&lt;0 &amp;&amp;  !  
+                            (oc-&gt;oformat-&gt;flags &amp; AVFMT_VARIABLE_FPS))))  
+            {  
+                av_log(oc, AV_LOG_WARNING, "Frame rate very high for a muxer not effciciently supporting it.\n"  
+                        "Please consider specifiying a lower framerate, a different muxer or -vsync 2\n");  
+            }  
+        &lt;span&gt;  &lt;/span&gt;for (j = 0; j &lt; ost-&gt;forced_kf_count; j++)  
+                ost-&gt;forced_kf_pts[j] = av_rescale_q(ost-&gt;forced_kf_pts[j],  
+                        AV_TIME_BASE_Q, codec-&gt;time_base);  
+                break;  
+            case AVMEDIA_TYPE_SUBTITLE:  
+                break;  
+            default:  
+                abort();  
+                break;  
+            }  
+            /* two pass mode */  
+            if (codec-&gt;codec_id != CODEC_ID_H264 &amp;&amp;  
+                    (codec-&gt;flags &amp; (CODEC_FLAG_PASS1 | CODEC_FLAG_PASS2)))  
+            {  
+                char logfilename[1024];  
+                FILE *f;  
+  
+                snprintf(logfilename, sizeof(logfilename), "%s-%d.log",  
+                        pass_logfilename_prefix ? pass_logfilename_prefix : DEFAULT_PASS_LOGFILENAME_PREFIX,  
+                        i);  
+                if (codec-&gt;flags &amp; CODEC_FLAG_PASS2){  
+                    char *logbuffer;  
+                    size_t logbuffer_size;  
+                    if (cmdutils_read_file(logfilename, &amp;logbuffer, &amp;logbuffer_size) &lt; 0){  
+                        av_log(NULL, AV_LOG_FATAL,  
+                                "Error reading log file '%s' for pass-2 encoding\n",  
+                                logfilename);  
+                        exit_program(1);  
+                    }  
+                    codec-&gt;stats_in = logbuffer;  
+                }  
+                if (codec-&gt;flags &amp; CODEC_FLAG_PASS1){  
+                    f = fopen(logfilename, "wb");  
+                    if (!f) {  
+                        av_log(NULL, AV_LOG_FATAL, "Cannot write log file '%s' for pass-1 encoding: %s\n",  
+                                logfilename, strerror(errno));  
+                        exit_program(1);  
+                    }  
+                    ost-&gt;logfile = f;  
+                }  
+            }  
+        }  
+        if (codec-&gt;codec_type == AVMEDIA_TYPE_VIDEO){  
+            /* maximum video buffer size is 6-bytes per pixel, plus DPX header size (1664)*/  
+            //计算编码输出缓冲的大小,计算一个最大值  
+            int size = codec-&gt;width * codec-&gt;height;  
+            bit_buffer_size = FFMAX(bit_buffer_size, 7 * size + 10000);  
+        }  
+    }  
+  
+    //分配编码后数据所在的缓冲  
+    if (!bit_buffer)  
+        bit_buffer = av_malloc(bit_buffer_size);  
+    if (!bit_buffer){  
+        av_log(NULL, AV_LOG_ERROR,  
+                "Cannot allocate %d bytes output buffer\n",  
+                bit_buffer_size);  
+        return AVERROR(ENOMEM);  
+    }  
+  
+    //轮循所有输出流,打开每个输出流的编码器  
+    for (i = 0; i &lt; nb_output_streams; i++)  
+    {  
+        ost = &amp;output_streams[i];  
+        if (ost-&gt;encoding_needed){  
+            //当然,只有在需要编码时才打开编码器  
+            AVCodec *codec = ost-&gt;enc;  
+            AVCodecContext *dec = input_streams[ost-&gt;source_index].st-&gt;codec;  
+            if (!codec) {  
+                snprintf(error, sizeof(error),  
+                        "Encoder (codec %s) not found for output stream #%d:%d",  
+                        avcodec_get_name(ost-&gt;st-&gt;codec-&gt;codec_id),  
+                        ost-&gt;file_index, ost-&gt;index);  
+                ret = AVERROR(EINVAL);  
+                goto dump_format;  
+            }  
+            if (dec-&gt;subtitle_header){  
+                ost-&gt;st-&gt;codec-&gt;subtitle_header = av_malloc(dec-&gt;subtitle_header_size);  
+                if (!ost-&gt;st-&gt;codec-&gt;subtitle_header){  
+                    ret = AVERROR(ENOMEM);  
+                    goto dump_format;  
+                }  
+                memcpy(ost-&gt;st-&gt;codec-&gt;subtitle_header,  
+                        dec-&gt;subtitle_header,dec-&gt;subtitle_header_size);  
+                ost-&gt;st-&gt;codec-&gt;subtitle_header_size = dec-&gt;subtitle_header_size;  
+            }  
+            //打开啦  
+            if (avcodec_open2(ost-&gt;st-&gt;codec, codec, &amp;ost-&gt;opts) &lt; 0)   {  
+                snprintf(error, sizeof(error),  
+                        "Error while opening encoder for output stream #%d:%d - maybe incorrect parameters such as bit_rate, rate, width or height",  
+                        ost-&gt;file_index, ost-&gt;index);  
+                ret = AVERROR(EINVAL);  
+                goto dump_format;  
+            }  
+            assert_codec_experimental(ost-&gt;st-&gt;codec, 1);  
+            assert_avoptions(ost-&gt;opts);  
+            if (ost-&gt;st-&gt;codec-&gt;bit_rate &amp;&amp; ost-&gt;st-&gt;codec-&gt;bit_rate &lt; 1000)  
+                av_log(NULL, AV_LOG_WARNING,  
+                        "The bitrate parameter is set too low."  
+                        " It takes bits/s as argument, not kbits/s\n");  
+            extra_size += ost-&gt;st-&gt;codec-&gt;extradata_size;  
+  
+            if (ost-&gt;st-&gt;codec-&gt;me_threshold)  
+                input_streams[ost-&gt;source_index].st-&gt;codec-&gt;debug |= FF_DEBUG_MV;  
+        }  
+    }  
+  
+    //初始化所有的输入流(主要做的就是在需要时打开解码器)  
+    for (i = 0; i &lt; nb_input_streams; i++)  
+        if ((ret = init_input_stream(i, output_streams, nb_output_streams,  
+                error, sizeof(error))) &lt; 0)  
+            goto dump_format;  
+  
+    /* discard unused programs */  
+    for (i = 0; i &lt; nb_input_files; i++){  
+        InputFile *ifile = &amp;input_files[i];  
+        for (j = 0; j &lt; ifile-&gt;ctx-&gt;nb_programs; j++){  
+            AVProgram *p = ifile-&gt;ctx-&gt;programs[j];  
+            int discard = AVDISCARD_ALL;  
+  
+            for (k = 0; k &lt; p-&gt;nb_stream_indexes; k++){  
+                if (!input_streams[ifile-&gt;ist_index + p-&gt;stream_index[k]].discard){  
+                    discard = AVDISCARD_DEFAULT;  
+                    break;  
+                }  
+            }  
+            p-&gt;discard = discard;  
+        }  
+    }  
+  
+    //打开所有输出文件，写入媒体文件头  
+    for (i = 0; i &lt; nb_output_files; i++){  
+        oc = output_files[i].ctx;  
+        oc-&gt;interrupt_callback = int_cb;  
+        if (avformat_write_header(oc, &amp;output_files[i].opts) &lt; 0){  
+            snprintf(error, sizeof(error),  
+                    "Could not write header for output file #%d (incorrect codec parameters ?)",  
+                    i);  
+            ret = AVERROR(EINVAL);  
+            goto dump_format;  
+        }  
+//        assert_avoptions(output_files[i].opts);  
+        if (strcmp(oc-&gt;oformat-&gt;name, "rtp")){  
+            want_sdp = 0;  
+        }  
+    }  
+  
+    return 0;  
+} </pre>
+      <br/>
+      <br/>
+      <p>
+       原文地址：
+       <a href="http://blog.csdn.net/niu_gao/article/details/7175421">
+        http://blog.csdn.net/niu_gao/article/details/7175421
+       </a>
+      </p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=transcode_init&amp;t=blog" target="_blank">
+    transcode_init
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

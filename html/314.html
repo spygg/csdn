@@ -1,0 +1,575 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 一个简单的基于 DirectShow 的播放器  1（封装类） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_314">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   一个简单的基于 DirectShow 的播放器  1（封装类）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月26日 00:20:29
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：7599
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     DirectShow最主要的功能就是播放视频，在这里介绍一个简单的基于DirectShow的播放器的例子，是用MFC做的，今后有机会可以基于该播放器开发更复杂的播放器软件。
+    </p>
+    <p>
+     注：该例子取自于《DirectShow开发指南》
+    </p>
+    <p>
+     首先看一眼最终结果，如图所示，播放器包含了：打开，播放，暂停，停止等功能。该图显示正在播放周杰伦的《听妈妈的话》。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131025133053484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     迅速进入主题，看一看工程是由哪些文件组成的，如下图所示
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131025133059390?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     从上图可以看出，该工程最重要的cpp文件有两个：SimplePlayerDlg.cpp和CDXGraph.cpp。前者是视频播放器对话框对应的类，而后者是对DirectShow功能进行封装的类。尤其是后面那个类，写的很好，可以说做到了“可复用”，可以移植到其他DirectShow项目中。
+    </p>
+    <p>
+     <span style="font-size:18px;">
+      <strong>
+       本文首先分析CDXGraph这个类，SimplePlayerDlg在下篇文章中再进行分析。
+      </strong>
+     </span>
+     <br/>
+    </p>
+    <p>
+     首先看看它的头文件：
+    </p>
+    <p>
+     <strong>
+      CDXGraph.h
+     </strong>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">/* 雷霄骅
+ * 中国传媒大学/数字电视技术
+ * leixiaohua1020@126.com
+ *
+ */
+// CDXGraph.h
+
+
+#ifndef __H_CDXGraph__
+#define __H_CDXGraph__
+
+// Filter graph notification to the specified window
+#define WM_GRAPHNOTIFY  (WM_USER+20)
+
+class CDXGraph
+{
+private:
+	//各种DirectShow接口
+	IGraphBuilder *     mGraph;  
+	IMediaControl *		mMediaControl;
+	IMediaEventEx *		mEvent;
+	IBasicVideo *		mBasicVideo;
+	IBasicAudio *		mBasicAudio;
+	IVideoWindow  *		mVideoWindow;
+	IMediaSeeking *		mSeeking;
+
+	DWORD				mObjectTableEntry; 
+
+public:
+	CDXGraph();
+	virtual ~CDXGraph();
+
+public:
+	//创建IGraphBuilder，使用CoCreateInstance
+	virtual bool Create(void);
+	//释放
+	virtual void Release(void);
+	virtual bool Attach(IGraphBuilder * inGraphBuilder);
+
+	IGraphBuilder * GetGraph(void); // Not outstanding reference count
+	IMediaEventEx * GetEventHandle(void);
+
+	bool ConnectFilters(IPin * inOutputPin, IPin * inInputPin, const AM_MEDIA_TYPE * inMediaType = 0);
+	void DisconnectFilters(IPin * inOutputPin);
+
+	bool SetDisplayWindow(HWND inWindow);
+	bool SetNotifyWindow(HWND inWindow);
+	bool ResizeVideoWindow(long inLeft, long inTop, long inWidth, long inHeight);
+	void HandleEvent(WPARAM inWParam, LPARAM inLParam);
+	//各种操作
+	bool Run(void);        // Control filter graph
+	bool Stop(void);
+	bool Pause(void);
+	bool IsRunning(void);  // Filter graph status
+	bool IsStopped(void);
+	bool IsPaused(void);
+
+	bool SetFullScreen(BOOL inEnabled);
+	bool GetFullScreen(void);
+
+	// IMediaSeeking
+	bool GetCurrentPosition(double * outPosition);
+	bool GetStopPosition(double * outPosition);
+	bool SetCurrentPosition(double inPosition);
+	bool SetStartStopPosition(double inStart, double inStop);
+	bool GetDuration(double * outDuration);
+	bool SetPlaybackRate(double inRate);
+
+	// Attention: range from -10000 to 0, and 0 is FULL_VOLUME.
+	bool SetAudioVolume(long inVolume);
+	long GetAudioVolume(void);
+	// Attention: range from -10000(left) to 10000(right), and 0 is both.
+	bool SetAudioBalance(long inBalance);
+	long GetAudioBalance(void);
+
+	bool RenderFile(const char * inFile);
+	bool SnapshotBitmap(const char * outFile);
+
+private:
+	void AddToObjectTable(void) ;
+	void RemoveFromObjectTable(void);
+	//各种QueryInterface，初始各种接口
+	bool QueryInterfaces(void);
+};
+
+#endif // __H_CDXGraph__</pre>
+    <br/>
+    该头文件定义了CDXGraph类封装的各种DirectShow接口，以及提供的各种方法。在这里因为方法种类特别多，所以只能选择最关键的方法进行分析。下面打开CDXGraph.cpp看看如下几个方法吧：
+    <br/>
+    <p>
+    </p>
+    <p>
+     <strong>
+      Create()
+     </strong>
+     ：用于创建IGraphBuilder
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//创建IGraphBuilder，使用CoCreateInstance
+bool CDXGraph::Create(void)
+{
+	if (!mGraph)
+	{
+		if (SUCCEEDED(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+			IID_IGraphBuilder, (void **)&amp;mGraph)))
+		{
+			AddToObjectTable();
+
+			return QueryInterfaces();
+		}
+		mGraph = 0;
+	}
+	return false;
+}</pre>
+    <p>
+    </p>
+    <p>
+     需要注意的是，Create()调用了QueryInterfaces()
+    </p>
+    <p>
+     <strong>
+      QueryInterfaces()：
+     </strong>
+     用于初始化各种接口
+    </p>
+    <pre class="cpp">//各种QueryInterface，初始各种接口
+bool CDXGraph::QueryInterfaces(void)
+{
+	if (mGraph)
+	{
+		HRESULT hr = NOERROR;
+		hr |= mGraph-&gt;QueryInterface(IID_IMediaControl, (void **)&amp;mMediaControl);
+		hr |= mGraph-&gt;QueryInterface(IID_IMediaEventEx, (void **)&amp;mEvent);
+		hr |= mGraph-&gt;QueryInterface(IID_IBasicVideo, (void **)&amp;mBasicVideo);
+		hr |= mGraph-&gt;QueryInterface(IID_IBasicAudio, (void **)&amp;mBasicAudio);
+		hr |= mGraph-&gt;QueryInterface(IID_IVideoWindow, (void **)&amp;mVideoWindow);
+		hr |= mGraph-&gt;QueryInterface(IID_IMediaSeeking, (void **)&amp;mSeeking);
+		if (mSeeking)
+		{
+			mSeeking-&gt;SetTimeFormat(&amp;TIME_FORMAT_MEDIA_TIME);
+		}
+		return SUCCEEDED(hr);
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     Release()
+    </strong>
+    ：释放各种接口
+    <br/>
+    <p>
+    </p>
+    <pre class="cpp">//释放
+void CDXGraph::Release(void)
+{
+	if (mSeeking)
+	{
+		mSeeking-&gt;Release();
+		mSeeking = NULL;
+	}
+	if (mMediaControl)
+	{
+		mMediaControl-&gt;Release();
+		mMediaControl = NULL;
+	}
+	if (mEvent)
+	{
+		mEvent-&gt;Release();
+		mEvent = NULL;
+	}
+	if (mBasicVideo)
+	{
+		mBasicVideo-&gt;Release();
+		mBasicVideo = NULL;
+	}
+	if (mBasicAudio)
+	{
+		mBasicAudio-&gt;Release();
+		mBasicAudio = NULL;
+	}
+	if (mVideoWindow)
+	{
+		mVideoWindow-&gt;put_Visible(OAFALSE);
+		mVideoWindow-&gt;put_MessageDrain((OAHWND)NULL);
+		mVideoWindow-&gt;put_Owner(OAHWND(0));
+		mVideoWindow-&gt;Release();
+		mVideoWindow = NULL;
+	}
+	RemoveFromObjectTable();
+	if (mGraph) 
+	{
+		mGraph-&gt;Release(); 
+		mGraph = NULL;
+	}
+}</pre>
+    <br/>
+    <strong>
+     Run()
+    </strong>
+    ：播放
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::Run(void)
+{
+	if (mGraph &amp;&amp; mMediaControl)
+	{
+		if (!IsRunning())
+		{
+			if (SUCCEEDED(mMediaControl-&gt;Run()))
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     Stop()
+    </strong>
+    ：停止
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::Stop(void)
+{
+	if (mGraph &amp;&amp; mMediaControl)
+	{
+		if (!IsStopped())
+		{	
+			if (SUCCEEDED(mMediaControl-&gt;Stop()))
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	return false;
+}
+</pre>
+    <br/>
+    <strong>
+     Pause()
+    </strong>
+    ：暂停
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::Pause(void)
+{
+	if (mGraph &amp;&amp; mMediaControl)
+	{
+		if (!IsPaused())
+		{	
+			if (SUCCEEDED(mMediaControl-&gt;Pause()))
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     SetFullScreen()
+    </strong>
+    ：设置全屏
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::SetFullScreen(BOOL inEnabled)
+{
+	if (mVideoWindow)
+	{
+		HRESULT hr = mVideoWindow-&gt;put_FullScreenMode(inEnabled ? OATRUE : OAFALSE);
+		return SUCCEEDED(hr);
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     GetDuration()
+    </strong>
+    ：获得视频时长
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::GetDuration(double * outDuration)
+{
+	if (mSeeking)
+	{
+		__int64 length = 0;
+		if (SUCCEEDED(mSeeking-&gt;GetDuration(&amp;length)))
+		{
+			*outDuration = ((double)length) / 10000000.;
+			return true;
+		}
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     SetAudioVolume()
+    </strong>
+    ：设置音量
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::SetAudioVolume(long inVolume)
+{
+	if (mBasicAudio)
+	{
+		HRESULT hr = mBasicAudio-&gt;put_Volume(inVolume);
+		return SUCCEEDED(hr);
+	}
+	return false;
+}</pre>
+    <br/>
+    <strong>
+     RenderFile()
+    </strong>
+    ：关键！
+    <br/>
+    <p>
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">bool CDXGraph::RenderFile(const char * inFile)
+{
+	if (mGraph)
+	{
+		WCHAR    szFilePath[MAX_PATH];
+		MultiByteToWideChar(CP_ACP, 0, inFile, -1, szFilePath, MAX_PATH);
+		if (SUCCEEDED(mGraph-&gt;RenderFile(szFilePath, NULL)))
+		{
+			return true;
+		}
+	}
+	return false;
+}</pre>
+    <br/>
+    播放器源代码下载：
+    <a href="http://download.csdn.net/detail/leixiaohua1020/6453467">
+     http://download.csdn.net/detail/leixiaohua1020/6453467
+    </a>
+    <br/>
+    <p>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/13019147
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=DirectShow&amp;t=blog" target="_blank">
+    DirectShow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=播放器&amp;t=blog" target="_blank">
+    播放器
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=API&amp;t=blog" target="_blank">
+    API
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mfc&amp;t=blog" target="_blank">
+    mfc
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=c++&amp;t=blog" target="_blank">
+    c++
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645657" target="_blank">
+    DirectShow
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

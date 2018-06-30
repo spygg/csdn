@@ -1,0 +1,308 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ ffdshow 源代码分析 5： 位图覆盖滤镜（总结） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_297">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   ffdshow 源代码分析 5： 位图覆盖滤镜（总结）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月30日 19:38:27
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：4100
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     ffdshow源代码分析系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12013619">
+      ffdshow 源代码分析 1： 整体结构
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12981725">
+      ffdshow 源代码分析 2： 位图覆盖滤镜（对话框部分Dialog）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13004051">
+      ffdshow 源代码分析 3： 位图覆盖滤镜（设置部分Settings）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13006213">
+      ffdshow 源代码分析 4： 位图覆盖滤镜（滤镜部分Filter）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13660583">
+      ffdshow 源代码分析 5： 位图覆盖滤镜（总结）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493329">
+      ffdshow 源代码分析 6： 对解码器的dll的封装（libavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493521">
+      ffdshow 源代码分析 7： libavcodec视频解码器类（TvideoCodecLibavcodec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493743">
+      ffdshow 源代码分析 8： 视频解码器类（TvideoCodecDec）
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/15493961">
+      ffdshow 源代码分析 9： 编解码器有关类的总结
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <span style="color:#660000;">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13660583" style="line-height:30px;font-family:Arial;text-decoration:none;">
+     </a>
+    </span>
+    <br/>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140616103721062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+     <br/>
+    </p>
+    <p>
+     前面写了三篇文章，介绍了 位图覆盖滤镜的3个部分：
+    </p>
+    <p>
+    </p>
+    <p style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     第一篇文章介绍了ffdshow的位图覆盖滤镜的对话框（Dialog）部分：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12981725" style="color:rgb(51,102,153);text-decoration:none;">
+      ffdshow 源代码分析2 ： 位图覆盖滤镜（对话框部分Dialog）
+     </a>
+     <br/>
+    </p>
+    <p style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+     第二篇文章介绍了ffdshow的位图覆盖滤镜的设置（Settings）部分：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13004051" style="color:rgb(51,102,153);text-decoration:none;">
+      ffdshow 源代码分析 3： 位图覆盖滤镜（设置部分Settings）
+     </a>
+    </p>
+    <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+     第三篇文章介绍了ffdshow的位图覆盖滤镜的滤镜（Filter）部分：
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/13006213">
+      ffdshow 源代码分析 4： 位图覆盖滤镜（滤镜部分Filter）
+     </a>
+    </span>
+    <br/>
+    <p>
+     在此，用一张图总结他们之间的关系：
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p align="center">
+     <img alt="" height="154" src="https://img-blog.csdn.net/20131030191924781?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="908"/>
+     <br/>
+    </p>
+    <p>
+     如图中所示，
+     <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+      设置（Settings）部分是直接和系统上层关联的，它包含两个接口函数：createPages()和createFilters()。分别用于创建
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       对话框（Dialog）和
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        滤镜（Filter）。其中在TbitmapPage中对话框直接和注册表变量关联。而在TbitmapSettings中注册表变量和系统中的变量关联。TimgFilterBitmap最终读取
+        <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+         TbitmapSettings中的变量完成相应的操作。
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+      <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+       <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+        <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+         目前来开
+         <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+          TimgFilterBitmap是不会直接读取
+          <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+           TbitmapPage类中的值的。
+          </span>
+         </span>
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <span style="color:rgb(51,51,51);line-height:26px;font-family:Arial;font-size:14px;">
+      <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+       <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+        <span style="font-family:Arial;font-size:14px;color:#333333;line-height:26px;">
+         <br/>
+        </span>
+       </span>
+      </span>
+     </span>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/13660583
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffdshow&amp;t=blog" target="_blank">
+    ffdshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=位图叠加&amp;t=blog" target="_blank">
+    位图叠加
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=directshow&amp;t=blog" target="_blank">
+    directshow
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=滤镜&amp;t=blog" target="_blank">
+    滤镜
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1638191" target="_blank">
+    ffdshow
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

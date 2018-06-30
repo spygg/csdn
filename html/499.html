@@ -1,0 +1,415 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MPlayer源代码分析 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_499">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   MPlayer源代码分析
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月22日 01:49:15
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：24044
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20140616104036421"/>
+     <br/>
+    </p>
+    <h2>
+     一.Mplayer支持的格式
+    </h2>
+    MPlayer是一个LINUX下的视频播放器，它支持相当多的媒体格式，无论在音频播放还是在视频播放方面，可以说它支持的格式是相当全面的。
+    <br/>
+    视频格式支持：MPEG、AVI、ASF 与WMV、QuickTime 与 OGG/OGM、SDP、PVA、GIF。
+    <br/>
+    音频格式支持：MP3、WAV、OGG/OGM 文件(Vorbis)、WMA 与 ASF、MP4、CD音频、XMMS。
+    <br/>
+    <h2>
+     二. Mplayer 中头文件的功能分析
+    </h2>
+    <p>
+    </p>
+    <pre class="cpp">config.h // 各种本地配置宏定义头
+version.h // 版本定义头 #define VERSION "1.0pre7try2-3.4.2"
+mp_msg.h // 消息处理头
+help_mp.h // 根据配置自动生成的帮助头 #include "help/help_mpen.h"
+cfg-mplayer-def.h // Mplayer 运行时的选项缺省值头文件 char*
+default_config =
+sub_reader.h // 拥有格式自动发现功能的字幕(subtitle)阅读器
+libvo/video_out.h // 该文件包含 libvo 视频输出的公共函数、变量
+libvo/font_load.h // 有关字体装载的例程
+libao2/audio_out.h // 音频输出驱动程序相关结构定义和全局数据
+libmpcodecs/dec_audio.h // 音频解码
+libmpcodecs/dec_video.h // 视频解码
+libmpdemux/matroska.h // 多路解复用，媒体容器格式 matroska 处理头
+libmpdemux/stream.h // 流处理
+libmpdemux/demuxer.h // 多路解复用头文件
+libmpdemux/stheader.h // 媒体流头处理
+get_path.c // 路径获取头文件
+spudec.h // SPU 子画面单元头，DVD 字幕流
+edl.h // 剪辑控制清单
+m_option.h // 选项类型处理头
+m_config.h // 配置处理头文件</pre>
+    <p>
+    </p>
+    <br/>
+    <h2>
+     三. MPlayer.main 主流程简要说明
+    </h2>
+    <p>
+    </p>
+    <pre class="cpp">int main() {
+1) 变量声明，电影信息 movie info:
+2) 初始化，消息系统……
+play_next_file:
+3)播放文件 filename 的循环 goto play_next_file 开始
+main:
+4) 主处理 main
+5) 播放真正主循环 2010 ~3541 while (!eof)
+while (!eof) {
+5.1) 播放音频 PLAY AUDIO 2017 ~ 2064 decode_audio(sh_audio, ...);
+5.2) 播放视频 PLAY VIDEO, 2068 ~ 2300 decode_video(sh_video, ...);
+5.3) 处理暂停 PAUSE
+5.4) 处理 EDL
+5.5) 键盘事件处理, 搜索2400~3216 while (!brk_cmd &amp;&amp;
+(cmd=mp_input_get_cmd(0,0,0))!=NULL)
+5.6) 时间寻道(秒) if (seek_to_sec)
+5.7) 寻道 3243 ~ 3306, if (rel_seek_secs || abs_seek_pos)
+5.8) 处理 GUI
+5.9) 变更 Update OSD
+5.10) 找到字幕 find sub
+5.11) 处理 X11 窗口
+5.12) DVD 字幕 sub:
+}
+goto_next_file:
+6) 播放结束，转到下个文件 goto_next_file:
+}</pre>
+    <p>
+    </p>
+    <br/>
+    <h2>
+     四.Mplayer源码分析
+    </h2>
+    从Mplayer.c的main开始处理参数
+    <br/>
+    <pre class="cpp">mconfig = m_config_new();
+m_config_register_options(mconfig,mplayer_opts);
+// TODO : add something to let modules register their options
+mp_input_register_options(mconfig);
+parse_cfgfiles(mconfig);</pre>
+    初始化mpctx结构体，mpctx应该是mplayer context的意思，顾名思义是一个统筹全局的变量。
+    <br/>
+    <pre class="cpp">static MPContext *mpctx = &amp;mpctx_s;
+// Not all functions in mplayer.c take the context as an argument yet
+static MPContext mpctx_s = {
+.osd_function = OSD_PLAY,
+.begin_skip = MP_NOPTS_VALUE,
+.play_tree_step = 1,
+.global_sub_pos = -1,
+.set_of_sub_pos = -1,
+.file_format = DEMUXER_TYPE_UNKNOWN,
+.loop_times = -1,
+#ifdef HAS_DVBIN_SUPPORT
+.last_dvb_step = 1,
+#endif
+};</pre>
+    <p>
+     原型
+    </p>
+    <p>
+    </p>
+    <pre class="cpp">//真正统筹全局的结构
+typedef struct MPContext {
+    int osd_show_percentage;
+    int osd_function;
+    const ao_functions_t *audio_out;
+    play_tree_t *playtree;
+    play_tree_iter_t *playtree_iter;
+    int eof;
+    int play_tree_step;
+    int loop_times;
+
+    stream_t *stream;
+    demuxer_t *demuxer;
+    sh_audio_t *sh_audio;
+    sh_video_t *sh_video;
+    demux_stream_t *d_audio;
+    demux_stream_t *d_video;
+    demux_stream_t *d_sub;
+    mixer_t mixer;
+    const vo_functions_t *video_out;
+    // Frames buffered in the vo ready to flip. Currently always 0 or 1.
+    // This is really a vo variable but currently there's no suitable vo
+    // struct.
+    int num_buffered_frames;
+
+    // used to retry decoding after startup/seeking to compensate for codec delay
+    int startup_decode_retry;
+    // how long until we need to display the "current" frame
+    float time_frame;
+
+    // AV sync: the next frame should be shown when the audio out has this
+    // much (in seconds) buffered data left. Increased when more data is
+    // written to the ao, decreased when moving to the next frame.
+    // In the audio-only case used as a timer since the last seek
+    // by the audio CPU usage meter.
+    double delay;
+
+    float begin_skip; ///&lt; start time of the current skip while on edlout mode
+    // audio is muted if either EDL or user activates mute
+    short edl_muted; ///&lt; Stores whether EDL is currently in muted mode.
+    short user_muted; ///&lt; Stores whether user wanted muted mode.
+
+    int global_sub_size; // this encompasses all subtitle sources
+    int global_sub_pos; // this encompasses all subtitle sources
+    int set_of_sub_pos;
+    int set_of_sub_size;
+    int sub_counts[SUB_SOURCES];
+#ifdef CONFIG_ASS
+    // set_of_ass_tracks[i] contains subtitles from set_of_subtitles[i]
+    // parsed by libass or NULL if format unsupported
+    ASS_Track* set_of_ass_tracks[MAX_SUBTITLE_FILES];
+#endif
+    sub_data* set_of_subtitles[MAX_SUBTITLE_FILES];
+
+    int file_format;
+
+#ifdef CONFIG_DVBIN
+    int last_dvb_step;
+    int dvbin_reopen;
+#endif
+
+    int was_paused;
+
+#ifdef CONFIG_DVDNAV
+    struct mp_image *nav_smpi;   ///&lt; last decoded dvdnav video image
+    unsigned char *nav_buffer;   ///&lt; last read dvdnav video frame
+    unsigned char *nav_start;    ///&lt; pointer to last read video buffer
+    int            nav_in_size;  ///&lt; last read size
+#endif
+} MPContext;</pre>
+    <br/>
+    <p>
+    </p>
+    一些GUI相关的操作
+    <br/>
+    打开字幕流
+    <br/>
+    打开音视频流
+    <br/>
+    <pre class="cpp">mpctx-&gt;stream=open_stream(filename,0,&amp;mpctx-&gt;file_format);
+fileformat 文件还是TV 流DEMUXER_TYPE_PLAYLIST 或DEMUXER_TYPE_UNKNOWN
+DEMUXER_TYPE_TV
+current_module记录状态vobsub open_stream handle_playlist dumpstream
+stream_reset(mpctx-&gt;stream);
+stream_seek(mpctx-&gt;stream,mpctx-&gt;stream-&gt;start_pos);
+f=fopen(stream_dump_name,”wb”); dump文件流
+stream-&gt;type==STREAMTYPE_DVD</pre>
+    //============ Open DEMUXERS — DETECT file type ======================
+    <br/>
+    Demux。分离视频流和音频流
+    <br/>
+    <pre class="cpp">mpctx-&gt;demuxer=demux_open(mpctx-&gt;stream,mpctx-
+&gt;file_format,audio_id,video_id,dvdsub_id,filename);
+Demux过程
+demux_open
+get_demuxer_type_from_name
+……
+mpctx-&gt;d_audio=mpctx-&gt;demuxer-&gt;audio;
+mpctx-&gt;d_video=mpctx-&gt;demuxer-&gt;video;
+mpctx-&gt;d_sub=mpctx-&gt;demuxer-&gt;sub;
+mpctx-&gt;sh_audio=mpctx-&gt;d_audio-&gt;sh;
+mpctx-&gt;sh_video=mpctx-&gt;d_video-&gt;sh;</pre>
+    分离了之后就开始分别Play audio和video
+    <br/>
+    这里只关心play video
+    <br/>
+    <pre class="cpp">/*======================== PLAY VIDEO ============================*/
+vo_pts=mpctx-&gt;sh_video-&gt;timer*90000.0;
+vo_fps=mpctx-&gt;sh_video-&gt;fps;
+if (!mpctx-&gt;num_buffered_frames) {
+double frame_time = update_video(&amp;blit_frame);
+mp_dbg(MSGT_AVSYNC,MSGL_DBG2,”*** ftime=%5.3f ***\n”,frame_time);
+if (mpctx-&gt;sh_video-&gt;vf_inited &lt; 0) {
+mp_msg(MSGT_CPLAYER,MSGL_FATAL, MSGTR_NotInitializeVOPorVO);
+mpctx-&gt;eof = 1; goto goto_next_file;
+}
+if (frame_time &lt; 0)
+mpctx-&gt;eof = 1;
+else {
+// might return with !eof &amp;&amp; !blit_frame if !correct_pts
+mpctx-&gt;num_buffered_frames += blit_frame;
+time_frame += frame_time / playback_speed; // for nosound
+}
+}</pre>
+    <br/>
+    <br/>
+    关键的函数是update_video根据pts是否正确调整一下同步并在必要的时候丢帧处理。最终调用decode_video开始解码（包括generate_video_frame里）。mpi = mpvdec-&gt;decode(sh_video, start, in_size, drop_frame);mpvdec是在main里通过reinit_video_chain的一系列调用动态选定的解码程序。其实就一结构体。它的原型是
+    <br/>
+    <pre class="cpp">typedef struct vd_functions_s
+{
+vd_info_t *info;
+int (*init)(sh_video_t *sh);
+void (*uninit)(sh_video_t *sh);
+int (*control)(sh_video_t *sh,int cmd,void* arg, …);
+mp_image_t* (*decode)(sh_video_t *sh,void* data,int len,int flags);
+} vd_functions_t;</pre>
+    这是所有解码器必须实现的接口。
+    <br/>
+    int (*init)(sh_video_t *sh);是一个名为init的指针，指向一个接受sh_video_t *类型参数，并返回int类型值的函数地址。那些vd_开头的文件都是解码相关的。随便打开一个vd文件以上几个函数和info变量肯定都包含了。mpi被mplayer用来存储解码后的图像。在mp_image.h里定义。
+    <p>
+    </p>
+    <pre class="cpp">typedef struct mp_image_s {
+unsigned short flags;
+unsigned char type;
+unsigned char bpp; // bits/pixel. NOT depth! for RGB it will be n*8
+unsigned int imgfmt;
+int width,height; // stored dimensions
+int x,y,w,h; // visible dimensions
+unsigned char* planes[MP_MAX_PLANES];
+int stride[MP_MAX_PLANES];
+char * qscale;
+int qstride;
+int pict_type; // 0-&gt;unknown, 1-&gt;I, 2-&gt;P, 3-&gt;B
+int fields;
+int qscale_type; // 0-&gt;mpeg1/4/h263, 1-&gt;mpeg2
+int num_planes;
+/* these are only used by planar formats Y,U(Cb),V(Cr) */
+int chroma_width;
+int chroma_height;
+int chroma_x_shift; // horizontal
+int chroma_y_shift; // vertical
+/* for private use by filter or vo driver (to store buffer id or dmpi) */
+void* priv;
+} mp_image_t;</pre>
+    <p>
+    </p>
+    <br/>
+    <p>
+     图像在解码以后会输出到显示器，mplayer本来就是一个视频播放器么。但也有可能作为输入提供给编码器进行二次编码，MP附带的mencoder.exe就是专门用来编码的。在这之前可以定义filter对图像进行处理，以实现各种效果。所有以vf_开头的文件，都是这样的filter。图像的显示是通过vo，即video out来实现的。解码器只负责把解码完成的帧传给vo，怎样显示就不用管了。这也是平台相关性最大的部分，单独分出来的好处是不言而喻的，像在Windows下有通过direcx实现的vo，Linux下有输出到X的vo。vo_*文件是各种不同的vo实现，只是他们不都是以显示为目的，像vo_md5sum.c只是计算一下图像的md5值。在解码完成以后，即得到mpi以后，filter_video被调用，其结果是整个filter链上的所有filter都被调用了一遍，包括最后的VO，在vo的put_image里把图像输出到显示器。这个时候需要考虑的是图像存储的方法即用哪种色彩空间。
+    </p>
+    <p>
+     附上两张MPlayer结构图：
+    </p>
+    <p style="text-align:center;">
+     <img alt="" height="1150" src="https://img-blog.csdn.net/20130922015822468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="789"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" height="1046" src="https://img-blog.csdn.net/20130922015827609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" width="764"/>
+     <br/>
+    </p>
+    <p>
+     MPLayer源代码下载地址：
+     <a href="http://download.csdn.net/detail/leixiaohua1020/6374337">
+      http://download.csdn.net/detail/leixiaohua1020/6374337
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=mplayer&amp;t=blog" target="_blank">
+    mplayer
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分析&amp;t=blog" target="_blank">
+    分析
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/2286593" target="_blank">
+    Mplayer
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/osmedia.html" target="_blank">
+    开源多媒体项目源代码分析
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

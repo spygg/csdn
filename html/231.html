@@ -1,0 +1,222 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 图像检索：FCTH（Fuzzy Color and Texture Histogram）算法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_231">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   图像检索：FCTH（Fuzzy Color and Texture Histogram）算法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月23日 14:40:52
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6968
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     模糊颜色和纹理直方图（Fuzzy Color and Texture Histogram，FCTH）
+    </p>
+    <p>
+    </p>
+    <p>
+     本文节选自论文《基于半监督和主动学习相结合的图像的检索研究》
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     FCTH 特征可从 3 个模糊单元的组合求得结果。先将图像划分成若干分块，在第一个模糊单元中以 HSV 颜色空间的三个信道为输入，经模糊系统最终产生 10-bin 的直方图。在第二个模糊单元修改每个颜色的色调后，经模糊系统最终产生 24-bin 的直方图。以上两个模糊单元在颜色描述子的章节中已详细作了解释，且模糊颜色描述子与 CEDD中所提的颜色描述子是同一个概念，在此不再累述。在第三个模糊单元中，将图像分块经 Harr 小波变换成一组纹理元素，模糊系统以这些纹理元素集为输入将 24-bin 直方图转换成
+ 192-bin 的直方图。最后是描述 FCTH 特征提取的实现。
+    </p>
+    <p>
+     <strong>
+      2.1.3.2.1. 模糊纹理分割
+     </strong>
+    </p>
+    <p>
+     模糊系统如图 2-8 所示，展示了模糊纹理直方图的求解过程，图像分块经 Harr 小波变换得到三个纹理元素f
+     <sub>
+      LH
+     </sub>
+     ,f
+     <sub>
+      HL
+     </sub>
+     和f
+     <sub>
+      HH
+     </sub>
+     。这三个纹理元素作为模糊系统的输入，可得到 8-bin 直方图，8bins 对应的区域分别是：(0)低能量线性区，(1)低能量水平激活区，(2)低能量垂直激活区，(3)低能量水平和垂直激活区，(4)高能量线性区，(5)高能量水平激活区，(6)高能量垂直激活区，(7)高能量水平和垂直激活区。
+    </p>
+    <p>
+     事实证明f
+     <sub>
+      LH
+     </sub>
+     ,f
+     <sub>
+      HL
+     </sub>
+     和f
+     <sub>
+      HH
+     </sub>
+     等纹理元素能有效辨别图像的纹理。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122133055875?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p align="center">
+    </p>
+    <p>
+     <strong>
+      2.1.3.2.2. FCTH 的实现
+     </strong>
+    </p>
+    <p>
+     首先定义与提取颜色信息相关的单元为颜色单元，与提取纹理信息相关的单元为纹理单元，如图 2-9 所示，纹理单元所在的模糊系统产生了 8 个区间，颜色单元所在的模糊系统产生了 24 个独立区间，这样最终的直方图将产生 8*24=192bin 区域。为了塑造这个直方图，衡量图像的细节与计算要求，先将图像分割成 1600 个分块。如果定义纹理单元的bin为N并且颜色单元的bin为M，那么该图像分块的直方图位置将为：N*24+M。
+    </p>
+    <p>
+     整个 FCTH 的实现模型如图 2-9 所示，分为纹理单元模块与颜色单元模块。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122133113796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p align="center">
+    </p>
+    <p align="left">
+     a) 在纹理单元模块中，每个图像分块经 Harr 小波变换得到三个纹理元素f
+     <sub>
+      LH
+     </sub>
+     ,f
+     <sub>
+      HL
+     </sub>
+     和f
+     <sub>
+      HH
+     </sub>
+     的值，经模糊关联系统分类可将该图像分块归类于 8-bin 直方图中的一种。假设该图像分块被归类到第二 bin 中，则它对应的纹理应为低能量水平激活区。
+    </p>
+    <p align="left">
+     b) 在颜色单元模块中，每个图像分块被转化到 HSV 颜色空间。信道色调 H，饱和度 S，亮度V组成模糊系统的输入，得到输出为10-bin的直方图。假设输出结果为第4bin，对应的颜色为红色。第二个模糊系统（24-bin 模糊关联）将原先的每个色调再次分割成 3 色调，改变亮度 V 为两个模糊区间，得出输出为 24-bin 直方图。再假设输出结果为第 4bin，此时对应的颜色却为深红色。合并这三个模糊系统最终可将该图像分块归类为 27bin(1*24+3)。
+    </p>
+    <p align="left">
+     c) 反复对图像的所有分块执行上(a)，(b)两个步骤，得到整张图像的直方图，直方图会归一于{0-1}区间内，而每个直方图可量化为 3 比特。
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      2.1.3.2.3. FCTH 特征的相似度量
+     </strong>
+    </p>
+    <p>
+     为了计算 FCTH 特征向量的相似性距离我们选择使用 Tanimoto 系数。
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=算法&amp;t=blog" target="_blank">
+    算法
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=纹理&amp;t=blog" target="_blank">
+    纹理
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=颜色&amp;t=blog" target="_blank">
+    颜色
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362935" target="_blank">
+    MPEG7/图像检索
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

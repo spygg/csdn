@@ -1,0 +1,353 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ Linux configure 参数解释 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_342">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   Linux configure 参数解释
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月19日 17:01:27
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：2360
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    Linux环境下的软件安装，并不是一件容易的事情；如果通过源代码编译后在安装，当然事情就更为复杂一些；现在安装各种软件的教程都非常普遍；但万变不离其中，对基础知识的扎实掌握，安装各种软件的问题就迎刃而解了。Configure脚本配置工具就是基础之一，它是autoconf的工具的基本应用。
+    <br/>
+    <br/>
+    与一些技巧相比，Configure显得基础一些，当然使用和学习起来就显得枯燥乏味一些，当然要成为高手，对基础的熟悉不能超越哦。
+    <br/>
+    <br/>
+    为此我转载了一篇关于Configure选项配置的详细介绍。供大家参考
+    <br/>
+    <br/>
+    <br/>
+    'configure'脚本有大量的命令行选项.对不同的软件包来说,这些选项可能会有变化,但是许多基本的选项是不会改变的.带上'--help'选项执行'configure'脚本可以看到可用的所有选项.尽管许多选项是很少用到的,但是当你为了特殊的需求而configure一个包时,知道他们的存在是很有益处的.下面对每一个选项进行简略的介绍:
+    <br/>
+    <br/>
+    --cache-file=FILE
+    <br/>
+    'configure'会在你的系统上测试存在的特性(或者bug!).为了加速随后进行的配置,测试的结果会存储在一个cache file里.当configure一个每个子树里都有'configure'脚本的复杂的源码树时,一个很好的cache file的存在会有很大帮助.
+    <br/>
+    <br/>
+    --help
+    <br/>
+    输出帮助信息.即使是有经验的用户也偶尔需要使用使用'--help'选项,因为一个复杂的项目会包含附加的选项.例如,GCC包里的'configure'脚本就包含了允许你控制是否生成和在GCC中使用GNU汇编器的选项.
+    <br/>
+    <br/>
+    --no-create
+    <br/>
+    'configure'中的一个主要函数会制作输出文件.此选项阻止'configure'生成这个文件.你可以认为这是一种演习(dry run),尽管缓存(cache)仍然被改写了.
+    <br/>
+    <br/>
+    --quiet
+    <br/>
+    --silent
+    <br/>
+    当'configure'进行他的测试时,会输出简要的信息来告诉用户正在作什么.这样作是因为'configure'可能会比较慢,没有这种输出的话用户将会被扔在一旁疑惑正在发生什么.使用这两个选项中的任何一个都会把你扔到一旁.(译注:这两句话比较有意思,原文是这样的:If there was no such output, the user would be left wondering what is happening. By using this option, you too can be left
+ wondering!)
+    <br/>
+    <br/>
+    --version
+    <br/>
+    打印用来产生'configure'脚本的Autoconf的版本号.
+    <br/>
+    <br/>
+    --prefix=PEWFIX
+    <br/>
+    '--prefix'是最常用的选项.制作出的'Makefile'会查看随此选项传递的参数,当一个包在安装时可以彻底的重新安置他的结构独立部分. 举一个例子,当安装一个包,例如说Emacs,下面的命令将会使Emacs Lisp file被安装到"/opt/gnu/share":
+    <br/>
+    $ ./configure --prefix=/opt/gnu
+    <br/>
+    <br/>
+    --exec-prefix=EPREFIX
+    <br/>
+    与'--prefix'选项类似,但是他是用来设置结构倚赖的文件的安装位置.编译好的'emacs'二进制文件就是这样一个问件.如果没有设置这个选项的话,默认使用的选项值将被设为和'--prefix'选项值一样.
+    <br/>
+    <br/>
+    --bindir=DIR
+    <br/>
+    指定二进制文件的安装位置.这里的二进制文件定义为可以被用户直接执行的程序.
+    <br/>
+    <br/>
+    --sbindir=DIR
+    <br/>
+    指定超级二进制文件的安装位置.这是一些通常只能由超级用户执行的程序.
+    <br/>
+    <br/>
+    --libexecdir=DIR
+    <br/>
+    指定可执行支持文件的安装位置.与二进制文件相反,这些文件从来不直接由用户执行,但是可以被上面提到的二进制文件所执行.
+    <br/>
+    <br/>
+    --datadir=DIR
+    <br/>
+    指定通用数据文件的安装位置.
+    <br/>
+    <br/>
+    --sysconfdir=DIR
+    <br/>
+    指定在单个机器上使用的只读数据的安装位置.
+    <br/>
+    <br/>
+    --sharedstatedir=DIR
+    <br/>
+    指定可以在多个机器上共享的可写数据的安装位置.
+    <br/>
+    <br/>
+    --localstatedir=DIR
+    <br/>
+    指定只能单机使用的可写数据的安装位置.
+    <br/>
+    <br/>
+    --libdir=DIR
+    <br/>
+    指定库文件的安装位置.
+    <br/>
+    <br/>
+    --includedir=DIR
+    <br/>
+    指定C头文件的安装位置.其他语言如C++的头文件也可以使用此选项.
+    <br/>
+    <br/>
+    --oldincludedir=DIR
+    <br/>
+    指定为除GCC外编译器安装的C头文件的安装位置.
+    <br/>
+    <br/>
+    --infodir=DIR
+    <br/>
+    指定Info格式文档的安装位置.Info是被GNU工程所使用的文档格式.
+    <br/>
+    <br/>
+    --mandir=DIR
+    <br/>
+    指定手册页的安装位置.
+    <br/>
+    <br/>
+    --srcdir=DIR
+    <br/>
+    这个选项对安装没有作用.他会告诉'configure'源码的位置.一般来说不用指定此选项,因为'configure'脚本一般和源码文件在同一个目录下.
+    <br/>
+    <br/>
+    --program-prefix=PREFIX
+    <br/>
+    指定将被加到所安装程序的名字上的前缀.例如,使用'--program-prefix=g'来configure一个名为'tar'的程序将会使安装的程序被命名为'gtar'.当和其他的安装选项一起使用时,这个选项只有当他被`Makefile.in'文件使用时才会工作.
+    <br/>
+    <br/>
+    --program-suffix=SUFFIX
+    <br/>
+    指定将被加到所安装程序的名字上的后缀.
+    <br/>
+    <br/>
+    --program-transform-name=PROGRAM
+    <br/>
+    这里的PROGRAM是一个sed脚本.当一个程序被安装时,他的名字将经过`sed -e PROGRAM'来产生安装的名字.
+    <br/>
+    <br/>
+    --build=BUILD
+    <br/>
+    指定软件包安装的系统平台.如果没有指定,默认值将是'--host'选项的值.
+    <br/>
+    <br/>
+    --host=HOST
+    <br/>
+    指定软件运行的系统平台.如果没有指定,将会运行`config.guess'来检测.
+    <br/>
+    <br/>
+    --target=GARGET
+    <br/>
+    指定软件面向(target to)的系统平台.这主要在程序语言工具如编译器和汇编器上下文中起作用.如果没有指定,默认将使用'--host'选项的值.
+    <br/>
+    <br/>
+    --disable-FEATURE
+    <br/>
+    一些软件包可以选择这个选项来提供为大型选项的编译时配置,例如使用Kerberos认证系统或者一个实验性的编译器最优配置.如果默认是提供这些特性,可以使用'--disable-FEATURE'来禁用它,这里'FEATURE'是特性的名字.例如:
+    <br/>
+    $ ./configure --disable-gui
+    <br/>
+    <br/>
+    -enable-FEATURE[=ARG]
+    <br/>
+    相反的,一些软件包可能提供了一些默认被禁止的特性,可以使用'--enable-FEATURE'来起用它.这里'FEATURE'是特性的名字.一个特性可能会接受一个可选的参数.例如:
+    <br/>
+    $ ./configure --enable-buffers=128
+    <br/>
+    `--enable-FEATURE=no'与上面提到的'--disable-FEATURE'是同义的.
+    <br/>
+    <br/>
+    --with-PACKAGE[=ARG]
+    <br/>
+    在自由软件社区里,有使用已有软件包和库的优秀传统.当用'configure'来配置一个源码树时,可以提供其他已经安装的软件包的信息.例如,倚赖于Tcl和Tk的BLT器件工具包.要配置BLT,可能需要给'configure'提供一些关于我们把Tcl和Tk装的何处的信息:
+    <br/>
+    $ ./configure --with-tcl=/usr/local --with-tk=/usr/local
+    <br/>
+    '--with-PACKAGE=no'与下面将提到的'--without-PACKAGE'是同义的.
+    <br/>
+    <br/>
+    --without-PACKAGE
+    <br/>
+    有时候你可能不想让你的软件包与系统已有的软件包交互.例如,你可能不想让你的新编译器使用GNU ld.通过使用这个选项可以做到这一点:
+    <br/>
+    $ ./configure --without-gnu-ld
+    <br/>
+    <br/>
+    --x-includes=DIR
+    <br/>
+    这个选项是'--with-PACKAGE'选项的一个特例.在Autoconf最初被开发出来时,流行使用'configure'来作为Imake的一个变通方法来制作运行于X的软件.'--x-includes'选项提供了向'configure'脚本指明包含X11头文件的目录的方法.
+    <br/>
+    <br/>
+    --x-libraries=DIR
+    <br/>
+    类似的,'--x-libraries'选项提供了向'configure'脚本指明包含X11库的目录的方法.
+    <br/>
+    <br/>
+    在源码树中运行'configure'是不必要的同时也是不好的.一个由'configure'产生的良好的'Makefile'可以构筑源码属于另一棵树的软件包.在一个独立于源码的树中构筑派生的文件的好处是很明显的:派生的文件,如目标文件,会凌乱的散布于源码树.这也使在另一个不同的系统或用不同的配置选项构筑同样的目标文件非常困难.建议使用三棵树:一棵源码树(source tree),一棵构筑树(build tree),一棵安装树(install tree).这里有一个很接近的例子,是使用这种方法来构筑GNU malloc包:
+    <br/>
+    $ gtar zxf mmalloc-1.0.tar.gz
+    <br/>
+    $ mkdir build &amp;&amp; cd build
+    <br/>
+    $ ../mmalloc-1.0/configure
+    <br/>
+    creating cache ./config.cache
+    <br/>
+    checking for gcc... gcc
+    <br/>
+    checking whether the C compiler (gcc ) works... yes
+    <br/>
+    checking whether the C compiler (gcc ) is a cross-compiler... no
+    <br/>
+    checking whether we are using GNU C... yes
+    <br/>
+    checking whether gcc accepts -g... yes
+    <br/>
+    checking for a BSD compatible install... /usr/bin/install -c
+    <br/>
+    checking host system type... i586-pc-linux-gnu
+    <br/>
+    checking build system type... i586-pc-linux-gnu
+    <br/>
+    checking for ar... ar
+    <br/>
+    checking for ranlib... ranlib
+    <br/>
+    checking how to run the C preprocessor... gcc -E
+    <br/>
+    checking for unistd.h... yes
+    <br/>
+    checking for getpagesize... yes
+    <br/>
+    checking for working mmap... yes
+    <br/>
+    checking for limits.h... yes
+    <br/>
+    checking for stddef.h... yes
+    <br/>
+    updating cache ../config.cache
+    <br/>
+    creating ./config.status
+    <br/>
+    这样这棵构筑树就被配置了,下面可以继续构筑和安装这个包到默认的位置'/usr/local':
+    <br/>
+    $ make all &amp;&amp; make install?
+    <br style="color:rgb(73,73,73);line-height:21px;font-family:simsun;font-size:14px;background-color:rgb(226,221,199);"/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=Linux&amp;t=blog" target="_blank">
+    Linux
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=configure&amp;t=blog" target="_blank">
+    configure
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=参数&amp;t=blog" target="_blank">
+    参数
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

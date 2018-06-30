@@ -1,0 +1,374 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ H.264 视频质量评价方法 （基于视频内容） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_339">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   H.264 视频质量评价方法 （基于视频内容）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月20日 16:18:32
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：5738
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     Michal Ries等人在论文《Content Based Video Quality Estimation for H.264/AVC Video Streaming》中，描述了一种基于视频内容的视频质量评价方法。有一定的参考价值，在此记录一下。
+    </p>
+    <p>
+     该质量评价方法的特别之处在于，根据视频内容的复杂程度将视频分成了几类，每种类别分别使用不同的模型系数。而一般的视频质量评价方法通常只有一个模型以及一套固定的系数。
+    </p>
+    <p>
+     该论文将视频序列分为5类，以下是其中几类的截图（少了一类）
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020130909015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     五类包括：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      <strong>
+       news（新闻）：
+      </strong>
+      仅有一小块感兴趣区域在运动（比如人脸，一般占视频画面的15%），背景是静止的。
+     </p>
+     <p>
+      <strong>
+       soccer（足球）：
+      </strong>
+      包含大面积统一方向的运动。镜头通常会在一个统一颜色的背景下（绿色）跟踪一个快速运动的物体（足球）。
+     </p>
+     <p>
+      <strong>
+       cartoon（卡通）：
+      </strong>
+      主题在运动，背景是绝对静止的（没有自然特性）。
+     </p>
+     <p>
+      <strong>
+       panorama（全景画）：
+      </strong>
+      包含大面积统一方向的运动，运动方向是一致的。
+     </p>
+     <p>
+      <strong>
+       rest（其他）：
+      </strong>
+      除以上几种之外的视频都属于这一类。通常包含大量杂乱的运动，或者有很多镜头切换。
+     </p>
+    </blockquote>
+    <p>
+     <br/>
+    </p>
+    <p>
+     对视频内容进行分类的Content classifier（内容分类器）设计如下图所示：
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020133602890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图统计了五种类别的视频中，统一运动所占的百分比以及零运动矢量百分比的
+     <span style="font-family:arial;line-height:18px;font-size:13px;">
+      经验累积分布函数。
+     </span>
+    </p>
+    <p>
+     注：ECDF全称empirical cumulative distribution functions，
+     <span style="font-family:arial;line-height:18px;font-size:13px;font-style:normal;">
+      经验累积分布函数。
+     </span>
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020133750515?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     对Content classifier（内容分类器）进行测试的结果如下表所示。False detection反映的是对视频进行了错误的分类的百分率。就是视频本身属于其他类，却分到了这一类。Good match反映的是对视频进行了正确的分类的百分率。
+     <br/>
+    </p>
+    <p>
+     由表可见，内容分类器基本上是比较准确的。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020134606546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     测试序列的设置如下表所示。测试序列时长为10秒，分辨率为SIF，编码为H.264 baseline profile 1b。下表所示一共有36种组合。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020134645843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     测试使用的设备如下图所示，是一个PDA。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020134701218?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下图是视频质量评价系统的设计。
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140608796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     实验结果数据分析方面，用到了
+     <span style="font-family:arial, '宋体', sans-serif;line-height:14px;">
+      principal component analysis（PCA，
+      <span style="font-family:arial, '宋体', sans-serif;line-height:14px;">
+       主成分分析
+      </span>
+      ）
+     </span>
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      注：主成分分析作用是：
+      <span style="font-size:12px;">
+       <span style="font-family:arial, '宋体', sans-serif;line-height:25px;text-indent:28px;">
+        将多个变量通过
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;">
+        <span style="line-height:25px;text-indent:28px;">
+         线性变换
+        </span>
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;line-height:25px;text-indent:28px;">
+        以选出较少个数重要变量的一种
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;">
+        <span style="line-height:25px;text-indent:28px;">
+         多元统计分析
+        </span>
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;line-height:25px;text-indent:28px;">
+        方法。又称
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;">
+        <span style="line-height:25px;text-indent:28px;">
+         主分量分析
+        </span>
+       </span>
+       <span style="font-family:arial, '宋体', sans-serif;line-height:25px;text-indent:28px;">
+        。
+       </span>
+      </span>
+     </p>
+    </blockquote>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140619046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     PCA分析结果如下图所示。
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      注：BR代表码率。FR代表帧率。
+     </p>
+    </blockquote>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140630703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     最终给出的视频客观质量评价模型的形式如下：
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140641734?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     最终给出的视频客观质量评价模型如下式所示：
+    </p>
+    <blockquote style="margin:0px 0px 0px 40px;padding:0px;border:;">
+     <p>
+      注：BR代表码率。FR代表帧率。
+     </p>
+    </blockquote>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140650546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     并且给出了五种不同的内容相应的系数：
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140701609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     下表所示是对该模型性能的验证。
+    </p>
+    <p>
+     r代表的是
+     <span style="font-family:arial;line-height:18px;font-size:13px;">
+      皮尔逊相关系数（
+     </span>
+     <span style="font-family:arial;line-height:18px;font-size:13px;font-style:normal;">
+      Pearson correlation
+     </span>
+     <span style="font-family:arial;line-height:18px;font-size:13px;">
+      coefficient）
+     </span>
+    </p>
+    <p>
+     <span style="font-family:arial;line-height:18px;font-size:13px;">
+      r'代表的是
+      <span style="font-family:arial;line-height:22px;font-size:13px;">
+       Spearman相关系数（Spearmank correlation factor）
+      </span>
+     </span>
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140711843?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     该模型预测的视频质量和实际主观视频质量之间的关系如下图所示：
+    </p>
+    <p align="center">
+     <img alt="" src="https://img-blog.csdn.net/20131020140729812?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     论文地址：
+     <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&amp;arnumber=4224741&amp;contentType=Conference+Publications">
+      http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&amp;arnumber=4224741&amp;contentType=Conference+Publications
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12883747
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=H.264&amp;t=blog" target="_blank">
+    H.264
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=质量评价&amp;t=blog" target="_blank">
+    质量评价
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频内容&amp;t=blog" target="_blank">
+    视频内容
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=分类&amp;t=blog" target="_blank">
+    分类
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

@@ -1,0 +1,210 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 使用批处理脚本（BAT）调用FFMPEG批量编码视频 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_456">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   使用批处理脚本（BAT）调用FFMPEG批量编码视频
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年09月25日 22:02:24
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：8937
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     使用批处理脚本（BAT）编码视频非常方便，尤其当视频序列非常多的时候，更是省了不少简单重复性劳动。
+    </p>
+    <p>
+     只要学会批处理里面几个基本的命令就行了，感觉和c/c++差不多。
+    </p>
+    <p>
+     set：设置变量（注意：变量一般情况下是字符串，而不是整形或者其他类型）
+    </p>
+    <p>
+     %变量名%：可以取到变量的值
+    </p>
+    <p>
+     传上来一个做实验的批处理脚本做示范（其中调用了ffmpeg和x264）：
+    </p>
+    <p>
+    </p>
+    <pre class="plain">@echo off
+@rem 使用此脚本生成实验序列
+@rem 设置序列名称
+set xuliename=src08
+@rem 帧率分辨率比特率参数
+set resolution1=1920x1080
+set resolution2=1280x720
+set resolution3=848x480
+set resolution4=640x360
+set resolution5=480x272
+set framerate1=25
+set framerate2=20
+set framerate3=15
+set framerate4=12.5
+set framerate5=10
+set framerate6=5
+set bitrate1=254
+set bitrate2=508
+set bitrate3=763
+set bitrate4=1017
+set bitrate5=1526
+set bitrate6=2035
+set bitrate7=2544
+@rem 生成特定分辨率，然后再进行上变换
+ffmpeg -s %resolution1% -i %xuliename%_%resolution1%.yuv -s %resolution2% %xuliename%_%resolution2%.yuv
+ffmpeg -s %resolution1% -i %xuliename%_%resolution1%.yuv -s %resolution3% %xuliename%_%resolution3%.yuv
+ffmpeg -s %resolution1% -i %xuliename%_%resolution1%.yuv -s %resolution4% %xuliename%_%resolution4%.yuv
+ffmpeg -s %resolution1% -i %xuliename%_%resolution1%.yuv -s %resolution5% %xuliename%_%resolution5%.yuv
+@rem =======================
+ffmpeg -s %resolution2% -i %xuliename%_%resolution2%.yuv -s %resolution1% -vcodec rawvideo %xuliename%_reHD_%resolution2%.avi
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -s %resolution1% -vcodec rawvideo %xuliename%_reHD_%resolution3%.avi
+ffmpeg -s %resolution4% -i %xuliename%_%resolution4%.yuv -s %resolution1% -vcodec rawvideo %xuliename%_reHD_%resolution4%.avi
+ffmpeg -s %resolution5% -i %xuliename%_%resolution5%.yuv -s %resolution1% -vcodec rawvideo %xuliename%_reHD_%resolution5%.avi
+@rem 原始分辨率 =======================
+ffmpeg -s %resolution1% -i %xuliename%_%resolution1%.yuv -s %resolution1% -vcodec rawvideo %xuliename%_reHD_ori.avi
+@rem 生成特定帧率
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate2% -vcodec rawvideo %xuliename%_fps_%framerate2%.avi
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate3% -vcodec rawvideo %xuliename%_fps_%framerate3%.avi
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate4% -vcodec rawvideo %xuliename%_fps_%framerate4%.avi
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate5% -vcodec rawvideo %xuliename%_fps_%framerate5%.avi
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate6% -vcodec rawvideo %xuliename%_fps_%framerate6%.avi
+@rem 原始帧率 =======================
+ffmpeg -s %resolution3% -i %xuliename%_%resolution3%.yuv -r %framerate2% -vcodec rawvideo %xuliename%_fps_ori.avi
+@rem 生成特定比特率
+x264 --bitrate %bitrate1% -o %xuliename%_bit_%bitrate1%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate2% -o %xuliename%_bit_%bitrate2%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate3% -o %xuliename%_bit_%bitrate3%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate4% -o %xuliename%_bit_%bitrate4%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate5% -o %xuliename%_bit_%bitrate5%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate6% -o %xuliename%_bit_%bitrate6%.flv %xuliename%_%resolution3%.yuv
+x264 --bitrate %bitrate7% -o %xuliename%_bit_%bitrate7%.flv %xuliename%_%resolution3%.yuv
+@rem 
+ffmpeg -i %xuliename%_bit_%bitrate1%.flv -vcodec rawvideo %xuliename%_bit_%bitrate1%.avi
+ffmpeg -i %xuliename%_bit_%bitrate2%.flv -vcodec rawvideo %xuliename%_bit_%bitrate2%.avi
+ffmpeg -i %xuliename%_bit_%bitrate3%.flv -vcodec rawvideo %xuliename%_bit_%bitrate3%.avi
+ffmpeg -i %xuliename%_bit_%bitrate4%.flv -vcodec rawvideo %xuliename%_bit_%bitrate4%.avi
+ffmpeg -i %xuliename%_bit_%bitrate5%.flv -vcodec rawvideo %xuliename%_bit_%bitrate5%.avi
+ffmpeg -i %xuliename%_bit_%bitrate6%.flv -vcodec rawvideo %xuliename%_bit_%bitrate6%.avi
+ffmpeg -i %xuliename%_bit_%bitrate7%.flv -vcodec rawvideo %xuliename%_bit_%bitrate7%.avi</pre>
+    <br/>
+    <br/>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/12030027
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=批处理&amp;t=blog" target="_blank">
+    批处理
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=脚本&amp;t=blog" target="_blank">
+    脚本
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=批量&amp;t=blog" target="_blank">
+    批量
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

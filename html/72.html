@@ -1,0 +1,912 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：libavdevice的gdigrab - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_72">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：libavdevice的gdigrab
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月25日 12:33:42
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：10027
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     <span style="white-space: pre;">
+      =====================================================
+     </span>
+     <span style="white-space:pre">
+      <br/>
+     </span>
+    </p>
+    <p>
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p>
+    </p>
+    <p>
+     【架构图】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151" target="_blank">
+      FFmpeg源代码结构图 - 解码
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355" target="_blank">
+      FFmpeg源代码结构图 - 编码
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+     【通用】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129" target="_blank">
+      FFmpeg 源代码简单分析：av_register_all()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265" target="_blank">
+      FFmpeg 源代码简单分析：avcodec_register_all()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777" target="_blank">
+      FFmpeg 源代码简单分析：内存的分配和释放（av_malloc()、av_free()等）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155" target="_blank">
+      FFmpeg 源代码简单分析：常见结构体的初始化和销毁（AVFormatContext，AVFrame等）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947" target="_blank">
+      FFmpeg 源代码简单分析：avio_open2()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557" target="_blank">
+      FFmpeg 源代码简单分析：av_find_decoder()和av_find_encoder()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891" target="_blank">
+      FFmpeg 源代码简单分析：avcodec_open2()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699" target="_blank">
+      FFmpeg 源代码简单分析：avcodec_close()
+     </a>
+     <br/>
+    </p>
+    【解码】
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601" target="_blank">
+      图解FFMPEG打开媒体的函数avformat_open_input
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715" target="_blank">
+      FFmpeg 源代码简单分析：avformat_open_input()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321" target="_blank">
+      FFmpeg 源代码简单分析：avformat_find_stream_info()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577" target="_blank">
+      FFmpeg 源代码简单分析：av_read_frame()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719" target="_blank">
+      FFmpeg 源代码简单分析：avcodec_decode_video2()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683" target="_blank">
+      FFmpeg 源代码简单分析：avformat_close_input()
+     </a>
+    </p>
+    <p>
+     【编码】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929" target="_blank">
+      FFmpeg 源代码简单分析：avformat_alloc_output_context2()
+     </a>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215" target="_blank">
+      FFmpeg 源代码简单分析：avformat_write_header()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485" target="_blank">
+      FFmpeg 源代码简单分析：avcodec_encode_video()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673" target="_blank">
+      FFmpeg 源代码简单分析：av_write_frame()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645" target="_blank">
+      FFmpeg 源代码简单分析：av_write_trailer()
+     </a>
+    </p>
+    <p>
+     【其它】
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155" target="_blank">
+      FFmpeg源代码简单分析：日志输出系统（av_log()等）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323" target="_blank">
+      FFmpeg源代码简单分析：结构体成员管理系统-AVClass
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329" target="_blank">
+      FFmpeg源代码简单分析：结构体成员管理系统-AVOption
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697" target="_blank">
+      FFmpeg源代码简单分析：libswscale的sws_getContext()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687" target="_blank">
+      FFmpeg源代码简单分析：libswscale的sws_scale()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121" target="_blank">
+      FFmpeg源代码简单分析：libavdevice的avdevice_register_all()
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955" target="_blank">
+      FFmpeg源代码简单分析：libavdevice的gdigrab
+     </a>
+     <br/>
+    </p>
+    <p>
+     【脚本】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525" target="_blank">
+      FFmpeg源代码简单分析：makefile
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465" target="_blank">
+      FFmpeg源代码简单分析：configure
+     </a>
+     <br/>
+    </p>
+    <p>
+     【H.264】
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509" target="_blank">
+      FFmpeg的H.264解码器源代码简单分析：概述
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     <span style="white-space:pre">
+     </span>
+     本文记录FFmpeg的libavdevice中GDIGrab组件的源代码。GDIGrab用于在Windows下屏幕录像（抓屏）。在ffmpeg.exe中使用可以参考文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/38284961" target="_blank">
+      FFmpeg获取DirectShow设备数据（摄像头，录屏）
+     </a>
+     <br/>
+    </p>
+    <p>
+     编程使用可以参考文章：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/39706721" target="_blank">
+      最简单的基于FFmpeg的AVDevice例子（屏幕录制）
+     </a>
+     <br/>
+    </p>
+    <p>
+     gdigrab的源代码位于libavdevice\gdigrab.c。关键函数的调用关系图如下图所示。图中绿色背景的函数代表源代码中自己声明的函数，紫色背景的函数代表Win32的API函数。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <div style="text-align: center;">
+     <img alt="" src="http://img.blog.csdn.net/20150325123337767"/>
+     <br/>
+    </div>
+    <h2>
+     ff_gdigrab_demuxer
+    </h2>
+    在FFmpeg中Device也被当做是一种Format，因为GDIGrab是一个输入设备，因此被当作一个AVInputFormat。GDIGrab对应的AVInputFormat结构体如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_1_3872705">AVInputFormat ff_gdigrab_demuxer = {
+    .name           = "gdigrab",
+    .long_name      = NULL_IF_CONFIG_SMALL("GDI API Windows frame grabber"),
+    .priv_data_size = sizeof(struct gdigrab),
+    .read_header    = gdigrab_read_header,
+    .read_packet    = gdigrab_read_packet,
+    .read_close     = gdigrab_read_close,
+    .flags          = AVFMT_NOFILE,
+    .priv_class     = &amp;gdigrab_class,
+};</pre>
+    <br/>
+    从该结构体可以看出：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     设备名称是“gdigrab”；
+     <br/>
+     设备完整名称是“GDI API Windows frame grabber”；
+     <br/>
+     初始化函数指针read_header()指向gdigrab_read_header()；
+     <br/>
+     读取数据函数指针read_packet()指向gdigrab_read_packet()；
+     <br/>
+     关闭函数指针read_close()指向gdigrab_read_close()；
+     <br/>
+     Flags设置为AVFMT_NOFILE；
+     <br/>
+     AVClass指定为gdigrab_class。
+    </blockquote>
+    下面分析一下这些数据。
+    <br/>
+    <br/>
+    <h2>
+     gdigrab_class
+    </h2>
+    ff_gdigrab_demuxer指定它的AVClass为一个名称为“gdigrab_class”的静态变量。有关AVClass的概念之前已经记录过，在这里不再重复。gdigrab_class的定义如下。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_2_3933817">static const AVClass gdigrab_class = {
+    .class_name = "GDIgrab indev",
+    .item_name  = av_default_item_name,
+    .option     = options,
+    .version    = LIBAVUTIL_VERSION_INT,
+};</pre>
+    <p>
+     从gdigrab_class的定义可以看出，它指定了一个名称为“options”的数组作为它的选项数组（赋值给AVClass的option变量）。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     options
+    </h3>
+    下面看一下这个options数组的定义，如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_3_9110497">#define OFFSET(x) offsetof(struct gdigrab, x)
+#define DEC AV_OPT_FLAG_DECODING_PARAM
+static const AVOption options[] = {
+    { "draw_mouse", "draw the mouse pointer", OFFSET(draw_mouse), AV_OPT_TYPE_INT, {.i64 = 1}, 0, 1, DEC },
+    { "show_region", "draw border around capture area", OFFSET(show_region), AV_OPT_TYPE_INT, {.i64 = 0}, 0, 1, DEC },
+    { "framerate", "set video frame rate", OFFSET(framerate), AV_OPT_TYPE_VIDEO_RATE, {.str = "ntsc"}, 0, 0, DEC },
+    { "video_size", "set video frame size", OFFSET(width), AV_OPT_TYPE_IMAGE_SIZE, {.str = NULL}, 0, 0, DEC },
+    { "offset_x", "capture area x offset", OFFSET(offset_x), AV_OPT_TYPE_INT, {.i64 = 0}, INT_MIN, INT_MAX, DEC },
+    { "offset_y", "capture area y offset", OFFSET(offset_y), AV_OPT_TYPE_INT, {.i64 = 0}, INT_MIN, INT_MAX, DEC },
+    { NULL },
+};</pre>
+    <br/>
+    options数组中包含了该Device支持的选项。可以看出GDIGrab支持如下选项：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     draw_mouse：画出鼠标指针。
+     <br/>
+     show_region：划出抓屏区域的边界。
+     <br/>
+     framerate：抓屏帧率。
+     <br/>
+     video_size：抓屏的大小。
+     <br/>
+     offset_x：抓屏起始点x轴坐标。
+     <br/>
+     offset_y：抓屏起始点y轴坐标。
+    </blockquote>
+    <p>
+     从宏定义“#define OFFSET(x) offsetof(struct gdigrab, x)”中可以看出，这些选项都存储在一个名称为“gdigrab”的结构体中。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     Gdigrab 上下文结构体
+    </h2>
+    Gdigrab上下文结构体中存储了GDIGrab设备用到的各种变量，定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_4_8256912">/**
+ * GDI Device Demuxer context
+ */
+struct gdigrab {
+    const AVClass *class;   /**&lt; Class for private options */
+
+    int        frame_size;  /**&lt; Size in bytes of the frame pixel data */
+    int        header_size; /**&lt; Size in bytes of the DIB header */
+    AVRational time_base;   /**&lt; Time base */
+    int64_t    time_frame;  /**&lt; Current time */
+
+    int        draw_mouse;  /**&lt; Draw mouse cursor (private option) */
+    int        show_region; /**&lt; Draw border (private option) */
+    AVRational framerate;   /**&lt; Capture framerate (private option) */
+    int        width;       /**&lt; Width of the grab frame (private option) */
+    int        height;      /**&lt; Height of the grab frame (private option) */
+    int        offset_x;    /**&lt; Capture x offset (private option) */
+    int        offset_y;    /**&lt; Capture y offset (private option) */
+
+    HWND       hwnd;        /**&lt; Handle of the window for the grab */
+    HDC        source_hdc;  /**&lt; Source device context */
+    HDC        dest_hdc;    /**&lt; Destination, source-compatible DC */
+    BITMAPINFO bmi;         /**&lt; Information describing DIB format */
+    HBITMAP    hbmp;        /**&lt; Information on the bitmap captured */
+    void      *buffer;      /**&lt; The buffer containing the bitmap image data */
+    RECT       clip_rect;   /**&lt; The subarea of the screen or window to clip */
+
+    HWND       region_hwnd; /**&lt; Handle of the region border window */
+
+    int cursor_error_printed;
+};
+</pre>
+    <br/>
+    <h2>
+     gdigrab_read_header()
+    </h2>
+    gdigrab_read_header()用于初始化gdigrab。函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_5_3466613">/**
+ * Initializes the gdi grab device demuxer (public device demuxer API).
+ *
+ * @param s1 Context from avformat core
+ * @return AVERROR_IO error, 0 success
+ */
+static int
+gdigrab_read_header(AVFormatContext *s1)
+{
+    struct gdigrab *gdigrab = s1-&gt;priv_data;
+    //窗口句柄
+    HWND hwnd;
+    HDC source_hdc = NULL;
+    HDC dest_hdc   = NULL;
+    BITMAPINFO bmi;
+    HBITMAP hbmp   = NULL;
+    void *buffer   = NULL;
+
+    const char *filename = s1-&gt;filename;
+    const char *name     = NULL;
+    AVStream   *st       = NULL;
+
+    int bpp;
+    RECT virtual_rect;
+    //窗口的位置和大小
+    RECT clip_rect;
+    BITMAP bmp;
+    int ret;
+    //filename为窗口名称
+    if (!strncmp(filename, "title=", 6)) {
+        name = filename + 6;
+        //查找窗口的句柄
+        hwnd = FindWindow(NULL, name);
+        if (!hwnd) {
+            av_log(s1, AV_LOG_ERROR,
+                   "Can't find window '%s', aborting.\n", name);
+            ret = AVERROR(EIO);
+            goto error;
+        }
+        if (gdigrab-&gt;show_region) {
+            av_log(s1, AV_LOG_WARNING,
+                    "Can't show region when grabbing a window.\n");
+            gdigrab-&gt;show_region = 0;
+        }
+        //filename为desktop
+    } else if (!strcmp(filename, "desktop")) {
+    	//窗口句柄为NULL
+        hwnd = NULL;
+    } else {
+        av_log(s1, AV_LOG_ERROR,
+               "Please use \"desktop\" or \"title=&lt;windowname&gt;\" to specify your target.\n");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+
+    if (hwnd) {
+        GetClientRect(hwnd, &amp;virtual_rect);
+    } else {
+    	//窗口句柄为NULL，代表是全屏
+        virtual_rect.left = GetSystemMetrics(SM_XVIRTUALSCREEN);
+        virtual_rect.top = GetSystemMetrics(SM_YVIRTUALSCREEN);
+        virtual_rect.right = virtual_rect.left + GetSystemMetrics(SM_CXVIRTUALSCREEN);
+        virtual_rect.bottom = virtual_rect.top + GetSystemMetrics(SM_CYVIRTUALSCREEN);
+    }
+
+    /* If no width or height set, use full screen/window area */
+    if (!gdigrab-&gt;width || !gdigrab-&gt;height) {
+        clip_rect.left = virtual_rect.left;
+        clip_rect.top = virtual_rect.top;
+        clip_rect.right = virtual_rect.right;
+        clip_rect.bottom = virtual_rect.bottom;
+    } else {
+        clip_rect.left = gdigrab-&gt;offset_x;
+        clip_rect.top = gdigrab-&gt;offset_y;
+        clip_rect.right = gdigrab-&gt;width + gdigrab-&gt;offset_x;
+        clip_rect.bottom = gdigrab-&gt;height + gdigrab-&gt;offset_y;
+    }
+
+    if (clip_rect.left &lt; virtual_rect.left ||
+            clip_rect.top &lt; virtual_rect.top ||
+            clip_rect.right &gt; virtual_rect.right ||
+            clip_rect.bottom &gt; virtual_rect.bottom) {
+            av_log(s1, AV_LOG_ERROR,
+                    "Capture area (%li,%li),(%li,%li) extends outside window area (%li,%li),(%li,%li)",
+                    clip_rect.left, clip_rect.top,
+                    clip_rect.right, clip_rect.bottom,
+                    virtual_rect.left, virtual_rect.top,
+                    virtual_rect.right, virtual_rect.bottom);
+            ret = AVERROR(EIO);
+            goto error;
+    }
+
+    /* This will get the device context for the selected window, or if
+     * none, the primary screen */
+    //得到某个窗口句柄的DC 
+    source_hdc = GetDC(hwnd);
+    if (!source_hdc) {
+        WIN32_API_ERROR("Couldn't get window device context");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+    bpp = GetDeviceCaps(source_hdc, BITSPIXEL);
+
+    if (name) {
+        av_log(s1, AV_LOG_INFO,
+               "Found window %s, capturing %lix%lix%i at (%li,%li)\n",
+               name,
+               clip_rect.right - clip_rect.left,
+               clip_rect.bottom - clip_rect.top,
+               bpp, clip_rect.left, clip_rect.top);
+    } else {
+        av_log(s1, AV_LOG_INFO,
+               "Capturing whole desktop as %lix%lix%i at (%li,%li)\n",
+               clip_rect.right - clip_rect.left,
+               clip_rect.bottom - clip_rect.top,
+               bpp, clip_rect.left, clip_rect.top);
+    }
+
+    if (clip_rect.right - clip_rect.left &lt;= 0 ||
+            clip_rect.bottom - clip_rect.top &lt;= 0 || bpp%8) {
+        av_log(s1, AV_LOG_ERROR, "Invalid properties, aborting\n");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+    //创建一个与指定设备兼容的HDC
+    dest_hdc = CreateCompatibleDC(source_hdc);
+    if (!dest_hdc) {
+        WIN32_API_ERROR("Screen DC CreateCompatibleDC");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+
+    /* Create a DIB and select it into the dest_hdc */
+    //BMP
+    bmi.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth         = clip_rect.right - clip_rect.left;
+    bmi.bmiHeader.biHeight        = -(clip_rect.bottom - clip_rect.top);
+    bmi.bmiHeader.biPlanes        = 1;
+    bmi.bmiHeader.biBitCount      = bpp;
+    bmi.bmiHeader.biCompression   = BI_RGB;
+    bmi.bmiHeader.biSizeImage     = 0;
+    bmi.bmiHeader.biXPelsPerMeter = 0;
+    bmi.bmiHeader.biYPelsPerMeter = 0;
+    bmi.bmiHeader.biClrUsed       = 0;
+    bmi.bmiHeader.biClrImportant  = 0;
+    hbmp = CreateDIBSection(dest_hdc, &amp;bmi, DIB_RGB_COLORS,
+            &amp;buffer, NULL, 0);
+    if (!hbmp) {
+        WIN32_API_ERROR("Creating DIB Section");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+
+    if (!SelectObject(dest_hdc, hbmp)) {
+        WIN32_API_ERROR("SelectObject");
+        ret = AVERROR(EIO);
+        goto error;
+    }
+
+    /* Get info from the bitmap */
+    GetObject(hbmp, sizeof(BITMAP), &amp;bmp);
+    //创建AVStream
+    st = avformat_new_stream(s1, NULL);
+    if (!st) {
+        ret = AVERROR(ENOMEM);
+        goto error;
+    }
+    avpriv_set_pts_info(st, 64, 1, 1000000); /* 64 bits pts in us */
+    //保存信息到GDIGrab上下文结构体
+    gdigrab-&gt;frame_size  = bmp.bmWidthBytes * bmp.bmHeight * bmp.bmPlanes;
+    gdigrab-&gt;header_size = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) +
+                           (bpp &lt;= 8 ? (1 &lt;&lt; bpp) : 0) * sizeof(RGBQUAD) /* palette size */;
+    gdigrab-&gt;time_base   = av_inv_q(gdigrab-&gt;framerate);
+    gdigrab-&gt;time_frame  = av_gettime() / av_q2d(gdigrab-&gt;time_base);
+
+    gdigrab-&gt;hwnd       = hwnd;
+    gdigrab-&gt;source_hdc = source_hdc;
+    gdigrab-&gt;dest_hdc   = dest_hdc;
+    gdigrab-&gt;hbmp       = hbmp;
+    gdigrab-&gt;bmi        = bmi;
+    gdigrab-&gt;buffer     = buffer;
+    gdigrab-&gt;clip_rect  = clip_rect;
+
+    gdigrab-&gt;cursor_error_printed = 0;
+
+    if (gdigrab-&gt;show_region) {
+        if (gdigrab_region_wnd_init(s1, gdigrab)) {
+            ret = AVERROR(EIO);
+            goto error;
+        }
+    }
+
+    st-&gt;codec-&gt;codec_type = AVMEDIA_TYPE_VIDEO;
+    st-&gt;codec-&gt;codec_id   = AV_CODEC_ID_BMP;
+    st-&gt;codec-&gt;time_base  = gdigrab-&gt;time_base;
+    st-&gt;codec-&gt;bit_rate   = (gdigrab-&gt;header_size + gdigrab-&gt;frame_size) * 1/av_q2d(gdigrab-&gt;time_base) * 8;
+
+    return 0;
+
+error:
+	//如果出错了
+    if (source_hdc)
+        ReleaseDC(hwnd, source_hdc);
+    if (dest_hdc)
+        DeleteDC(dest_hdc);
+    if (hbmp)
+        DeleteObject(hbmp);
+    if (source_hdc)
+        DeleteDC(source_hdc);
+    return ret;
+}
+</pre>
+    <br/>
+    从源代码可以看出，gdigrab_read_header()的流程大致如下所示：
+    <br/>
+    （1）确定窗口的句柄hwnd。如果指定了“title=”的话，调用FindWindow()获取hwnd；如果指定了“desktop”，则设定hwnd为NULL。
+    <br/>
+    （2）根据窗口的句柄hwnd确定抓屏的矩形区域。如果抓取指定窗口，则通过GetClientRect()函数；否则就抓取整个屏幕。
+    <br/>
+    （3）调用GDI的API完成抓屏的一些初始化工作。包括：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     a)通过GetDC()获得某个窗口句柄的HDC（在这里是source_hdc）。
+     <br/>
+     b)通过CreateCompatibleDC()创建一个与指定设备兼容的HDC（在这里是dest_hdc）
+     <br/>
+     c)通过CreateDIBSection()创建HBITMAP
+     <br/>
+     d)通过SelectObject()绑定HBITMAP和HDC（指的是dest_hdc）
+    </blockquote>
+    （4）通过avformat_new_stream()创建一个AVStream。
+    <br/>
+    （5）将初始化时候的一些参数保存至GDIGrab的上下文结构体。
+    <br/>
+    <br/>
+    <h2>
+     gdigrab_read_packet()
+    </h2>
+    gdigrab_read_packet()用于读取一帧抓屏数据。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_6_7563497">/**
+ * Grabs a frame from gdi (public device demuxer API).
+ *
+ * @param s1 Context from avformat core
+ * @param pkt Packet holding the grabbed frame
+ * @return frame size in bytes
+ */
+static int gdigrab_read_packet(AVFormatContext *s1, AVPacket *pkt)
+{
+    struct gdigrab *gdigrab = s1-&gt;priv_data;
+    //读取参数
+    HDC        dest_hdc   = gdigrab-&gt;dest_hdc;
+    HDC        source_hdc = gdigrab-&gt;source_hdc;
+    RECT       clip_rect  = gdigrab-&gt;clip_rect;
+    AVRational time_base  = gdigrab-&gt;time_base;
+    int64_t    time_frame = gdigrab-&gt;time_frame;
+
+    BITMAPFILEHEADER bfh;
+    int file_size = gdigrab-&gt;header_size + gdigrab-&gt;frame_size;
+
+    int64_t curtime, delay;
+
+    /* Calculate the time of the next frame */
+    time_frame += INT64_C(1000000);
+
+    /* Run Window message processing queue */
+    if (gdigrab-&gt;show_region)
+        gdigrab_region_wnd_update(s1, gdigrab);
+
+    /* wait based on the frame rate */
+    //延时
+    for (;;) {
+        curtime = av_gettime();
+        delay = time_frame * av_q2d(time_base) - curtime;
+        if (delay &lt;= 0) {
+            if (delay &lt; INT64_C(-1000000) * av_q2d(time_base)) {
+                time_frame += INT64_C(1000000);
+            }
+            break;
+        }
+        if (s1-&gt;flags &amp; AVFMT_FLAG_NONBLOCK) {
+            return AVERROR(EAGAIN);
+        } else {
+            av_usleep(delay);
+        }
+    }
+    //新建一个AVPacket
+    if (av_new_packet(pkt, file_size) &lt; 0)
+        return AVERROR(ENOMEM);
+    pkt-&gt;pts = curtime;
+
+    /* Blit screen grab */
+    //关键：BitBlt()完成抓屏功能
+    if (!BitBlt(dest_hdc, 0, 0,
+                clip_rect.right - clip_rect.left,
+                clip_rect.bottom - clip_rect.top,
+                source_hdc,
+                clip_rect.left, clip_rect.top, SRCCOPY | CAPTUREBLT)) {
+        WIN32_API_ERROR("Failed to capture image");
+        return AVERROR(EIO);
+    }
+    //画鼠标指针？
+    if (gdigrab-&gt;draw_mouse)
+        paint_mouse_pointer(s1, gdigrab);
+
+    /* Copy bits to packet data */
+    //BMP文件头BITMAPFILEHEADER
+    bfh.bfType = 0x4d42; /* "BM" in little-endian */
+    bfh.bfSize = file_size;
+    bfh.bfReserved1 = 0;
+    bfh.bfReserved2 = 0;
+    bfh.bfOffBits = gdigrab-&gt;header_size;
+    //往AVPacket中拷贝数据
+    //拷贝BITMAPFILEHEADER
+    memcpy(pkt-&gt;data, &amp;bfh, sizeof(bfh));
+    //拷贝BITMAPINFOHEADER
+    memcpy(pkt-&gt;data + sizeof(bfh), &amp;gdigrab-&gt;bmi.bmiHeader, sizeof(gdigrab-&gt;bmi.bmiHeader));
+    //不常见
+    if (gdigrab-&gt;bmi.bmiHeader.biBitCount &lt;= 8)
+        GetDIBColorTable(dest_hdc, 0, 1 &lt;&lt; gdigrab-&gt;bmi.bmiHeader.biBitCount,
+                (RGBQUAD *) (pkt-&gt;data + sizeof(bfh) + sizeof(gdigrab-&gt;bmi.bmiHeader)));
+    //拷贝像素数据
+    memcpy(pkt-&gt;data + gdigrab-&gt;header_size, gdigrab-&gt;buffer, gdigrab-&gt;frame_size);
+
+    gdigrab-&gt;time_frame = time_frame;
+
+    return gdigrab-&gt;header_size + gdigrab-&gt;frame_size;
+}
+</pre>
+    <br/>
+    从源代码可以看出，gdigrab_read_packet()的流程大致如下所示：
+    <br/>
+    （1）从GDIGrab上下文结构体读取初始化时候设定的参数。
+    <br/>
+    （2）根据帧率参数进行延时。
+    <br/>
+    （3）通过av_new_packet()新建一个AVPacket。
+    <br/>
+    （4）通过BitBlt()完成抓屏功能。
+    <br/>
+    （5）如果需要画鼠标指针的话，调用paint_mouse_pointer()，这里不做分析。
+    <br/>
+    （6）按照顺序拷贝以下3项内容至AVPacket的data指向的内存：
+    <br/>
+    <blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;">
+     a)BITMAPFILEHEADER
+     <br/>
+     b)BITMAPINFOHEADER
+     <br/>
+     c)抓屏的到的像素数据
+    </blockquote>
+    <br/>
+    <h2>
+     gdigrab_read_close()
+    </h2>
+    gdigrab_read_close()用于关闭gdigrab。该函数的定义如下所示。
+    <br/>
+    <pre class="cpp" code_snippet_id="627428" name="code" snippet_file_name="blog_20150325_7_5281453">/**
+ * Closes gdi frame grabber (public device demuxer API).
+ *
+ * @param s1 Context from avformat core
+ * @return 0 success, !0 failure
+ */
+static int gdigrab_read_close(AVFormatContext *s1)
+{
+    struct gdigrab *s = s1-&gt;priv_data;
+
+    if (s-&gt;show_region)
+        gdigrab_region_wnd_destroy(s1, s);
+
+    if (s-&gt;source_hdc)
+        ReleaseDC(s-&gt;hwnd, s-&gt;source_hdc);
+    if (s-&gt;dest_hdc)
+        DeleteDC(s-&gt;dest_hdc);
+    if (s-&gt;hbmp)
+        DeleteObject(s-&gt;hbmp);
+    if (s-&gt;source_hdc)
+        DeleteDC(s-&gt;source_hdc);
+
+    return 0;
+}
+</pre>
+    <br/>
+    从源代码可以看出，gdigrab_read_close ()完成了各种变量的清理工作。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#990000;">
+       雷霄骅
+       <br/>
+       leixiaohua1020@126.com
+       <br/>
+       http://blog.csdn.net/leixiaohua1020
+      </span>
+     </strong>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44597955
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FFmpeg&amp;t=blog" target="_blank">
+    FFmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=GDI&amp;t=blog" target="_blank">
+    GDI
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=抓屏&amp;t=blog" target="_blank">
+    抓屏
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=屏幕录像&amp;t=blog" target="_blank">
+    屏幕录像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

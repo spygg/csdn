@@ -1,0 +1,324 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 图像检索：基于形状特征的算法 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_229">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   图像检索：基于形状特征的算法
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年11月24日 11:59:09
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：18335
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     本文节选自《基于形状特征的图像检索算法研究》
+    </p>
+    <p>
+    </p>
+    <p>
+     基于形状特征的图像检索算法相对于颜色特征和纹理特征来说，使用的稍微少一些。摘录了其中的几种算法，不做深入剖析了。
+    </p>
+    <p>
+    </p>
+    <p>
+     形状通常与图像中的特定目标对象有关，是人们的视觉系统对目标的最初认识，有一定的语义信息，被认为是比颜色特征和纹理特征更高一层的特征。形状描述的准确与否是决定图像检索算法优劣的重要因素，一个好的形状描述符应具备独特性、完备性、几何不变性、灵活性以及抽象性。形状的描述符大体可以分为两大类：第一类是描述形状目标区域边界轮廓的像素集合，称为基于轮廓的形状描述符；第二类称为基于区域的形状描述符，是对形状目标区域内所有像素集合的描述；具体分类如图2-2所示。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122151938203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     2.3.1 基于轮廓的形状描述符
+    </p>
+    <p>
+     1.链码
+    </p>
+    <p>
+     Freeman于1961年将链码的概念引入到图像检索中，并推广其定义提出了广义链码。链码已经成为形状描述符中最常用的方法之一。Freeman通过链码提取图像的关键点产生了一种相对于平移、旋转与尺度不变的表示方法，并总结了与链码有关的各种算法，确定了链码在第二代图像编码中的地位，使其得到了广泛的应用。
+    </p>
+    <p>
+     链码是通过一个给定的方向上的单位尺寸的直线片段的序列来描述一条曲线或一个二维形状的边界。根据连通定义的不同可分为4方向链码（0到3）和8方向链码（0到8），如图2-3所示。
+    </p>
+    <p>
+     链码可以有效的描述轮廓形状而且可以大大减少边界所需要的数据量，但是链码对起始点要求很高，对噪声和边界线段的缺陷也很敏感，而且链码本身不具有旋转不变性。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152015421?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+     2.傅里叶描述子
+    </p>
+    <p>
+     傅立叶描述子是物体形状边界的傅立叶变换系数，它是物体边界信号频域分析的结果。假设一个物体的轮廓是由一系列坐标的像素组成，通过边界点的坐标可以获得形状的复坐标函数、曲率函数以及质心距离三种表达方式。应用傅里叶变换于这三种函数将得到一系列复数形式的系数，这些系数是直接与边界曲线的形状有关的，其中，高频分量表示形状的细节，而低频分量则表示形状的总体。
+    </p>
+    <p>
+     傅立叶描述子仅用一些低频分量就可以近似的描述轮廓形状，具有易于计算、容易归一化、匹配简单及易获得全局和局部特征等许多优点；而它的主要缺点是对轮廓上感兴趣的部分，如有无遮挡，由于映射到全部系数中而看不到了。对于轮廓有较锐的变化或被区分对象仅有微小差别的识别问题来说，这种方法就不理想了。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.小波描述符
+    </p>
+    <p>
+     小波变换在时域和频域上有突出信号局部特征和进行多分辨率分析的能力，因此被广泛应用于形状描述中。小波描述符定量描述边界的基础是将边界坐标看作一个复数序列，并对该复数序列做小波变换。
+    </p>
+    <p>
+     小波描述子对轮廓的畸变具有较强的鲁棒性，而且，可以在较少系数的情况下获取较高的轮廓描述精度，并支持多层次的分析，通过多层次的分析，达到轮廓由粗糙到精细的多个层次的描述。但是小波变换的最大缺点是过于依赖目标轮廓的起始点，也就是说，同一目标的两个轮廓的小波描述符可能因为起始点的不同而有很大的不同。
+    </p>
+    <p>
+    </p>
+    <p>
+     4.曲率尺度空间描述符
+    </p>
+    <p>
+     曲率尺度空间描述符是将经典CSS(Curvature scale space，曲率尺度空间)算法应用到形状描述符中，由F.Mokhtarian和Mackworth首先提出。其具体方法是沿着形状的轮廓，用不同带宽的Gaussian核来平滑轮廓，然后计算采样点的曲率并找出曲率过零点。重复上述平滑过程直到找不到曲率过零点，最后根据高斯函数标准差及其对应的曲率过零点建立一个CSS二值图像作为描述该形状的特征。
+    </p>
+    <p>
+     基于曲率/凹凸度的形状描述法是目前比较新的研究方法，吸引了很多学者的注意，文献[36]在经典CSS描述法的基础上提出了一种使用所有采样点曲率与形状描述的方法。文献[37]提出了使用形状的凹凸度表示形状特征的多尺度空间描述方法。这种以曲率或凸凹度为特征的形状描述符，在多尺度空间逐层描述形状轮廓的变化规律，与人类感知形状的机理类似, 可以细致地区分形状边界的差异。曲率／凸凹度是作为几何变化的描述，具有平移和缩放不变性，而且由于多尺度空间的构建同时也是逐次滤波的过程，因此，对噪声也具有较好的鲁棒性。总的来说，基于曲率／凸凹度的形状描述符能够很好的描述轮廓的形状，但是作为一个局部特性，它不能反应形状的内部结构及层次关系，不适用于多层次的复杂形状描述。
+    </p>
+    <p>
+    </p>
+    <p>
+     5.多边形逼近
+    </p>
+    <p>
+     多边形逼近方法的基本思想是通过与对象区域近似的多边形的顶点来表示该区域。这个近似的多边形则是由顶点连接顶点的直线段序列组成。如果多边形的线段数与边界上的点数相等，即每对相邻点定义多边形的一个边，则多边形可以完全准确的表达边界。
+    </p>
+    <p>
+     多边形逼近最常用的方法是分裂和合并法,在这个方法中，曲线首先分裂成由几个线段来表示，直到误差达到可以接受。被分裂的线段在合并后的逼近误差范围内仍可以继续合并。文献[39]提出的用直线段的长度和相邻直线段的夹角作为形状描述的特征是在原始多边形逼近的方法上做出的改进。Pavlidis使用平方和误差函数的偏导数来引导牛顿法搜索最佳断点。Bengtsson和Eklundh提出了一种层次化的多边形逼近方法。Chung等开发了一种基于Hopfield神经网络的形状的多边形逼近方法。
+    </p>
+    <p>
+     利用多边形逼近进行形状描述具有抗干扰性好以及表达形状所需要的数据量小等优点，然而多边形逼近对尺度变化不具有自适应性，而且逼近的精度没有固定的标准，很容易造成精度过大或过小，会影响形状描述（精度过小，会有很多的顶点，得到的多边形过于复杂；精度过大，容易丢失边界中的细节信息）。
+    </p>
+    <p>
+    </p>
+    <p>
+     2.3.2 基于区域的形状描述符
+    </p>
+    <p>
+    </p>
+    <p>
+     1.几何不变矩
+    </p>
+    <p>
+     Hu于1962年提出了图像识别的不变矩理论，并且首次提出了基于代数不变量的矩不变量。所谓的不变矩是图像的一种统计特征，主要是利用图像灰度分布的各阶矩来描述图像灰度分布的特性。
+    </p>
+    <p>
+    </p>
+    <p>
+     2.正交矩
+    </p>
+    <p>
+     正交矩相对几何矩有两个优点：首先，正交矩具有最小的信息冗余，用很小的数据集合就可以描述图像；其次正交矩是可逆的，可以用正交矩的运算重建图像。
+    </p>
+    <p>
+     目前常用的正交矩有：Legendre Moments, Zernike Moments以及pseudo-ZernikeMoments等。在区域形状的矩描述符中，Zernike Moments的性能是最优的。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.通用傅里叶描述符
+    </p>
+    <p>
+     通用傅里叶描述符(Generic Fourier Descriptor)采用了修正的平面极坐标傅里叶变换，其基本思想是：首先对图像进行采样，将采样的信息重新绘制在直角坐标系下，然后对改直角坐标系下的图像做傅里叶变换。
+    </p>
+    <p>
+    </p>
+    <p>
+     4.角半径变换（Angular RadialTransformation ART）
+    </p>
+    <p>
+     ART是另一个MPEG-7推荐的基于矩的图像描述符，是定义在极坐标下的一个单位圆内的二维复变换，ART的主要思路是通过使用一组半径变换系数，描述单个连通区域或者不连通区域，对旋转和噪声具有鲁棒性。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     <strong>
+      <span style="font-size:18px;">
+       示例：形状描述符的构造
+      </span>
+     </strong>
+    </p>
+    <p>
+     对基于轮廓的图像检索技术来说，目标的形状可以通过轮廓的提取或图像分割的方法获得，如轮廓跟踪。为了形成具有较强鲁棒性的形状描述符，本章首先对跟踪后的轮廓进行平滑操作，得到一个光滑的曲线；然后详细介绍了均匀采样点和尖点以及特征向量集的定义；最后统计特征向量集的距离和方向得出极坐标直方图，再根据这个直方图来描述目标形状。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.2.1 曲线平滑
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152019828?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152023406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152028875?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+     <br/>
+    </p>
+    <p>
+    </p>
+    <p>
+     3.2.2 特征点提取
+    </p>
+    <p>
+     定义 1 把轮廓线上局部曲率极大值的点定义为尖点。
+    </p>
+    <p>
+     定义 2 把轮廓线作定数等分采样得到的点定义为均匀采样点。
+    </p>
+    <p>
+     定义 3 把尖点和均匀采样点的集合称为特征点。
+    </p>
+    <p>
+     尖点是形状识别中的重要特征，它能够很好地描述轮廓的形状。但是其它轮廓点同样也含有丰富的信息，对描述轮廓的形状也具有很重要的作用，因此本文在提取尖点的同时又提取了均匀采样点作为描述轮廓形状的特征点。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152032046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     3.2.2.1 均匀采样点的提取
+    </p>
+    <p>
+     在提取均匀采样前，首先要确定轮廓起始点(x
+     <sub>
+      q
+     </sub>
+     , y
+     <sub>
+      q
+     </sub>
+     )。本文将轮廓线上曲率最大的像素点确定为均匀采样的起始点。如果轮廓有不止一个曲率最大的像素点，则比较曲率最大的像素点的相邻像素点的曲率，然后取相邻像素点的曲率也较大的像素点所对应的曲率最大点作为起轮廓始点，如果相邻像素点的曲率也相同则再比较相邻点的相邻点曲率，直到找出较大的相邻像素点为止。
+    </p>
+    <p>
+    </p>
+    <p>
+     3.2.2.2 尖点的提取
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152035343?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+     3.2.3 特征向量集
+    </p>
+    <p>
+     把由特征点向轮廓线质心所引向量定义为特征向量。所有特征向量集合称为特征向量集。
+    </p>
+    <p style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20131122152039093?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </p>
+    <p>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=算法&amp;t=blog" target="_blank">
+    算法
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=检索&amp;t=blog" target="_blank">
+    检索
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=图像&amp;t=blog" target="_blank">
+    图像
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=形状&amp;t=blog" target="_blank">
+    形状
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=轮廓&amp;t=blog" target="_blank">
+    轮廓
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362935" target="_blank">
+    MPEG7/图像检索
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

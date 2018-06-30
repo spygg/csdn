@@ -1,0 +1,374 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ 最简单的基于librtmp的示例：接收（RTMP保存为FLV） - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_118">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   最简单的基于librtmp的示例：接收（RTMP保存为FLV）
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2014年12月25日 00:50:26
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：24801
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     =====================================================
+     <br/>
+    </p>
+    <p>
+     最简单的基于libRTMP的示例系列文章列表：
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42104893">
+      最简单的基于librtmp的示例：接收（RTMP保存为FLV）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42104945">
+      最简单的基于librtmp的示例：发布（FLV通过RTMP发布）
+     </a>
+     <br/>
+    </p>
+    <p>
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/42105049">
+      最简单的基于librtmp的示例：发布H.264（H.264通过RTMP发布）
+     </a>
+     <br/>
+    </p>
+    <p>
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     本文记录一个基于libRTMP的接收流媒体的程序：Simplest libRTMP Receive。该程序可以将RTMP流保存成本地FLV文件。实际上本文记录的程序就是一个“精简”过的RTMPDump。RTMPDump功能比较多，因而其代码比较复杂导致很多初学者不知从何下手。而本文记录的这个程序只保留了RTMPDump中最核心的函数，更加方便新手入门学习libRTMP。
+    </p>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150110200148145"/>
+    </div>
+    <h2>
+     流程图
+    </h2>
+    使用librtmp接收RTMP流的函数执行流程图如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141223170153132?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    流程图中关键函数的作用如下所列：
+    <br/>
+    InitSockets()：初始化Socket
+    <br/>
+    RTMP_Alloc()：为结构体“RTMP”分配内存。
+    <br/>
+    RTMP_Init()：初始化结构体“RTMP”中的成员变量。
+    <br/>
+    RTMP_SetupURL()：设置输入的RTMP连接的URL。
+    <br/>
+    RTMP_Connect()：建立RTMP连接，创建一个RTMP协议规范中的NetConnection。
+    <br/>
+    RTMP_ConnectStream()：创建一个RTMP协议规范中的NetStream。
+    <br/>
+    RTMP_Read()：从服务器读取数据。
+    <br/>
+    RTMP_Close()：关闭RTMP连接。
+    <br/>
+    RTMP_Free()：释放结构体“RTMP”。
+    <br/>
+    CleanupSockets()：关闭Socket。
+    <br/>
+    <br/>
+    其中NetStream和NetConnection是RTMP协议规范中的两个逻辑结构。NetStream建立在NetConnection之上。一个NetConnection可以包含多个NetStream。它们之间的关系如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20141223170215265?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <h2>
+     源代码
+    </h2>
+    <pre class="cpp">/**
+ * Simplest Librtmp Receive
+ *
+ * 雷霄骅，张晖
+ * leixiaohua1020@126.com
+ * zhanghuicuc@gmail.com
+ * 中国传媒大学/数字电视技术
+ * Communication University of China / Digital TV Technology
+ * http://blog.csdn.net/leixiaohua1020
+ *
+ * 本程序用于接收RTMP流媒体并在本地保存成FLV格式的文件。
+ * This program can receive rtmp live stream and save it as local flv file.
+ */
+#include &lt;stdio.h&gt;
+#include "librtmp/rtmp_sys.h"
+#include "librtmp/log.h"
+
+int InitSockets()
+{
+	WORD version;
+	WSADATA wsaData;
+	version = MAKEWORD(1, 1);
+	return (WSAStartup(version, &amp;wsaData) == 0);
+}
+
+void CleanupSockets()
+{
+	WSACleanup();
+}
+
+int main(int argc, char* argv[])
+{
+	InitSockets();
+	
+	double duration=-1;
+	int nRead;
+	//is live stream ?
+	bool bLiveStream=true;				
+	
+	
+	int bufsize=1024*1024*10;			
+	char *buf=(char*)malloc(bufsize);
+	memset(buf,0,bufsize);
+	long countbufsize=0;
+	
+	FILE *fp=fopen("receive.flv","wb");
+	if (!fp){
+		RTMP_LogPrintf("Open File Error.\n");
+		CleanupSockets();
+		return -1;
+	}
+	
+	/* set log level */
+	//RTMP_LogLevel loglvl=RTMP_LOGDEBUG;
+	//RTMP_LogSetLevel(loglvl);
+
+	RTMP *rtmp=RTMP_Alloc();
+	RTMP_Init(rtmp);
+	//set connection timeout,default 30s
+	rtmp-&gt;Link.timeout=10;	
+	// HKS's live URL
+	if(!RTMP_SetupURL(rtmp,"rtmp://live.hkstv.hk.lxdns.com/live/hks"))
+	{
+		RTMP_Log(RTMP_LOGERROR,"SetupURL Err\n");
+		RTMP_Free(rtmp);
+		CleanupSockets();
+		return -1;
+	}
+	if (bLiveStream){
+		rtmp-&gt;Link.lFlags|=RTMP_LF_LIVE;
+	}
+	
+	//1hour
+	RTMP_SetBufferMS(rtmp, 3600*1000);		
+	
+	if(!RTMP_Connect(rtmp,NULL)){
+		RTMP_Log(RTMP_LOGERROR,"Connect Err\n");
+		RTMP_Free(rtmp);
+		CleanupSockets();
+		return -1;
+	}
+
+	if(!RTMP_ConnectStream(rtmp,0)){
+		RTMP_Log(RTMP_LOGERROR,"ConnectStream Err\n");
+		RTMP_Close(rtmp);
+		RTMP_Free(rtmp);
+		CleanupSockets();
+		return -1;
+	}
+
+	while(nRead=RTMP_Read(rtmp,buf,bufsize)){
+		fwrite(buf,1,nRead,fp);
+
+		countbufsize+=nRead;
+		RTMP_LogPrintf("Receive: %5dByte, Total: %5.2fkB\n",nRead,countbufsize*1.0/1024);
+	}
+
+	if(fp)
+		fclose(fp);
+
+	if(buf){
+		free(buf);
+	}
+
+	if(rtmp){
+		RTMP_Close(rtmp);
+		RTMP_Free(rtmp);
+		CleanupSockets();
+		rtmp=NULL;
+	}	
+	return 0;
+}</pre>
+    <br/>
+    <br/>
+    <h2>
+     运行结果
+    </h2>
+    <p>
+     程序运行后，会将URL为“rtmp://live.hkstv.hk.lxdns.com/live/hks”的直播流（实际上是香港卫视）在本地保存为“receive.flv”。保存后的文件使用播放器就可以观看。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h2>
+     下载
+    </h2>
+    <br/>
+    <strong>
+     Simplest LibRTMP Example
+    </strong>
+    <br/>
+    <br/>
+    <p>
+     <strong>
+      项目主页
+     </strong>
+    </p>
+    <p>
+     SourceForge：
+     <a href="https://sourceforge.net/projects/simplestlibrtmpexample/">
+      https://sourceforge.net/projects/simplestlibrtmpexample/
+     </a>
+    </p>
+    <p>
+     Github：
+     <a href="https://github.com/leixiaohua1020/simplest_librtmp_example">
+      https://github.com/leixiaohua1020/simplest_librtmp_example
+     </a>
+    </p>
+    <p>
+     开源中国：
+     <a href="http://git.oschina.net/leixiaohua1020/simplest_librtmp_example">
+      http://git.oschina.net/leixiaohua1020/simplest_librtmp_example
+     </a>
+    </p>
+    <p>
+     <br/>
+    </p>
+    CSDN下载：
+    <a href="http://download.csdn.net/detail/leixiaohua1020/8291757">
+     http://download.csdn.net/detail/leixiaohua1020/8291757
+    </a>
+    <br/>
+    <br/>
+    本工程包含了LibRTMP的使用示例，包含如下子工程：
+    <br/>
+    <span style="color:rgb(255,0,0);">
+     simplest_librtmp_receive: 接收RTMP流媒体并在本地保存成FLV格式的文件。
+    </span>
+    <br/>
+    simplest_librtmp_send_flv: 将FLV格式的视音频文件使用RTMP推送至RTMP流媒体服务器。
+    <br/>
+    simplest_librtmp_send264: 将内存中的H.264数据推送至RTMP流媒体服务器。
+    <br/>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/42104893
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=librtmp&amp;t=blog" target="_blank">
+    librtmp
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=rtmp&amp;t=blog" target="_blank">
+    rtmp
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=flv&amp;t=blog" target="_blank">
+    flv
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=流媒体&amp;t=blog" target="_blank">
+    流媒体
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank">
+    libRTMP
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1843731" target="_blank">
+    我的开源项目
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

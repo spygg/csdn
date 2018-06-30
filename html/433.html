@@ -1,0 +1,166 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ QoE的定义及影响因素 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_433">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   QoE的定义及影响因素
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月07日 22:10:11
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：6913
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     QoE标准的定义，摘自论文《用户体验质量(QoE)的模型与评价方法综述》（林闯，胡杰，孔祥震）
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <span style="font-size:12px;">
+      现有的文献给出了许多关于QoE定义和影响
+     </span>
+     因素的讨论，但是没有形成一个统一的论述．下面我们将在这些文献的基础上，给出一个更为全面的QoE定义，并且对QoE的影响因素进行概括和分析．
+    </p>
+    1 QoE的理解与定义
+    <br/>
+    QoE最初被理解为用户对提供给OSI模型不同层次的QoS机制整体感知的度量．例如在文献中，QoE被定义为：确保通过IP网络平稳传输音频和视频质量的QoS机制的整体性能．因此，可以将QoE理解为在用户角度对QoS机制的评价．之后，国际电信联盟等对QoE的定义进行了扩展，它不再是对QoS机制进行评价，而是对整个服务进行评价．国际电信联盟对QoE的定义为：终端用户对应用或者服务整体的主观可接受程度．文献中，QoE被定义为：从用户角度体验到的一个系统的整体性能．
+    <br/>
+    <p>
+     分析上述几个定义，可以总结出QoE是一种主观感受，是用户在与服务或者应用交互的过程中，由用户产生的对服务的一种主观感受．因此QoE有两个直接的影响因素：用户和服务．但是用户和服务交互的过程肯定会处在一定的客观环境中，而且客观环境对用户和服务的交互过程具有较大的影响．因此我们有必要在QoE定义中阐明这一因素．
+    </p>
+    <p>
+     综上所述，我们将QoE定义为用户在一定的客观环境中对所使用的服务或者业务的整体认可程度．
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     2 QoE的影响因素
+    </p>
+    <p>
+     QoE的影响因素的研究对于QoE的评价至关重要．因为QoE评价的基本目标就是要从已知或者容易测量的影响因素来预测难以直接测量的QoE．下面，我们先对QoE的影响因素做一个较为全面的讨论．文献[5—7]详细讨论了QoE的影响因素，我们在这些文献的基础上，结合1小节中的讨论，将QoE影响因素分为3个层面：服务层面、环境层面及用户层面，如图所示．
+    </p>
+    <p>
+     <img alt="" src="https://img-blog.csdn.net/20131007220853937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"/>
+     <br/>
+    </p>
+    服务层面的影响因素又包括网络(或者传输)层、应用层及服务层的参数．传输层的参数反映网络传输的状况，如延迟、带宽、丢包率、误码率、抖动等．应用层的参数反映没有经过传输的服务的性能，包含了OSI模型中会话层、表示层、应用层对服务的影响，如IPTV服务中的内容分辨率、编解码类型等．服务层的参数确定了通信的语义、内容、优先级、重要性以及定价，如服务层的配置(内容类型、服务的应用级别)及质量保证．环境层面的影响因素包括自然环境(如光照条件、噪声的大小、环境的固定或移动)，人文与社会环境(如社会观念、文化规范)以及服务运行环境(包括软硬件环境)等．用户层面的因素包括用户的期望、体验经历、用户体验时所处的身心状态和自身背景(如年龄、性别、受教育程度、价值观念等)．文献对这些影响因素如何相互作用进行了分析和讨论，这里不再赘述．
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=用户体验&amp;t=blog" target="_blank">
+    用户体验
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=网络&amp;t=blog" target="_blank">
+    网络
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=体验&amp;t=blog" target="_blank">
+    体验
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=通信&amp;t=blog" target="_blank">
+    通信
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=视频&amp;t=blog" target="_blank">
+    视频
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1446693" target="_blank">
+    视频质量评价
+   </a>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1645655" target="_blank">
+    计算机网络
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/videoquality.html" target="_blank">
+    视频质量评价
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

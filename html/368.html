@@ -1,0 +1,464 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ MFC的多国语言界面的实现 - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_368">
+  <span class="article-type type-2 float-left">
+   转
+  </span>
+  <h1 class="title-article">
+   MFC的多国语言界面的实现
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2013年10月15日 21:25:24
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：5801
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+     目前很多软件都是要出口到多个国家，因此，为软件提供多国语言支持就成为了一个基本条件。为软件提供多国语言的支持的具体实现方法有很多，但基本原理都差不多，就是实现代码和语言包的独立，代码根据设定的语言选择语言包。
+    </p>
+    <p>
+     其中，MFC的资源文件就提供了对多国不同语言的支持功能，如果使用MFC开发，直接用资源文件自带的多国语言支持，可以省去不少的麻烦。
+    </p>
+    <p>
+     下面就介绍给MFC程序添加中英文的支持，开发环境为VS2010。
+    </p>
+    <p>
+     1．  新建工程
+    </p>
+    <p>
+     新建了一个对话框工程，工程名称为MultiLanguages，默认语言选择是“中文”。
+    </p>
+    <p>
+     2．  添加多国语言的资源
+    </p>
+    <p>
+     在创建工程后，工程会添加默认的资源，如主对话框，都是“中文”资源。现在我们需要添加相应的英文的资源文件。
+    </p>
+    <p>
+     为主窗口IDD_MULTILANGUAGES添加英文资源的方法为：
+    </p>
+    <p>
+     （1）       打开Resource View窗口。
+    </p>
+    <p>
+     （2）       右键IDD_MULTILANGUAGES，点击弹出菜单中的“Insert Copy”菜单，如下图所示。
+    </p>
+    <p>
+     <img alt="" src="http://pic002.cnblogs.com/images/2011/304524/2011090215271059.jpg"/>
+    </p>
+    <p>
+     （3）       弹出窗口资源复制语言选择窗口，选择语言为“英语（美国）”，如下图所示。
+    </p>
+    <p>
+     <img alt="" src="http://pic002.cnblogs.com/images/2011/304524/2011090215274712.jpg"/>
+    </p>
+    <p>
+     （4）       点击OK，即完成英文版对话框的添加。完成添加后，IDD_MULTILANGUAGES就对应于两个不同语言版本的对话框了，如下图所示。
+    </p>
+    <p>
+     <img alt="" src="http://pic002.cnblogs.com/images/2011/304524/2011090215281164.jpg"/>
+    </p>
+    <p>
+     使用同样的方法，也可以为其他资源添加多国语言版本的支持。主要需要多国版本需要支持的有对话框、菜单和字符串。
+    </p>
+    <p>
+     添加多国语言的资源后，要对这些资源进行不同语言的定制，根据资源对应的语言，设置对话框和控件的标题等。
+    </p>
+    <p>
+     3．  Locale
+    </p>
+    <p>
+     程序的语言选择跟操作系统语言(System Locale)、用户设置语言(User Locale)和线程语言(Thread Locale)有关。程序运行时，是根据线程语言来选择资源的。如果程序中未对线程语言进行设置，线程语言默认采用用户设置语言。设置线程语言的函数是SetThreadLocale。
+    </p>
+    <p>
+     设置线程语言为“中文”的代码如下：
+    </p>
+    <div>
+     <p>
+      SetThreadLocale(MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_DEFAULT));
+     </p>
+    </div>
+    <p>
+     设置线程语言为“英语（美国）”的代码如下：
+    </p>
+    <div>
+     <p>
+      SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+     </p>
+     <p>
+      <br/>
+     </p>
+    </div>
+    <p>
+     <span style="color:#990000;">
+      注：在新的系统中上述代码可能不起作用，比如我的WIN7+VC2010系统中，设置语言应该使用如下代码
+      <br/>
+      SetThreadUILanguage(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+     </span>
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     设置线程语言要在对话框创建之前，否则无法更改对话框的资源。可以在CMultiLanguagesApp::InitInstance函数中的对话框初始化之前添加线程语言设置，分别设置为中文和英文语言，就可以查看到对话框界面的不同。
+    </p>
+    <p>
+     4．  字符串处理
+    </p>
+    <p>
+     程序的多国语言的支持，不仅包括界面的多国语言支持，也要包括各类字符串的多国语言支持，如弹出的提示信息。因此，在弹出提示信息时，也要为提示信息创建多个语言版本，并根据当前线程的语言来选择不同的提示信息。
+    </p>
+    <p>
+     例子：实现不同语言版本中按钮的点击次数的统计。
+    </p>
+    <p>
+     （1）       在String Table中分别添加中英文的IDS_STRING_SAMPLE资源，内容如下表所示。
+    </p>
+    <div align="center">
+     <table border="1" cellpadding="0" cellspacing="0">
+      <tbody>
+       <tr>
+        <td valign="top">
+         <p>
+          中文
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          这个一个中文提示信息。\n点击次数：%d。
+         </p>
+        </td>
+       </tr>
+       <tr>
+        <td valign="top">
+         <p>
+          英文
+         </p>
+        </td>
+        <td valign="top">
+         <p>
+          This is a prompt message in English.\nClick Times:%d.
+         </p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>
+    </p>
+    <p>
+     （2）       在主窗口控件中添加一个控件Button1，控件的中文名为“提示”，英文名称为“Prompt”。为该控件添加一个左键单击消息响应函数，该函数的内容如下：
+    </p>
+    <div>
+     <p>
+     </p>
+     <pre class="cpp">void CMultiLanguagesDlg::OnBnClickedButton1()
+{
+         // TODO: Add your control notification handler code here
+         static int s_iClickTime = 0;
+         s_iClickTime++;
+         CString strPrompt = _T("");
+         CString strFormat = _T("");
+         strFormat.LoadString(IDS_STRING_SAMPLE);
+         strPrompt.Format(strFormat, s_iClickTime);
+         AfxMessageBox(strPrompt);
+}</pre>
+     <br/>
+     <p>
+     </p>
+    </div>
+    <p>
+     （3）       分别在CMultiLanguagesApp::InitInstance添加设置线程语言为中文和英文的代码，然后多次点击按钮进行测试。
+    </p>
+    <p>
+     中文版本弹出的提示框如下图所示：
+    </p>
+    <p>
+     <img alt="" src="http://pic002.cnblogs.com/images/2011/304524/2011090215284214.jpg"/>
+    </p>
+    <p>
+     英文版本弹出的提示框如下图所示：
+    </p>
+    <p>
+     <img alt="" src="http://pic002.cnblogs.com/images/2011/304524/2011090215285293.jpg"/>
+    </p>
+    <p>
+     5．  语言切换
+    </p>
+    <p>
+     窗口在初始化时候就导入了资源文件，在通过SetThreadLocale更换了线程语言后，窗口的资源并不会更改，必须要通过代码来重新装载资源。因为窗口中存在多种与线程语言相关的资源，重新启动软件一种叫快捷的更新语言环境的方法。
+    </p>
+    <p>
+     例：通过菜单来进行语言切换，切换语言后重启软件。
+    </p>
+    <p>
+     (1)    为程序添加中英文菜单选项ID_LANGUAGE_SWITCH，并为该菜单添加消息响应函数，其中，m_bRestartFlag使用判断关闭窗口时是否需要重启程序的标识。代码如下。
+    </p>
+    <div>
+     <p>
+     </p>
+     <pre class="cpp">void CMultiLanguagesDlg::OnLanguageSwitch()
+{
+         // TODO: Add your command handler code here
+         // 读取当前线程的语言，并根据当前线程语言进行语言切换
+         LCID lcidNew = GetThreadLocale();
+         if (LANG_ENGLISH == PRIMARYLANGID(LANGIDFROMLCID(lcidNew)))
+         {
+                   lcidNew = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_DEFAULT);
+         }
+         else
+         {
+                   lcidNew = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
+         }
+ 
+         // 把语言设置写入配置文件
+         CFile file;
+         file.Open(_T("Language.ini"), CFile::modeWrite | CFile::modeCreate | CFile::typeBinary);
+         file.Write(&amp;lcidNew, sizeof(lcidNew));
+         file.Close();
+ 
+         // 关闭窗口
+         m_bRestartFlag = TRUE;
+         PostMessage(WM_CLOSE, 0, 0);
+} </pre>
+     <br/>
+     <br/>
+     <p>
+     </p>
+    </div>
+    <p>
+     (2)    在关闭窗口时，重启动该程序。即在窗口响应WM_CLOSE时，重启程序。代码如下：
+    </p>
+    <div>
+     <p>
+     </p>
+     <pre class="cpp">void CMultiLanguagesDlg::OnClose()
+{
+         // TODO: Add your message handler code here and/or call default
+         // 判断是否需要重新启动窗口
+         if (m_bRestartFlag)
+         {
+                   CString strFileName = _T("");
+                   GetModuleFileName(NULL, strFileName.GetBuffer(MAX_PATH), MAX_PATH);
+                   ShellExecute(NULL, _T(""), strFileName, NULL, NULL, SW_SHOWNORMAL);
+                   strFileName.ReleaseBuffer();
+         }
+ 
+         CDialogEx::OnClose();
+}</pre>
+     <br/>
+     <br/>
+     <p>
+     </p>
+    </div>
+    <p>
+     (3)    在启动软件时，根据当前软件的配置文件中语言来设置线程语言，即在CMultiLanguagesApp::InitInstance函数中创建对话框之前设置线程语言，代码如下：
+    </p>
+    <div>
+     <p>
+     </p>
+     <pre class="cpp">         // 判断你是否存在配置文件，如果存在，从配置文件中读取语言设置
+         CString strFileName = _T("Language.ini");
+         if (PathFileExists(strFileName))
+         {
+                   LCID lcidThread = 0;
+                   CFile file;
+                   file.Open(strFileName, CFile::modeRead | CFile::typeBinary);
+                   file.Read(&amp;lcidThread, sizeof(LCID));
+                   file.Close();
+                   SetThreadLocale(lcidThread);
+         }</pre>
+     <br/>
+     <p>
+     </p>
+    </div>
+    <p>
+     （4）       通过点击菜单来测试软件的语言切换。
+    </p>
+    <p>
+     6. MessageBox的问题
+    </p>
+    <p>
+     由于MessageBox中的按钮的语言是跟操作系统相关的，要想实现MessageBox按钮的多语言化是很有一定难度的。我现在还没有查到好的解决方法，很多网友的建议是抛弃MessageBox，自己建立对话框。
+    </p>
+    <p>
+     7. 源代码
+    </p>
+    <p>
+     源代码的下载链接如下：
+    </p>
+    <p>
+     <a href="http://files.cnblogs.com/xianyunhe/MultiLanguages.rar">
+      http://files.cnblogs.com/xianyunhe/MultiLanguages.rar
+     </a>
+    </p>
+    <p>
+    </p>
+    <p>
+     8. 相关函数和类型
+    </p>
+    <p>
+     与本地化相关的函数和类型如下：
+    </p>
+    <p>
+     GetSystemDefaultLCID
+    </p>
+    <p>
+     GetSystemDefaultLocaleName
+    </p>
+    <p>
+     GetUserDefaultLCID
+    </p>
+    <p>
+     GetUserDefaultLocaleName
+    </p>
+    <p>
+     SetThreadLocale
+    </p>
+    <p>
+     GetThreadLocale
+    </p>
+    <p>
+    </p>
+    <p>
+     MAKELCID
+    </p>
+    <p>
+     MAKELANGID
+    </p>
+    <p>
+     LCIDToLocalName
+    </p>
+    <p>
+     LocalNameToLCID
+    </p>
+    <p>
+     LANGIDFROMLCID
+    </p>
+    <p>
+     PRIMARYLANGID
+    </p>
+    <p>
+    </p>
+    <p>
+     LCID
+    </p>
+    <p>
+     LANGID
+    </p>
+    <p>
+     LANG_CHINESE 0x04
+    </p>
+    <p>
+     LANG_ENGLISH 0x09
+    </p>
+    <p>
+     <br/>
+    </p>
+    <p>
+     原文地址：
+     <a href="http://www.cnblogs.com/xianyunhe/archive/2011/09/02/2163842.html">
+      http://www.cnblogs.com/xianyunhe/archive/2011/09/02/2163842.html
+     </a>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=界面&amp;t=blog" target="_blank">
+    界面
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=语言&amp;t=blog" target="_blank">
+    语言
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=VC&amp;t=blog" target="_blank">
+    VC
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=MFC&amp;t=blog" target="_blank">
+    MFC
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1647545" target="_blank">
+    纯编程
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>

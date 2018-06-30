@@ -1,0 +1,1332 @@
+
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>
+ FFmpeg源代码简单分析：av_write_frame() - CSDN博客
+</title>
+
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-60a2c245da.min.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin3-template/skin3-template-88717cedf2.min.css">
+
+                <script type="text/javascript">
+                var username = "";
+                </script>
+
+                <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+                <!-- 新版上报 -->
+                <!-- 新版上报end -->
+                <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.3/css/sandalstrap.min.css"> 
+                </head>
+                <body>    
+        
+                    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+                    <div class="container clearfix pt0" id="mainBox">
+        <main style="width: 100%;"><div class="blog-content-box">
+ <div class="article-title-box" id="article_anchors_86">
+  <span class="article-type type-1 float-left">
+   原
+  </span>
+  <h1 class="title-article">
+   FFmpeg源代码简单分析：av_write_frame()
+  </h1>
+ </div>
+ <div class="article-info-box">
+  <div class="article-bar-top d-flex">
+   <span class="time">
+    2015年03月11日 16:03:35
+   </span>
+   <div ">
+    <span class="read-count">
+     阅读数：26385
+    </span>
+   </div>
+  </div>
+ </div>
+ <article>
+  <div class="article_content clearfix csdn-tracking-statistics" data-dsm="post" data-mod="popu_307" data-pid="blog" id="article_content">
+   <link href="https://csdnimg.cn/release/phoenix/template/css/htmledit_views-0a60691e80.css" rel="stylesheet"/>
+   <div class="htmledit_views">
+    <p>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <p align="left">
+     FFmpeg的库函数源代码分析文章列表：
+    </p>
+    <p align="left">
+     【架构图】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       解码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44226355">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码结构图 -
+      </span>
+      <span style="color:#0000FF;">
+       编码
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【通用】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12677265">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41176777">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：内存的分配和释放（
+      </span>
+      <span style="color:#0000FF;">
+       av_malloc()
+      </span>
+      <span style="color:#0000FF;">
+       、
+      </span>
+      <span style="color:#0000FF;">
+       av_free()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41181155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：常见结构体的初始化和销毁（
+      </span>
+      <span style="color:#0000FF;">
+       AVFormatContext
+      </span>
+      <span style="color:#0000FF;">
+       ，
+      </span>
+      <span style="color:#0000FF;">
+       AVFrame
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41199947">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avio_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084557">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_find_decoder()
+      </span>
+      <span style="color:#0000FF;">
+       和
+      </span>
+      <span style="color:#0000FF;">
+       av_find_encoder()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44117891">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_open2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206699">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_close()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【解码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/8661601">
+      <span style="color:#0000FF;">
+       图解
+      </span>
+      <span style="color:#0000FF;">
+       FFMPEG
+      </span>
+      <span style="color:#0000FF;">
+       打开媒体的函数
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44064715">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_open_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44084321">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_find_stream_info()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12678577">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_read_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/12679719">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_decode_video2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44110683">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_close_input()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【编码】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41198929">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_alloc_output_context2()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44116215">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avformat_write_header()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44206485">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       avcodec_encode_video()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44199673">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_frame()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44201645">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       av_write_trailer()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【其它】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44243155">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：日志输出系统（
+      </span>
+      <span style="color:#0000FF;">
+       av_log()
+      </span>
+      <span style="color:#0000FF;">
+       等）
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44268323">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVClass
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44279329">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：结构体成员管理系统
+      </span>
+      <span style="color:#0000FF;">
+       -AVOption
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44305697">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_getContext()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44346687">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libswscale
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       sws_scale()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/41211121">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       avdevice_register_all()
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44597955">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       libavdevice
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       gdigrab
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【脚本】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44556525">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       makefile
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44587465">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       源代码简单分析：
+      </span>
+      <span style="color:#0000FF;">
+       configure
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     【H.264】
+    </p>
+    <p align="left">
+     <a href="http://blog.csdn.net/leixiaohua1020/article/details/44864509">
+      <span style="color:#0000FF;">
+       FFmpeg
+      </span>
+      <span style="color:#0000FF;">
+       的
+      </span>
+      <span style="color:#0000FF;">
+       H.264
+      </span>
+      <span style="color:#0000FF;">
+       解码器源代码简单分析：概述
+      </span>
+     </a>
+    </p>
+    <p align="left">
+     =====================================================
+    </p>
+    <br/>
+    <p>
+     打算写两篇文章简单分析FFmpeg的写文件用到的3个函数avformat_write_header()，av_write_frame()以及av_write_trailer()。上篇文章已经分析了avformat_write_header()，这篇文章继续分析av_write_frame()。
+    </p>
+    <br/>
+    av_write_frame()用于输出一帧视音频数据，它的声明位于libavformat\avformat.h，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Write a packet to an output media file.
+ *
+ * This function passes the packet directly to the muxer, without any buffering
+ * or reordering. The caller is responsible for correctly interleaving the
+ * packets if the format requires it. Callers that want libavformat to handle
+ * the interleaving should call av_interleaved_write_frame() instead of this
+ * function.
+ *
+ * @param s media file handle
+ * @param pkt The packet containing the data to be written. Note that unlike
+ *            av_interleaved_write_frame(), this function does not take
+ *            ownership of the packet passed to it (though some muxers may make
+ *            an internal reference to the input packet).
+ *            &lt;br&gt;
+ *            This parameter can be NULL (at any time, not just at the end), in
+ *            order to immediately flush data buffered within the muxer, for
+ *            muxers that buffer up data internally before writing it to the
+ *            output.
+ *            &lt;br&gt;
+ *            Packet's @ref AVPacket.stream_index "stream_index" field must be
+ *            set to the index of the corresponding stream in @ref
+ *            AVFormatContext.streams "s-&gt;streams". It is very strongly
+ *            recommended that timing information (@ref AVPacket.pts "pts", @ref
+ *            AVPacket.dts "dts", @ref AVPacket.duration "duration") is set to
+ *            correct values.
+ * @return &lt; 0 on error, = 0 if OK, 1 if flushed and there is no more data to flush
+ *
+ * @see av_interleaved_write_frame()
+ */
+int av_write_frame(AVFormatContext *s, AVPacket *pkt);</pre>
+    <br/>
+    简单解释一下它的参数的含义：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     s：用于输出的AVFormatContext。
+     <br/>
+     pkt：等待输出的AVPacket。
+    </blockquote>
+    函数正常执行后返回值等于0。
+    <br/>
+    <br/>
+    <p>
+     这个函数最典型的例子可以参考：
+    </p>
+    <a href="http://blog.csdn.net/leixiaohua1020/article/details/25430425">
+     最简单的基于FFMPEG的视频编码器（YUV编码为H.264）
+    </a>
+    <br/>
+    <br/>
+    <h2>
+     函数调用关系图
+    </h2>
+    av_write_frame()的调用关系如下图所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311155409612"/>
+     <br/>
+    </div>
+    <br/>
+    <h2>
+     av_write_frame()
+    </h2>
+    av_write_frame()的定义位于libavformat\mux.c，如下所示。
+    <br/>
+    <pre class="cpp">int av_write_frame(AVFormatContext *s, AVPacket *pkt)
+{
+    int ret;
+
+    ret = check_packet(s, pkt);
+    if (ret &lt; 0)
+        return ret;
+    //Packet为NULL，Flush Encoder
+    if (!pkt) {
+        if (s-&gt;oformat-&gt;flags &amp; AVFMT_ALLOW_FLUSH) {
+            ret = s-&gt;oformat-&gt;write_packet(s, NULL);
+            if (s-&gt;flush_packets &amp;&amp; s-&gt;pb &amp;&amp; s-&gt;pb-&gt;error &gt;= 0 &amp;&amp; s-&gt;flags &amp; AVFMT_FLAG_FLUSH_PACKETS)
+                avio_flush(s-&gt;pb);
+            if (ret &gt;= 0 &amp;&amp; s-&gt;pb &amp;&amp; s-&gt;pb-&gt;error &lt; 0)
+                ret = s-&gt;pb-&gt;error;
+            return ret;
+        }
+        return 1;
+    }
+
+    ret = compute_pkt_fields2(s, s-&gt;streams[pkt-&gt;stream_index], pkt);
+
+    if (ret &lt; 0 &amp;&amp; !(s-&gt;oformat-&gt;flags &amp; AVFMT_NOTIMESTAMPS))
+        return ret;
+    //写入
+    ret = write_packet(s, pkt);
+    if (ret &gt;= 0 &amp;&amp; s-&gt;pb &amp;&amp; s-&gt;pb-&gt;error &lt; 0)
+        ret = s-&gt;pb-&gt;error;
+
+    if (ret &gt;= 0)
+        s-&gt;streams[pkt-&gt;stream_index]-&gt;nb_frames++;
+    return ret;
+}
+</pre>
+    <br/>
+    从源代码可以看出，av_write_frame()主要完成了以下几步工作：
+    <br/>
+    （1）调用check_packet()做一些简单的检测
+    <br/>
+    （2）调用compute_pkt_fields2()设置AVPacket的一些属性值
+    <br/>
+    （3）调用write_packet()写入数据
+    <br/>
+    <p>
+     下面分别看一下这几个函数功能。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     check_packet()
+    </h3>
+    check_packet()定义位于libavformat\mux.c，如下所示。
+    <br/>
+    <pre class="cpp">static int check_packet(AVFormatContext *s, AVPacket *pkt)
+{
+    if (!pkt)
+        return 0;
+
+    if (pkt-&gt;stream_index &lt; 0 || pkt-&gt;stream_index &gt;= s-&gt;nb_streams) {
+        av_log(s, AV_LOG_ERROR, "Invalid packet stream index: %d\n",
+               pkt-&gt;stream_index);
+        return AVERROR(EINVAL);
+    }
+
+    if (s-&gt;streams[pkt-&gt;stream_index]-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_ATTACHMENT) {
+        av_log(s, AV_LOG_ERROR, "Received a packet for an attachment stream.\n");
+        return AVERROR(EINVAL);
+    }
+
+    return 0;
+}
+</pre>
+    <br/>
+    从代码中可以看出，check_packet()的功能比较简单：首先检查一下输入的AVPacket是否为空，如果为空，则是直接返回；然后检查一下AVPacket的stream_index（标记了该AVPacket所属的AVStream）设置是否正常，如果为负数或者大于AVStream的个数，则返回错误信息；最后检查AVPacket所属的AVStream是否属于attachment stream，这个地方没见过，目前还没有研究。
+    <br/>
+    <br/>
+    <h3>
+     compute_pkt_fields2()
+    </h3>
+    compute_pkt_fields2()函数的定义位于libavformat\mux.c，如下所示。
+    <br/>
+    <pre class="cpp">//FIXME merge with compute_pkt_fields
+static int compute_pkt_fields2(AVFormatContext *s, AVStream *st, AVPacket *pkt)
+{
+    int delay = FFMAX(st-&gt;codec-&gt;has_b_frames, st-&gt;codec-&gt;max_b_frames &gt; 0);
+    int num, den, i;
+    int frame_size;
+
+    av_dlog(s, "compute_pkt_fields2: pts:%s dts:%s cur_dts:%s b:%d size:%d st:%d\n",
+            av_ts2str(pkt-&gt;pts), av_ts2str(pkt-&gt;dts), av_ts2str(st-&gt;cur_dts), delay, pkt-&gt;size, pkt-&gt;stream_index);
+
+    if (pkt-&gt;duration &lt; 0 &amp;&amp; st-&gt;codec-&gt;codec_type != AVMEDIA_TYPE_SUBTITLE) {
+        av_log(s, AV_LOG_WARNING, "Packet with invalid duration %d in stream %d\n",
+               pkt-&gt;duration, pkt-&gt;stream_index);
+        pkt-&gt;duration = 0;
+    }
+
+    /* duration field */
+    if (pkt-&gt;duration == 0) {
+        ff_compute_frame_duration(s, &amp;num, &amp;den, st, NULL, pkt);
+        if (den &amp;&amp; num) {
+            pkt-&gt;duration = av_rescale(1, num * (int64_t)st-&gt;time_base.den * st-&gt;codec-&gt;ticks_per_frame, den * (int64_t)st-&gt;time_base.num);
+        }
+    }
+
+    if (pkt-&gt;pts == AV_NOPTS_VALUE &amp;&amp; pkt-&gt;dts != AV_NOPTS_VALUE &amp;&amp; delay == 0)
+        pkt-&gt;pts = pkt-&gt;dts;
+
+    //XXX/FIXME this is a temporary hack until all encoders output pts
+    if ((pkt-&gt;pts == 0 || pkt-&gt;pts == AV_NOPTS_VALUE) &amp;&amp; pkt-&gt;dts == AV_NOPTS_VALUE &amp;&amp; !delay) {
+        static int warned;
+        if (!warned) {
+            av_log(s, AV_LOG_WARNING, "Encoder did not produce proper pts, making some up.\n");
+            warned = 1;
+        }
+        pkt-&gt;dts =
+//        pkt-&gt;pts= st-&gt;cur_dts;
+            pkt-&gt;pts = st-&gt;pts.val;
+    }
+
+    //calculate dts from pts
+    if (pkt-&gt;pts != AV_NOPTS_VALUE &amp;&amp; pkt-&gt;dts == AV_NOPTS_VALUE &amp;&amp; delay &lt;= MAX_REORDER_DELAY) {
+        st-&gt;pts_buffer[0] = pkt-&gt;pts;
+        for (i = 1; i &lt; delay + 1 &amp;&amp; st-&gt;pts_buffer[i] == AV_NOPTS_VALUE; i++)
+            st-&gt;pts_buffer[i] = pkt-&gt;pts + (i - delay - 1) * pkt-&gt;duration;
+        for (i = 0; i&lt;delay &amp;&amp; st-&gt;pts_buffer[i] &gt; st-&gt;pts_buffer[i + 1]; i++)
+            FFSWAP(int64_t, st-&gt;pts_buffer[i], st-&gt;pts_buffer[i + 1]);
+
+        pkt-&gt;dts = st-&gt;pts_buffer[0];
+    }
+
+    if (st-&gt;cur_dts &amp;&amp; st-&gt;cur_dts != AV_NOPTS_VALUE &amp;&amp;
+        ((!(s-&gt;oformat-&gt;flags &amp; AVFMT_TS_NONSTRICT) &amp;&amp;
+          st-&gt;cur_dts &gt;= pkt-&gt;dts) || st-&gt;cur_dts &gt; pkt-&gt;dts)) {
+        av_log(s, AV_LOG_ERROR,
+               "Application provided invalid, non monotonically increasing dts to muxer in stream %d: %s &gt;= %s\n",
+               st-&gt;index, av_ts2str(st-&gt;cur_dts), av_ts2str(pkt-&gt;dts));
+        return AVERROR(EINVAL);
+    }
+    if (pkt-&gt;dts != AV_NOPTS_VALUE &amp;&amp; pkt-&gt;pts != AV_NOPTS_VALUE &amp;&amp; pkt-&gt;pts &lt; pkt-&gt;dts) {
+        av_log(s, AV_LOG_ERROR,
+               "pts (%s) &lt; dts (%s) in stream %d\n",
+               av_ts2str(pkt-&gt;pts), av_ts2str(pkt-&gt;dts),
+               st-&gt;index);
+        return AVERROR(EINVAL);
+    }
+
+    av_dlog(s, "av_write_frame: pts2:%s dts2:%s\n",
+            av_ts2str(pkt-&gt;pts), av_ts2str(pkt-&gt;dts));
+    st-&gt;cur_dts = pkt-&gt;dts;
+    st-&gt;pts.val = pkt-&gt;dts;
+
+    /* update pts */
+    switch (st-&gt;codec-&gt;codec_type) {
+    case AVMEDIA_TYPE_AUDIO:
+        frame_size = (pkt-&gt;flags &amp; AV_PKT_FLAG_UNCODED_FRAME) ?
+                     ((AVFrame *)pkt-&gt;data)-&gt;nb_samples :
+                     av_get_audio_frame_duration(st-&gt;codec, pkt-&gt;size);
+
+        /* HACK/FIXME, we skip the initial 0 size packets as they are most
+         * likely equal to the encoder delay, but it would be better if we
+         * had the real timestamps from the encoder */
+        if (frame_size &gt;= 0 &amp;&amp; (pkt-&gt;size || st-&gt;pts.num != st-&gt;pts.den &gt;&gt; 1 || st-&gt;pts.val)) {
+            frac_add(&amp;st-&gt;pts, (int64_t)st-&gt;time_base.den * frame_size);
+        }
+        break;
+    case AVMEDIA_TYPE_VIDEO:
+        frac_add(&amp;st-&gt;pts, (int64_t)st-&gt;time_base.den * st-&gt;codec-&gt;time_base.num);
+        break;
+    }
+    return 0;
+}
+</pre>
+    <br/>
+    从代码中可以看出，compute_pkt_fields2()主要有两方面的功能：一方面用于计算AVPacket的duration， dts等信息；另一方面用于检查pts、dts这些参数的合理性（例如PTS是否一定大于DTS）。具体的代码还没有细看，以后有时间再进行分析。
+    <br/>
+    <br/>
+    <h3>
+     AVOutputFormat-&gt;write_packet()
+    </h3>
+    write_packet()函数的定义位于libavformat\mux.c，如下所示。
+    <br/>
+    <pre class="cpp">/**
+ * Make timestamps non negative, move side data from payload to internal struct, call muxer, and restore
+ * sidedata.
+ *
+ * FIXME: this function should NEVER get undefined pts/dts beside when the
+ * AVFMT_NOTIMESTAMPS is set.
+ * Those additional safety checks should be dropped once the correct checks
+ * are set in the callers.
+ */
+static int write_packet(AVFormatContext *s, AVPacket *pkt)
+{
+    int ret, did_split;
+
+    if (s-&gt;output_ts_offset) {
+        AVStream *st = s-&gt;streams[pkt-&gt;stream_index];
+        int64_t offset = av_rescale_q(s-&gt;output_ts_offset, AV_TIME_BASE_Q, st-&gt;time_base);
+
+        if (pkt-&gt;dts != AV_NOPTS_VALUE)
+            pkt-&gt;dts += offset;
+        if (pkt-&gt;pts != AV_NOPTS_VALUE)
+            pkt-&gt;pts += offset;
+    }
+
+    if (s-&gt;avoid_negative_ts &gt; 0) {
+        AVStream *st = s-&gt;streams[pkt-&gt;stream_index];
+        int64_t offset = st-&gt;mux_ts_offset;
+
+        if (s-&gt;offset == AV_NOPTS_VALUE &amp;&amp; pkt-&gt;dts != AV_NOPTS_VALUE &amp;&amp;
+            (pkt-&gt;dts &lt; 0 || s-&gt;avoid_negative_ts == AVFMT_AVOID_NEG_TS_MAKE_ZERO)) {
+            s-&gt;offset = -pkt-&gt;dts;
+            s-&gt;offset_timebase = st-&gt;time_base;
+        }
+
+        if (s-&gt;offset != AV_NOPTS_VALUE &amp;&amp; !offset) {
+            offset = st-&gt;mux_ts_offset =
+                av_rescale_q_rnd(s-&gt;offset,
+                                 s-&gt;offset_timebase,
+                                 st-&gt;time_base,
+                                 AV_ROUND_UP);
+        }
+
+        if (pkt-&gt;dts != AV_NOPTS_VALUE)
+            pkt-&gt;dts += offset;
+        if (pkt-&gt;pts != AV_NOPTS_VALUE)
+            pkt-&gt;pts += offset;
+
+        av_assert2(pkt-&gt;dts == AV_NOPTS_VALUE || pkt-&gt;dts &gt;= 0 || s-&gt;max_interleave_delta &gt; 0);
+        if (pkt-&gt;dts != AV_NOPTS_VALUE &amp;&amp; pkt-&gt;dts &lt; 0) {
+            av_log(s, AV_LOG_WARNING,
+                   "Packets poorly interleaved, failed to avoid negative "
+                   "timestamp %s in stream %d.\n"
+                   "Try -max_interleave_delta 0 as a possible workaround.\n",
+                   av_ts2str(pkt-&gt;dts),
+                   pkt-&gt;stream_index
+            );
+        }
+    }
+
+    did_split = av_packet_split_side_data(pkt);
+    if ((pkt-&gt;flags &amp; AV_PKT_FLAG_UNCODED_FRAME)) {
+        AVFrame *frame = (AVFrame *)pkt-&gt;data;
+        av_assert0(pkt-&gt;size == UNCODED_FRAME_PACKET_SIZE);
+        ret = s-&gt;oformat-&gt;write_uncoded_frame(s, pkt-&gt;stream_index, &amp;frame, 0);
+        av_frame_free(&amp;frame);
+    } else {
+    	//写入
+        ret = s-&gt;oformat-&gt;write_packet(s, pkt);
+    }
+
+    if (s-&gt;flush_packets &amp;&amp; s-&gt;pb &amp;&amp; ret &gt;= 0 &amp;&amp; s-&gt;flags &amp; AVFMT_FLAG_FLUSH_PACKETS)
+        avio_flush(s-&gt;pb);
+
+    if (did_split)
+        av_packet_merge_side_data(pkt);
+
+    return ret;
+}
+</pre>
+    <br/>
+    write_packet()函数最关键的地方就是调用了AVOutputFormat中写入数据的方法。如果AVPacket中的flag标记中包含AV_PKT_FLAG_UNCODED_FRAME，就会调用AVOutputFormat的write_uncoded_frame()函数；如果不包含那个标记，就会调用write_packet()函数。write_packet()实际上是一个函数指针，指向特定的AVOutputFormat中的实现函数。例如，我们看一下FLV对应的AVOutputFormat，位于libavformat\flvenc.c，如下所示。
+    <br/>
+    <pre class="cpp">AVOutputFormat ff_flv_muxer = {
+    .name           = "flv",
+    .long_name      = NULL_IF_CONFIG_SMALL("FLV (Flash Video)"),
+    .mime_type      = "video/x-flv",
+    .extensions     = "flv",
+    .priv_data_size = sizeof(FLVContext),
+    .audio_codec    = CONFIG_LIBMP3LAME ? AV_CODEC_ID_MP3 : AV_CODEC_ID_ADPCM_SWF,
+    .video_codec    = AV_CODEC_ID_FLV1,
+    .write_header   = flv_write_header,
+    .write_packet   = flv_write_packet,
+    .write_trailer  = flv_write_trailer,
+    .codec_tag      = (const AVCodecTag* const []) {
+                          flv_video_codec_ids, flv_audio_codec_ids, 0
+                      },
+    .flags          = AVFMT_GLOBALHEADER | AVFMT_VARIABLE_FPS |
+                      AVFMT_TS_NONSTRICT,
+};</pre>
+    <br/>
+    <p>
+     从ff_flv_muxer的定义可以看出，write_packet()指向的是flv_write_packet()函数。在看flv_write_packet()函数的定义之前，我们先回顾一下FLV封装格式的结构。
+    </p>
+    <p>
+     <br/>
+    </p>
+    <h3>
+     FLV封装格式
+    </h3>
+    <p>
+     FLV封装格式如下图所示。
+    </p>
+    <p>
+     <span style="font-family:'FangSong_GB2312';">
+      PS：原图是网上找的，感觉画的很清晰，比官方的Video File Format Specification更加通俗易懂。但是图中有一个错误，就是TagHeader中的StreamID字段的长度写错了（查看了一下官方标准，应该是3字节，现在已经改过来了）。
+     </span>
+    </p>
+    <p style="text-align:center;">
+     <span style="font-family:'FangSong_GB2312';">
+      <img alt="" src="https://img-blog.csdn.net/20150311155419878?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+      <br/>
+     </span>
+    </p>
+    从FLV的封装格式结构可以看出，它的文件数据是一个一个的Tag连接起来的，中间间隔包含着Previous Tag Size。因此，flv_write_packet()函数的任务就是写入一个Tag和Previous Tag Size。下面简单记录一下Tag Data的格式。Tag Data根据Tag的Type不同而不同：可以分为音频Tag Data，视频Tag Data以及Script Tag Data。下面简述一下音频Tag Data和视频Tag Data。
+    <br/>
+    <br/>
+    <h4>
+     Audio Tag Data
+    </h4>
+    Audio Tag在官方标准中定义如下。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311155802989?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    Audio Tag开始的第1个字节包含了音频数据的参数信息，从第2个字节开始为音频流数据。
+    <br/>
+    第1个字节的前4位的数值表示了音频数据格式：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     0 = Linear PCM, platform endian
+     <br/>
+     1 = ADPCM
+     <br/>
+     2 = MP3
+     <br/>
+     3 = Linear PCM, little endian
+     <br/>
+     4 = Nellymoser 16-kHz mono
+     <br/>
+     5 = Nellymoser 8-kHz mono
+     <br/>
+     6 = Nellymoser
+     <br/>
+     7 = G.711 A-law logarithmic PCM
+     <br/>
+     8 = G.711 mu-law logarithmic PCM
+     <br/>
+     9 = reserved
+     <br/>
+     10 = AAC
+     <br/>
+     14 = MP3 8-Khz
+     <br/>
+     15 = Device-specific sound
+    </blockquote>
+    第1个字节的第5-6位的数值表示采样率：0 = 5.5kHz，1 = 11KHz，2 = 22 kHz，3 = 44 kHz。
+    <br/>
+    第1个字节的第7位表示采样精度：0 = 8bits，1 = 16bits。
+    <br/>
+    第1个字节的第8位表示音频类型：0 = sndMono，1 = sndStereo。
+    <br/>
+    其中，当音频编码为AAC的时候，第一个字节后面存储的是AACAUDIODATA，格式如下所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311155831334?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <h4>
+     Video Tag Data
+    </h4>
+    Video Tag在官方标准中的定义如下。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311155842987?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    Video Tag也用开始的第1个字节包含视频数据的参数信息，从第2个字节为视频流数据。
+    <br/>
+    第1个字节的前4位的数值表示帧类型（FrameType）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1: keyframe (for AVC, a seekableframe)（关键帧）
+     <br/>
+     2: inter frame (for AVC, a nonseekableframe)
+     <br/>
+     3: disposable inter frame (H.263only)
+     <br/>
+     4: generated keyframe (reservedfor server use only)
+     <br/>
+     5: video info/command frame
+    </blockquote>
+    第1个字节的后4位的数值表示视频编码ID（CodecID）：
+    <br/>
+    <blockquote style="margin:0 0 0 40px;border:none;padding:0px;">
+     1: JPEG (currently unused)
+     <br/>
+     2: Sorenson H.263
+     <br/>
+     3: Screen video
+     <br/>
+     4: On2 VP6
+     <br/>
+     5: On2 VP6 with alpha channel
+     <br/>
+     6: Screen video version 2
+     <br/>
+     7: AVC
+    </blockquote>
+    其中，当音频编码为AVC（H.264）的时候，第一个字节后面存储的是AVCVIDEOPACKET，格式如下所示。
+    <br/>
+    <div style="text-align:center;">
+     <img alt="" src="https://img-blog.csdn.net/20150311155753645?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"/>
+    </div>
+    <br/>
+    <h2>
+     flv_write_packet()
+    </h2>
+    下面我们看一下FLV格式中write_packet()对应的实现函数flv_write_packet()的定义，位于libavformat\flvenc.c，如下所示。
+    <br/>
+    <pre class="cpp">static int flv_write_packet(AVFormatContext *s, AVPacket *pkt)
+{
+    AVIOContext *pb      = s-&gt;pb;
+    AVCodecContext *enc  = s-&gt;streams[pkt-&gt;stream_index]-&gt;codec;
+    FLVContext *flv      = s-&gt;priv_data;
+    FLVStreamContext *sc = s-&gt;streams[pkt-&gt;stream_index]-&gt;priv_data;
+    unsigned ts;
+    int size = pkt-&gt;size;
+    uint8_t *data = NULL;
+    int flags = -1, flags_size, ret;
+
+    if (enc-&gt;codec_id == AV_CODEC_ID_VP6F || enc-&gt;codec_id == AV_CODEC_ID_VP6A ||
+        enc-&gt;codec_id == AV_CODEC_ID_VP6  || enc-&gt;codec_id == AV_CODEC_ID_AAC)
+        flags_size = 2;
+    else if (enc-&gt;codec_id == AV_CODEC_ID_H264 || enc-&gt;codec_id == AV_CODEC_ID_MPEG4)
+        flags_size = 5;
+    else
+        flags_size = 1;
+
+    if (flv-&gt;delay == AV_NOPTS_VALUE)
+        flv-&gt;delay = -pkt-&gt;dts;
+
+    if (pkt-&gt;dts &lt; -flv-&gt;delay) {
+        av_log(s, AV_LOG_WARNING,
+               "Packets are not in the proper order with respect to DTS\n");
+        return AVERROR(EINVAL);
+    }
+
+    ts = pkt-&gt;dts + flv-&gt;delay; // add delay to force positive dts
+
+    if (s-&gt;event_flags &amp; AVSTREAM_EVENT_FLAG_METADATA_UPDATED) {
+        write_metadata(s, ts);
+        s-&gt;event_flags &amp;= ~AVSTREAM_EVENT_FLAG_METADATA_UPDATED;
+    }
+    //Tag Header
+    switch (enc-&gt;codec_type) {
+    case AVMEDIA_TYPE_VIDEO:
+    	//Type
+        avio_w8(pb, FLV_TAG_TYPE_VIDEO);
+
+        flags = enc-&gt;codec_tag;
+        if (flags == 0) {
+            av_log(s, AV_LOG_ERROR,
+                   "Video codec '%s' is not compatible with FLV\n",
+                   avcodec_get_name(enc-&gt;codec_id));
+            return AVERROR(EINVAL);
+        }
+        //Key Frame?
+        flags |= pkt-&gt;flags &amp; AV_PKT_FLAG_KEY ? FLV_FRAME_KEY : FLV_FRAME_INTER;
+        break;
+    case AVMEDIA_TYPE_AUDIO:
+    	
+        flags = get_audio_flags(s, enc);
+
+        av_assert0(size);
+        //Type
+        avio_w8(pb, FLV_TAG_TYPE_AUDIO);
+        break;
+    case AVMEDIA_TYPE_DATA:
+    	//Type
+        avio_w8(pb, FLV_TAG_TYPE_META);
+        break;
+    default:
+        return AVERROR(EINVAL);
+    }
+
+    if (enc-&gt;codec_id == AV_CODEC_ID_H264 || enc-&gt;codec_id == AV_CODEC_ID_MPEG4) {
+        /* check if extradata looks like mp4 formated */
+        if (enc-&gt;extradata_size &gt; 0 &amp;&amp; *(uint8_t*)enc-&gt;extradata != 1)
+            if ((ret = ff_avc_parse_nal_units_buf(pkt-&gt;data, &amp;data, &amp;size)) &lt; 0)
+                return ret;
+    } else if (enc-&gt;codec_id == AV_CODEC_ID_AAC &amp;&amp; pkt-&gt;size &gt; 2 &amp;&amp;
+               (AV_RB16(pkt-&gt;data) &amp; 0xfff0) == 0xfff0) {
+        if (!s-&gt;streams[pkt-&gt;stream_index]-&gt;nb_frames) {
+        av_log(s, AV_LOG_ERROR, "Malformed AAC bitstream detected: "
+               "use the audio bitstream filter 'aac_adtstoasc' to fix it "
+               "('-bsf:a aac_adtstoasc' option with ffmpeg)\n");
+        return AVERROR_INVALIDDATA;
+        }
+        av_log(s, AV_LOG_WARNING, "aac bitstream error\n");
+    }
+
+    /* check Speex packet duration */
+    if (enc-&gt;codec_id == AV_CODEC_ID_SPEEX &amp;&amp; ts - sc-&gt;last_ts &gt; 160)
+        av_log(s, AV_LOG_WARNING, "Warning: Speex stream has more than "
+                                  "8 frames per packet. Adobe Flash "
+                                  "Player cannot handle this!\n");
+
+    if (sc-&gt;last_ts &lt; ts)
+        sc-&gt;last_ts = ts;
+
+    if (size + flags_size &gt;= 1&lt;&lt;24) {
+        av_log(s, AV_LOG_ERROR, "Too large packet with size %u &gt;= %u\n",
+               size + flags_size, 1&lt;&lt;24);
+        return AVERROR(EINVAL);
+    }
+    //Tag Header - Datasize
+    avio_wb24(pb, size + flags_size);
+    //Tag Header - Timestamp
+    avio_wb24(pb, ts &amp; 0xFFFFFF);
+    avio_w8(pb, (ts &gt;&gt; 24) &amp; 0x7F); // timestamps are 32 bits _signed_
+    //StreamID
+    avio_wb24(pb, flv-&gt;reserved);
+
+    if (enc-&gt;codec_type == AVMEDIA_TYPE_DATA) {
+        int data_size;
+        int64_t metadata_size_pos = avio_tell(pb);
+        if (enc-&gt;codec_id == AV_CODEC_ID_TEXT) {
+            // legacy FFmpeg magic?
+            avio_w8(pb, AMF_DATA_TYPE_STRING);
+            put_amf_string(pb, "onTextData");
+            avio_w8(pb, AMF_DATA_TYPE_MIXEDARRAY);
+            avio_wb32(pb, 2);
+            put_amf_string(pb, "type");
+            avio_w8(pb, AMF_DATA_TYPE_STRING);
+            put_amf_string(pb, "Text");
+            put_amf_string(pb, "text");
+            avio_w8(pb, AMF_DATA_TYPE_STRING);
+            put_amf_string(pb, pkt-&gt;data);
+            put_amf_string(pb, "");
+            avio_w8(pb, AMF_END_OF_OBJECT);
+        } else {
+            // just pass the metadata through
+            avio_write(pb, data ? data : pkt-&gt;data, size);
+        }
+        /* write total size of tag */
+        data_size = avio_tell(pb) - metadata_size_pos;
+        avio_seek(pb, metadata_size_pos - 10, SEEK_SET);
+        avio_wb24(pb, data_size);
+        avio_seek(pb, data_size + 10 - 3, SEEK_CUR);
+        avio_wb32(pb, data_size + 11);
+    } else {
+        av_assert1(flags&gt;=0);
+        //First Byte of Tag Data
+        avio_w8(pb,flags);
+        if (enc-&gt;codec_id == AV_CODEC_ID_VP6)
+            avio_w8(pb,0);
+        if (enc-&gt;codec_id == AV_CODEC_ID_VP6F || enc-&gt;codec_id == AV_CODEC_ID_VP6A) {
+            if (enc-&gt;extradata_size)
+                avio_w8(pb, enc-&gt;extradata[0]);
+            else
+                avio_w8(pb, ((FFALIGN(enc-&gt;width,  16) - enc-&gt;width) &lt;&lt; 4) |
+                             (FFALIGN(enc-&gt;height, 16) - enc-&gt;height));
+        } else if (enc-&gt;codec_id == AV_CODEC_ID_AAC)
+            avio_w8(pb, 1); // AAC raw
+        else if (enc-&gt;codec_id == AV_CODEC_ID_H264 || enc-&gt;codec_id == AV_CODEC_ID_MPEG4) {
+            //AVCVIDEOPACKET-AVCPacketType
+        	avio_w8(pb, 1); // AVC NALU
+        	//AVCVIDEOPACKET-CompositionTime
+            avio_wb24(pb, pkt-&gt;pts - pkt-&gt;dts);
+        }
+        //Data
+        avio_write(pb, data ? data : pkt-&gt;data, size);
+
+        avio_wb32(pb, size + flags_size + 11); // previous tag size
+        flv-&gt;duration = FFMAX(flv-&gt;duration,
+                              pkt-&gt;pts + flv-&gt;delay + pkt-&gt;duration);
+    }
+
+    av_free(data);
+
+    return pb-&gt;error;
+}
+</pre>
+    <br/>
+    我们通过源代码简单梳理一下flv_write_packet()在写入H.264/AAC时候的流程：
+    <br/>
+    （1）写入Tag Header的Type，如果是视频，代码如下：
+    <br/>
+    <pre class="cpp">avio_w8(pb, FLV_TAG_TYPE_VIDEO);</pre>
+    如果是音频，代码如下：
+    <br/>
+    <pre class="cpp">avio_w8(pb, FLV_TAG_TYPE_AUDIO);</pre>
+    （2）写入Tag Header的Datasize，Timestamp和StreamID（至此完成Tag Header）：
+    <br/>
+    <pre class="cpp">    //Tag Header - Datasize
+    avio_wb24(pb, size + flags_size);
+    //Tag Header - Timestamp
+    avio_wb24(pb, ts &amp; 0xFFFFFF);
+    avio_w8(pb, (ts &gt;&gt; 24) &amp; 0x7F); // timestamps are 32 bits _signed_
+    //StreamID
+    avio_wb24(pb, flv-&gt;reserved);</pre>
+    （3）写入Tag Data的第一字节（其中flag已经在前面的代码中设置完毕）：
+    <br/>
+    <pre class="cpp">    //First Byte of Tag Data
+    avio_w8(pb,flags);</pre>
+    （4）如果编码格式VP6作相应的处理（不研究）；编码格式为AAC，写入AACAUDIODATA；编码格式为H.264，写入AVCVIDEOPACKET：
+    <br/>
+    <pre class="cpp">        if (enc-&gt;codec_id == AV_CODEC_ID_VP6F || enc-&gt;codec_id == AV_CODEC_ID_VP6A) {
+            if (enc-&gt;extradata_size)
+                avio_w8(pb, enc-&gt;extradata[0]);
+            else
+                avio_w8(pb, ((FFALIGN(enc-&gt;width,  16) - enc-&gt;width) &lt;&lt; 4) |
+                             (FFALIGN(enc-&gt;height, 16) - enc-&gt;height));
+        } else if (enc-&gt;codec_id == AV_CODEC_ID_AAC)
+            avio_w8(pb, 1); // AAC raw
+        else if (enc-&gt;codec_id == AV_CODEC_ID_H264 || enc-&gt;codec_id == AV_CODEC_ID_MPEG4) {
+            //AVCVIDEOPACKET-AVCPacketType
+        	avio_w8(pb, 1); // AVC NALU
+        	//AVCVIDEOPACKET-CompositionTime
+            avio_wb24(pb, pkt-&gt;pts - pkt-&gt;dts);
+        }</pre>
+    （5）写入数据：
+    <br/>
+    <pre class="cpp">        //Data
+        avio_write(pb, data ? data : pkt-&gt;data, size);</pre>
+    （6）
+    <span style="white-space:pre;">
+    </span>
+    写入previous tag size：
+    <br/>
+    <pre class="cpp">avio_wb32(pb, size + flags_size + 11); // previous tag size</pre>
+    至此，flv_write_packet()就完成了一个Tag的写入。
+    <br/>
+    <p>
+     <br/>
+    </p>
+    <p>
+     <strong>
+      <span style="color:#990000;">
+       雷霄骅
+       <br/>
+       leixiaohua1020@126.com
+       <br/>
+       http://blog.csdn.net/leixiaohua1020
+      </span>
+     </strong>
+     <br/>
+    </p>
+   </div>
+  </div>
+  <div style="display:none;" class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+   <a class="btn btn-red-hollow" id="btn-readmore">
+    阅读更多
+   </a>
+  </div>
+ </article>
+ <div class="article-bar-bottom">
+  <div class="article-copyright">
+   版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/leixiaohua1020/article/details/44199673
+  </div>
+  <div class="tags-box artic-tag-box">
+   <span class="label">
+    文章标签：
+   </span>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=ffmpeg&amp;t=blog" target="_blank">
+    ffmpeg
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=AVPacket&amp;t=blog" target="_blank">
+    AVPacket
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=FLV&amp;t=blog" target="_blank">
+    FLV
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=输出&amp;t=blog" target="_blank">
+    输出
+   </a>
+   <a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=源代码&amp;t=blog" target="_blank">
+    源代码
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    个人分类：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/leixiaohua1020/article/category/1360795" target="_blank">
+    FFMPEG
+   </a>
+  </div>
+  <div class="tags-box">
+   <span class="label">
+    所属专栏：
+   </span>
+   <a class="tag-link" href="https://blog.csdn.net/column/details/ffmpeg-devel.html" target="_blank">
+    FFmpeg
+   </a>
+  </div>
+ </div>
+ <!-- !empty($pre_next_article[0]) -->
+</div>
+<div class="recommend-box">
+                            <div style="background: #fff; border: dashed 1px #666; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;">
+                                <span style="font-size: 0.8em; font-weight: bold;">
+                                    此PDF由<a style="color:#0000ff" href="http://www.github.com/spygg"  target="_blank">spygg</a>生成,请尊重原作者版权!!!
+                                    <br/>
+                                    我的邮箱:liushidc@163.com
+                                </span>
+                                </div> 
+                        </div>
+                    </main>
+      
+                </div>
+
+            <script>
+                var recommendCount = 0;
+                var articleTit = "";
+                var articleId = "";
+                var commentscount = 0;
+
+                //1禁止评论，2正常
+                var commentAuth = 1;
+                //百度搜索
+                var baiduKey = "";
+                var needInsertBaidu = "";
+            </script>
+            <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
+            </body>
+        </html>
