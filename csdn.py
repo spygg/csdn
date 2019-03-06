@@ -79,6 +79,10 @@ class CSDN(object):
         articleList = soup.find(class_ = 'article-list').find_all(class_ = 'article-item-box')
 
         for article in articleList:
+            #这里竟然反爬虫
+            if article.has_attr('style') and u'display: none;' == article['style']:
+                print('贱人竟然如此绝招')
+                continue
             article= article.find('a')
 
             href = article.get('href')
@@ -212,7 +216,8 @@ class CSDN(object):
 
         if not os.path.exists('html'):
             os.mkdir('html')
-        with open('html/%d.html' % id, "w") as f:
+        #修复windows下编码错误
+        with open('html/%d.html' % id, "w", encoding='utf-8') as f:
             f.write(cleanedData)
         return cleanedData
 
