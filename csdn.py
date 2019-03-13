@@ -7,21 +7,20 @@ import pdfkit
 import time
 import random
 import os
-import sqlite3  
+import sqlite3
 import multiprocessing
 import threading
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import sys
 import io
 
+
 class CSDN(object):
     def __init__(self, username):
-        super (CSDN, self).__init__()
+        super(CSDN, self).__init__()
 
-        self.username = username;
+        self.username = username
         self.baseUrl = 'https://blog.csdn.net/%s/article/list/' % username;
-
-
 
         self.conn = sqlite3.connect('csdn.db')
         self.cursor = self.conn.cursor()
@@ -33,7 +32,7 @@ class CSDN(object):
             title      TEXT,
             srcHtml    BLOB
             ) 
-            ''' % self.username) 
+            ''' % self.username)
 
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS %s_Index( 
@@ -41,7 +40,7 @@ class CSDN(object):
             url        TEXT,
             indexHtml    BLOB
             ) 
-            ''' % self.username) 
+            ''' % self.username)
 
         self.articleNumber = 0
         self.merge = PdfFileWriter()
@@ -52,21 +51,21 @@ class CSDN(object):
         self.conn.commit()
         self.conn.close()
 
-
     def insert2Db(self, url, title, srcHtml, cleanedHtml):
         print(url)
-        self.cursor.execute('''select count(*) from "%s" where url = "%s"''' % (self.username, url))
+        self.cursor.execute(
+            '''select count(*) from "%s" where url = "%s"''' % (self.username, url))
         if not self.cursor.fetchone()[0]:
-            self.cursor.execute('INSERT INTO %s (url, title, srcHtml)  VALUES (?,?,?)'  % (self.username,), ( url, title, memoryview(srcHtml.encode(encoding="utf-8"))) );
-
+            self.cursor.execute('INSERT INTO %s (url, title, srcHtml)  VALUES (?,?,?)' % (
+                self.username,), (url, title, memoryview(srcHtml.encode(encoding="utf-8"))))
 
     def getArticleByUrl(self, url, articleName):
         while True:
             try:
-                html = request.urlopen(url).read().decode('utf-8');
-                break;
+                html = request.urlopen(url).read().decode('utf-8')
+                break
             except:
-                print("获取 <%s> 时,发生故障! %s\n" % (articleName, url)) 
+                print("获取 <%s> 时,发生故障! %s\n" % (articleName, url))
                 time.sleep(random.randint(5, 10))
 
         data = html
@@ -76,19 +75,21 @@ class CSDN(object):
     def getArticlesInPage(self, html):
         soup = BeautifulSoup(html, "lxml")
 
-        articleList = soup.find(class_ = 'article-list').find_all(class_ = 'article-item-box')
+        articleList = soup.find(
+            class_='article-list').find_all(class_='article-item-box')
 
         for article in articleList:
-            #这里竟然反爬虫
+            # 这里竟然反爬虫
             if article.has_attr('style') and u'display: none;' == article['style']:
                 print('贱人竟然如此绝招')
                 continue
-            article= article.find('a')
+            article = article.find('a')
 
             href = article.get('href')
             title = article.get_text("|", strip=True)[2:]
 
-            self.cursor.execute('''select count(*) from "%s" where url = "%s"''' % (self.username, href))
+            self.cursor.execute(
+                '''select count(*) from "%s" where url = "%s"''' % (self.username, href))
             if not self.cursor.fetchone()[0]:
                 srcHtml = self.getArticleByUrl(href, title)
                 cleanedData = ''
@@ -100,8 +101,9 @@ class CSDN(object):
     def getPageByIndex(self, pageIndex):
         url = self.baseUrl + str(pageIndex)
 
-        self.cursor.execute('''select count(*) from "%s_Index" where url = "%s"''' % (self.username, url))
-        if  self.cursor.fetchone()[0]:
+        self.cursor.execute(
+            '''select count(*) from "%s_Index" where url = "%s"''' % (self.username, url))
+        if self.cursor.fetchone()[0]:
             #print("爬过了%s" % url)
             return True
 
@@ -118,24 +120,24 @@ class CSDN(object):
 
         while True:
             try:
-                html = request.urlopen(url).read().decode('utf-8');
-                break;
+                html = request.urlopen(url).read().decode('utf-8')
+                break
             except:
-                print("当前第%d页,发生故障!\n" % pageIndex) 
+                print("当前第%d页,发生故障!\n" % pageIndex)
                 time.sleep(5)
-            
+
         soup = BeautifulSoup(html, "lxml")
-        #print(soup.prettify())
+        # print(soup.prettify())
 
         if html.find('class="no-data') != -1 and html.find('<h6>空空如也</h6>') != -1:
-            return False;
+            return False
         else:
 
-            self.cursor.execute('INSERT INTO %s_Index (url, indexHtml)  VALUES (?,?)'  % (self.username,), ( url, memoryview(html.encode(encoding="utf-8"))) );
+            self.cursor.execute('INSERT INTO %s_Index (url, indexHtml)  VALUES (?,?)' % (
+                self.username,), (url, memoryview(html.encode(encoding="utf-8"))))
 
             self.getArticlesInPage(html)
-            return True;
-
+            return True
 
     def cleanHtmlData(self, html, id):
         cleanedData = ''
@@ -171,7 +173,6 @@ class CSDN(object):
                     <div class="container clearfix pt0" id="mainBox">
         ''' % (soup.title.prettify())
 
-
         cleanedData += '<main style="width: 100%;">'
         cleanedData += blog_content_box.prettify()
         # cleanedData += article_title_box.prettify()
@@ -206,71 +207,74 @@ class CSDN(object):
             <script src="https://csdnimg.cn/release/phoenix/template/js/detail-effe72036e.min.js"></script>
             </body>
         </html>'''
-        
 
-        cleanedData = cleanedData.replace('class="hide-article-box', 'style="display:none;" class="hide-article-box')
+        cleanedData = cleanedData.replace(
+            'class="hide-article-box', 'style="display:none;" class="hide-article-box')
         cleanedData = cleanedData.replace('class="float-right', '')
-        #生成锚链接
-        cleanedData = cleanedData.replace('class="article-title-box"', 'class="article-title-box" id="article_anchors_%d"' % (id))
+        # 生成锚链接
+        cleanedData = cleanedData.replace(
+            'class="article-title-box"', 'class="article-title-box" id="article_anchors_%d"' % (id))
 
+        # 修复图片索引错误
+        cleanedData = cleanedData.replace(
+            'src="//img-blog.csdn.net', 'src="https://img-blog.csdn.net')
 
         if not os.path.exists('html'):
             os.mkdir('html')
-        #修复windows下编码错误
+        # 修复windows下编码错误
         with open('html/%d.html' % id, "w", encoding='utf-8') as f:
             f.write(cleanedData)
         return cleanedData
 
-
     def doConvert(self, id, html, forceUpdate=False):
-        #pdfkit.from_file("dhtml/%s.html" % fileName, 'pdf/%s.pdf' % fileName) 
+        #pdfkit.from_file("dhtml/%s.html" % fileName, 'pdf/%s.pdf' % fileName)
         if not os.path.exists('pdf'):
             os.mkdir('pdf')
 
-        if forceUpdate or (not os.path.exists('pdf/%d.pdf' % id )) :
+        if forceUpdate or (not os.path.exists('pdf/%d.pdf' % id)):
             print("正在生成第%d篇pdf (%d of %d)" % (id, id, self.articleNumber))
             ts = 0
             while True:
-                #获取输出结果
+                # 获取输出结果
                 ts = ts + 1
 
                 if ts > 5:
                     print('5次失败后, 放弃获取图片')
+                    break
 
-                #c重定向输出结果
+                # c重定向输出结果
                 stdout = sys.stdout
-                err =  io.StringIO()
+                err = io.StringIO()
                 sys.stdout = err
-                pdfkit.from_string(html, 'pdf/%d.pdf' % id )
+                pdfkit.from_string(html, 'pdf/%d.pdf' % id)
 
-                #恢复重定向
+                # 恢复重定向
                 sys.stdout = stdout
 
                 r = err.getvalue()
 
                 print(r)
                 if r.find('Warning: Failed to load') == -1:
-                    break;
+                    break
                 else:
                     #print("生成%d篇文章pdf时发生意外,重试中...." % id)
                     pass
-                
-
 
     def doMerge(self):
         print("PDF生成完成, 开始合并........")
         pageIndex = 0
         for i in range(0, self.articleNumber):
-            pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber - i), "rb"))
+            pdf = PdfFileReader(open('pdf/%d.pdf' %
+                                     (self.articleNumber - i), "rb"))
 
-            pageCount = pdf.getNumPages() 
+            pageCount = pdf.getNumPages()
             title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
             #print(title, pageCount)
             self.merge.appendPagesFromReader(pdf)
             self.merge.addBookmark(title, pageIndex)
             pageIndex += pageCount
 
-        #设置最大递归深度,不然报错
+        # 设置最大递归深度,不然报错
         sys.setrecursionlimit(5000)
         self.merge.write(open("%s.pdf" % self.username, "wb"))
         sys.setrecursionlimit(1000)
@@ -279,9 +283,8 @@ class CSDN(object):
         line = ''
         size = 1024
 
+    def generateCatlog(self, forceUpdate=False):
 
-    def generateCatlog(self, forceUpdate = False):
-        
         if not forceUpdate:
             print('正在生成目录....')
         else:
@@ -290,42 +293,43 @@ class CSDN(object):
         articleIndex = 1
         pageIndex = 0
 
-
         pdfcontent = ''
         pdfcontent = pdfcontent + '''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>博客目录</title></head><body><div style='font-size:30px;text-align:center;'> 目录 </div>'''
 
         for i in range(0, self.articleNumber):
-            pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber - i), "rb"))
-            pageCount = pdf.getNumPages() 
+            pdf = PdfFileReader(open('pdf/%d.pdf' %
+                                     (self.articleNumber - i), "rb"))
+            pageCount = pdf.getNumPages()
             title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+            print(pdf.getDocumentInfo())
 
             # #目录..........................................
-
 
             pdfcontent = pdfcontent + '''
                             <div style="max-width:100%;line-height:1.8em;margin-top:5px;background-color:#ccc;">
                             <span class="start">
                         '''
 
-            #序号,标题
-            pdfcontent = pdfcontent +  '''%d.<a href='javascript:{document.getElementById("article_anchors_%d").scrollIntoView()};'>%s</a></span>''' % (articleIndex, articleIndex, title)
-            pdfcontent = pdfcontent + '''<span class='middle' style="max-height:25px;overflow:hidden;display:inline-block"></span>'''
-            pdfcontent = pdfcontent +   ''' <span class="end" style="float:right;">'''
-            #页码.....
-            pdfcontent = pdfcontent +  '%d' % (pageIndex + 1 + self.catlogPageNum)
+            # 序号,标题
+            pdfcontent = pdfcontent + \
+                '''%d.<a href='javascript:{document.getElementById("article_anchors_%d").scrollIntoView()};'>%s</a></span>''' % (
+                    articleIndex, articleIndex, title)
+            pdfcontent = pdfcontent + \
+                '''<span class='middle' style="max-height:25px;overflow:hidden;display:inline-block"></span>'''
+            pdfcontent = pdfcontent + ''' <span class="end" style="float:right;">'''
+            # 页码.....
+            pdfcontent = pdfcontent + \
+                '%d' % (pageIndex + 1 + self.catlogPageNum)
             pdfcontent = pdfcontent + '</span></div>'
-
-
-
 
             # pdfcontent = pdfcontent + "<div><span style='font-size:20px;'>"
             # start = "%d.%s" % (articleIndex, title)
             # middle = '</span><span style="max_length=80%;overflow:hidden;">'
             # end = '%d' % pageIndex
-           
+
             # lstart = len(start)
             # lend = len(end)
-            # for x in range(1024 - lstart * 20 - lend * 20): 
+            # for x in range(1024 - lstart * 20 - lend * 20):
             #     middle = middle + '..'
 
             # middle = middle + '</span>'
@@ -333,14 +337,12 @@ class CSDN(object):
             # pdfcontent = pdfcontent + start + middle + end
             # pdfcontent = pdfcontent + '</div>'
 
-
             articleIndex = articleIndex + 1
             pageIndex += pageCount
 
+        # 写入javascript代码
 
-        #写入javascript代码
-
-        #手动计算.....个数
+        # 手动计算.....个数
         # innerHTML = ''
         # for x in range(2048):
         #     innerHTML = innerHTML + '.'
@@ -350,7 +352,7 @@ class CSDN(object):
         #                                 var start = document.getElementsByClassName("start");
         #                                 var end =  document.getElementsByClassName("end");
         #                                 var middle = document.getElementsByClassName("middle");
-                                     
+
         #                                 for(var i = 0; i < start.length; i++)
         #                                 {
         #                                     var maxw = start[i].offsetParent.offsetWidth - start[i].offsetWidth - end[i].offsetWidth - 5 + 'px'
@@ -359,9 +361,8 @@ class CSDN(object):
         #                                 }
         #                             </script>
         #                         ''' % innerHTML
-    
-        pdfcontent = pdfcontent +  '</body></html>'
 
+        pdfcontent = pdfcontent + '</body></html>'
 
         if not os.path.exists('html'):
             os.mkdir('html')
@@ -377,27 +378,26 @@ class CSDN(object):
         else:
             self.doConvert(self.articleNumber, pdfcontent, True)
 
-        #获取目录页码
+        # 获取目录页码
         if forceUpdate:
             print('目录生成完成....')
 
-
     def generateCatlogAndUpdate(self):
-        #第一次生成目录
+        # 第一次生成目录
         self.generateCatlog()
 
-        pdf = PdfFileReader(open('pdf/%d.pdf' % (self.articleNumber + 1), "rb"))
+        pdf = PdfFileReader(open('pdf/%d.pdf' %
+                                 (self.articleNumber + 1), "rb"))
         self.catlogPageNum = pdf.getNumPages()
 
-        #重新生成目录
+        # 重新生成目录
         self.generateCatlog(True)
-
 
     def startThreadPool(self):
 
         processList = []
 
-        #降序排列
+        # 降序排列
         self.cursor.execute('select id, srcHtml from %s' % (self.username))
 
         result = self.cursor.fetchall()
@@ -406,10 +406,11 @@ class CSDN(object):
 
         for (id, srcHtml) in result:
             #process = multiprocessing.Process(target = self.doConvert, args = (id, cleanedHtml))
-            if not os.path.exists('pdf/%d.pdf' % id ):
+            if not os.path.exists('pdf/%d.pdf' % id):
                 cleanedHtml = self.cleanHtmlData(srcHtml.decode('utf-8'), id)
 
-                process = threading.Thread(target = self.doConvert, args = (id, cleanedHtml))
+                process = threading.Thread(
+                    target=self.doConvert, args=(id, cleanedHtml))
                 processList.append(process)
 
         k = 0
@@ -427,33 +428,27 @@ class CSDN(object):
                 tmpProcess.join()
 
 
-        
-
 if __name__ == '__main__':
 
     #username = 'spygg'
-    username = 'leixiaohua1020'
+    print('先输入用户名:如https://blog.csdn.net/spygg 则输入spygg')
+    username = input("input user's name")
     csdn = CSDN(username)
 
     print('开始获取文章列表.....')
-    i = 1;
+    i = 1
     while(True):
         pageNumber = csdn.getPageByIndex(i)
-        
+
         if pageNumber:
             pass
         else:
-            break;
+            break
 
-        i = i + 1;
+        i = i + 1
 
     print('索引页获取完成, 共 %d 页!!!' % (i - 1))
-
 
     csdn.startThreadPool()
     csdn.generateCatlogAndUpdate()
     csdn.doMerge()
-
-    
-
-    
