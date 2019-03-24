@@ -260,21 +260,26 @@ class CSDN(object):
         print("PDF生成完成, 开始合并........")
         pageIndex = 0
         for i in range(0, self.articleNumber):
+            # 倒叙排列
             pdf = PdfFileReader(open('pdf/%d.pdf' %
                                      (self.articleNumber - i), "rb"))
 
             pageCount = pdf.getNumPages()
-            title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+            # title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+
+            # if not title:
+            title = ""
+            self.cursor.execute(
+                'select title from %s where id = %d' % (self.username, (self.articleNumber - i)))
+            result = self.cursor.fetchall()
+
+            for r in result:
+                title = r[0]
+                # print('为空, 从新获取%s %s' % (result, title))
+                break
 
             if not title:
-                self.cursor.execute(
-                    'select title from %s where id = %d' % (self.username, i + 1))
-                result = self.cursor.fetchall()
-
-                for r in result:
-                    title = r[0]
-                    # print('为空, 从新获取%s %s' % (result, title))
-                    break
+                title = "博客目录"
 
             #print(title, pageCount)
             self.merge.appendPagesFromReader(pdf)
@@ -307,20 +312,22 @@ class CSDN(object):
             pdf = PdfFileReader(open('pdf/%d.pdf' %
                                      (self.articleNumber - i), "rb"))
             pageCount = pdf.getNumPages()
-            title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+            # title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
             # print(pdf.getDocumentInfo())
 
+            title = ""
             # 修复标题为空的bug
-            if not title:
-                self.cursor.execute(
-                    'select title from %s where id = %d' % (self.username, i + 1))
-                result = self.cursor.fetchall()
+            # if not title:
+            self.cursor.execute(
+                'select title from %s where id = %d' % (self.username, self.articleNumber - i))
+            result = self.cursor.fetchall()
 
-                for r in result:
-                    title = r[0]
-                    #print('为空, 从新获取%s %s' % (result, title))
-                    break
-                    # #目录..........................................
+            for r in result:
+                title = r[0]
+                #print('为空, 从新获取%s %s' % (result, title))
+                break
+
+            # #目录..........................................
 
             pdfcontent = pdfcontent + '''
                             <div style="max-width:100%;line-height:1.8em;margin-top:5px;background-color:#ccc;">
