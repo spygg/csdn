@@ -142,10 +142,6 @@ class CSDN(object):
     def cleanHtmlData(self, html, id):
         cleanedData = ''
         soup = BeautifulSoup(html, "lxml")
-        # article_title_box = soup.find(class_='article-title-box')
-        # article_info_box = soup.find(class_='article-info-box')
-        # article_content = soup.find(id = 'article_content')
-        # article_bar_bottom = soup.find(class_='article-bar-bottom')
         blog_content_box = soup.find(class_='blog-content-box')
 
         cleanedData += '''
@@ -269,6 +265,17 @@ class CSDN(object):
 
             pageCount = pdf.getNumPages()
             title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
+
+            if not title:
+                self.cursor.execute(
+                    'select title from %s where id = %d' % (self.username, i + 1))
+                result = self.cursor.fetchall()
+
+                for r in result:
+                    title = r[0]
+                    # print('为空, 从新获取%s %s' % (result, title))
+                    break
+
             #print(title, pageCount)
             self.merge.appendPagesFromReader(pdf)
             self.merge.addBookmark(title, pageIndex)
@@ -301,9 +308,19 @@ class CSDN(object):
                                      (self.articleNumber - i), "rb"))
             pageCount = pdf.getNumPages()
             title = pdf.getDocumentInfo().title.replace(' - CSDN博客', '')
-            print(pdf.getDocumentInfo())
+            # print(pdf.getDocumentInfo())
 
-            # #目录..........................................
+            # 修复标题为空的bug
+            if not title:
+                self.cursor.execute(
+                    'select title from %s where id = %d' % (self.username, i + 1))
+                result = self.cursor.fetchall()
+
+                for r in result:
+                    title = r[0]
+                    #print('为空, 从新获取%s %s' % (result, title))
+                    break
+                    # #目录..........................................
 
             pdfcontent = pdfcontent + '''
                             <div style="max-width:100%;line-height:1.8em;margin-top:5px;background-color:#ccc;">
@@ -322,45 +339,8 @@ class CSDN(object):
                 '%d' % (pageIndex + 1 + self.catlogPageNum)
             pdfcontent = pdfcontent + '</span></div>'
 
-            # pdfcontent = pdfcontent + "<div><span style='font-size:20px;'>"
-            # start = "%d.%s" % (articleIndex, title)
-            # middle = '</span><span style="max_length=80%;overflow:hidden;">'
-            # end = '%d' % pageIndex
-
-            # lstart = len(start)
-            # lend = len(end)
-            # for x in range(1024 - lstart * 20 - lend * 20):
-            #     middle = middle + '..'
-
-            # middle = middle + '</span>'
-            # #print(start + middle + end)
-            # pdfcontent = pdfcontent + start + middle + end
-            # pdfcontent = pdfcontent + '</div>'
-
             articleIndex = articleIndex + 1
             pageIndex += pageCount
-
-        # 写入javascript代码
-
-        # 手动计算.....个数
-        # innerHTML = ''
-        # for x in range(2048):
-        #     innerHTML = innerHTML + '.'
-
-        # pdfcontent = pdfcontent + '''
-        #                             <script type="text/javascript">
-        #                                 var start = document.getElementsByClassName("start");
-        #                                 var end =  document.getElementsByClassName("end");
-        #                                 var middle = document.getElementsByClassName("middle");
-
-        #                                 for(var i = 0; i < start.length; i++)
-        #                                 {
-        #                                     var maxw = start[i].offsetParent.offsetWidth - start[i].offsetWidth - end[i].offsetWidth - 5 + 'px'
-        #                                     middle[i].style.width=maxw
-        #                                     middle[i].innerHTML = "%s"
-        #                                 }
-        #                             </script>
-        #                         ''' % innerHTML
 
         pdfcontent = pdfcontent + '</body></html>'
 
@@ -432,7 +412,7 @@ if __name__ == '__main__':
 
     #username = 'spygg'
     print('先输入用户名:如https://blog.csdn.net/spygg 则输入spygg')
-    username = input("input user's name")
+    username = input("input user's name: ")
     csdn = CSDN(username)
 
     print('开始获取文章列表.....')
