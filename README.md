@@ -1,6 +1,8 @@
 # csdn
 爬取csdn博客的爬虫
 
+## 详情
+[CSDN博客转高清PDF](https://spygg.github.io/2019/04/12/CSDN%E5%8D%9A%E5%AE%A2%E8%BD%AC%E9%AB%98%E6%B8%85PDF/)
 
 来源:主要是为了学习ffmpeg,然后看到雷神大人的博客太好了(但是广告太多了....),就爬取下来了,理论上可以爬取所有的csdn
 
@@ -21,3 +23,4 @@ $ python csdn.py
 更新:修正了反爬措施,修正了Windows下编码错误
 
 更新:修正了图片索引为src="//img-blog"的错误,修正转化成PDF时死循环的bug(发现目录索引为空的bug)
+
