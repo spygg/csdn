@@ -13,7 +13,10 @@ import threading
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import sys
 import io
-
+import requests
+#from io import BytesIO
+import gzip
+import chardet
 
 class CSDN(object):
     def __init__(self, username):
@@ -61,12 +64,52 @@ class CSDN(object):
 
     def getArticleByUrl(self, url, articleName):
         while True:
-            try:
-                html = request.urlopen(url).read().decode('utf-8')
-                break
-            except:
-                print("获取 <%s> 时,发生故障! %s\n" % (articleName, url))
-                time.sleep(random.randint(5, 10))
+            #try:
+            headers = {
+            	'Cookie': 'acw_tc=2760821915709055383842117e5e11fa015afba4a726c9740ff1e10d94aadd; acw_sc__v2=5da21e15ffe8d6436eac8909c7893531a38a3f55; uuid_tt_dd=10_18796629400-1570905623613-532111; dc_session_id=10_1570905623613.376716; Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1570905624; Hm_ct_6bcd52f51e9b3dce32bec4a3997715ac=6525*1*10_18796629400-1570905623613-532111; dc_tos=pz9yv1; Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1570906046',
+            	"Accept-Encoding": "gzip, deflate, br",
+            	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+            	'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6,es;q=0.5,sv;q=0.4,da;q=0.3,la;q=0.2,fr;q=0.1,su;q=0.1,de;q=0.1,pt;q=0.1,cy;q=0.1,ca;q=0.1,mt;q=0.1,nl;q=0.1,nb;q=0.1,lb;q=0.1,mr;q=0.1',
+            	'Host': 'blog.csdn.net',
+    			'Connection': 'keep-alive',
+    			'Sec-Fetch-Mode': 'navigate',
+    			'Sec-Fetch-User': '?1',
+    			'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+            }
+            response = requests.get(url, headers=headers)
+            # 通过状态码判断是否获取成功
+            if response.status_code == 200:
+                #response.encoding = 'utf-8'
+                print(response.headers)
+                print(response.encoding)
+                key = 'Content-Encoding'
+                # print(response.headers[key])
+                print("-----------")
+                if(key in response.headers and response.headers['Content-Encoding'] == 'br'):
+                       data = brotli.decompress(response.content)
+                       data1 = data.decode('utf-8')
+                       print(data1)
+
+                print(response.content)
+            # req = request.Request(url=url, headers=headers, method='GET')
+            # response = request.urlopen(req)
+            # contentencoding = response.getheader('Content-Encoding')
+            # encoding = response.getheader('encoding')
+            # print(contentencoding)
+            # print(response.headers)
+
+            # html = response.read()
+            # print(html.decode('utf-8'))
+            # if encoding == 'gzip':
+            # 	html = gzip.decompress(html)
+  
+
+            # print(chardet.detect(html))
+            break
+            #except:
+            #    print("获取 <%s> 时,发生故障! %s\n" % (articleName, url))
+            #    time.sleep(random.randint(5, 10))
 
         data = html
 
@@ -88,6 +131,7 @@ class CSDN(object):
             href = article.get('href')
             title = article.get_text("|", strip=True)[2:]
 
+            #print('链接:%s, 标题: %s' % (href, title))
             self.cursor.execute(
                 '''select count(*) from "%s" where url = "%s"''' % (self.username, href))
             if not self.cursor.fetchone()[0]:
@@ -95,16 +139,16 @@ class CSDN(object):
                 cleanedData = ''
                 self.insert2Db(href, title, srcHtml, cleanedData)
             else:
-                #print('文章"%s"已经存在' % (title, ))
+                print('文章"%s"已经存在' % (title, ))
                 pass
 
     def getPageByIndex(self, pageIndex):
         url = self.baseUrl + str(pageIndex)
-
+        print('准备获取目录页面' + url)
         self.cursor.execute(
             '''select count(*) from "%s_Index" where url = "%s"''' % (self.username, url))
         if self.cursor.fetchone()[0]:
-            #print("爬过了%s" % url)
+            print("爬过了%s" % url)
             return True
 
         # headers = {
@@ -127,7 +171,7 @@ class CSDN(object):
                 time.sleep(5)
 
         soup = BeautifulSoup(html, "lxml")
-        # print(soup.prettify())
+        #print(soup.prettify())
 
         if html.find('class="no-data') != -1 and html.find('<h6>空空如也</h6>') != -1:
             return False
@@ -432,6 +476,7 @@ if __name__ == '__main__':
         else:
             break
 
+        break
         i = i + 1
 
     print('索引页获取完成, 共 %d 页!!!' % (i - 1))
